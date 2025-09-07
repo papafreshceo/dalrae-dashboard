@@ -1766,14 +1766,25 @@ function updateScoreboard(elementId, newValue) {
 const messageElement = document.getElementById('filterStatsMessage');
 messageElement.innerHTML = `<span class="typing-animation">${message}</span>`;
 
-// 애니메이션 재시작을 위해 클래스 제거 후 다시 추가
-setTimeout(() => {
-    const typingSpan = messageElement.querySelector('.typing-animation');
-    if (typingSpan) {
-        typingSpan.style.animation = 'none';
-        setTimeout(() => {
-            typingSpan.style.animation = '';
-        }, 10);
+function updateFilterStats() {
+    const uniqueProducts = new Set();
+    let totalOptions = 0;
+    
+    filteredProducts.forEach(p => {
+        const variety = p.품종 || p.품목 || '';
+        if (variety) {
+            uniqueProducts.add(variety);
+            totalOptions++;
+        }
+    });
+    
+    const newProducts = uniqueProducts.size;
+    const newOptions = totalOptions;
+    
+    // 스코어보드 플립 애니메이션
+    updateScoreboard('filterStatsProducts', newProducts);
+    updateScoreboard('filterStatsOptions', newOptions);
+}
     }
 }, 10);
         }
@@ -2631,6 +2642,7 @@ case 'preparing':
 </body>
 
 </html>
+
 
 
 
