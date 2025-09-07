@@ -504,24 +504,12 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="common-styles.css">
 </head>
 <body>
-    <!-- 헤더 -->
-    <header class="top-header">
-        <div class="header-content">
-            <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
-                 alt="달래마켓" 
-                 class="logo-img">
-            <nav class="nav-menu">
-                <button class="nav-btn" onclick="location.href='index.html'">📊 대시보드</button>
-                <button class="nav-btn active">📦 상품리스트</button>
-                <button class="nav-btn">📅 상품캘린더</button>
-                <button class="nav-btn">📋 주문관리</button>
-                <button class="nav-btn">🎯 서비스&프로그램</button>
-                <button class="nav-btn">📢 공지사항</button>
-            </nav>
-        </div>
-    </header>
+<!-- 공통 헤더 -->
+<div id="header-container"></div>
+  
 
     <!-- 검색 섹션 -->
     <div class="search-section">
@@ -1113,8 +1101,10 @@ function displayChart(data, optionName) {
             });
         }
     </script>
+    <script src="header.js"></script>
 </body>
 </html>
+
 
 
 
