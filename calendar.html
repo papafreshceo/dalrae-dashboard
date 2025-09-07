@@ -1347,24 +1347,32 @@
                     let hasProduct = false;
                     let barStart = 0;
                     let barWidth = 0;
+                    let barClass = '';
                     
                     if (startMonth <= endMonth) {
                         // 일반적인 경우
                         if (month >= startMonth && month <= endMonth) {
                             hasProduct = true;
-                            if (month === startMonth) {
+                            if (month === startMonth && month === endMonth) {
+                                // 한 달 내에서 시작하고 끝나는 경우
                                 barStart = ((startDay - 1) / monthDays[month]) * 100;
-                                if (month === endMonth) {
-                                    barWidth = ((endDay - startDay + 1) / monthDays[month]) * 100;
-                                } else {
-                                    barWidth = ((monthDays[month] - startDay + 1) / monthDays[month]) * 100;
-                                }
+                                barWidth = ((endDay - startDay + 1) / monthDays[month]) * 100;
+                                barClass = 'full';
+                            } else if (month === startMonth) {
+                                // 시작월
+                                barStart = ((startDay - 1) / monthDays[month]) * 100;
+                                barWidth = ((monthDays[month] - startDay + 1) / monthDays[month]) * 100;
+                                barClass = 'start-only';
                             } else if (month === endMonth) {
+                                // 종료월
                                 barStart = 0;
                                 barWidth = (endDay / monthDays[month]) * 100;
+                                barClass = 'end-only';
                             } else {
+                                // 중간월
                                 barStart = 0;
                                 barWidth = 100;
+                                barClass = 'middle';
                             }
                         }
                     } else {
@@ -1372,21 +1380,27 @@
                         if (month >= startMonth || month <= endMonth) {
                             hasProduct = true;
                             if (month === startMonth) {
+                                // 시작월 (연말)
                                 barStart = ((startDay - 1) / monthDays[month]) * 100;
                                 barWidth = ((monthDays[month] - startDay + 1) / monthDays[month]) * 100;
+                                barClass = 'start-only';
                             } else if (month === endMonth) {
+                                // 종료월 (연초)
                                 barStart = 0;
                                 barWidth = (endDay / monthDays[month]) * 100;
+                                barClass = 'end-only';
                             } else if (month > startMonth || month < endMonth) {
+                                // 중간월
                                 barStart = 0;
                                 barWidth = 100;
+                                barClass = 'middle';
                             }
                         }
                     }
                     
                     if (hasProduct) {
                         html += `
-                            <div class="year-timeline-bar" 
+                            <div class="year-timeline-bar ${barClass}" 
                                  style="left: ${barStart}%; width: ${barWidth}%; background: ${productColors[product.name]};"
                                  data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
                                  onmouseover="showTooltip(event, this.dataset.product)"
