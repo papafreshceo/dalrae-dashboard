@@ -1939,25 +1939,20 @@ if (p.종료일) {
             
             products.forEach(p => {
     if (p.시작일) {
-        const d = parseDate(p.시작일);  // new Date를 parseDate로 변경
+        const d = parseDate(p.시작일);
         if (d && d < minDate) minDate = d;
     }
     if (p.종료일) {
-        const d = parseDate(p.종료일);  // new Date를 parseDate로 변경
+        const d = parseDate(p.종료일);
         if (d && d > maxDate) maxDate = d;
     }
-});
-if (p.종료일) {
-    const end = parseDate(p.종료일);  // new Date를 parseDate로 변경
-                    if (d > maxDate) maxDate = d;
-                }
-            });
-            
-            let seasonIcon = '⚫';
-            let seasonText = '시즌종료';
-            
-            const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-            const seven = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+});  // 여기서 forEach 끝
+
+let seasonIcon = '⚫';
+let seasonText = '시즌종료';
+
+const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
+const seven = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
             
             if (today >= minDate && today <= maxDate) {
                 if (maxDate <= seven) {
@@ -2504,4 +2499,5 @@ case 'preparing':
 </body>
 
 </html>
+
 
