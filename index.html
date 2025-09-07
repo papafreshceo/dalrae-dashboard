@@ -434,7 +434,17 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     position: relative;
     transform-style: preserve-3d;
-    transition: transform 0.6s;
+}
+
+/* 옵션용 작은 스코어보드 */
+.scoreboard-item.option .scoreboard-number .digit {
+    font-size: 16px;
+    width: 20px;
+    height: 28px;
+    line-height: 28px;
+    background: #e8e9eb;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .scoreboard-label {
@@ -480,21 +490,18 @@
 }
         
         
-/* 플립 애니메이션 */
-@keyframes flipDigit {
+/* 슬롯머신 애니메이션 */
+@keyframes slotSpin {
     0% {
         transform: rotateX(0deg);
     }
-    50% {
-        transform: rotateX(-90deg);
-    }
     100% {
-        transform: rotateX(0deg);
+        transform: rotateX(720deg);
     }
 }
 
-.digit.flip {
-    animation: flipDigit 0.6s ease-in-out;
+.digit.spin {
+    animation: slotSpin 1.5s cubic-bezier(0.17, 0.67, 0.83, 0.67);
 }
 
 /* 타이핑 애니메이션 */
@@ -1100,6 +1107,13 @@
     line-height: 36px;
 }
 
+/* 모바일 옵션용 작은 스코어보드 */
+.scoreboard-item.option .scoreboard-number .digit {
+    font-size: 14px;
+    width: 18px;
+    height: 24px;
+    line-height: 24px;
+}
 .scoreboard-label {
     font-size: 12px;
 }
@@ -1481,7 +1495,7 @@
             </div>
             <div class="scoreboard-label">상품</div>
         </div>
-        <div class="scoreboard-item">
+        <div class="scoreboard-item option">  <!-- 두 번째에 option 추가 -->
             <div class="scoreboard-number" id="filterStatsOptions">
                 <span class="digit">0</span>
             </div>
@@ -1779,31 +1793,6 @@ function updateFilterStats() {
     }
 }
 
-// 스코어보드 업데이트 함수 추가
-function updateScoreboard(elementId, newValue) {
-    const container = document.getElementById(elementId);
-    const currentValue = parseInt(container.textContent) || 0;
-    
-    if (currentValue !== newValue) {
-        const digits = newValue.toString().split('');
-        let html = '';
-        
-        digits.forEach(digit => {
-            html += `<span class="digit flip">${digit}</span>`;
-        });
-        
-        container.innerHTML = html;
-        
-        // 애니메이션 트리거
-        setTimeout(() => {
-            container.querySelectorAll('.digit').forEach(d => {
-                d.classList.remove('flip');
-            });
-        }, 600);
-    }
-}
-            
-            // 스코어보드 업데이트 함수
 function updateScoreboard(elementId, newValue) {
     const container = document.getElementById(elementId);
     if (!container) return;
@@ -1814,20 +1803,22 @@ function updateScoreboard(elementId, newValue) {
         const digits = newValue.toString().split('');
         let html = '';
         
-        digits.forEach(digit => {
-            html += `<span class="digit flip">${digit}</span>`;
+        digits.forEach((digit, index) => {
+            html += `<span class="digit spin" style="animation-delay: ${index * 0.1}s">${digit}</span>`;
         });
         
         container.innerHTML = html;
         
-        // 애니메이션 트리거
+        // 슬롯머신 효과
         setTimeout(() => {
             container.querySelectorAll('.digit').forEach(d => {
-                d.classList.remove('flip');
+                d.classList.remove('spin');
             });
-        }, 600);
+        }, 1500);
     }
 }
+            
+
 
 // 필터 통계 업데이트
 function updateFilterStats() {
@@ -2765,6 +2756,7 @@ case 'preparing':
 </body>
 
 </html>
+
 
 
 
