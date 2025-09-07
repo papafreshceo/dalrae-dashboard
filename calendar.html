@@ -926,8 +926,6 @@
         // 상품 타임라인 처리
         function processProductTimelines() {
             const productMap = {};
-            const today = new Date();
-            const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
             
             allProducts.forEach(p => {
                 const item = p.품목;
@@ -938,9 +936,13 @@
                 
                 if (!startDate || !endDate) return;
                 
-                // 시작일이 종료일보다 늦으면 종료일을 다음 해로 조정
+                // 시작일이 종료일보다 늦으면 연도를 조정
+                // 예: 11월 시작 - 3월 종료인 경우
                 if (startDate > endDate) {
-                    endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
+                    // 시작월이 9월 이후고 종료월이 4월 이전이면 종료일을 다음해로
+                    if (startDate.getMonth() >= 8 && endDate.getMonth() <= 3) {
+                        endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
+                    }
                 }
                 
                 if (!productMap[item]) {
@@ -969,6 +971,7 @@
             });
             
             productTimelines = Object.values(productMap);
+            console.log('처리된 품목 타임라인:', productTimelines);
         }
 
         // 색상 할당
@@ -1023,12 +1026,23 @@
                 }
             });
             
+            // 네비게이션 버튼 표시/숨김
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const todayBtn = document.getElementById('todayBtn');
+            
             if (view === 'month') {
                 document.getElementById('monthView').style.display = 'block';
                 document.getElementById('yearView').style.display = 'none';
+                prevBtn.style.display = 'flex';
+                nextBtn.style.display = 'flex';
+                todayBtn.style.display = 'block';
             } else {
                 document.getElementById('monthView').style.display = 'none';
                 document.getElementById('yearView').style.display = 'block';
+                prevBtn.style.display = 'none';
+                nextBtn.style.display = 'none';
+                todayBtn.style.display = 'none';
             }
             
             updatePeriodDisplay();
@@ -1101,13 +1115,18 @@
         // 월 보기 렌더링
         function renderMonthView() {
             const grid = document.getElementById('daysGrid');
-            const firstDay = new Date(currentYear, currentMonth, 1);
-            const lastDay = new Date(currentYear, currentMonth + 1, 0);
-            const prevLastDay = new Date(currentYear, currentMonth, 0);
+            
+            // 현재 표시할 월의 고정된 연도 사용 (2025년 기준)
+            const baseYear = 2025;
+            const firstDay = new Date(baseYear, currentMonth, 1);
+            const lastDay = new Date(baseYear, currentMonth + 1, 0);
+            const prevLastDay = new Date(baseYear, currentMonth, 0);
             const startDay = firstDay.getDay();
             const totalDays = lastDay.getDate();
             const prevTotalDays = prevLastDay.getDate();
             const today = new Date();
+            const isCurrentMonth = today.getMonth() === currentMonth;
+            const todayDate = today.getDate();
             
             let html = '';
             
@@ -1121,9 +1140,9 @@
             
             // 현재 달 날짜
             for (let day = 1; day <= totalDays; day++) {
-                const date = new Date(currentYear, currentMonth, day);
+                const date = new Date(baseYear, currentMonth, day);
                 const dayOfWeek = date.getDay();
-                const isToday = date.toDateString() === today.toDateString();
+                const isToday = isCurrentMonth && day === todayDate;
                 const classes = ['day-cell'];
                 
                 if (isToday) classes.push('today');
@@ -1156,12 +1175,18 @@
             const container = document.getElementById('monthTimelinesContainer');
             if (!container) return;
             
-            const monthStart = new Date(currentYear, currentMonth, 1);
-            const monthEnd = new Date(currentYear, currentMonth + 1, 0);
-            
             // 이번 달에 표시할 품목 필터링
             monthProductTimelines = productTimelines.filter(product => {
-                return product.endDate >= monthStart && product.startDate <= monthEnd;
+                const startMonth = product.startDate.getMonth();
+                const endMonth = product.endDate.getMonth();
+                
+                // 같은 해 내에서의 기간
+                if (startMonth <= endMonth) {
+                    return currentMonth >= startMonth && currentMonth <= endMonth;
+                } else {
+                    // 연도를 넘어가는 기간 (예: 11월~3월)
+                    return currentMonth >= startMonth || currentMonth <= endMonth;
+                }
             });
             
             let html = '';
@@ -1170,24 +1195,28 @@
             
             // 각 품목별로 타임라인 그리기
             monthProductTimelines.forEach((product, index) => {
-                const productStart = product.startDate;
-                const productEnd = product.endDate;
+                const startMonth = product.startDate.getMonth();
+                const startDay = product.startDate.getDate();
+                const endMonth = product.endDate.getMonth();
+                const endDay = product.endDate.getDate();
                 
-                // 이번 달에 해당하는 부분만 계산
                 let displayStart, displayEnd;
                 
-                if (productStart.getFullYear() === currentYear && productStart.getMonth() === currentMonth) {
-                    displayStart = productStart.getDate();
-                } else if (productStart < monthStart) {
+                // 현재 월에서의 시작일 계산
+                if (startMonth === currentMonth) {
+                    displayStart = startDay;
+                } else if (startMonth < currentMonth || (startMonth > currentMonth && startMonth > endMonth)) {
                     displayStart = 1;
                 } else {
                     return;
                 }
                 
-                if (productEnd.getFullYear() === currentYear && productEnd.getMonth() === currentMonth) {
-                    displayEnd = productEnd.getDate();
-                } else if (productEnd > monthEnd) {
-                    displayEnd = monthEnd.getDate();
+                // 현재 월에서의 종료일 계산
+                const lastDayOfMonth = new Date(2025, currentMonth + 1, 0).getDate();
+                if (endMonth === currentMonth) {
+                    displayEnd = endDay;
+                } else if (endMonth > currentMonth || (endMonth < currentMonth && startMonth > endMonth)) {
+                    displayEnd = lastDayOfMonth;
                 } else {
                     return;
                 }
