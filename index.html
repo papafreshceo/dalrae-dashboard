@@ -1565,11 +1565,19 @@ function parseDate(dateStr) {
         
         // 페이지 로드 시 실행
         window.onload = function() {
-            console.log('페이지 초기화');
-            loadData();
-            setupEventListeners();
-            setupStickyMenu();
-        };
+    console.log('페이지 초기화');
+    
+    // 헤더 초기화 먼저
+    DalraeHeader.init({
+        containerId: 'header-container',
+        activePage: 'dashboard',
+        enableStickyMenu: true  // header.js의 스티키 메뉴 사용
+    });
+    
+    loadData();
+    setupEventListeners();
+    // setupStickyMenu(); // 이 줄 삭제 또는 주석처리
+};
         
         // 필터 토글
         function toggleFilter() {
@@ -2744,6 +2752,7 @@ case 'preparing':
 </body>
 
 </html>
+
 
 
 
