@@ -1816,12 +1816,15 @@ if (p.시작일) {
                 }
                 
 if (p.종료일) {
-    const end = parseDate(p.종료일);  // new Date를 parseDate로 변경
-                    if (end >= today && end <= sevenDays) {
-                        productSets.ending.add(variety);
-                        stats.ending.options++;
-                    }
-                }
+    const end = parseDate(p.종료일);
+    if (end) {
+        const daysUntilEnd = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+        if (daysUntilEnd >= 0 && daysUntilEnd <= 7) {
+            productSets.ending.add(variety);
+            stats.ending.options++;
+        }
+    }
+}
             });
             
             filteredProducts.forEach(p => {
@@ -1953,19 +1956,22 @@ let seasonText = '시즌종료';
 
 const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
 const seven = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-            
-            if (today >= minDate && today <= maxDate) {
-                if (maxDate <= seven) {
-                    seasonIcon = '🟡';
-                    seasonText = '종료임박';
-                } else {
-                    seasonIcon = '🟢';
-                    seasonText = '시즌중';
-                }
-            } else if (minDate > today && minDate <= twenty) {
-                seasonIcon = '🟡';
-                seasonText = '출하준비';
-            }
+
+if (minDate.getFullYear() !== 2099 && maxDate.getFullYear() !== 1900) {
+    if (today >= minDate && today <= maxDate) {
+        const daysUntilEnd = Math.ceil((maxDate - today) / (1000 * 60 * 60 * 24));
+        if (daysUntilEnd >= 0 && daysUntilEnd <= 7) {
+            seasonIcon = '🟡';
+            seasonText = '종료임박';
+        } else {
+            seasonIcon = '🟢';
+            seasonText = '시즌중';
+        }
+    } else if (minDate > today && minDate <= twenty) {
+        seasonIcon = '🟡';
+        seasonText = '출하준비';
+    }
+}
             
             const hasDetail = products.some(p => p.상세페이지제공 && p.상세페이지제공.trim() !== '');
             const hasImage = products.some(p => p.이미지제공 && p.이미지제공.trim() !== '');
@@ -2441,11 +2447,13 @@ case 'preparing':
         return start && start > today && start <= twenty;
     });
     break;
-                    case 'ending':
+                   case 'ending':
     filteredProducts = filteredProducts.filter(p => {
         if (!p.종료일) return false;
-        const end = parseDate(p.종료일);  // new Date를 parseDate로 변경
-        return end && end >= today && end <= seven;
+        const end = parseDate(p.종료일);
+        if (!end) return false;
+        const daysUntilEnd = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+        return daysUntilEnd >= 0 && daysUntilEnd <= 7;
     });
     break;
                 }
@@ -2499,5 +2507,6 @@ case 'preparing':
 </body>
 
 </html>
+
 
 
