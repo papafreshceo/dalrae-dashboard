@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>달래마켓 상품리스트</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: 'Noto Sans KR', -apple-system, sans-serif; 
+            background: #fafbfc;
+            min-height: 100vh;
+        }
+        
+        /* 헤더 */
+        .top-header {
+            background: white;
+            border-bottom: 1px solid #e8e9eb;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-img { 
+            height: 36px;
+            object-fit: contain;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-btn {
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid #e1e3e5;
+            border-radius: 8px;
+            color: #5a5c60;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .nav-btn:hover {
+            background: #f5f6f7;
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+        
+        /* 검색 섹션 */
+        .search-section {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .search-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e8e9eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* 필터 태그 */
+        .filter-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tag {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e1e3e5;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #5a5c60;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .filter-tag:hover {
+            background: #f5f6f7;
+        }
+        
+        .filter-tag.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        /* 리스트 헤더 */
+        .list-header {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .result-count {
+            font-size: 18px;
+            color: #3a3b3d;
+            font-weight: 600;
+        }
+        
+        .view-options {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .view-btn {
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #e1e3e5;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .view-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        /* 상품 테이블 */
+        .product-table {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f5f6f7;
+        }
+        
+        th {
+            padding: 15px;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 600;
+            color: #5a5c60;
+            border-bottom: 2px solid #e8e9eb;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f0f1f3;
+            font-size: 14px;
+            color: #3a3b3d;
+        }
+        
+        tbody tr:hover {
+            background: #f9fafb;
+        }
+        
+        .product-thumb {
+            width: 50px;
+            height: 50px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #f0f1f3;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            color: #667eea;
+            cursor: pointer;
+        }
+        
+        .product-name:hover {
+            text-decoration: underline;
+        }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-active {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .status-paused {
+            background: #fff8e1;
+            color: #f57c00;
+        }
+        
+        .status-stopped {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .price {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        /* 그리드 뷰 */
+        .product-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .grid-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .grid-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .grid-thumb {
+            width: 100%;
+            height: 180px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #f0f1f3;
+            margin-bottom: 15px;
+        }
+        
+        .grid-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3a3b3d;
+            margin-bottom: 8px;
+        }
+        
+        .grid-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 30px;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .page-btn {
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #e1e3e5;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .page-btn:hover {
+            background: #f5f6f7;
+        }
+        
+        .page-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-menu {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                width: 100%;
+            }
+            
+            .search-box {
+                flex-direction: column;
+            }
+            
+            .filter-tags {
+                gap: 5px;
+            }
+            
+            .filter-tag {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            /* 모바일 테이블 카드 형식 */
+            .table-container {
+                background: transparent;
+                box-shadow: none;
+            }
+            
+            table, thead, tbody, tr, td {
+                display: block;
+            }
+            
+            thead {
+                display: none;
+            }
+            
+            tr {
+                background: white;
+                margin-bottom: 15px;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+            }
+            
+            td {
+                border: none;
+                padding: 8px 0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #5a5c60;
+                font-size: 12px;
+            }
+            
+            .product-grid {
+                grid-template-columns: 1fr;
+                padding: 0 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="top-header">
+        <div class="header-content">
+            <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
+                 alt="달래마켓" 
+                 class="logo-img">
+            <nav class="nav-menu">
+                <button class="nav-btn" onclick="location.href='/'">📊 대시보드</button>
+                <button class="nav-btn active">📦 상품리스트</button>
+                <button class="nav-btn">📅 상품캘린더</button>
+                <button class="nav-btn">📋 주문관리</button>
+                <button class="nav-btn">🎯 서비스&프로그램</button>
+                <button class="nav-btn">📢 공지사항</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 검색 섹션 -->
+    <div class="search-section">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="상품명, 품종, 옵션명으로 검색...">
+                <button class="search-btn" onclick="searchProducts()">검색</button>
+            </div>
+            <div class="filter-tags">
+                <span class="filter-tag active" data-filter="all">전체</span>
+                <span class="filter-tag" data-filter="agricultural">농산물</span>
+                <span class="filter-tag" data-filter="seafood">수산물</span>
+                <span class="filter-tag" data-filter="livestock">축산물</span>
+                <span class="filter-tag" data-filter="imported">수입농산물</span>
+                <span class="filter-tag" data-filter="active">공급중</span>
+                <span class="filter-tag" data-filter="paused">시즌종료</span>
+                <span class="filter-tag" data-filter="stopped">공급중지</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 리스트 헤더 -->
+    <div class="list-header">
+        <div class="result-count">
+            총 <span id="resultCount">0</span>개 상품
+        </div>
+        <div class="view-options">
+            <button class="view-btn active" onclick="setView('table')">📋 테이블</button>
+            <button class="view-btn" onclick="setView('grid')">⊞ 그리드</button>
+        </div>
+    </div>
+
+    <!-- 상품 테이블 -->
+    <div class="product-table" id="tableView">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>이미지</th>
+                        <th>상품명</th>
+                        <th>옵션명</th>
+                        <th>규격</th>
+                        <th>공급상태</th>
+                        <th>공급가</th>
+                        <th>시작일</th>
+                        <th>종료일</th>
+                    </tr>
+                </thead>
+                <tbody id="productTableBody">
+                    <!-- 동적으로 생성 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 상품 그리드 -->
+    <div class="product-grid" id="gridView" style="display: none;">
+        <!-- 동적으로 생성 -->
+    </div>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination" id="pagination">
+        <!-- 동적으로 생성 -->
+    </div>
+
+    <script>
+        // 전역 변수
+        let allProducts = [];
+        let filteredProducts = [];
+        let currentPage = 1;
+        const itemsPerPage = 20;
+        let currentView = 'table';
+        let activeFilter = 'all';
+        
+        // 날짜 파싱 함수
+        function parseDate(dateStr) {
+            if (!dateStr || dateStr === '') return null;
+            
+            if (dateStr.length === 5 && dateStr.indexOf('-') === 2) {
+                const currentYear = new Date().getFullYear();
+                const month = parseInt(dateStr.substring(0, 2)) - 1;
+                const day = parseInt(dateStr.substring(3, 5));
+                
+                if (isNaN(month) || isNaN(day)) return null;
+                
+                let date = new Date(currentYear, month, day);
+                return date;
+            }
+        
+            
+            const date = new Date(dateStr);
+            return isNaN(date.getTime()) ? null : date;
+        }
+        
+        // 페이지 로드
+        window.onload = function() {
+            loadData();
+            setupEventListeners();
+        };
+        
+        // 데이터 로드
+        function loadData() {
+            fetch('https://dalrae-dashboard.vercel.app/api/products')
+            .then(response => response.json())
+            .then(data => {
+                allProducts = data.filter(p => {
+                    const supplyStatus = p['셀러공급Y/N'] || '';
+                    return supplyStatus.toString().trim() !== '미공급상품';
+                });
+                filteredProducts = [...allProducts];
+                updateDisplay();
+            })
+            .catch(error => {
+                console.error('데이터 로드 에러:', error);
+            });
+        }
+        
+        // 검색
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!searchTerm) {
+                filteredProducts = [...allProducts];
+            } else {
+                filteredProducts = allProducts.filter(p => {
+                    const productName = (p.품종 || p.품목 || '').toLowerCase();
+                    const optionName = (p.옵션명 || '').toLowerCase();
+                    return productName.includes(searchTerm) || optionName.includes(searchTerm);
+                });
+            }
+            
+            currentPage = 1;
+            updateDisplay();
+        }
+        
+        // 필터 적용
+        function applyFilter(filter) {
+            activeFilter = filter;
+            
+            if (filter === 'all') {
+                filteredProducts = [...allProducts];
+            } else if (filter === 'agricultural') {
+                filteredProducts = allProducts.filter(p => p.대분류 === '농산물');
+            } else if (filter === 'seafood') {
+                filteredProducts = allProducts.filter(p => p.대분류 === '수산물');
+            } else if (filter === 'livestock') {
+                filteredProducts = allProducts.filter(p => p.대분류 === '축산물');
+            } else if (filter === 'imported') {
+                filteredProducts = allProducts.filter(p => p.대분류 === '농산물(수입)');
+            } else if (filter === 'active') {
+                filteredProducts = allProducts.filter(p => p.공급상태 === '공급중');
+            } else if (filter === 'paused') {
+                filteredProducts = allProducts.filter(p => p.공급상태 === '시즌종료');
+            } else if (filter === 'stopped') {
+                filteredProducts = allProducts.filter(p => p.공급상태 === '공급중지');
+            }
+            
+            currentPage = 1;
+            updateDisplay();
+        }
+        
+        // 뷰 전환
+        function setView(view) {
+            currentView = view;
+            
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            if (view === 'table') {
+                document.getElementById('tableView').style.display = 'block';
+                document.getElementById('gridView').style.display = 'none';
+            } else {
+                document.getElementById('tableView').style.display = 'none';
+                document.getElementById('gridView').style.display = 'grid';
+            }
+            
+            updateDisplay();
+        }
+        
+        // 화면 업데이트
+        function updateDisplay() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageProducts = filteredProducts.slice(startIndex, endIndex);
+            
+            document.getElementById('resultCount').textContent = filteredProducts.length;
+            
+            if (currentView === 'table') {
+                renderTable(pageProducts);
+            } else {
+                renderGrid(pageProducts);
+            }
+            
+            renderPagination();
+        }
+        
+        // 테이블 렌더링
+        function renderTable(products) {
+            const tbody = document.getElementById('productTableBody');
+            
+            if (products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;">검색 결과가 없습니다.</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = products.map(p => {
+                const name = p.품종 || p.품목 || '-';
+                const specs = [p.규격1, p.규격2, p.규격3].filter(s => s).join(' ');
+                const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
+                
+                let statusClass = 'status-active';
+                if (p.공급상태 === '시즌종료') statusClass = 'status-paused';
+                if (p.공급상태 === '공급중지') statusClass = 'status-stopped';
+                
+                const startDate = p.시작일 ? formatDate(parseDate(p.시작일)) : '-';
+                const endDate = p.종료일 ? formatDate(parseDate(p.종료일)) : '-';
+                
+                return `
+                    <tr>
+                        <td data-label="이미지">
+                            ${p.썸네일 ? 
+                                `<img src="${p.썸네일}" class="product-thumb" alt="${name}">` :
+                                `<div class="product-thumb"></div>`
+                            }
+                        </td>
+                        <td data-label="상품명">
+                            <span class="product-name">${name}</span>
+                        </td>
+                        <td data-label="옵션명">${p.옵션명 || '-'}</td>
+                        <td data-label="규격">${specs || '-'}</td>
+                        <td data-label="상태">
+                            <span class="status-badge ${statusClass}">${p.공급상태 || '미정'}</span>
+                        </td>
+                        <td data-label="공급가">
+                            <span class="price">${price}원</span>
+                        </td>
+                        <td data-label="시작일">${startDate}</td>
+                        <td data-label="종료일">${endDate}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        // 그리드 렌더링
+        function renderGrid(products) {
+            const grid = document.getElementById('gridView');
+            
+            if (products.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;">검색 결과가 없습니다.</div>';
+                return;
+            }
+            
+            grid.innerHTML = products.map(p => {
+                const name = p.품종 || p.품목 || '-';
+                const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
+                
+                let statusClass = 'status-active';
+                if (p.공급상태 === '시즌종료') statusClass = 'status-paused';
+                if (p.공급상태 === '공급중지') statusClass = 'status-stopped';
+                
+                return `
+                    <div class="grid-card">
+                        ${p.썸네일 ? 
+                            `<img src="${p.썸네일}" class="grid-thumb" alt="${name}">` :
+                            `<div class="grid-thumb"></div>`
+                        }
+                        <div class="grid-title">${name}</div>
+                        <div style="color:#7a7c80;font-size:14px;margin-bottom:8px;">${p.옵션명 || '-'}</div>
+                        <div class="grid-info">
+                            <span class="status-badge ${statusClass}">${p.공급상태 || '미정'}</span>
+                            <span class="price">${price}원</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // 페이지네이션 렌더링
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            
+            // 이전 버튼
+            html += `<button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})">‹</button>`;
+            
+            // 페이지 번호
+            for (let i = 1; i <= Math.min(totalPages, 10); i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
+            }
+            
+            // 다음 버튼
+            html += `<button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})">›</button>`;
+            
+            pagination.innerHTML = html;
+        }
+        
+        // 페이지 이동
+        function goToPage(page) {
+            currentPage = page;
+            updateDisplay();
+            window.scrollTo(0, 0);
+        }
+        
+        // 날짜 포맷
+        function formatDate(date) {
+            if (!date) return '-';
+            return `${String(date.getMonth()+1).padStart(2,'0')}/${String(date.getDate()).padStart(2,'0')}`;
+        }
+        
+        // 이벤트 리스너 설정
+        function setupEventListeners() {
+            // 필터 태그 클릭
+            document.querySelectorAll('.filter-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    applyFilter(this.dataset.filter);
+                });
+            });
+            
+            // 엔터키로 검색
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchProducts();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
