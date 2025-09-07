@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- PNG 파비콘 추가 -->
     <link rel="icon" type="image/png" href="/favicon.png">
+    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WBYD1EM6GP"></script>
     <script>
@@ -1396,48 +1397,11 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="common-styles.css">
 </head>
 <body>
-    <!-- 헤더 -->
-    <header class="top-header">
-        <div class="header-content">
-            <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
-                 alt="달래마켓" 
-                 class="logo-img">
-            <div class="center-button">
-                <button class="nav-btn special-btn" onclick="openOrderSystem()">
-                    <span>🚜</span>
-                    <span>발주시스템</span>
-                </button>
-            </div>
-            <nav class="nav-menu" id="mainMenu">
-                <button class="nav-btn active">
-                    <span>📊</span>
-                    <span>대시보드</span>
-                </button>
-                <button class="nav-btn" onclick="location.href='products.html'">
-                    <span>📦</span>
-                    <span>상품리스트</span>
-                </button>
-                <button class="nav-btn">
-                    <span>📅</span>
-                    <span>상품캘린더</span>
-                </button>
-                <button class="nav-btn">
-                    <span>📋</span>
-                    <span>주문관리</span>
-                </button>
-                <button class="nav-btn">
-                    <span>🎯</span>
-                    <span>서비스&프로그램</span>
-                </button>
-                <button class="nav-btn">
-                    <span>📢</span>
-                    <span>공지사항</span>
-                </button>
-            </nav>
-        </div>
-    </header>
+    <!-- 공통 헤더 -->
+<div id="header-container"></div>
 
     <!-- 메뉴 고정 컨테이너 -->
     <div class="menu-container" id="menuContainer">
@@ -2776,9 +2740,11 @@ case 'preparing':
             });
         }
     </script>
+    <script src="header.js"></script>
 </body>
 
 </html>
+
 
 
 
