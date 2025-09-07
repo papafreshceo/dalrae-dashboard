@@ -1233,12 +1233,15 @@
                 const endCol = (col + duration - 1) % 7;
                 const endRow = row + Math.floor((col + duration - 1) / 7);
                 
+                // 겹치지 않도록 행 위치 조정 (index를 사용하여 여러 줄로 분산)
+                const rowOffset = (index % 5) * 20; // 5개 행으로 분산
+                
                 // 주를 넘어가는 경우 처리
                 if (endRow > row) {
                     // 첫 주 부분
                     const firstWeekDays = 7 - col;
                     const left = col * cellWidth + 2;
-                    const top = row * cellHeight + 30 + (index % 4) * 20;
+                    const top = row * cellHeight + 30 + rowOffset;
                     const width = firstWeekDays * cellWidth - 4;
                     
                     html += `
@@ -1255,7 +1258,7 @@
                     
                     // 중간 주들
                     for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
-                        const weekTop = weekRow * cellHeight + 30 + (index % 4) * 20;
+                        const weekTop = weekRow * cellHeight + 30 + rowOffset;
                         html += `
                             <div class="month-timeline-row" style="top: ${weekTop}px;">
                                 <div class="month-timeline-bar" 
@@ -1271,7 +1274,7 @@
                     
                     // 마지막 주 부분
                     const lastWeekDays = endCol + 1;
-                    const lastTop = endRow * cellHeight + 30 + (index % 4) * 20;
+                    const lastTop = endRow * cellHeight + 30 + rowOffset;
                     const lastWidth = lastWeekDays * cellWidth - 4;
                     
                     html += `
@@ -1288,7 +1291,7 @@
                 } else {
                     // 한 주 내에 있는 경우
                     const left = col * cellWidth + 2;
-                    const top = row * cellHeight + 30 + (index % 4) * 20;
+                    const top = row * cellHeight + 30 + rowOffset;
                     const width = duration * cellWidth - 4;
                     
                     html += `
