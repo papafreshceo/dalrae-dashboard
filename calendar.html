@@ -128,16 +128,6 @@
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(255, 154, 158, 0.4);
         }
-
-        /* 펄스 애니메이션 */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .pulse-animation {
-            animation: pulse 0.3s ease-in-out;
-        }
         
         /* 캘린더 페이지 스타일 */
         body { 
@@ -291,10 +281,10 @@
         
         .day-cell {
             background: white;
-            min-height: 100px;
+            min-height: 120px;
             padding: 8px;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
         }
         
         .day-number {
@@ -328,13 +318,13 @@
         /* 타임라인 바 */
         .timeline-bar {
             position: absolute;
-            height: 20px;
-            border-radius: 10px;
-            font-size: 11px;
+            height: 18px;
+            border-radius: 3px;
+            font-size: 10px;
             color: white;
             display: flex;
             align-items: center;
-            padding: 0 6px;
+            padding: 0 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -344,96 +334,110 @@
         }
         
         .timeline-bar:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transform: scale(1.05);
             z-index: 10;
         }
-        
-        .timeline-bar.type-agricultural {
-            background: linear-gradient(135deg, #4caf50, #66bb6a);
+
+        .timeline-bar.start {
+            border-top-left-radius: 9px;
+            border-bottom-left-radius: 9px;
+            padding-left: 8px;
+        }
+
+        .timeline-bar.end {
+            border-top-right-radius: 9px;
+            border-bottom-right-radius: 9px;
+            padding-right: 8px;
+        }
+
+        .timeline-bar.single {
+            border-radius: 9px;
         }
         
-        .timeline-bar.type-seafood {
-            background: linear-gradient(135deg, #2196f3, #42a5f5);
-        }
-        
-        .timeline-bar.type-livestock {
-            background: linear-gradient(135deg, #ff9800, #ffb74d);
-        }
-        
-        .timeline-bar.type-imported {
-            background: linear-gradient(135deg, #9c27b0, #ba68c8);
-        }
-        
-        /* 연 보기 */
+        /* 년 보기 - 테이블 형식 */
         .year-view {
             background: white;
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            overflow-x: auto;
         }
         
-        .year-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+        .year-table {
+            width: 100%;
+            border-collapse: collapse;
         }
         
-        .mini-month {
+        .year-table th,
+        .year-table td {
             border: 1px solid #e8e9eb;
-            border-radius: 8px;
-            padding: 15px;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .year-table th {
+            background: #f5f6f7;
+            font-weight: 600;
+            font-size: 13px;
+            color: #5a5c60;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .year-table th:first-child {
+            text-align: left;
+            min-width: 120px;
+        }
+        
+        .year-table td:first-child {
+            text-align: left;
+            font-weight: 500;
             background: #fafbfc;
         }
         
-        .mini-month-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #3a3b3d;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        
-        .mini-weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            margin-bottom: 5px;
-        }
-        
-        .mini-weekday {
-            text-align: center;
-            font-size: 10px;
-            color: #999;
-            padding: 2px;
-        }
-        
-        .mini-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-        }
-        
-        .mini-day {
-            aspect-ratio: 1;
+        .year-timeline-bar {
+            height: 24px;
+            border-radius: 12px;
+            color: white;
+            font-size: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
-            color: #666;
-            position: relative;
+            margin: 0 auto;
             cursor: pointer;
+            transition: all 0.2s;
         }
         
-        .mini-day.has-product {
-            background: #e8f5e9;
-            color: #2e7d32;
-            font-weight: 600;
+        .year-timeline-bar:hover {
+            transform: scale(1.05);
         }
         
-        .mini-day.today {
-            background: #ff6b6b;
-            color: white;
-            border-radius: 50%;
+        /* 범례 */
+        .legend {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #5a5c60;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 12px;
+            border-radius: 6px;
         }
         
         /* 상품 정보 툴팁 */
@@ -466,53 +470,11 @@
             line-height: 1.4;
         }
         
-        /* 범례 */
-        .legend {
-            background: white;
-            border-radius: 12px;
-            padding: 15px 20px;
-            margin-top: 20px;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            color: #5a5c60;
-        }
-        
-        .legend-color {
-            width: 20px;
-            height: 12px;
-            border-radius: 6px;
-        }
-        
         /* 로딩 */
         .loading {
             text-align: center;
             padding: 100px 20px;
             color: #999;
-        }
-        
-        .loading-spinner {
-            display: inline-block;
-            width: 50px;
-            height: 50px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         
         /* 모바일 반응형 */
@@ -575,7 +537,7 @@
             }
             
             .day-cell {
-                min-height: 60px;
+                min-height: 80px;
                 padding: 4px;
             }
             
@@ -584,22 +546,9 @@
             }
             
             .timeline-bar {
-                height: 16px;
+                height: 14px;
                 font-size: 9px;
-                padding: 0 4px;
-            }
-            
-            .year-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-            
-            .mini-month {
-                padding: 10px;
-            }
-            
-            .mini-month-title {
-                font-size: 14px;
+                padding: 0 3px;
             }
             
             .legend {
@@ -623,8 +572,8 @@
                 <button class="today-btn" onclick="goToToday()">오늘</button>
             </div>
             <div class="view-toggle">
-                <button class="toggle-btn active" data-view="month" onclick="setView('month')">월 보기</button>
-                <button class="toggle-btn" data-view="year" onclick="setView('year')">연 보기</button>
+                <button class="toggle-btn active" data-view="month" onclick="setView('month')">월</button>
+                <button class="toggle-btn" data-view="year" onclick="setView('year')">년</button>
             </div>
         </div>
     </div>
@@ -647,31 +596,35 @@
             </div>
         </div>
 
-        <!-- 연 보기 -->
+        <!-- 년 보기 -->
         <div id="yearView" class="year-view" style="display: none;">
-            <div class="year-grid" id="yearGrid">
-                <!-- 동적 생성 -->
-            </div>
+            <table class="year-table">
+                <thead>
+                    <tr>
+                        <th>품목</th>
+                        <th>1월</th>
+                        <th>2월</th>
+                        <th>3월</th>
+                        <th>4월</th>
+                        <th>5월</th>
+                        <th>6월</th>
+                        <th>7월</th>
+                        <th>8월</th>
+                        <th>9월</th>
+                        <th>10월</th>
+                        <th>11월</th>
+                        <th>12월</th>
+                    </tr>
+                </thead>
+                <tbody id="yearTableBody">
+                    <!-- 동적 생성 -->
+                </tbody>
+            </table>
         </div>
 
         <!-- 범례 -->
-        <div class="legend">
-            <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(135deg, #4caf50, #66bb6a);"></div>
-                <span>농산물</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(135deg, #2196f3, #42a5f5);"></div>
-                <span>수산물</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(135deg, #ff9800, #ffb74d);"></div>
-                <span>축산물</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: linear-gradient(135deg, #9c27b0, #ba68c8);"></div>
-                <span>수입농산물</span>
-            </div>
+        <div class="legend" id="legend">
+            <!-- 동적 생성 -->
         </div>
     </div>
 
@@ -906,6 +859,18 @@
         let currentMonth = currentDate.getMonth();
         let allProducts = [];
         let productTimelines = [];
+        let productColors = {};
+
+        // 색상 팔레트 (더 많은 색상 추가)
+        const colorPalette = [
+            '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
+            '#DDA0DD', '#FF9FF3', '#48C9B0', '#F39C12', '#E74C3C',
+            '#9B59B6', '#3498DB', '#1ABC9C', '#F39C12', '#E67E22',
+            '#D35400', '#C0392B', '#8E44AD', '#2980B9', '#27AE60',
+            '#16A085', '#F1C40F', '#E74C3C', '#95A5A6', '#34495E',
+            '#FF6348', '#FFA502', '#FF4757', '#5F27CD', '#00D2D3',
+            '#54A0FF', '#48DBFB', '#0ABDE3', '#C8D6E5', '#576574'
+        ];
 
         // 날짜 파싱 함수
         function parseDate(dateStr) {
@@ -941,7 +906,9 @@
                     return supplyStatus.toString().trim() !== '미공급상품';
                 });
                 processProductTimelines();
+                assignColors();
                 renderCalendar();
+                updateLegend();
             })
             .catch(error => {
                 console.error('데이터 로드 에러:', error);
@@ -989,6 +956,13 @@
             productTimelines = Object.values(productMap);
         }
 
+        // 색상 할당
+        function assignColors() {
+            productTimelines.forEach((product, index) => {
+                productColors[product.name] = colorPalette[index % colorPalette.length];
+            });
+        }
+
         // 상품 타입 결정
         function getProductType(category) {
             if (category === '농산물') return 'agricultural';
@@ -996,6 +970,23 @@
             if (category === '축산물') return 'livestock';
             if (category === '농산물(수입)') return 'imported';
             return 'agricultural';
+        }
+
+        // 범례 업데이트
+        function updateLegend() {
+            const legend = document.getElementById('legend');
+            let html = '';
+            
+            productTimelines.forEach(product => {
+                html += `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: ${productColors[product.name]};"></div>
+                        <span>${product.name}</span>
+                    </div>
+                `;
+            });
+            
+            legend.innerHTML = html;
         }
 
         // 뷰 전환
@@ -1092,7 +1083,6 @@
             const today = new Date();
             
             let html = '';
-            let dayCount = 1;
             
             // 이전 달 날짜
             for (let i = startDay - 1; i >= 0; i--) {
@@ -1113,12 +1103,9 @@
                 if (dayOfWeek === 0) classes.push('sunday');
                 if (dayOfWeek === 6) classes.push('saturday');
                 
-                html += `<div class="${classes.join(' ')}" data-date="${date.toISOString()}">
+                html += `<div class="${classes.join(' ')}" data-date="${date.toISOString()}" data-day="${day}">
                     <div class="day-number">${day}</div>
-                    <div class="timelines" id="timeline-${currentYear}-${currentMonth}-${day}"></div>
                 </div>`;
-                
-                dayCount++;
             }
             
             // 다음 달 날짜
@@ -1132,101 +1119,92 @@
             grid.innerHTML = html;
             
             // 타임라인 추가
-            addTimelines();
+            setTimeout(() => addMonthTimelines(), 10);
         }
 
-        // 타임라인 추가
-        function addTimelines() {
+        // 월 타임라인 추가
+        function addMonthTimelines() {
             const monthStart = new Date(currentYear, currentMonth, 1);
             const monthEnd = new Date(currentYear, currentMonth + 1, 0);
             
+            // 각 품목별로 타임라인 그리기
             productTimelines.forEach((product, index) => {
-                if (product.endDate < monthStart || product.startDate > monthEnd) return;
+                const productStart = product.startDate;
+                const productEnd = product.endDate;
                 
-                const displayStart = product.startDate < monthStart ? monthStart : product.startDate;
-                const displayEnd = product.endDate > monthEnd ? monthEnd : product.endDate;
+                // 이번 달에 해당하는 부분만 표시
+                if (productEnd < monthStart || productStart > monthEnd) return;
                 
-                const startDay = displayStart.getDate();
-                const endDay = displayEnd.getDate();
+                const displayStart = productStart < monthStart ? 1 : productStart.getDate();
+                const displayEnd = productEnd > monthEnd ? monthEnd.getDate() : productEnd.getDate();
                 
-                // 타임라인 바 생성
-                for (let day = startDay; day <= endDay; day++) {
-                    const container = document.getElementById(`timeline-${currentYear}-${currentMonth}-${day}`);
-                    if (container) {
-                        const bar = document.createElement('div');
-                        bar.className = `timeline-bar type-${product.type}`;
-                        bar.style.top = `${25 + (index % 3) * 22}px`;
-                        bar.style.left = '8px';
-                        bar.style.right = '8px';
-                        bar.textContent = product.name;
-                        bar.onclick = () => showTooltip(event, product);
-                        container.appendChild(bar);
-                    }
+                // 연속된 바 그리기
+                const startCell = document.querySelector(`[data-day="${displayStart}"]`);
+                if (!startCell) return;
+                
+                const bar = document.createElement('div');
+                bar.className = 'timeline-bar';
+                bar.style.background = productColors[product.name];
+                bar.style.top = `${28 + (index * 20)}px`;
+                bar.textContent = product.name;
+                
+                // 바의 너비 계산
+                const cellWidth = startCell.offsetWidth;
+                const duration = displayEnd - displayStart + 1;
+                const width = cellWidth * duration - 4;
+                
+                bar.style.width = `${width}px`;
+                bar.style.left = '2px';
+                
+                // 시작일과 종료일에 따라 모서리 둥글게
+                if (displayStart === 1 || productStart.getDate() === displayStart) {
+                    bar.classList.add('start');
                 }
+                if (displayEnd === monthEnd.getDate() || productEnd.getDate() === displayEnd) {
+                    bar.classList.add('end');
+                }
+                if (duration === 1) {
+                    bar.classList.add('single');
+                }
+                
+                bar.onclick = (e) => showTooltip(e, product);
+                startCell.appendChild(bar);
             });
         }
 
-        // 연 보기 렌더링
+        // 년 보기 렌더링
         function renderYearView() {
-            const grid = document.getElementById('yearGrid');
-            const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
-            const today = new Date();
+            const tbody = document.getElementById('yearTableBody');
             let html = '';
             
-            for (let month = 0; month < 12; month++) {
-                const firstDay = new Date(currentYear, month, 1);
-                const lastDay = new Date(currentYear, month + 1, 0);
-                const startDay = firstDay.getDay();
-                const totalDays = lastDay.getDate();
+            productTimelines.forEach(product => {
+                html += `<tr>
+                    <td style="background: ${productColors[product.name]}20; color: #333; font-weight: 600;">
+                        ${product.name}
+                    </td>`;
                 
-                html += `<div class="mini-month">
-                    <div class="mini-month-title">${monthNames[month]}</div>
-                    <div class="mini-weekdays">
-                        <div class="mini-weekday">일</div>
-                        <div class="mini-weekday">월</div>
-                        <div class="mini-weekday">화</div>
-                        <div class="mini-weekday">수</div>
-                        <div class="mini-weekday">목</div>
-                        <div class="mini-weekday">금</div>
-                        <div class="mini-weekday">토</div>
-                    </div>
-                    <div class="mini-days">`;
-                
-                // 빈 칸
-                for (let i = 0; i < startDay; i++) {
-                    html += '<div class="mini-day"></div>';
+                for (let month = 0; month < 12; month++) {
+                    const monthStart = new Date(currentYear, month, 1);
+                    const monthEnd = new Date(currentYear, month + 1, 0);
+                    
+                    // 이 달에 상품이 있는지 확인
+                    if (product.startDate <= monthEnd && product.endDate >= monthStart) {
+                        html += `<td>
+                            <div class="year-timeline-bar" 
+                                 style="background: ${productColors[product.name]};"
+                                 onclick="showTooltip(event, ${JSON.stringify(product).replace(/"/g, '&quot;')})">
+                                ●
+                            </div>
+                        </td>`;
+                    } else {
+                        html += '<td></td>';
+                    }
                 }
                 
-                // 날짜
-                for (let day = 1; day <= totalDays; day++) {
-                    const date = new Date(currentYear, month, day);
-                    const hasProduct = checkProductOnDate(date);
-                    const isToday = date.toDateString() === today.toDateString();
-                    
-                    const classes = ['mini-day'];
-                    if (hasProduct) classes.push('has-product');
-                    if (isToday) classes.push('today');
-                    
-                    html += `<div class="${classes.join(' ')}" onclick="jumpToMonth(${month})">${day}</div>`;
-                }
-                
-                html += '</div></div>';
-            }
-            
-            grid.innerHTML = html;
-        }
-
-        // 날짜에 상품이 있는지 확인
-        function checkProductOnDate(date) {
-            return productTimelines.some(product => {
-                return date >= product.startDate && date <= product.endDate;
+                html += '</tr>';
             });
-        }
-
-        // 특정 월로 이동
-        function jumpToMonth(month) {
-            currentMonth = month;
-            setView('month');
+            
+            tbody.innerHTML = html;
         }
 
         // 툴팁 표시
@@ -1234,6 +1212,11 @@
             const tooltip = document.getElementById('tooltip');
             const title = document.getElementById('tooltipTitle');
             const info = document.getElementById('tooltipInfo');
+            
+            // JSON 문자열로 전달된 경우 파싱
+            if (typeof product === 'string') {
+                product = JSON.parse(product);
+            }
             
             title.textContent = product.name;
             info.innerHTML = `
@@ -1253,6 +1236,9 @@
 
         // 날짜 포맷
         function formatDate(date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             return `${date.getMonth() + 1}/${date.getDate()}`;
         }
 
