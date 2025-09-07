@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>달래마켓 상품캘린더</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: 'Noto Sans KR', -apple-system, sans-serif; 
+            background: #fafbfc;
+            min-height: 100vh;
+        }
+        
+        /* 캘린더 헤더 */
+        .calendar-header {
+            background: white;
+            padding: 20px 30px;
+            margin: 20px auto 20px;
+            max-width: 1400px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .month-year-display {
+            font-size: 24px;
+            font-weight: 600;
+            color: #3a3b3d;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .nav-btn {
+            background: white;
+            border: 1px solid #e1e3e5;
+            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+        
+        .nav-btn:hover {
+            background: #f5f6f7;
+            border-color: #667eea;
+            color: #667eea;
+        }
+        
+        .today-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e1e3e5;
+            border-radius: 8px;
+            color: #5a5c60;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .today-btn:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .toggle-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e1e3e5;
+            border-radius: 8px;
+            color: #5a5c60;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+        
+        /* 캘린더 컨테이너 */
+        .calendar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        
+        /* 월 보기 */
+        .month-view {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e8e9eb;
+            border: 1px solid #e8e9eb;
+            margin-bottom: 1px;
+        }
+        
+        .weekday {
+            background: #f5f6f7;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 13px;
+            color: #5a5c60;
+        }
+        
+        .weekday.sunday {
+            color: #ff5252;
+        }
+        
+        .weekday.saturday {
+            color: #2196f3;
+        }
+        
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e8e9eb;
+            border: 1px solid #e8e9eb;
+            border-top: none;
+        }
+        
+        .day-cell {
+            background: white;
+            min-height: 100px;
+            padding: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .day-number {
+            font-size: 14px;
+            font-weight: 500;
+            color: #3a3b3d;
+            margin-bottom: 4px;
+        }
+        
+        .day-cell.other-month .day-number {
+            color: #ccc;
+        }
+        
+        .day-cell.today {
+            background: #fff8f0;
+        }
+        
+        .day-cell.today .day-number {
+            color: #ff6b6b;
+            font-weight: 700;
+        }
+        
+        .day-cell.sunday .day-number {
+            color: #ff5252;
+        }
+        
+        .day-cell.saturday .day-number {
+            color: #2196f3;
+        }
+        
+        /* 타임라인 바 */
+        .timeline-bar {
+            position: absolute;
+            height: 20px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 1;
+        }
+        
+        .timeline-bar:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+        
+        .timeline-bar.type-agricultural {
+            background: linear-gradient(135deg, #4caf50, #66bb6a);
+        }
+        
+        .timeline-bar.type-seafood {
+            background: linear-gradient(135deg, #2196f3, #42a5f5);
+        }
+        
+        .timeline-bar.type-livestock {
+            background: linear-gradient(135deg, #ff9800, #ffb74d);
+        }
+        
+        .timeline-bar.type-imported {
+            background: linear-gradient(135deg, #9c27b0, #ba68c8);
+        }
+        
+        /* 연 보기 */
+        .year-view {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .year-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        
+        .mini-month {
+            border: 1px solid #e8e9eb;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fafbfc;
+        }
+        
+        .mini-month-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3a3b3d;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .mini-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 5px;
+        }
+        
+        .mini-weekday {
+            text-align: center;
+            font-size: 10px;
+            color: #999;
+            padding: 2px;
+        }
+        
+        .mini-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+        }
+        
+        .mini-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #666;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .mini-day.has-product {
+            background: #e8f5e9;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+        
+        .mini-day.today {
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+        }
+        
+        /* 상품 정보 툴팁 */
+        .tooltip {
+            position: absolute;
+            background: white;
+            border: 1px solid #e8e9eb;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            min-width: 200px;
+            display: none;
+        }
+        
+        .tooltip.show {
+            display: block;
+        }
+        
+        .tooltip-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #3a3b3d;
+            margin-bottom: 6px;
+        }
+        
+        .tooltip-info {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        /* 범례 */
+        .legend {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-top: 20px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #5a5c60;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 12px;
+            border-radius: 6px;
+        }
+        
+        /* 로딩 */
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            color: #999;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .calendar-header {
+                padding: 15px;
+            }
+            
+            .month-year-display {
+                font-size: 18px;
+            }
+            
+            .calendar-container {
+                padding: 0 15px;
+            }
+            
+            .day-cell {
+                min-height: 60px;
+                padding: 4px;
+            }
+            
+            .day-number {
+                font-size: 12px;
+            }
+            
+            .timeline-bar {
+                height: 16px;
+                font-size: 9px;
+                padding: 0 4px;
+            }
+            
+            .year-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .mini-month {
+                padding: 10px;
+            }
+            
+            .mini-month-title {
+                font-size: 14px;
+            }
+            
+            .legend {
+                padding: 10px;
+                gap: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="common-styles.css">
+</head>
+<body>
+    <!-- 공통 헤더 -->
+    <div id="header-container"></div>
+
+    <!-- 캘린더 헤더 -->
+    <div class="calendar-header">
+        <div class="calendar-controls">
+            <div class="nav-controls">
+                <button class="nav-btn" onclick="previousPeriod()">‹</button>
+                <div class="month-year-display" id="periodDisplay">2025년 1월</div>
+                <button class="nav-btn" onclick="nextPeriod()">›</button>
+                <button class="today-btn" onclick="goToToday()">오늘</button>
+            </div>
+            <div class="view-toggle">
+                <button class="toggle-btn active" data-view="month" onclick="setView('month')">월 보기</button>
+                <button class="toggle-btn" data-view="year" onclick="setView('year')">연 보기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 캘린더 컨테이너 -->
+    <div class="calendar-container">
+        <!-- 월 보기 -->
+        <div id="monthView" class="month-view">
+            <div class="weekdays">
+                <div class="weekday sunday">일</div>
+                <div class="weekday">월</div>
+                <div class="weekday">화</div>
+                <div class="weekday">수</div>
+                <div class="weekday">목</div>
+                <div class="weekday">금</div>
+                <div class="weekday saturday">토</div>
+            </div>
+            <div class="days-grid" id="daysGrid">
+                <!-- 동적 생성 -->
+            </div>
+        </div>
+
+        <!-- 연 보기 -->
+        <div id="yearView" class="year-view" style="display: none;">
+            <div class="year-grid" id="yearGrid">
+                <!-- 동적 생성 -->
+            </div>
+        </div>
+
+        <!-- 범례 -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #4caf50, #66bb6a);"></div>
+                <span>농산물</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #2196f3, #42a5f5);"></div>
+                <span>수산물</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #ff9800, #ffb74d);"></div>
+                <span>축산물</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: linear-gradient(135deg, #9c27b0, #ba68c8);"></div>
+                <span>수입농산물</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 툴팁 -->
+    <div class="tooltip" id="tooltip">
+        <div class="tooltip-title" id="tooltipTitle"></div>
+        <div class="tooltip-info" id="tooltipInfo"></div>
+    </div>
+
+    <script src="header.js"></script>
+    <script>
+        // 헤더 초기화
+        window.addEventListener('DOMContentLoaded', function() {
+            DalraeHeader.init({
+                containerId: 'header-container',
+                activePage: 'calendar'
+            });
+        });
+
+        // 전역 변수
+        let currentView = 'month';
+        let currentDate = new Date();
+        let currentYear = currentDate.getFullYear();
+        let currentMonth = currentDate.getMonth();
+        let allProducts = [];
+        let productTimelines = [];
+
+        // 날짜 파싱 함수
+        function parseDate(dateStr) {
+            if (!dateStr || dateStr === '') return null;
+            
+            if (dateStr.length === 5 && dateStr.indexOf('-') === 2) {
+                const currentYear = new Date().getFullYear();
+                const month = parseInt(dateStr.substring(0, 2)) - 1;
+                const day = parseInt(dateStr.substring(3, 5));
+                
+                if (isNaN(month) || isNaN(day)) return null;
+                
+                let date = new Date(currentYear, month, day);
+                const today = new Date();
+                if (date < today) {
+                    date = new Date(currentYear + 1, month, day);
+                }
+                
+                return date;
+            }
+            
+            const date = new Date(dateStr);
+            return isNaN(date.getTime()) ? null : date;
+        }
+
+        // 데이터 로드
+        function loadData() {
+            fetch('/api/products')
+            .then(response => response.json())
+            .then(data => {
+                allProducts = data.filter(p => {
+                    const supplyStatus = p['셀러공급Y/N'] || '';
+                    return supplyStatus.toString().trim() !== '미공급상품';
+                });
+                processProductTimelines();
+                renderCalendar();
+            })
+            .catch(error => {
+                console.error('데이터 로드 에러:', error);
+            });
+        }
+
+        // 상품 타임라인 처리
+        function processProductTimelines() {
+            const productMap = {};
+            
+            allProducts.forEach(p => {
+                const item = p.품목;
+                if (!item) return;
+                
+                const startDate = parseDate(p.시작일);
+                const endDate = parseDate(p.종료일);
+                
+                if (!startDate || !endDate) return;
+                
+                if (!productMap[item]) {
+                    productMap[item] = {
+                        name: item,
+                        type: getProductType(p.대분류),
+                        startDate: startDate,
+                        endDate: endDate,
+                        options: []
+                    };
+                }
+                
+                // 기간 확장
+                if (startDate < productMap[item].startDate) {
+                    productMap[item].startDate = startDate;
+                }
+                if (endDate > productMap[item].endDate) {
+                    productMap[item].endDate = endDate;
+                }
+                
+                productMap[item].options.push({
+                    name: p.옵션명,
+                    variety: p.품종,
+                    status: p.공급상태
+                });
+            });
+            
+            productTimelines = Object.values(productMap);
+        }
+
+        // 상품 타입 결정
+        function getProductType(category) {
+            if (category === '농산물') return 'agricultural';
+            if (category === '수산물') return 'seafood';
+            if (category === '축산물') return 'livestock';
+            if (category === '농산물(수입)') return 'imported';
+            return 'agricultural';
+        }
+
+        // 뷰 전환
+        function setView(view) {
+            currentView = view;
+            
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.view === view) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            if (view === 'month') {
+                document.getElementById('monthView').style.display = 'block';
+                document.getElementById('yearView').style.display = 'none';
+            } else {
+                document.getElementById('monthView').style.display = 'none';
+                document.getElementById('yearView').style.display = 'block';
+            }
+            
+            updatePeriodDisplay();
+            renderCalendar();
+        }
+
+        // 이전 기간
+        function previousPeriod() {
+            if (currentView === 'month') {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+            } else {
+                currentYear--;
+            }
+            updatePeriodDisplay();
+            renderCalendar();
+        }
+
+        // 다음 기간
+        function nextPeriod() {
+            if (currentView === 'month') {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+            } else {
+                currentYear++;
+            }
+            updatePeriodDisplay();
+            renderCalendar();
+        }
+
+        // 오늘로 이동
+        function goToToday() {
+            const today = new Date();
+            currentYear = today.getFullYear();
+            currentMonth = today.getMonth();
+            updatePeriodDisplay();
+            renderCalendar();
+        }
+
+        // 기간 표시 업데이트
+        function updatePeriodDisplay() {
+            const display = document.getElementById('periodDisplay');
+            if (currentView === 'month') {
+                const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+                display.textContent = `${currentYear}년 ${monthNames[currentMonth]}`;
+            } else {
+                display.textContent = `${currentYear}년`;
+            }
+        }
+
+        // 캘린더 렌더링
+        function renderCalendar() {
+            if (currentView === 'month') {
+                renderMonthView();
+            } else {
+                renderYearView();
+            }
+        }
+
+        // 월 보기 렌더링
+        function renderMonthView() {
+            const grid = document.getElementById('daysGrid');
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const prevLastDay = new Date(currentYear, currentMonth, 0);
+            const startDay = firstDay.getDay();
+            const totalDays = lastDay.getDate();
+            const prevTotalDays = prevLastDay.getDate();
+            const today = new Date();
+            
+            let html = '';
+            let dayCount = 1;
+            
+            // 이전 달 날짜
+            for (let i = startDay - 1; i >= 0; i--) {
+                const day = prevTotalDays - i;
+                html += `<div class="day-cell other-month">
+                    <div class="day-number">${day}</div>
+                </div>`;
+            }
+            
+            // 현재 달 날짜
+            for (let day = 1; day <= totalDays; day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const dayOfWeek = date.getDay();
+                const isToday = date.toDateString() === today.toDateString();
+                const classes = ['day-cell'];
+                
+                if (isToday) classes.push('today');
+                if (dayOfWeek === 0) classes.push('sunday');
+                if (dayOfWeek === 6) classes.push('saturday');
+                
+                html += `<div class="${classes.join(' ')}" data-date="${date.toISOString()}">
+                    <div class="day-number">${day}</div>
+                    <div class="timelines" id="timeline-${currentYear}-${currentMonth}-${day}"></div>
+                </div>`;
+                
+                dayCount++;
+            }
+            
+            // 다음 달 날짜
+            const remainingCells = 42 - (startDay + totalDays);
+            for (let day = 1; day <= remainingCells; day++) {
+                html += `<div class="day-cell other-month">
+                    <div class="day-number">${day}</div>
+                </div>`;
+            }
+            
+            grid.innerHTML = html;
+            
+            // 타임라인 추가
+            addTimelines();
+        }
+
+        // 타임라인 추가
+        function addTimelines() {
+            const monthStart = new Date(currentYear, currentMonth, 1);
+            const monthEnd = new Date(currentYear, currentMonth + 1, 0);
+            
+            productTimelines.forEach((product, index) => {
+                if (product.endDate < monthStart || product.startDate > monthEnd) return;
+                
+                const displayStart = product.startDate < monthStart ? monthStart : product.startDate;
+                const displayEnd = product.endDate > monthEnd ? monthEnd : product.endDate;
+                
+                const startDay = displayStart.getDate();
+                const endDay = displayEnd.getDate();
+                
+                // 타임라인 바 생성
+                for (let day = startDay; day <= endDay; day++) {
+                    const container = document.getElementById(`timeline-${currentYear}-${currentMonth}-${day}`);
+                    if (container) {
+                        const bar = document.createElement('div');
+                        bar.className = `timeline-bar type-${product.type}`;
+                        bar.style.top = `${25 + (index % 3) * 22}px`;
+                        bar.style.left = '8px';
+                        bar.style.right = '8px';
+                        bar.textContent = product.name;
+                        bar.onclick = () => showTooltip(event, product);
+                        container.appendChild(bar);
+                    }
+                }
+            });
+        }
+
+        // 연 보기 렌더링
+        function renderYearView() {
+            const grid = document.getElementById('yearGrid');
+            const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+            const today = new Date();
+            let html = '';
+            
+            for (let month = 0; month < 12; month++) {
+                const firstDay = new Date(currentYear, month, 1);
+                const lastDay = new Date(currentYear, month + 1, 0);
+                const startDay = firstDay.getDay();
+                const totalDays = lastDay.getDate();
+                
+                html += `<div class="mini-month">
+                    <div class="mini-month-title">${monthNames[month]}</div>
+                    <div class="mini-weekdays">
+                        <div class="mini-weekday">일</div>
+                        <div class="mini-weekday">월</div>
+                        <div class="mini-weekday">화</div>
+                        <div class="mini-weekday">수</div>
+                        <div class="mini-weekday">목</div>
+                        <div class="mini-weekday">금</div>
+                        <div class="mini-weekday">토</div>
+                    </div>
+                    <div class="mini-days">`;
+                
+                // 빈 칸
+                for (let i = 0; i < startDay; i++) {
+                    html += '<div class="mini-day"></div>';
+                }
+                
+                // 날짜
+                for (let day = 1; day <= totalDays; day++) {
+                    const date = new Date(currentYear, month, day);
+                    const hasProduct = checkProductOnDate(date);
+                    const isToday = date.toDateString() === today.toDateString();
+                    
+                    const classes = ['mini-day'];
+                    if (hasProduct) classes.push('has-product');
+                    if (isToday) classes.push('today');
+                    
+                    html += `<div class="${classes.join(' ')}" onclick="jumpToMonth(${month})">${day}</div>`;
+                }
+                
+                html += '</div></div>';
+            }
+            
+            grid.innerHTML = html;
+        }
+
+        // 날짜에 상품이 있는지 확인
+        function checkProductOnDate(date) {
+            return productTimelines.some(product => {
+                return date >= product.startDate && date <= product.endDate;
+            });
+        }
+
+        // 특정 월로 이동
+        function jumpToMonth(month) {
+            currentMonth = month;
+            setView('month');
+        }
+
+        // 툴팁 표시
+        function showTooltip(event, product) {
+            const tooltip = document.getElementById('tooltip');
+            const title = document.getElementById('tooltipTitle');
+            const info = document.getElementById('tooltipInfo');
+            
+            title.textContent = product.name;
+            info.innerHTML = `
+                기간: ${formatDate(product.startDate)} ~ ${formatDate(product.endDate)}<br>
+                옵션: ${product.options.length}개<br>
+                상태: ${product.options[0]?.status || '확인 필요'}
+            `;
+            
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY + 10 + 'px';
+            tooltip.classList.add('show');
+            
+            setTimeout(() => {
+                tooltip.classList.remove('show');
+            }, 3000);
+        }
+
+        // 날짜 포맷
+        function formatDate(date) {
+            return `${date.getMonth() + 1}/${date.getDate()}`;
+        }
+
+        // 초기화
+        loadData();
+        updatePeriodDisplay();
+    </script>
+</body>
+</html>
