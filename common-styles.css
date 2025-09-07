@@ -1,22 +1,18 @@
+/* header.css - 달래마켓 공통 헤더 스타일 */
+
+/* 기본 리셋 */
 * { 
     margin: 0; 
     padding: 0; 
     box-sizing: border-box; 
 }
 
-body { 
-    font-family: 'Noto Sans KR', -apple-system, sans-serif; 
-    background: #fafbfc;
-    min-height: 100vh;
-}
-
-/* 헤더 스타일 */
+/* 헤더 */
 .top-header {
     background: white;
     border-bottom: 1px solid #e8e9eb;
     padding: 20px 0;
-    position: sticky;
-    top: 0;
+    position: relative;
     z-index: 100;
 }
 
@@ -24,18 +20,52 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 30px;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
     align-items: center;
+    gap: 20px;
 }
 
 .logo-img { 
     height: 36px;
     object-fit: contain;
+    cursor: pointer;
 }
 
-.nav-menu {
+/* 메뉴 고정용 컨테이너 */
+.menu-container {
+    position: relative;
+    background: white;
+    transition: all 0.3s;
+}
+
+.menu-container.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 10px 0;
+}
+
+.menu-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 30px;
     display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.center-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-menu { 
+    display: flex; 
     gap: 8px;
 }
 
@@ -52,6 +82,8 @@ body {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.2s;
+    white-space: nowrap;
+    font-family: 'Noto Sans KR', -apple-system, sans-serif;
 }
 
 .nav-btn:hover {
@@ -66,12 +98,63 @@ body {
     border-color: transparent;
 }
 
-/* 모바일 */
+/* 발주시스템 특별 스타일 */
+.special-btn {
+    padding: 10px 24px;
+    background: linear-gradient(270deg, #ffffff, #ff9a9e, #fecfef, #a8e6cf, #ffffff);
+    background-size: 400% 100%;
+    color: #333;
+    border: none;
+    font-weight: 600;
+    animation: shine 3.75s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes shine {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.special-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 154, 158, 0.4);
+}
+
+/* 펄스 애니메이션 */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.pulse-animation {
+    animation: pulse 0.3s ease-in-out;
+}
+
+/* 모바일 반응형 */
 @media (max-width: 768px) {
+    .top-header {
+        padding: 15px 0;
+    }
+    
+    .logo-img {
+        height: 22px;
+    }
+    
     .header-content {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         gap: 15px;
         padding: 0 15px;
+    }
+    
+    .menu-container.sticky .menu-wrapper {
+        padding: 0 10px;
+        gap: 8px;
+    }
+    
+    .center-button {
+        order: -1;
     }
     
     .nav-menu {
@@ -84,6 +167,15 @@ body {
     .nav-btn {
         padding: 6px 4px;
         font-size: 11px;
-        flex-direction: column;
+    }
+    
+    .nav-btn span {
+        display: inline-block;
+        white-space: nowrap;
+    }
+    
+    .special-btn {
+        width: 100%;
+        padding: 8px 12px;
     }
 }
