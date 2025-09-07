@@ -137,9 +137,9 @@
         const page = btn.dataset.page;
         
         if (page) {
-            // 페이지 매핑
+            // 페이지 매핑 - dashboard는 index.html로
             const pageUrls = {
-                'dashboard': 'dashboard.html',
+                'dashboard': 'index.html',
                 'products': 'products.html',
                 'calendar': 'calendar.html',
                 'orders': 'orders.html',
@@ -148,9 +148,12 @@
             };
             
             if (pageUrls[page]) {
-                // 현재 페이지가 아닌 경우에만 이동
-                const currentPage = window.location.pathname.split('/').pop().replace('.html', '');
-                if (currentPage !== page) {
+                // 현재 페이지 확인
+                const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+                const currentPage = currentFile.replace('.html', '');
+                const currentPageName = currentPage === 'index' ? 'dashboard' : currentPage;
+                
+                if (currentPageName !== page) {
                     window.location.href = pageUrls[page];
                 }
             }
@@ -163,7 +166,7 @@
         const { 
             containerId = 'header-container',
             activePage = null,
-            enableStickyMenu = true  // 스티키 메뉴 활성화 옵션 추가
+            enableStickyMenu = true  // 스티키 메뉴 활성화 옵션
         } = options;
         
         // 헤더 컨테이너 찾기
@@ -181,8 +184,8 @@
             setActivePage(activePage);
         } else {
             // URL에서 현재 페이지 추출
-            const currentFile = window.location.pathname.split('/').pop();
-            const pageName = currentFile.replace('.html', '') || 'dashboard';
+            const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+            const pageName = currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
             setActivePage(pageName);
         }
         
