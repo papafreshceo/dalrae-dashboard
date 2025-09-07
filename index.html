@@ -1432,6 +1432,27 @@
         let activeStatusFilter = 'all';
         let activeProductFilter = 'all';
         let priceChart = null;
+
+        // 날짜 파싱 함수 추가
+function parseDate(dateStr) {
+    if (!dateStr) return null;
+    
+    if (dateStr.length === 5 && dateStr.indexOf('-') === 2) {
+        const currentYear = new Date().getFullYear();
+        const month = parseInt(dateStr.substring(0, 2)) - 1;
+        const day = parseInt(dateStr.substring(3, 5));
+        
+        let date = new Date(currentYear, month, day);
+        
+        if (date < new Date()) {
+            date = new Date(currentYear + 1, month, day);
+        }
+        
+        return date;
+    }
+    
+    return new Date(dateStr);
+}
         
         // 캐싱 시스템
         let priceDataCache = {};
@@ -1786,16 +1807,16 @@
                     stats.stopped.options++;
                 }
                 
-                if (p.시작일) {
-                    const start = new Date(p.시작일);
+if (p.시작일) {
+    const start = parseDate(p.시작일);  // new Date를 parseDate로 변경
                     if (start > today && start <= twentyDays) {
                         productSets.preparing.add(variety);
                         stats.preparing.options++;
                     }
                 }
                 
-                if (p.종료일) {
-                    const end = new Date(p.종료일);
+if (p.종료일) {
+    const end = parseDate(p.종료일);  // new Date를 parseDate로 변경
                     if (end >= today && end <= sevenDays) {
                         productSets.ending.add(variety);
                         stats.ending.options++;
@@ -1835,7 +1856,7 @@
                     if (first.공급상태 === '공급중') return 1;
                     
                     if (first.시작일) {
-                        const start = new Date(first.시작일);
+    const start = parseDate(first.시작일);  // new Date를 parseDate로 변경
                         if (start > today && start <= twenty) return 2;
                     }
                     
@@ -1869,7 +1890,7 @@
                     groupStatus = '공급중';
                     statusClass = 'status-active';
                 } else if (first.시작일) {
-                    const start = new Date(first.시작일);
+    const start = parseDate(first.시작일);  // new Date를 parseDate로 변경
                     if (start > today && start <= twenty) {
                         groupStatus = '출하준비중';
                         statusClass = 'status-preparing';
@@ -1917,12 +1938,17 @@
             let maxDate = new Date('1900-01-01');
             
             products.forEach(p => {
-                if (p.시작일) {
-                    const d = new Date(p.시작일);
-                    if (d < minDate) minDate = d;
-                }
-                if (p.종료일) {
-                    const d = new Date(p.종료일);
+    if (p.시작일) {
+        const d = parseDate(p.시작일);  // new Date를 parseDate로 변경
+        if (d && d < minDate) minDate = d;
+    }
+    if (p.종료일) {
+        const d = parseDate(p.종료일);  // new Date를 parseDate로 변경
+        if (d && d > maxDate) maxDate = d;
+    }
+});
+if (p.종료일) {
+    const end = parseDate(p.종료일);  // new Date를 parseDate로 변경
                     if (d > maxDate) maxDate = d;
                 }
             });
@@ -2413,20 +2439,20 @@
                     case 'stopped':
                         filteredProducts = filteredProducts.filter(p => p.공급상태 === '공급중지');
                         break;
-                    case 'preparing':
-                        filteredProducts = filteredProducts.filter(p => {
-                            if (!p.시작일) return false;
-                            const start = new Date(p.시작일);
-                            return start > today && start <= twenty;
-                        });
-                        break;
+case 'preparing':
+    filteredProducts = filteredProducts.filter(p => {
+        if (!p.시작일) return false;
+        const start = parseDate(p.시작일);  // new Date를 parseDate로 변경
+        return start && start > today && start <= twenty;
+    });
+    break;
                     case 'ending':
-                        filteredProducts = filteredProducts.filter(p => {
-                            if (!p.종료일) return false;
-                            const end = new Date(p.종료일);
-                            return end >= today && end <= seven;
-                        });
-                        break;
+    filteredProducts = filteredProducts.filter(p => {
+        if (!p.종료일) return false;
+        const end = parseDate(p.종료일);  // new Date를 parseDate로 변경
+        return end && end >= today && end <= seven;
+    });
+    break;
                 }
             }
             
@@ -2478,3 +2504,4 @@
 </body>
 
 </html>
+
