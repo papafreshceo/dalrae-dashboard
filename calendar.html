@@ -1506,9 +1506,184 @@
             return `${date.getMonth() + 1}/${date.getDate()}`;
         }
 
+        // 배송 캘린더 관련 변수
+        let deliveryYear = new Date().getFullYear();
+        let deliveryMonth = new Date().getMonth();
+        
+        // 한국 공휴일 데이터 (2025-2026년)
+        const koreanHolidays = {
+            2025: [
+                { date: '2025-01-01', name: '신정' },
+                { date: '2025-01-28', name: '설날 연휴' },
+                { date: '2025-01-29', name: '설날' },
+                { date: '2025-01-30', name: '설날 연휴' },
+                { date: '2025-03-01', name: '삼일절' },
+                { date: '2025-05-05', name: '어린이날' },
+                { date: '2025-05-06', name: '부처님오신날' },
+                { date: '2025-06-06', name: '현충일' },
+                { date: '2025-08-15', name: '광복절' },
+                { date: '2025-10-03', name: '개천절' },
+                { date: '2025-10-05', name: '추석 연휴' },
+                { date: '2025-10-06', name: '추석' },
+                { date: '2025-10-07', name: '추석 연휴' },
+                { date: '2025-10-09', name: '한글날' },
+                { date: '2025-12-25', name: '크리스마스' }
+            ],
+            2026: [
+                { date: '2026-01-01', name: '신정' },
+                { date: '2026-02-16', name: '설날 연휴' },
+                { date: '2026-02-17', name: '설날' },
+                { date: '2026-02-18', name: '설날 연휴' },
+                { date: '2026-03-01', name: '삼일절' },
+                { date: '2026-05-05', name: '어린이날' },
+                { date: '2026-05-24', name: '부처님오신날' },
+                { date: '2026-06-06', name: '현충일' },
+                { date: '2026-08-15', name: '광복절' },
+                { date: '2026-09-24', name: '추석 연휴' },
+                { date: '2026-09-25', name: '추석' },
+                { date: '2026-09-26', name: '추석 연휴' },
+                { date: '2026-10-03', name: '개천절' },
+                { date: '2026-10-09', name: '한글날' },
+                { date: '2026-12-25', name: '크리스마스' }
+            ]
+        };
+        
+        // 대체 공휴일 계산 함수
+        function getSubstituteHoliday(holiday) {
+            const date = new Date(holiday.date);
+            const dayOfWeek = date.getDay();
+            
+            // 공휴일이 토요일이나 일요일인 경우 대체 공휴일 적용
+            if (dayOfWeek === 0) { // 일요일
+                const substitute = new Date(date);
+                substitute.setDate(date.getDate() + 1); // 월요일로
+                return {
+                    date: substitute.toISOString().split('T')[0],
+                    name: holiday.name + ' 대체공휴일'
+                };
+            } else if (dayOfWeek === 6) { // 토요일
+                const substitute = new Date(date);
+                substitute.setDate(date.getDate() + 2); // 월요일로
+                return {
+                    date: substitute.toISOString().split('T')[0],
+                    name: holiday.name + ' 대체공휴일'
+                };
+            }
+            return null;
+        }
+        
+        // 공휴일 확인 함수
+        function isHoliday(year, month, day) {
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const holidays = koreanHolidays[year] || [];
+            
+            // 대체 공휴일 추가
+            const allHolidays = [...holidays];
+            holidays.forEach(holiday => {
+                const substitute = getSubstituteHoliday(holiday);
+                if (substitute) {
+                    allHolidays.push(substitute);
+                }
+            });
+            
+            return allHolidays.find(h => h.date === dateStr);
+        }
+        
+        // 배송 캘린더 렌더링
+        function renderDeliveryCalendar() {
+            const grid = document.getElementById('deliveryDaysGrid');
+            if (!grid) return;
+            
+            const firstDay = new Date(deliveryYear, deliveryMonth, 1);
+            const lastDay = new Date(deliveryYear, deliveryMonth + 1, 0);
+            const prevLastDay = new Date(deliveryYear, deliveryMonth, 0);
+            const startDay = firstDay.getDay();
+            const totalDays = lastDay.getDate();
+            const prevTotalDays = prevLastDay.getDate();
+            const today = new Date();
+            
+            let html = '';
+            
+            // 이전 달 날짜
+            for (let i = startDay - 1; i >= 0; i--) {
+                const day = prevTotalDays - i;
+                html += `<div class="day-cell other-month">
+                    <div class="day-number">${day}</div>
+                </div>`;
+            }
+            
+            // 현재 달 날짜
+            for (let day = 1; day <= totalDays; day++) {
+                const date = new Date(deliveryYear, deliveryMonth, day);
+                const dayOfWeek = date.getDay();
+                const isToday = date.toDateString() === today.toDateString();
+                const holiday = isHoliday(deliveryYear, deliveryMonth, day);
+                
+                const classes = ['day-cell'];
+                if (isToday) classes.push('today');
+                if (dayOfWeek === 0 || holiday) classes.push('sunday'); // 일요일 또는 공휴일
+                if (dayOfWeek === 6 && !holiday) classes.push('saturday'); // 토요일 (공휴일 아닌 경우)
+                
+                let holidayText = '';
+                if (holiday) {
+                    holidayText = `<div style="font-size: 10px; color: #ff5252; font-weight: 600; margin-top: 2px;">${holiday.name}</div>`;
+                }
+                
+                html += `<div class="${classes.join(' ')}">
+                    <div class="day-number">${day}</div>
+                    ${holidayText}
+                </div>`;
+            }
+            
+            // 다음 달 날짜
+            const remainingCells = 42 - (startDay + totalDays);
+            for (let day = 1; day <= remainingCells; day++) {
+                html += `<div class="day-cell other-month">
+                    <div class="day-number">${day}</div>
+                </div>`;
+            }
+            
+            grid.innerHTML = html;
+            updateDeliveryMonthDisplay();
+        }
+        
+        // 배송 캘린더 월 표시 업데이트
+        function updateDeliveryMonthDisplay() {
+            const display = document.getElementById('deliveryMonthDisplay');
+            if (display) {
+                const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+                display.textContent = `${deliveryYear}년 ${monthNames[deliveryMonth]}`;
+            }
+        }
+        
+        // 배송 캘린더 이전 월
+        function previousDeliveryMonth() {
+            deliveryMonth--;
+            if (deliveryMonth < 0) {
+                deliveryMonth = 11;
+                deliveryYear--;
+            }
+            renderDeliveryCalendar();
+        }
+        
+        // 배송 캘린더 다음 월
+        function nextDeliveryMonth() {
+            deliveryMonth++;
+            if (deliveryMonth > 11) {
+                deliveryMonth = 0;
+                deliveryYear++;
+            }
+            renderDeliveryCalendar();
+        }
+        
         // 초기화
         loadData();
         updatePeriodDisplay();
+        
+        // 배송 캘린더 초기화
+        setTimeout(() => {
+            renderDeliveryCalendar();
+        }, 100);
     </script>
 </body>
 </html>
