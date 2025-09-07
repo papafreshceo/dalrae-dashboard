@@ -1233,21 +1233,32 @@
                 const endCol = (col + duration - 1) % 7;
                 const endRow = row + Math.floor((col + duration - 1) / 7);
                 
-                // 겹치지 않도록 행 위치 조정 (index를 사용하여 여러 줄로 분산)
-                const rowOffset = (index % 5) * 20; // 5개 행으로 분산
+                // 10개 행으로 분산, 그 이상이면 바 높이를 더 줄임
+                const totalProducts = monthProductTimelines.length;
+                let rowOffset, barHeight;
+                
+                if (totalProducts <= 10) {
+                    rowOffset = (index % 10) * 18; // 10개 행으로 분산
+                    barHeight = 16; // 기본 높이
+                } else {
+                    // 10개 이상이면 더 많은 행으로 분산하고 바 높이 줄임
+                    const maxRows = Math.min(15, totalProducts); // 최대 15행까지
+                    rowOffset = (index % maxRows) * 14; // 더 촘촘하게
+                    barHeight = 12; // 높이 줄임
+                }
                 
                 // 주를 넘어가는 경우 처리
                 if (endRow > row) {
                     // 첫 주 부분
                     const firstWeekDays = 7 - col;
                     const left = col * cellWidth + 2;
-                    const top = row * cellHeight + 30 + rowOffset;
+                    const top = row * cellHeight + 28 + rowOffset;
                     const width = firstWeekDays * cellWidth - 4;
                     
                     html += `
                         <div class="month-timeline-row" style="top: ${top}px;">
                             <div class="month-timeline-bar" 
-                                 style="left: ${left}px; width: ${width}px; background: ${productColors[product.name]};"
+                                 style="left: ${left}px; width: ${width}px; height: ${barHeight}px; background: ${productColors[product.name]};"
                                  data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
                                  onmouseover="showTooltip(event, this.dataset.product)"
                                  onmouseout="hideTooltip()">
@@ -1258,11 +1269,11 @@
                     
                     // 중간 주들
                     for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
-                        const weekTop = weekRow * cellHeight + 30 + rowOffset;
+                        const weekTop = weekRow * cellHeight + 28 + rowOffset;
                         html += `
                             <div class="month-timeline-row" style="top: ${weekTop}px;">
                                 <div class="month-timeline-bar" 
-                                     style="left: 2px; width: ${7 * cellWidth - 4}px; background: ${productColors[product.name]};"
+                                     style="left: 2px; width: ${7 * cellWidth - 4}px; height: ${barHeight}px; background: ${productColors[product.name]};"
                                      data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
                                      onmouseover="showTooltip(event, this.dataset.product)"
                                      onmouseout="hideTooltip()">
@@ -1274,13 +1285,13 @@
                     
                     // 마지막 주 부분
                     const lastWeekDays = endCol + 1;
-                    const lastTop = endRow * cellHeight + 30 + rowOffset;
+                    const lastTop = endRow * cellHeight + 28 + rowOffset;
                     const lastWidth = lastWeekDays * cellWidth - 4;
                     
                     html += `
                         <div class="month-timeline-row" style="top: ${lastTop}px;">
                             <div class="month-timeline-bar" 
-                                 style="left: 2px; width: ${lastWidth}px; background: ${productColors[product.name]};"
+                                 style="left: 2px; width: ${lastWidth}px; height: ${barHeight}px; background: ${productColors[product.name]};"
                                  data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
                                  onmouseover="showTooltip(event, this.dataset.product)"
                                  onmouseout="hideTooltip()">
@@ -1291,13 +1302,13 @@
                 } else {
                     // 한 주 내에 있는 경우
                     const left = col * cellWidth + 2;
-                    const top = row * cellHeight + 30 + rowOffset;
+                    const top = row * cellHeight + 28 + rowOffset;
                     const width = duration * cellWidth - 4;
                     
                     html += `
                         <div class="month-timeline-row" style="top: ${top}px;">
                             <div class="month-timeline-bar" 
-                                 style="left: ${left}px; width: ${width}px; background: ${productColors[product.name]};"
+                                 style="left: ${left}px; width: ${width}px; height: ${barHeight}px; background: ${productColors[product.name]};"
                                  data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
                                  onmouseover="showTooltip(event, this.dataset.product)"
                                  onmouseout="hideTooltip()">
