@@ -440,11 +440,17 @@
         
         .year-month-cell {
             position: relative;
-            border-left: 1px solid #e8e9eb;
+            border-left: 1px solid #f0f0f0;
         }
         
         .year-month-cell:last-child {
-            border-right: 1px solid #e8e9eb;
+            border-right: 1px solid #f0f0f0;
+        }
+        
+        .year-month-cell.today-column {
+            background: linear-gradient(to bottom, rgba(102, 126, 234, 0.05), rgba(102, 126, 234, 0.02));
+            border-left: 2px solid #667eea;
+            border-right: 2px solid #667eea;
         }
         
         .year-timeline-bar {
@@ -804,223 +810,6 @@
     </div>
 
     <script>
-        // header.js 코드를 직접 포함
-        (function() {
-            // 헤더 HTML 생성
-            function createHeader() {
-                const headerHTML = `
-                    <!-- 상단 헤더 -->
-                    <header class="top-header">
-                        <div class="header-content">
-                            <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
-                                 alt="달래마켓" 
-                                 class="logo-img">
-                            <div class="center-button">
-                                <button class="nav-btn special-btn" onclick="openOrderSystem()">
-                                    <span>🚜</span>
-                                    <span>발주시스템</span>
-                                </button>
-                            </div>
-                            <nav class="nav-menu" id="mainMenu">
-                                <button class="nav-btn" data-page="dashboard">
-                                    <span>📊</span>
-                                    <span>대시보드</span>
-                                </button>
-                                <button class="nav-btn" data-page="products">
-                                    <span>📦</span>
-                                    <span>상품리스트</span>
-                                </button>
-                                <button class="nav-btn" data-page="calendar">
-                                    <span>📅</span>
-                                    <span>상품캘린더</span>
-                                </button>
-                                <button class="nav-btn" data-page="orders">
-                                    <span>📋</span>
-                                    <span>주문관리</span>
-                                </button>
-                                <button class="nav-btn" data-page="services">
-                                    <span>🎯</span>
-                                    <span>서비스&프로그램</span>
-                                </button>
-                                <button class="nav-btn" data-page="notice">
-                                    <span>📢</span>
-                                    <span>공지사항</span>
-                                </button>
-                            </nav>
-                        </div>
-                    </header>
-
-                    <!-- 메뉴 고정 컨테이너 (스크롤 시 스티키) -->
-                    <div class="menu-container" id="menuContainer">
-                        <div class="menu-wrapper" id="menuWrapper" style="display: none;">
-                            <!-- 스크롤 시 여기에 메뉴 복사 -->
-                        </div>
-                    </div>
-                `;
-                
-                return headerHTML;
-            }
-
-            // 현재 페이지 활성화
-            function setActivePage(pageName) {
-                // 모든 nav-btn에서 active 클래스 제거
-                document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                
-                // 현재 페이지 버튼에 active 클래스 추가
-                document.querySelectorAll(`.nav-btn[data-page="${pageName}"]`).forEach(btn => {
-                    btn.classList.add('active');
-                });
-            }
-
-            // 발주시스템 열기
-            window.openOrderSystem = function() {
-                window.open('https://papafarmers.com/orders/', '_blank');
-            };
-
-            // 스티키 메뉴 설정
-            function setupStickyMenu() {
-                // DOM이 완전히 로드된 후 실행
-                setTimeout(() => {
-                    const header = document.querySelector('.top-header');
-                    const menuContainer = document.getElementById('menuContainer');
-                    const menuWrapper = document.getElementById('menuWrapper');
-                    const mainMenu = document.getElementById('mainMenu');
-                    const centerButton = document.querySelector('.center-button');
-                    
-                    if (!header || !menuContainer || !menuWrapper || !mainMenu || !centerButton) {
-                        console.warn('헤더 요소를 찾을 수 없습니다 - 스티키 메뉴 비활성화');
-                        return;
-                    }
-                    
-                    let headerHeight = header.offsetHeight;
-                    let stickyOffset = header.offsetTop + headerHeight;
-                    
-                    // 기존 스크롤 이벤트 리스너 제거 (중복 방지)
-                    window.removeEventListener('scroll', window.dalraeStickyHandler);
-                    
-                    // 새 스크롤 핸들러 정의
-                    window.dalraeStickyHandler = function() {
-                        if (window.pageYOffset > stickyOffset) {
-                            if (!menuContainer.classList.contains('sticky')) {
-                                menuContainer.classList.add('sticky');
-                                menuWrapper.style.display = 'flex';
-                                
-                                // 메뉴 복사
-                                menuWrapper.innerHTML = '';
-                                
-                                // 중앙 버튼 복사
-                                const centerButtonClone = centerButton.cloneNode(true);
-                                menuWrapper.appendChild(centerButtonClone);
-                                
-                                // 메인 메뉴 복사
-                                const mainMenuClone = mainMenu.cloneNode(true);
-                                menuWrapper.appendChild(mainMenuClone);
-                                
-                                // 이벤트 리스너 재설정
-                                centerButtonClone.querySelector('.special-btn').onclick = openOrderSystem;
-                                
-                                // 메뉴 클릭 이벤트 재설정
-                                mainMenuClone.querySelectorAll('.nav-btn').forEach(btn => {
-                                    btn.addEventListener('click', handleMenuClick);
-                                });
-                            }
-                        } else {
-                            menuContainer.classList.remove('sticky');
-                            menuWrapper.style.display = 'none';
-                        }
-                    };
-                    
-                    // 스크롤 이벤트 리스너 추가
-                    window.addEventListener('scroll', window.dalraeStickyHandler);
-                }, 100);
-            }
-
-            // 메뉴 클릭 처리
-            function handleMenuClick(e) {
-                const btn = e.currentTarget;
-                const page = btn.dataset.page;
-                
-                if (page) {
-                    // 페이지 매핑 - dashboard는 index.html로
-                    const pageUrls = {
-                        'dashboard': 'index.html',
-                        'products': 'products.html',
-                        'calendar': 'calendar.html',
-                        'orders': 'orders.html',
-                        'services': 'services.html',
-                        'notice': 'notice.html'
-                    };
-                    
-                    if (pageUrls[page]) {
-                        // 현재 페이지 확인
-                        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-                        const currentPage = currentFile.replace('.html', '');
-                        const currentPageName = currentPage === 'index' ? 'dashboard' : currentPage;
-                        
-                        if (currentPageName !== page) {
-                            window.location.href = pageUrls[page];
-                        }
-                    }
-                }
-            }
-
-            // 헤더 초기화
-            function initHeader(options = {}) {
-                // 옵션 설정
-                const { 
-                    containerId = 'header-container',
-                    activePage = null,
-                    enableStickyMenu = true  // 스티키 메뉴 활성화 옵션
-                } = options;
-                
-                // 헤더 컨테이너 찾기
-                const container = document.getElementById(containerId);
-                if (!container) {
-                    console.error(`헤더 컨테이너 '${containerId}'를 찾을 수 없습니다`);
-                    return;
-                }
-                
-                // 헤더 HTML 삽입
-                container.innerHTML = createHeader();
-                
-                // 현재 페이지 활성화
-                if (activePage) {
-                    setActivePage(activePage);
-                } else {
-                    // URL에서 현재 페이지 추출
-                    const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-                    const pageName = currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
-                    setActivePage(pageName);
-                }
-                
-                // 메뉴 클릭 이벤트 설정
-                document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
-                    btn.addEventListener('click', handleMenuClick);
-                });
-                
-                // 스티키 메뉴 설정 (옵션에 따라)
-                if (enableStickyMenu) {
-                    setupStickyMenu();
-                }
-            }
-
-            // 전역으로 내보내기
-            window.DalraeHeader = {
-                init: initHeader,
-                setActivePage: setActivePage
-            };
-        })();
-
-        // 헤더 초기화
-        window.addEventListener('DOMContentLoaded', function() {
-            DalraeHeader.init({
-                containerId: 'header-container',
-                activePage: 'calendar'
-            });
-        });
-
         // 전역 변수
         let currentView = 'month';
         let currentMonth = new Date().getMonth();
@@ -1041,135 +830,9 @@
             '#54A0FF', '#48DBFB', '#0ABDE3', '#C8D6E5', '#576574'
         ];
 
-        // 날짜 파싱 함수
-        function parseDate(dateStr) {
-            if (!dateStr || dateStr === '') return null;
-            
-            if (dateStr.length === 5 && dateStr.indexOf('-') === 2) {
-                const month = parseInt(dateStr.substring(0, 2)) - 1;
-                const day = parseInt(dateStr.substring(3, 5));
-                
-                if (isNaN(month) || isNaN(day)) return null;
-                
-                // 기준 연도 설정 (2025년)
-                let date = new Date(2025, month, day);
-                
-                return date;
-            }
-            
-            const date = new Date(dateStr);
-            return isNaN(date.getTime()) ? null : date;
-        }
-
-        // 데이터 로드
-        function loadData() {
-            fetch('/api/products')
-            .then(response => response.json())
-            .then(data => {
-                allProducts = data.filter(p => {
-                    const supplyStatus = p['셀러공급Y/N'] || '';
-                    return supplyStatus.toString().trim() !== '미공급상품';
-                });
-                processProductTimelines();
-                assignColors();
-                renderCalendar();
-                updateLegend();
-            })
-            .catch(error => {
-                console.error('데이터 로드 에러:', error);
-            });
-        }
-
-        // 상품 타임라인 처리
-        function processProductTimelines() {
-            const productMap = {};
-            
-            allProducts.forEach(p => {
-                const item = p.품목;
-                if (!item) return;
-                
-                let startDate = parseDate(p.시작일);
-                let endDate = parseDate(p.종료일);
-                
-                if (!startDate || !endDate) return;
-                
-                // 시작일이 종료일보다 늦으면 연도를 조정
-                // 예: 11월 시작 - 3월 종료인 경우
-                if (startDate > endDate) {
-                    // 시작월이 9월 이후고 종료월이 4월 이전이면 종료일을 다음해로
-                    if (startDate.getMonth() >= 8 && endDate.getMonth() <= 3) {
-                        endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
-                    }
-                }
-                
-                if (!productMap[item]) {
-                    productMap[item] = {
-                        name: item,
-                        type: getProductType(p.대분류),
-                        startDate: startDate,
-                        endDate: endDate,
-                        options: []
-                    };
-                }
-                
-                // 기간 확장
-                if (startDate < productMap[item].startDate) {
-                    productMap[item].startDate = startDate;
-                }
-                if (endDate > productMap[item].endDate) {
-                    productMap[item].endDate = endDate;
-                }
-                
-                productMap[item].options.push({
-                    name: p.옵션명,
-                    variety: p.품종,
-                    status: p.공급상태
-                });
-            });
-            
-            productTimelines = Object.values(productMap);
-            console.log('처리된 품목 타임라인:', productTimelines);
-        }
-
-        // 색상 할당
-        function assignColors() {
-            productTimelines.forEach((product, index) => {
-                productColors[product.name] = colorPalette[index % colorPalette.length];
-            });
-        }
-
-        // 상품 타입 결정
-        function getProductType(category) {
-            if (category === '농산물') return 'agricultural';
-            if (category === '수산물') return 'seafood';
-            if (category === '축산물') return 'livestock';
-            if (category === '농산물(수입)') return 'imported';
-            return 'agricultural';
-        }
-
-        // 범례 업데이트
-        function updateLegend() {
-            const legend = document.getElementById('legend');
-            let html = '';
-            
-            // 현재 보기에 따라 필터링
-            let productsToShow = [];
-            if (currentView === 'month') {
-                productsToShow = monthProductTimelines;
-            } else {
-                productsToShow = productTimelines;
-            }
-            
-            productsToShow.forEach(product => {
-                html += `
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: ${productColors[product.name]};"></div>
-                        <span>${product.name}</span>
-                    </div>
-                `;
-            });
-            
-            legend.innerHTML = html;
+        // 발주시스템 열기
+        function openOrderSystem() {
+            window.open('https://papafarmers.com/orders/', '_blank');
         }
 
         // 뷰 전환
@@ -1183,7 +846,6 @@
                 }
             });
             
-            // 네비게이션 컨트롤 표시/숨김
             const navControls = document.getElementById('navControls');
             
             if (view === 'month') {
@@ -1248,6 +910,129 @@
             }
         }
 
+        // 날짜 파싱
+        function parseDate(dateStr) {
+            if (!dateStr || dateStr === '') return null;
+            
+            if (dateStr.length === 5 && dateStr.indexOf('-') === 2) {
+                const month = parseInt(dateStr.substring(0, 2)) - 1;
+                const day = parseInt(dateStr.substring(3, 5));
+                
+                if (isNaN(month) || isNaN(day)) return null;
+                
+                let date = new Date(2025, month, day);
+                return date;
+            }
+            
+            const date = new Date(dateStr);
+            return isNaN(date.getTime()) ? null : date;
+        }
+
+        // 데이터 로드
+        function loadData() {
+            fetch('/api/products')
+            .then(response => response.json())
+            .then(data => {
+                allProducts = data.filter(p => {
+                    const supplyStatus = p['셀러공급Y/N'] || '';
+                    return supplyStatus.toString().trim() !== '미공급상품';
+                });
+                processProductTimelines();
+                assignColors();
+                renderCalendar();
+                updateLegend();
+            })
+            .catch(error => {
+                console.error('데이터 로드 에러:', error);
+            });
+        }
+
+        // 상품 타임라인 처리
+        function processProductTimelines() {
+            const productMap = {};
+            
+            allProducts.forEach(p => {
+                const item = p.품목;
+                if (!item) return;
+                
+                let startDate = parseDate(p.시작일);
+                let endDate = parseDate(p.종료일);
+                
+                if (!startDate || !endDate) return;
+                
+                if (startDate > endDate) {
+                    if (startDate.getMonth() >= 8 && endDate.getMonth() <= 3) {
+                        endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
+                    }
+                }
+                
+                if (!productMap[item]) {
+                    productMap[item] = {
+                        name: item,
+                        type: getProductType(p.대분류),
+                        startDate: startDate,
+                        endDate: endDate,
+                        options: []
+                    };
+                }
+                
+                if (startDate < productMap[item].startDate) {
+                    productMap[item].startDate = startDate;
+                }
+                if (endDate > productMap[item].endDate) {
+                    productMap[item].endDate = endDate;
+                }
+                
+                productMap[item].options.push({
+                    name: p.옵션명,
+                    variety: p.품종,
+                    status: p.공급상태
+                });
+            });
+            
+            productTimelines = Object.values(productMap);
+        }
+
+        // 색상 할당
+        function assignColors() {
+            productTimelines.forEach((product, index) => {
+                productColors[product.name] = colorPalette[index % colorPalette.length];
+            });
+        }
+
+        // 상품 타입 결정
+        function getProductType(category) {
+            if (category === '농산물') return 'agricultural';
+            if (category === '수산물') return 'seafood';
+            if (category === '축산물') return 'livestock';
+            if (category === '농산물(수입)') return 'imported';
+            return 'agricultural';
+        }
+
+        // 범례 업데이트
+        function updateLegend() {
+            const legend = document.getElementById('legend');
+            let html = '';
+            
+            let productsToShow = [];
+            if (currentView === 'month') {
+                productsToShow = monthProductTimelines;
+            } else {
+                productsToShow = productTimelines;
+            }
+            
+            productsToShow.forEach(product => {
+                html += `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: ${productColors[product.name]};"></div>
+                        <span>${product.name}</span>
+                    </div>
+                `;
+            });
+            
+            legend.innerHTML = html;
+        }
+
         // 캘린더 렌더링
         function renderCalendar() {
             if (currentView === 'month') {
@@ -1261,7 +1046,6 @@
         function renderMonthView() {
             const grid = document.getElementById('daysGrid');
             
-            // 현재 표시할 월의 고정된 연도 사용 (2025년 기준)
             const baseYear = 2025;
             const firstDay = new Date(baseYear, currentMonth, 1);
             const lastDay = new Date(baseYear, currentMonth + 1, 0);
@@ -1275,7 +1059,6 @@
             
             let html = '';
             
-            // 이전 달 날짜
             for (let i = startDay - 1; i >= 0; i--) {
                 const day = prevTotalDays - i;
                 html += `<div class="day-cell other-month">
@@ -1283,7 +1066,6 @@
                 </div>`;
             }
             
-            // 현재 달 날짜
             for (let day = 1; day <= totalDays; day++) {
                 const date = new Date(baseYear, currentMonth, day);
                 const dayOfWeek = date.getDay();
@@ -1299,7 +1081,6 @@
                 </div>`;
             }
             
-            // 다음 달 날짜
             const remainingCells = 42 - (startDay + totalDays);
             for (let day = 1; day <= remainingCells; day++) {
                 html += `<div class="day-cell other-month">
@@ -1311,7 +1092,6 @@
             
             grid.innerHTML = html;
             
-            // 타임라인 추가
             setTimeout(() => addMonthTimelines(), 10);
         }
 
@@ -1320,18 +1100,15 @@
             const container = document.getElementById('monthTimelinesContainer');
             if (!container) return;
             
-            // 이번 달에 표시할 품목 필터링
             monthProductTimelines = productTimelines.filter(product => {
                 const startMonth = product.startDate.getMonth();
                 const endMonth = product.endDate.getMonth();
                 const startYear = product.startDate.getFullYear();
                 const endYear = product.endDate.getFullYear();
                 
-                // 같은 해 내에서의 기간
                 if (startYear === endYear) {
                     return currentMonth >= startMonth && currentMonth <= endMonth;
                 } else {
-                    // 연도를 넘어가는 기간 (예: 11월~3월)
                     return currentMonth >= startMonth || currentMonth <= endMonth;
                 }
             });
@@ -1340,7 +1117,6 @@
             const cellWidth = document.querySelector('.day-cell').offsetWidth;
             const cellHeight = document.querySelector('.day-cell').offsetHeight;
             
-            // 각 품목별로 타임라인 그리기
             monthProductTimelines.forEach((product, index) => {
                 const startMonth = product.startDate.getMonth();
                 const startDay = product.startDate.getDate();
@@ -1351,7 +1127,6 @@
                 
                 let displayStart, displayEnd;
                 
-                // 현재 월에서의 시작일 계산
                 if (startMonth === currentMonth) {
                     displayStart = startDay;
                 } else if ((startYear < endYear && currentMonth <= endMonth) || 
@@ -1361,7 +1136,6 @@
                     return;
                 }
                 
-                // 현재 월에서의 종료일 계산
                 const lastDayOfMonth = new Date(2025, currentMonth + 1, 0).getDate();
                 if (endMonth === currentMonth) {
                     displayEnd = endDay;
@@ -1372,7 +1146,6 @@
                     return;
                 }
                 
-                // 위치 계산
                 const startCell = document.querySelector(`[data-day="${displayStart}"]`);
                 if (!startCell) return;
                 
@@ -1384,19 +1157,16 @@
                 const endCol = (col + duration - 1) % 7;
                 const endRow = row + Math.floor((col + duration - 1) / 7);
                 
-                // 모바일에서 더 많은 행으로 분산
                 const totalProducts = monthProductTimelines.length;
                 let rowOffset, barHeight;
                 
                 const isMobile = window.innerWidth <= 768;
                 
                 if (isMobile) {
-                    // 모바일: 더 촘촘하게 배치
                     const maxRows = Math.min(20, totalProducts);
                     rowOffset = (index % maxRows) * 10;
                     barHeight = 10;
                 } else {
-                    // 데스크톱
                     if (totalProducts <= 10) {
                         rowOffset = (index % 10) * 18;
                         barHeight = 16;
@@ -1407,9 +1177,7 @@
                     }
                 }
                 
-                // 주를 넘어가는 경우 처리
                 if (endRow > row) {
-                    // 첫 주 부분
                     const firstWeekDays = 7 - col;
                     const left = col * cellWidth + 2;
                     const top = row * cellHeight + 28 + rowOffset;
@@ -1427,7 +1195,6 @@
                         </div>
                     `;
                     
-                    // 중간 주들
                     for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
                         const weekTop = weekRow * cellHeight + 28 + rowOffset;
                         html += `
@@ -1443,7 +1210,6 @@
                         `;
                     }
                     
-                    // 마지막 주 부분
                     const lastWeekDays = endCol + 1;
                     const lastTop = endRow * cellHeight + 28 + rowOffset;
                     const lastWidth = lastWeekDays * cellWidth - 4;
@@ -1460,7 +1226,6 @@
                         </div>
                     `;
                 } else {
-                    // 한 주 내에 있는 경우
                     const left = col * cellWidth + 2;
                     const top = row * cellHeight + 28 + rowOffset;
                     const width = duration * cellWidth - 4;
@@ -1482,12 +1247,11 @@
             container.innerHTML = html;
         }
 
-        // 년 보기 렌더링 - 연속된 바로 표시
+        // 년 보기 렌더링
         function renderYearView() {
             const container = document.getElementById('yearTimelineContainer');
             let html = '';
             
-            // 오늘 날짜 정보
             const today = new Date();
             const currentYearNow = today.getFullYear();
             const currentMonthNow = today.getMonth();
@@ -1501,16 +1265,12 @@
                 const startYear = product.startDate.getFullYear();
                 const endYear = product.endDate.getFullYear();
                 
-                // 각 품목별로 한 줄씩
                 html += `<div class="year-timeline-row">`;
                 
-                // 12개월 그리드 생성 - 오늘 날짜 표시
                 for (let m = 0; m < 12; m++) {
                     let cellClass = 'year-month-cell';
                     
-                    // 현재 년도가 표시 년도(2025)와 같고, 현재 월과 일치하면 오늘 표시
                     if (currentYearNow === 2025 && m === currentMonthNow) {
-                        // 오늘 날짜가 포함된 월에 특별한 스타일 적용
                         const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                         const dayPercent = currentDayNow / monthDays[m];
                         
@@ -1522,13 +1282,11 @@
                     }
                 }
                 
-                // 타임라인 바 계산 및 그리기
                 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 let barStartPercent, barWidthPercent;
                 let barClass = '';
                 
                 if (startYear === endYear) {
-                    // 같은 해 내에서 시작-종료
                     const startMonthOffset = (100 / 12) * startMonth;
                     const startDayOffset = (100 / 12) * (startDay / monthDays[startMonth]);
                     barStartPercent = startMonthOffset + startDayOffset;
@@ -1550,8 +1308,6 @@
                         </div>
                     `;
                 } else {
-                    // 연도를 넘어가는 경우 - 두 부분으로 나눔
-                    // 첫 부분: 시작월 ~ 12월
                     const startMonthOffset = (100 / 12) * startMonth;
                     const startDayOffset = (100 / 12) * (startDay / monthDays[startMonth]);
                     const firstBarStart = startMonthOffset + startDayOffset;
@@ -1567,7 +1323,6 @@
                         </div>
                     `;
                     
-                    // 두 번째 부분: 1월 ~ 종료월
                     const endMonthOffset = (100 / 12) * endMonth;
                     const endDayOffset = (100 / 12) * (endDay / monthDays[endMonth]);
                     const secondBarWidth = endMonthOffset + endDayOffset;
@@ -1585,7 +1340,6 @@
                 html += `</div>`;
             });
             
-            // 오늘 날짜 표시 레이블 추가
             if (currentYearNow === 2025 && currentMonthNow >= 0 && currentMonthNow <= 11) {
                 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 const monthOffset = (100 / 12) * currentMonthNow;
@@ -1649,15 +1403,180 @@
             return `${date.getMonth() + 1}/${date.getDate()}`;
         }
 
-        // 배송 캘린더 관련 변수
-        let deliveryYear = new Date().getFullYear();
-        let deliveryMonth = new Date().getMonth();
-        
-        // 한국 공휴일 데이터 (2025-2026년)
-        const koreanHolidays = {
-            2025: [
-                { date: '2025-01-01', name: '신정' },
-                { date: '2025-01-28', name: '설날 연휴' },
-                { date: '2025-01-29', name: '설날' },
-                { date: '2025-01-30', name: '설날 연휴' },
-                { date: '2025-03-01', name:
+        // 헤더 초기화 코드
+        (function() {
+            function createHeader() {
+                const headerHTML = `
+                    <header class="top-header">
+                        <div class="header-content">
+                            <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
+                                 alt="달래마켓" 
+                                 class="logo-img">
+                            <div class="center-button">
+                                <button class="nav-btn special-btn" onclick="openOrderSystem()">
+                                    <span>🚜</span>
+                                    <span>발주시스템</span>
+                                </button>
+                            </div>
+                            <nav class="nav-menu" id="mainMenu">
+                                <button class="nav-btn" data-page="dashboard">
+                                    <span>📊</span>
+                                    <span>대시보드</span>
+                                </button>
+                                <button class="nav-btn" data-page="products">
+                                    <span>📦</span>
+                                    <span>상품리스트</span>
+                                </button>
+                                <button class="nav-btn" data-page="calendar">
+                                    <span>📅</span>
+                                    <span>상품캘린더</span>
+                                </button>
+                                <button class="nav-btn" data-page="orders">
+                                    <span>📋</span>
+                                    <span>주문관리</span>
+                                </button>
+                                <button class="nav-btn" data-page="services">
+                                    <span>🎯</span>
+                                    <span>서비스&프로그램</span>
+                                </button>
+                                <button class="nav-btn" data-page="notice">
+                                    <span>📢</span>
+                                    <span>공지사항</span>
+                                </button>
+                            </nav>
+                        </div>
+                    </header>
+                    <div class="menu-container" id="menuContainer">
+                        <div class="menu-wrapper" id="menuWrapper" style="display: none;"></div>
+                    </div>
+                `;
+                return headerHTML;
+            }
+
+            function setActivePage(pageName) {
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelectorAll(`.nav-btn[data-page="${pageName}"]`).forEach(btn => {
+                    btn.classList.add('active');
+                });
+            }
+
+            function setupStickyMenu() {
+                setTimeout(() => {
+                    const header = document.querySelector('.top-header');
+                    const menuContainer = document.getElementById('menuContainer');
+                    const menuWrapper = document.getElementById('menuWrapper');
+                    const mainMenu = document.getElementById('mainMenu');
+                    const centerButton = document.querySelector('.center-button');
+                    
+                    if (!header || !menuContainer || !menuWrapper || !mainMenu || !centerButton) {
+                        return;
+                    }
+                    
+                    let headerHeight = header.offsetHeight;
+                    let stickyOffset = header.offsetTop + headerHeight;
+                    
+                    window.removeEventListener('scroll', window.dalraeStickyHandler);
+                    
+                    window.dalraeStickyHandler = function() {
+                        if (window.pageYOffset > stickyOffset) {
+                            if (!menuContainer.classList.contains('sticky')) {
+                                menuContainer.classList.add('sticky');
+                                menuWrapper.style.display = 'flex';
+                                menuWrapper.innerHTML = '';
+                                const centerButtonClone = centerButton.cloneNode(true);
+                                menuWrapper.appendChild(centerButtonClone);
+                                const mainMenuClone = mainMenu.cloneNode(true);
+                                menuWrapper.appendChild(mainMenuClone);
+                                centerButtonClone.querySelector('.special-btn').onclick = openOrderSystem;
+                                mainMenuClone.querySelectorAll('.nav-btn').forEach(btn => {
+                                    btn.addEventListener('click', handleMenuClick);
+                                });
+                            }
+                        } else {
+                            menuContainer.classList.remove('sticky');
+                            menuWrapper.style.display = 'none';
+                        }
+                    };
+                    
+                    window.addEventListener('scroll', window.dalraeStickyHandler);
+                }, 100);
+            }
+
+            function handleMenuClick(e) {
+                const btn = e.currentTarget;
+                const page = btn.dataset.page;
+                
+                if (page) {
+                    const pageUrls = {
+                        'dashboard': 'index.html',
+                        'products': 'products.html',
+                        'calendar': 'calendar.html',
+                        'orders': 'orders.html',
+                        'services': 'services.html',
+                        'notice': 'notice.html'
+                    };
+                    
+                    if (pageUrls[page]) {
+                        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+                        const currentPage = currentFile.replace('.html', '');
+                        const currentPageName = currentPage === 'index' ? 'dashboard' : currentPage;
+                        
+                        if (currentPageName !== page) {
+                            window.location.href = pageUrls[page];
+                        }
+                    }
+                }
+            }
+
+            function initHeader(options = {}) {
+                const { 
+                    containerId = 'header-container',
+                    activePage = null,
+                    enableStickyMenu = true
+                } = options;
+                
+                const container = document.getElementById(containerId);
+                if (!container) {
+                    return;
+                }
+                
+                container.innerHTML = createHeader();
+                
+                if (activePage) {
+                    setActivePage(activePage);
+                } else {
+                    const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+                    const pageName = currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
+                    setActivePage(pageName);
+                }
+                
+                document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
+                    btn.addEventListener('click', handleMenuClick);
+                });
+                
+                if (enableStickyMenu) {
+                    setupStickyMenu();
+                }
+            }
+
+            window.DalraeHeader = {
+                init: initHeader,
+                setActivePage: setActivePage
+            };
+        })();
+
+        // DOM 로드 완료 후 초기화
+        window.addEventListener('DOMContentLoaded', function() {
+            DalraeHeader.init({
+                containerId: 'header-container',
+                activePage: 'calendar'
+            });
+            
+            loadData();
+            updatePeriodDisplay();
+        });
+    </script>
+</body>
+</html>
