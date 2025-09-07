@@ -1487,6 +1487,12 @@
             const container = document.getElementById('yearTimelineContainer');
             let html = '';
             
+            // 오늘 날짜 정보
+            const today = new Date();
+            const currentYearNow = today.getFullYear();
+            const currentMonthNow = today.getMonth();
+            const currentDayNow = today.getDate();
+            
             productTimelines.forEach((product, index) => {
                 const startMonth = product.startDate.getMonth();
                 const startDay = product.startDate.getDate();
@@ -1498,9 +1504,22 @@
                 // 각 품목별로 한 줄씩
                 html += `<div class="year-timeline-row">`;
                 
-                // 12개월 그리드 생성
+                // 12개월 그리드 생성 - 오늘 날짜 표시
                 for (let m = 0; m < 12; m++) {
-                    html += `<div class="year-month-cell"></div>`;
+                    let cellClass = 'year-month-cell';
+                    
+                    // 현재 년도가 표시 년도(2025)와 같고, 현재 월과 일치하면 오늘 표시
+                    if (currentYearNow === 2025 && m === currentMonthNow) {
+                        // 오늘 날짜가 포함된 월에 특별한 스타일 적용
+                        const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                        const dayPercent = currentDayNow / monthDays[m];
+                        
+                        html += `<div class="${cellClass}" style="position: relative;">
+                            <div style="position: absolute; left: ${dayPercent * 100}%; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #ff6b6b, #ff9a9e); z-index: 5; opacity: 0.7;"></div>
+                        </div>`;
+                    } else {
+                        html += `<div class="${cellClass}"></div>`;
+                    }
                 }
                 
                 // 타임라인 바 계산 및 그리기
@@ -1565,6 +1584,23 @@
                 
                 html += `</div>`;
             });
+            
+            // 오늘 날짜 표시 레이블 추가
+            if (currentYearNow === 2025 && currentMonthNow >= 0 && currentMonthNow <= 11) {
+                const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                const monthOffset = (100 / 12) * currentMonthNow;
+                const dayOffset = (100 / 12) * (currentDayNow / monthDays[currentMonthNow]);
+                const todayPosition = monthOffset + dayOffset;
+                
+                html += `
+                    <div style="position: absolute; left: ${todayPosition}%; top: -20px; transform: translateX(-50%); z-index: 20;">
+                        <div style="background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; white-space: nowrap;">
+                            오늘
+                        </div>
+                        <div style="width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 6px solid #ff6b6b; margin: 0 auto;"></div>
+                    </div>
+                `;
+            }
             
             container.innerHTML = html;
         }
