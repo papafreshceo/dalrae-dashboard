@@ -75,50 +75,60 @@
 
     // 스티키 메뉴 설정
     function setupStickyMenu() {
-        const header = document.querySelector('.top-header');
-        const menuContainer = document.getElementById('menuContainer');
-        const menuWrapper = document.getElementById('menuWrapper');
-        const mainMenu = document.getElementById('mainMenu');
-        const centerButton = document.querySelector('.center-button');
-        
-        if (!header || !menuContainer || !menuWrapper || !mainMenu || !centerButton) {
-            console.error('헤더 요소를 찾을 수 없습니다');
-            return;
-        }
-        
-        let headerHeight = header.offsetHeight;
-        let stickyOffset = header.offsetTop + headerHeight;
-        
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > stickyOffset) {
-                if (!menuContainer.classList.contains('sticky')) {
-                    menuContainer.classList.add('sticky');
-                    menuWrapper.style.display = 'flex';
-                    
-                    // 메뉴 복사
-                    menuWrapper.innerHTML = '';
-                    
-                    // 중앙 버튼 복사
-                    const centerButtonClone = centerButton.cloneNode(true);
-                    menuWrapper.appendChild(centerButtonClone);
-                    
-                    // 메인 메뉴 복사
-                    const mainMenuClone = mainMenu.cloneNode(true);
-                    menuWrapper.appendChild(mainMenuClone);
-                    
-                    // 이벤트 리스너 재설정
-                    centerButtonClone.querySelector('.special-btn').onclick = openOrderSystem;
-                    
-                    // 메뉴 클릭 이벤트 재설정
-                    mainMenuClone.querySelectorAll('.nav-btn').forEach(btn => {
-                        btn.addEventListener('click', handleMenuClick);
-                    });
-                }
-            } else {
-                menuContainer.classList.remove('sticky');
-                menuWrapper.style.display = 'none';
+        // DOM이 완전히 로드된 후 실행
+        setTimeout(() => {
+            const header = document.querySelector('.top-header');
+            const menuContainer = document.getElementById('menuContainer');
+            const menuWrapper = document.getElementById('menuWrapper');
+            const mainMenu = document.getElementById('mainMenu');
+            const centerButton = document.querySelector('.center-button');
+            
+            if (!header || !menuContainer || !menuWrapper || !mainMenu || !centerButton) {
+                console.warn('헤더 요소를 찾을 수 없습니다 - 스티키 메뉴 비활성화');
+                return;
             }
-        });
+            
+            let headerHeight = header.offsetHeight;
+            let stickyOffset = header.offsetTop + headerHeight;
+            
+            // 기존 스크롤 이벤트 리스너 제거 (중복 방지)
+            window.removeEventListener('scroll', window.dalraeStickyHandler);
+            
+            // 새 스크롤 핸들러 정의
+            window.dalraeStickyHandler = function() {
+                if (window.pageYOffset > stickyOffset) {
+                    if (!menuContainer.classList.contains('sticky')) {
+                        menuContainer.classList.add('sticky');
+                        menuWrapper.style.display = 'flex';
+                        
+                        // 메뉴 복사
+                        menuWrapper.innerHTML = '';
+                        
+                        // 중앙 버튼 복사
+                        const centerButtonClone = centerButton.cloneNode(true);
+                        menuWrapper.appendChild(centerButtonClone);
+                        
+                        // 메인 메뉴 복사
+                        const mainMenuClone = mainMenu.cloneNode(true);
+                        menuWrapper.appendChild(mainMenuClone);
+                        
+                        // 이벤트 리스너 재설정
+                        centerButtonClone.querySelector('.special-btn').onclick = openOrderSystem;
+                        
+                        // 메뉴 클릭 이벤트 재설정
+                        mainMenuClone.querySelectorAll('.nav-btn').forEach(btn => {
+                            btn.addEventListener('click', handleMenuClick);
+                        });
+                    }
+                } else {
+                    menuContainer.classList.remove('sticky');
+                    menuWrapper.style.display = 'none';
+                }
+            };
+            
+            // 스크롤 이벤트 리스너 추가
+            window.addEventListener('scroll', window.dalraeStickyHandler);
+        }, 100);
     }
 
     // 메뉴 클릭 처리
