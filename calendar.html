@@ -251,6 +251,22 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
         
+        .month-scroll-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .month-scroll-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .month-calendar-content {
+            min-width: 700px;
+        }
+        
         .weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
@@ -374,6 +390,18 @@
             padding: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .year-view::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .year-calendar-content {
+            min-width: 1200px;
         }
         
         .year-months-header {
@@ -579,20 +607,68 @@
             }
 
             .calendar-header {
-                padding: 15px;
+                padding: 10px;
+            }
+            
+            .calendar-controls {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 0;
+                flex-wrap: nowrap;
+            }
+            
+            .nav-controls {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                flex: 0 0 auto;
             }
             
             .month-year-display {
-                font-size: 18px;
+                font-size: 16px;
+                min-width: auto;
+                width: 60px;
+            }
+            
+            .calendar-nav-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+                padding: 0;
+            }
+            
+            .today-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+            
+            .view-toggle {
+                display: flex;
+                gap: 4px;
+                flex: 0 0 auto;
+            }
+            
+            .toggle-btn {
+                padding: 6px 10px;
+                font-size: 12px;
             }
             
             .calendar-container {
                 padding: 0 15px;
             }
             
+            .month-view {
+                padding: 10px;
+            }
+            
+            .month-calendar-content {
+                min-width: 600px;
+            }
+            
             .day-cell {
-                min-height: 80px;
-                padding: 4px;
+                min-height: 100px;
+                padding: 6px;
             }
             
             .day-number {
@@ -600,9 +676,17 @@
             }
             
             .month-timeline-bar {
-                height: 14px;
+                height: 12px;
                 font-size: 8px;
                 padding: 0 4px;
+            }
+            
+            .year-view {
+                padding: 10px;
+            }
+            
+            .year-calendar-content {
+                min-width: 900px;
             }
             
             .legend {
@@ -619,7 +703,7 @@
     <!-- 캘린더 헤더 -->
     <div class="calendar-header">
         <div class="calendar-controls">
-            <div class="nav-controls" id="navControls" style="flex: 1;">
+            <div class="nav-controls" id="navControls">
                 <button class="calendar-nav-btn" onclick="previousPeriod()" id="prevBtn">‹</button>
                 <div class="month-year-display" id="periodDisplay">1월</div>
                 <button class="calendar-nav-btn" onclick="nextPeriod()" id="nextBtn">›</button>
@@ -641,38 +725,44 @@
     <div class="calendar-container">
         <!-- 월 보기 -->
         <div id="monthView" class="month-view">
-            <div class="weekdays">
-                <div class="weekday sunday">일</div>
-                <div class="weekday">월</div>
-                <div class="weekday">화</div>
-                <div class="weekday">수</div>
-                <div class="weekday">목</div>
-                <div class="weekday">금</div>
-                <div class="weekday saturday">토</div>
-            </div>
-            <div class="days-grid" id="daysGrid">
-                <!-- 동적 생성 -->
+            <div class="month-scroll-wrapper">
+                <div class="month-calendar-content">
+                    <div class="weekdays">
+                        <div class="weekday sunday">일</div>
+                        <div class="weekday">월</div>
+                        <div class="weekday">화</div>
+                        <div class="weekday">수</div>
+                        <div class="weekday">목</div>
+                        <div class="weekday">금</div>
+                        <div class="weekday saturday">토</div>
+                    </div>
+                    <div class="days-grid" id="daysGrid">
+                        <!-- 동적 생성 -->
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- 년 보기 -->
         <div id="yearView" class="year-view" style="display: none;">
-            <div class="year-months-header">
-                <div class="year-month-label">1월</div>
-                <div class="year-month-label">2월</div>
-                <div class="year-month-label">3월</div>
-                <div class="year-month-label">4월</div>
-                <div class="year-month-label">5월</div>
-                <div class="year-month-label">6월</div>
-                <div class="year-month-label">7월</div>
-                <div class="year-month-label">8월</div>
-                <div class="year-month-label">9월</div>
-                <div class="year-month-label">10월</div>
-                <div class="year-month-label">11월</div>
-                <div class="year-month-label">12월</div>
-            </div>
-            <div class="year-timeline-container" id="yearTimelineContainer">
-                <!-- 동적 생성 -->
+            <div class="year-calendar-content">
+                <div class="year-months-header">
+                    <div class="year-month-label">1월</div>
+                    <div class="year-month-label">2월</div>
+                    <div class="year-month-label">3월</div>
+                    <div class="year-month-label">4월</div>
+                    <div class="year-month-label">5월</div>
+                    <div class="year-month-label">6월</div>
+                    <div class="year-month-label">7월</div>
+                    <div class="year-month-label">8월</div>
+                    <div class="year-month-label">9월</div>
+                    <div class="year-month-label">10월</div>
+                    <div class="year-month-label">11월</div>
+                    <div class="year-month-label">12월</div>
+                </div>
+                <div class="year-timeline-container" id="yearTimelineContainer">
+                    <!-- 동적 생성 -->
+                </div>
             </div>
         </div>
 
@@ -934,6 +1024,7 @@
         // 전역 변수
         let currentView = 'month';
         let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
         let allProducts = [];
         let productTimelines = [];
         let productColors = {};
@@ -955,14 +1046,13 @@
             if (!dateStr || dateStr === '') return null;
             
             if (dateStr.length === 5 && dateStr.indexOf('-') === 2) {
-                const currentYear = new Date().getFullYear();
                 const month = parseInt(dateStr.substring(0, 2)) - 1;
                 const day = parseInt(dateStr.substring(3, 5));
                 
                 if (isNaN(month) || isNaN(day)) return null;
                 
-                // 현재 연도로 우선 설정
-                let date = new Date(currentYear, month, day);
+                // 기준 연도 설정 (2025년)
+                let date = new Date(2025, month, day);
                 
                 return date;
             }
@@ -1154,7 +1244,7 @@
             if (currentView === 'month') {
                 display.textContent = monthNames[currentMonth];
             } else {
-                display.textContent = '연간 공급 계획';
+                display.textContent = `${currentYear}년`;
             }
         }
 
@@ -1234,9 +1324,11 @@
             monthProductTimelines = productTimelines.filter(product => {
                 const startMonth = product.startDate.getMonth();
                 const endMonth = product.endDate.getMonth();
+                const startYear = product.startDate.getFullYear();
+                const endYear = product.endDate.getFullYear();
                 
                 // 같은 해 내에서의 기간
-                if (startMonth <= endMonth) {
+                if (startYear === endYear) {
                     return currentMonth >= startMonth && currentMonth <= endMonth;
                 } else {
                     // 연도를 넘어가는 기간 (예: 11월~3월)
@@ -1254,13 +1346,16 @@
                 const startDay = product.startDate.getDate();
                 const endMonth = product.endDate.getMonth();
                 const endDay = product.endDate.getDate();
+                const startYear = product.startDate.getFullYear();
+                const endYear = product.endDate.getFullYear();
                 
                 let displayStart, displayEnd;
                 
                 // 현재 월에서의 시작일 계산
                 if (startMonth === currentMonth) {
                     displayStart = startDay;
-                } else if (startMonth < currentMonth || (startMonth > currentMonth && startMonth > endMonth)) {
+                } else if ((startYear < endYear && currentMonth <= endMonth) || 
+                          (startMonth > currentMonth && startMonth > endMonth)) {
                     displayStart = 1;
                 } else {
                     return;
@@ -1270,7 +1365,8 @@
                 const lastDayOfMonth = new Date(2025, currentMonth + 1, 0).getDate();
                 if (endMonth === currentMonth) {
                     displayEnd = endDay;
-                } else if (endMonth > currentMonth || (endMonth < currentMonth && startMonth > endMonth)) {
+                } else if ((startYear < endYear && currentMonth >= startMonth) || 
+                          (endMonth < currentMonth && startMonth > endMonth)) {
                     displayEnd = lastDayOfMonth;
                 } else {
                     return;
@@ -1288,18 +1384,27 @@
                 const endCol = (col + duration - 1) % 7;
                 const endRow = row + Math.floor((col + duration - 1) / 7);
                 
-                // 10개 행으로 분산, 그 이상이면 바 높이를 더 줄임
+                // 모바일에서 더 많은 행으로 분산
                 const totalProducts = monthProductTimelines.length;
                 let rowOffset, barHeight;
                 
-                if (totalProducts <= 10) {
-                    rowOffset = (index % 10) * 18; // 10개 행으로 분산
-                    barHeight = 16; // 기본 높이
+                const isMobile = window.innerWidth <= 768;
+                
+                if (isMobile) {
+                    // 모바일: 더 촘촘하게 배치
+                    const maxRows = Math.min(20, totalProducts);
+                    rowOffset = (index % maxRows) * 10;
+                    barHeight = 10;
                 } else {
-                    // 10개 이상이면 더 많은 행으로 분산하고 바 높이 줄임
-                    const maxRows = Math.min(15, totalProducts); // 최대 15행까지
-                    rowOffset = (index % maxRows) * 14; // 더 촘촘하게
-                    barHeight = 12; // 높이 줄임
+                    // 데스크톱
+                    if (totalProducts <= 10) {
+                        rowOffset = (index % 10) * 18;
+                        barHeight = 16;
+                    } else {
+                        const maxRows = Math.min(15, totalProducts);
+                        rowOffset = (index % maxRows) * 14;
+                        barHeight = 12;
+                    }
                 }
                 
                 // 주를 넘어가는 경우 처리
@@ -1387,6 +1492,8 @@
                 const startDay = product.startDate.getDate();
                 const endMonth = product.endDate.getMonth();
                 const endDay = product.endDate.getDate();
+                const startYear = product.startDate.getFullYear();
+                const endYear = product.endDate.getFullYear();
                 
                 // 각 품목별로 한 줄씩
                 html += `<div class="year-timeline-row">`;
@@ -1401,7 +1508,7 @@
                 let barStartPercent, barWidthPercent;
                 let barClass = '';
                 
-                if (startMonth <= endMonth) {
+                if (startYear === endYear) {
                     // 같은 해 내에서 시작-종료
                     const startMonthOffset = (100 / 12) * startMonth;
                     const startDayOffset = (100 / 12) * (startDay / monthDays[startMonth]);
@@ -1517,173 +1624,4 @@
                 { date: '2025-01-28', name: '설날 연휴' },
                 { date: '2025-01-29', name: '설날' },
                 { date: '2025-01-30', name: '설날 연휴' },
-                { date: '2025-03-01', name: '삼일절' },
-                { date: '2025-05-05', name: '어린이날' },
-                { date: '2025-05-06', name: '부처님오신날' },
-                { date: '2025-06-06', name: '현충일' },
-                { date: '2025-08-15', name: '광복절' },
-                { date: '2025-10-03', name: '개천절' },
-                { date: '2025-10-05', name: '추석 연휴' },
-                { date: '2025-10-06', name: '추석' },
-                { date: '2025-10-07', name: '추석 연휴' },
-                { date: '2025-10-09', name: '한글날' },
-                { date: '2025-12-25', name: '크리스마스' }
-            ],
-            2026: [
-                { date: '2026-01-01', name: '신정' },
-                { date: '2026-02-16', name: '설날 연휴' },
-                { date: '2026-02-17', name: '설날' },
-                { date: '2026-02-18', name: '설날 연휴' },
-                { date: '2026-03-01', name: '삼일절' },
-                { date: '2026-05-05', name: '어린이날' },
-                { date: '2026-05-24', name: '부처님오신날' },
-                { date: '2026-06-06', name: '현충일' },
-                { date: '2026-08-15', name: '광복절' },
-                { date: '2026-09-24', name: '추석 연휴' },
-                { date: '2026-09-25', name: '추석' },
-                { date: '2026-09-26', name: '추석 연휴' },
-                { date: '2026-10-03', name: '개천절' },
-                { date: '2026-10-09', name: '한글날' },
-                { date: '2026-12-25', name: '크리스마스' }
-            ]
-        };
-        
-        // 대체 공휴일 계산 함수
-        function getSubstituteHoliday(holiday) {
-            const date = new Date(holiday.date);
-            const dayOfWeek = date.getDay();
-            
-            // 공휴일이 토요일이나 일요일인 경우 대체 공휴일 적용
-            if (dayOfWeek === 0) { // 일요일
-                const substitute = new Date(date);
-                substitute.setDate(date.getDate() + 1); // 월요일로
-                return {
-                    date: substitute.toISOString().split('T')[0],
-                    name: holiday.name + ' 대체공휴일'
-                };
-            } else if (dayOfWeek === 6) { // 토요일
-                const substitute = new Date(date);
-                substitute.setDate(date.getDate() + 2); // 월요일로
-                return {
-                    date: substitute.toISOString().split('T')[0],
-                    name: holiday.name + ' 대체공휴일'
-                };
-            }
-            return null;
-        }
-        
-        // 공휴일 확인 함수
-        function isHoliday(year, month, day) {
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-            const holidays = koreanHolidays[year] || [];
-            
-            // 대체 공휴일 추가
-            const allHolidays = [...holidays];
-            holidays.forEach(holiday => {
-                const substitute = getSubstituteHoliday(holiday);
-                if (substitute) {
-                    allHolidays.push(substitute);
-                }
-            });
-            
-            return allHolidays.find(h => h.date === dateStr);
-        }
-        
-        // 배송 캘린더 렌더링
-        function renderDeliveryCalendar() {
-            const grid = document.getElementById('deliveryDaysGrid');
-            if (!grid) return;
-            
-            const firstDay = new Date(deliveryYear, deliveryMonth, 1);
-            const lastDay = new Date(deliveryYear, deliveryMonth + 1, 0);
-            const prevLastDay = new Date(deliveryYear, deliveryMonth, 0);
-            const startDay = firstDay.getDay();
-            const totalDays = lastDay.getDate();
-            const prevTotalDays = prevLastDay.getDate();
-            const today = new Date();
-            
-            let html = '';
-            
-            // 이전 달 날짜
-            for (let i = startDay - 1; i >= 0; i--) {
-                const day = prevTotalDays - i;
-                html += `<div class="day-cell other-month">
-                    <div class="day-number">${day}</div>
-                </div>`;
-            }
-            
-            // 현재 달 날짜
-            for (let day = 1; day <= totalDays; day++) {
-                const date = new Date(deliveryYear, deliveryMonth, day);
-                const dayOfWeek = date.getDay();
-                const isToday = date.toDateString() === today.toDateString();
-                const holiday = isHoliday(deliveryYear, deliveryMonth, day);
-                
-                const classes = ['day-cell'];
-                if (isToday) classes.push('today');
-                if (dayOfWeek === 0 || holiday) classes.push('sunday'); // 일요일 또는 공휴일
-                if (dayOfWeek === 6 && !holiday) classes.push('saturday'); // 토요일 (공휴일 아닌 경우)
-                
-                let holidayText = '';
-                if (holiday) {
-                    holidayText = `<div style="font-size: 10px; color: #ff5252; font-weight: 600; margin-top: 2px;">${holiday.name}</div>`;
-                }
-                
-                html += `<div class="${classes.join(' ')}">
-                    <div class="day-number">${day}</div>
-                    ${holidayText}
-                </div>`;
-            }
-            
-            // 다음 달 날짜
-            const remainingCells = 42 - (startDay + totalDays);
-            for (let day = 1; day <= remainingCells; day++) {
-                html += `<div class="day-cell other-month">
-                    <div class="day-number">${day}</div>
-                </div>`;
-            }
-            
-            grid.innerHTML = html;
-            updateDeliveryMonthDisplay();
-        }
-        
-        // 배송 캘린더 월 표시 업데이트
-        function updateDeliveryMonthDisplay() {
-            const display = document.getElementById('deliveryMonthDisplay');
-            if (display) {
-                const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
-                display.textContent = `${deliveryYear}년 ${monthNames[deliveryMonth]}`;
-            }
-        }
-        
-        // 배송 캘린더 이전 월
-        function previousDeliveryMonth() {
-            deliveryMonth--;
-            if (deliveryMonth < 0) {
-                deliveryMonth = 11;
-                deliveryYear--;
-            }
-            renderDeliveryCalendar();
-        }
-        
-        // 배송 캘린더 다음 월
-        function nextDeliveryMonth() {
-            deliveryMonth++;
-            if (deliveryMonth > 11) {
-                deliveryMonth = 0;
-                deliveryYear++;
-            }
-            renderDeliveryCalendar();
-        }
-        
-        // 초기화
-        loadData();
-        updatePeriodDisplay();
-        
-        // 배송 캘린더 초기화
-        setTimeout(() => {
-            renderDeliveryCalendar();
-        }, 100);
-    </script>
-</body>
-</html>
+                { date: '2025-03-01', name:
