@@ -443,6 +443,43 @@
     font-weight: 600;
 }
 
+/* 필터 통계 컨테이너 */
+.filter-stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-right: 20px;
+}
+
+/* 메시지 스타일 */
+.filter-message {
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+    text-align: center;
+    padding: 8px 12px;
+    background: #f0f4ff;
+    border-radius: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* 타이핑 애니메이션 */
+@keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+}
+
+.typing-animation {
+    animation: typing 1.5s steps(30, end);
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    width: 0;
+    animation-fill-mode: forwards;
+}
+        
+        
 /* 플립 애니메이션 */
 @keyframes flipDigit {
     0% {
@@ -1066,6 +1103,15 @@
 .scoreboard-label {
     font-size: 12px;
 }
+       .filter-stats-container {
+    gap: 10px;
+    margin-right: 0;
+}
+
+.filter-message {
+    font-size: 11px;
+    padding: 6px 10px;
+}
             
             /* 모바일 그룹 간격 */
             .group-divider {
@@ -1427,18 +1473,23 @@
                             <!-- 품목 필터가 여기에 동적으로 생성됨 -->
                         </div>
                     </div>
-                    <div id="filterStats" class="scoreboard-stats">
-    <div class="scoreboard-item">
-        <div class="scoreboard-number" id="filterStatsProducts">
-            <span class="digit">0</span>
+                    <div id="filterStats" class="filter-stats-container">
+    <div class="scoreboard-stats">
+        <div class="scoreboard-item">
+            <div class="scoreboard-number" id="filterStatsProducts">
+                <span class="digit">0</span>
+            </div>
+            <div class="scoreboard-label">상품</div>
         </div>
-        <div class="scoreboard-label">상품</div>
+        <div class="scoreboard-item">
+            <div class="scoreboard-number" id="filterStatsOptions">
+                <span class="digit">0</span>
+            </div>
+            <div class="scoreboard-label">옵션</div>
+        </div>
     </div>
-    <div class="scoreboard-item">
-        <div class="scoreboard-number" id="filterStatsOptions">
-            <span class="digit">0</span>
-        </div>
-        <div class="scoreboard-label">옵션</div>
+    <div class="filter-message" id="filterStatsMessage">
+        달래마켓과 함께 성장하세요
     </div>
 </div>
                 </div>
@@ -1705,6 +1756,27 @@ function updateFilterStats() {
     // 스코어보드 플립 애니메이션
     updateScoreboard('filterStatsProducts', newProducts);
     updateScoreboard('filterStatsOptions', newOptions);
+    
+    // 메시지 업데이트
+    let message = "달래마켓과 함께 성장하세요";
+    
+    if (activeStatusFilter === 'active') {
+        message = "지금 바로 시작하세요";
+    } else if (activeStatusFilter === 'paused') {
+        message = "다음 시즌을 누구보다 빨리 준비해야죠";
+    } else if (activeStatusFilter === 'preparing') {
+        message = "지금 바로 준비하세요";
+    } else if (activeStatusFilter === 'ending') {
+        message = "첫술에 배 부른 법은 절대 없죠. 성과는 어땠나요?";
+    } else if (activeStatusFilter === 'stopped') {
+        message = "다시 준비하겠습니다";
+    }
+    
+    // 타이핑 애니메이션 적용
+    const messageElement = document.getElementById('filterStatsMessage');
+    if (messageElement) {
+        messageElement.innerHTML = `<span class="typing-animation">${message}</span>`;
+    }
 }
 
 // 스코어보드 업데이트 함수 추가
@@ -2642,6 +2714,7 @@ case 'preparing':
 </body>
 
 </html>
+
 
 
 
