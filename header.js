@@ -152,7 +152,8 @@
         // 옵션 설정
         const { 
             containerId = 'header-container',
-            activePage = null 
+            activePage = null,
+            enableStickyMenu = true  // 스티키 메뉴 활성화 옵션 추가
         } = options;
         
         // 헤더 컨테이너 찾기
@@ -180,8 +181,10 @@
             btn.addEventListener('click', handleMenuClick);
         });
         
-        // 스티키 메뉴 설정
-        setupStickyMenu();
+        // 스티키 메뉴 설정 (옵션에 따라)
+        if (enableStickyMenu) {
+            setupStickyMenu();
+        }
     }
 
     // 전역으로 내보내기
