@@ -236,6 +236,13 @@
             padding: 0 30px;
         }
         
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #3a3b3d;
+            margin-bottom: 15px;
+        }
+        
         /* 월 보기 */
         .month-view {
             background: white;
@@ -406,11 +413,6 @@
         .year-month-cell {
             position: relative;
             border-left: 1px solid #e8e9eb;
-            border-right: 1px solid #e8e9eb;
-        }
-        
-        .year-month-cell:first-child {
-            border-left: 1px solid #e8e9eb;
         }
         
         .year-month-cell:last-child {
@@ -482,6 +484,21 @@
             width: 20px;
             height: 12px;
             border-radius: 6px;
+        }
+        
+        /* 배송 캘린더 */
+        .delivery-calendar-wrapper {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .delivery-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f5f6f7;
+            border-radius: 8px;
         }
         
         /* 상품 정보 툴팁 */
@@ -602,7 +619,7 @@
     <!-- 캘린더 헤더 -->
     <div class="calendar-header">
         <div class="calendar-controls">
-            <div class="nav-controls" id="navControls">
+            <div class="nav-controls" id="navControls" style="flex: 1;">
                 <button class="calendar-nav-btn" onclick="previousPeriod()" id="prevBtn">‹</button>
                 <div class="month-year-display" id="periodDisplay">1월</div>
                 <button class="calendar-nav-btn" onclick="nextPeriod()" id="nextBtn">›</button>
@@ -613,6 +630,11 @@
                 <button class="toggle-btn" data-view="year" onclick="setView('year')">년</button>
             </div>
         </div>
+    </div>
+
+    <!-- 상품 캘린더 섹션 -->
+    <div class="calendar-container">
+        <h2 class="section-title">📅 상품캘린더</h2>
     </div>
 
     <!-- 캘린더 컨테이너 -->
@@ -657,6 +679,31 @@
         <!-- 범례 -->
         <div class="legend" id="legend">
             <!-- 동적 생성 -->
+        </div>
+    </div>
+
+    <!-- 배송 캘린더 섹션 -->
+    <div class="calendar-container" style="margin-top: 40px;">
+        <h2 class="section-title">🚚 배송캘린더</h2>
+        
+        <div class="delivery-calendar-wrapper">
+            <!-- Google 캘린더 embed (한국 공휴일) -->
+            <iframe src="https://calendar.google.com/calendar/embed?src=ko.south_korea%23holiday%40group.v.calendar.google.com&ctz=Asia%2FSeoul&showTitle=0&showNav=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&height=600&wkst=1&bgcolor=%23ffffff&hl=ko" 
+                    style="border: 0; width: 100%; height: 600px; border-radius: 8px;" 
+                    frameborder="0" 
+                    scrolling="no">
+            </iframe>
+            
+            <!-- 배송 안내 정보 -->
+            <div class="delivery-info">
+                <h3 style="font-size: 16px; font-weight: 600; color: #3a3b3d; margin-bottom: 10px;">📌 배송 안내</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 빨간색 날짜: 공휴일 (배송 불가)</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 토요일/일요일: 주말 (배송 제한)</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 공휴일 전날 오후 주문: 공휴일 다음 영업일 배송</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 당일 배송: 오전 10시 이전 주문 시 가능 (평일 기준)</li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -1046,17 +1093,17 @@
                 }
             });
             
-            // 네비게이션 컨트롤 전체 표시/숨김
+            // 네비게이션 컨트롤 표시/숨김
             const navControls = document.getElementById('navControls');
             
             if (view === 'month') {
                 document.getElementById('monthView').style.display = 'block';
                 document.getElementById('yearView').style.display = 'none';
-                navControls.style.display = 'flex';
+                navControls.style.visibility = 'visible';
             } else {
                 document.getElementById('monthView').style.display = 'none';
                 document.getElementById('yearView').style.display = 'block';
-                navControls.style.display = 'none';
+                navControls.style.visibility = 'hidden';
             }
             
             updatePeriodDisplay();
