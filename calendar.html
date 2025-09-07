@@ -920,15 +920,30 @@
         // 상품 타임라인 처리
         function processProductTimelines() {
             const productMap = {};
+            const today = new Date();
+            const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
             
             allProducts.forEach(p => {
                 const item = p.품목;
                 if (!item) return;
                 
-                const startDate = parseDate(p.시작일);
-                const endDate = parseDate(p.종료일);
+                let startDate = parseDate(p.시작일);
+                let endDate = parseDate(p.종료일);
                 
                 if (!startDate || !endDate) return;
+                
+                // 시작일과 종료일 모두 오늘보다 과거인 경우 다음 해로 조정
+                const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+                const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+                
+                if (startDateOnly < todayDateOnly && endDateOnly < todayDateOnly) {
+                    // 둘 다 과거면 1년 추가
+                    startDate = new Date(startDate.getFullYear() + 1, startDate.getMonth(), startDate.getDate());
+                    endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
+                } else if (startDateOnly > endDateOnly) {
+                    // 시작일이 종료일보다 늦으면 종료일을 다음 해로
+                    endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
+                }
                 
                 if (!productMap[item]) {
                     productMap[item] = {
