@@ -1092,7 +1092,10 @@
             
             grid.innerHTML = html;
             
-            setTimeout(() => addMonthTimelines(), 10);
+            // 데이터가 로드되었을 때만 타임라인 추가
+            if (productTimelines && productTimelines.length > 0) {
+                setTimeout(() => addMonthTimelines(), 100);
+            }
         }
 
         // 월 타임라인 추가
