@@ -770,81 +770,85 @@ function searchProducts() {
         }
         
         // 테이블 렌더링
-        function renderTable(products) {
-            const tbody = document.getElementById('productTableBody');
-            const today = new Date();
-            const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-            
-            if (products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;">검색된 옵션상품이 없습니다.</td></tr>;
-                return;
+// 테이블 렌더링
+function renderTable(products) {
+    const tbody = document.getElementById('productTableBody');
+    const today = new Date();
+    const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
+    
+    if (products.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;">검색된 옵션상품이 없습니다.</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = products.map(p => {
+        const name = p.품종 || p.품목 || '-';
+        const specs = [p.규격1, p.규격2, p.규격3].filter(s => s).join(' ');
+        const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
+        
+        let statusClass = 'status-active';
+        let statusText = p.공급상태 || '미정';
+        
+        if (p.시작일) {
+            const start = parseDate(p.시작일);
+            if (start && start > today && start <= twenty) {
+                statusClass = 'status-preparing';
+                statusText = '출하준비중';
             }
-            
-            tbody.innerHTML = products.map(p => {
-                const name = p.품종 || p.품목 || '-';
-                const specs = [p.규격1, p.규격2, p.규격3].filter(s => s).join(' ');
-                const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
-                
-                let statusClass = 'status-active';
-                let statusText = p.공급상태 || '미정';
-                
-                if (p.시작일) {
-                    const start = parseDate(p.시작일);
-                    if (start && start > today && start <= twenty) {
-                        statusClass = 'status-preparing';
-                        statusText = '출하준비중';
-                    }
-                }
-                
-                if (p.공급상태 === '시즌종료') {
-                    statusClass = 'status-paused';
-                    statusText = '시즌종료';
-                } else if (p.공급상태 === '공급중지') {
-                    statusClass = 'status-stopped';
-                    statusText = '공급중지';
-                } else if (p.공급상태 === '공급중' && statusText !== '출하준비중') {
-                    statusClass = 'status-active';
-                    statusText = '공급중';
-                }
-                
-                const startDate = p.시작일 ? formatDate(parseDate(p.시작일)) : '-';
-                const endDate = p.종료일 ? formatDate(parseDate(p.종료일)) : '-';
-                
-                const hasDetail = p.상세페이지제공 && p.상세페이지제공.trim() !== '';
-                const hasImage = p.이미지제공 && p.이미지제공.trim() !== '';
-                
-                return `
-                    <tr>
-                        <td>
-                            ${p.썸네일 ? 
-                                `<img src="${p.썸네일}" class="product-thumb" alt="${name}">` :
-                                `<div class="product-thumb"></div>`
-                            }
-                        </td>
-                        <td><span class="product-name">${name}</span></td>
-                        <td>${p.옵션명 || '-'}</td>
-                        <td>${specs || '-'}</td>
-                        <td>${p.발송지주소 || '-'}</td>
-                        <td>${p.발송기한 || '-'}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td class="price-cell"><span class="price">${price}원</span></td>
-                        <td>
-    <button class="badge-chart" data-option-name="${p.옵션명 || ''}" onclick="event.stopPropagation(); openPriceChart('', this.dataset.optionName);">
-        가격차트
-    </button>
-</td>
-                        <td>${startDate}</td>
-                        <td>${endDate}</td>
-                        <td>
-                            <div class="badge-provide">
-                                ${hasDetail ? '<span class="badge-detail">상세</span>' : ''}
-                                ${hasImage ? '<span class="badge-image">이미지</span>' : ''}
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
         }
+        
+        if (p.공급상태 === '시즌종료') {
+            statusClass = 'status-paused';
+            statusText = '시즌종료';
+        } else if (p.공급상태 === '공급중지') {
+            statusClass = 'status-stopped';
+            statusText = '공급중지';
+        } else if (p.공급상태 === '공급중' && statusText !== '출하준비중') {
+            statusClass = 'status-active';
+            statusText = '공급중';
+        }
+        
+        const startDate = p.시작일 ? formatDate(parseDate(p.시작일)) : '-';
+        const endDate = p.종료일 ? formatDate(parseDate(p.종료일)) : '-';
+        
+        const hasDetail = p.상세페이지제공 && p.상세페이지제공.trim() !== '';
+        const hasImage = p.이미지제공 && p.이미지제공.trim() !== '';
+        
+        // 옵션명 안전하게 처리
+        const safeOptionName = (p.옵션명 || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        
+        return `
+            <tr>
+                <td>
+                    ${p.썸네일 ? 
+                        `<img src="${p.썸네일}" class="product-thumb" alt="${name}">` :
+                        `<div class="product-thumb"></div>`
+                    }
+                </td>
+                <td><span class="product-name">${name}</span></td>
+                <td>${p.옵션명 || '-'}</td>
+                <td>${specs || '-'}</td>
+                <td>${p.발송지주소 || '-'}</td>
+                <td>${p.발송기한 || '-'}</td>
+                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                <td class="price-cell"><span class="price">${price}원</span></td>
+                <td>
+                    <button class="badge-chart" data-option-name="${safeOptionName}" onclick="event.stopPropagation(); openPriceChart('', this.dataset.optionName);">
+                        가격차트
+                    </button>
+                </td>
+                <td>${startDate}</td>
+                <td>${endDate}</td>
+                <td>
+                    <div class="badge-provide">
+                        ${hasDetail ? '<span class="badge-detail">상세</span>' : ''}
+                        ${hasImage ? '<span class="badge-image">이미지</span>' : ''}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
         
         // 그리드 렌더링
         function renderGrid(products) {
@@ -1091,6 +1095,7 @@ function searchProducts() {
     </script>
 </body>
 </html>
+
 
 
 
