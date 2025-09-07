@@ -947,72 +947,89 @@ function renderTable(products) {
 }
         
         // 차트 표시
-        function displayChart(data, optionName) {
-            if (!data || data.length === 0) {
-                showNoChartData();
-                return;
-            }
-            
-            data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
-            
-            const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
-            
-            const ctx = document.getElementById('priceChartCanvas').getContext('2d');
-            
-            if (priceChart) {
-                priceChart.destroy();
-            }
-            
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map(d => {
-                        const date = new Date(d.날짜);
-                        return `${date.getMonth() + 1}/${date.getDate()}`;
-                    }),
-                    datasets: [{
-                        label: '공급가',
-                        data: prices,
-                        borderColor: 'rgb(102, 126, 234)',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.1,
-                        borderWidth: 2,
-                        pointRadius: 4,
-                        pointBackgroundColor: 'rgb(102, 126, 234)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 6,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return '공급가: ' + context.parsed.y.toLocaleString() + '원';
-                                }
+function displayChart(data, optionName) {
+    if (!data || data.length === 0) {
+        showNoChartData();
+        return;
+    }
+    
+    // 차트 컨테이너 HTML 먼저 설정
+    document.getElementById('chartModalBody').innerHTML = `
+        <div class="chart-container">
+            <canvas id="priceChartCanvas"></canvas>
+        </div>
+    `;
+    
+    // DOM이 준비될 때까지 잠시 대기
+    setTimeout(() => {
+        const canvas = document.getElementById('priceChartCanvas');
+        if (!canvas) {
+            console.error('캔버스 요소를 찾을 수 없습니다');
+            showNoChartData();
+            return;
+        }
+        
+        const ctx = canvas.getContext('2d');
+        
+        data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
+        
+        const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
+        
+        if (priceChart) {
+            priceChart.destroy();
+        }
+        
+        priceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.map(d => {
+                    const date = new Date(d.날짜);
+                    return `${date.getMonth() + 1}/${date.getDate()}`;
+                }),
+                datasets: [{
+                    label: '공급가',
+                    data: prices,
+                    borderColor: 'rgb(102, 126, 234)',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.1,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: 'rgb(102, 126, 234)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 6,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return '공급가: ' + context.parsed.y.toLocaleString() + '원';
                             }
                         }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString() + '원';
-                                }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString() + '원';
                             }
                         }
                     }
                 }
-            });
-        }
+            }
+        });
+    }, 100);
+}
         
         // 차트 데이터 없음 표시
         function showNoChartData() {
@@ -1095,6 +1112,7 @@ function renderTable(products) {
     </script>
 </body>
 </html>
+
 
 
 
