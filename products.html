@@ -905,7 +905,7 @@ function renderTable(products) {
         }
         
         // 가격 차트 열기
-        function openPriceChart(optionCode, optionName) {
+function openPriceChart(optionCode, optionName) {
     console.log('차트 열기:', optionName);
     
     const chartModal = document.getElementById('chartModal');
@@ -919,12 +919,10 @@ function renderTable(products) {
         </div>
     `;
     
-    // 옵션명으로 캐시 확인
     if (priceDataCache[optionName]) {
         console.log('캐시 사용');
         displayChart(priceDataCache[optionName], optionName);
     } else {
-        // 옵션명으로 API 호출
         console.log('API 호출 - 옵션명:', optionName);
         
         fetch(`https://dalrae-dashboard.vercel.app/api/price-history?optionName=${encodeURIComponent(optionName)}`)
@@ -934,10 +932,15 @@ function renderTable(products) {
         })
         .then(data => {
             console.log('받은 데이터:', data);
-            if (data && data.length > 0) {
-                priceDataCache[optionName] = data;  // 옵션명으로 캐싱
+            
+            // 해당 옵션명의 데이터만 필터링
+            const filteredData = data.filter(item => item.옵션명 === optionName);
+            console.log('필터링된 데이터:', filteredData);
+            
+            if (filteredData && filteredData.length > 0) {
+                priceDataCache[optionName] = filteredData;
             }
-            displayChart(data, optionName);
+            displayChart(filteredData, optionName);
         })
         .catch(error => {
             console.error('차트 데이터 로드 실패:', error);
@@ -1112,6 +1115,7 @@ function displayChart(data, optionName) {
     </script>
 </body>
 </html>
+
 
 
 
