@@ -2070,7 +2070,7 @@
             const isMobile = window.innerWidth <= 768;
             
             products.forEach(p => {
-                const price = p.셀러공급가 ? Number(p.셀러공급가).toLocaleString() : '0';
+                const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
                 
                 let statusClass = 'status-active';
                 if (p.공급상태 === '시즌종료') statusClass = 'status-paused';
@@ -2210,7 +2210,7 @@
             data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
             
             // 통계 계산
-            const prices = data.map(d => Number(d.셀러공급가));
+            const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
             const currentPrice = prices[prices.length - 1];
             const maxPrice = Math.max(...prices);
             const minPrice = Math.min(...prices);
@@ -2463,4 +2463,5 @@
         }
     </script>
 </body>
+
 </html>
