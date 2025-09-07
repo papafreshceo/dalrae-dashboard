@@ -1856,10 +1856,28 @@ function updateFilterStats() {
     // 스코어보드 플립 애니메이션
     updateScoreboard('filterStatsProducts', newProducts);
     updateScoreboard('filterStatsOptions', newOptions);
-}
+    
+    // 메시지 업데이트
+    let message = "달래마켓과 함께 성장하세요";
+    
+    if (activeStatusFilter === 'active') {
+        message = "지금 바로 시작하세요";
+    } else if (activeStatusFilter === 'paused') {
+        message = "다음 시즌을 누구보다 빨리 준비해야죠";
+    } else if (activeStatusFilter === 'preparing') {
+        message = "지금 바로 준비하세요";
+    } else if (activeStatusFilter === 'ending') {
+        message = "첫술에 배 부른 법은 절대 없죠. 성과는 어땠나요?";
+    } else if (activeStatusFilter === 'stopped') {
+        message = "다시 준비하겠습니다";
     }
-}, 10);
-        }
+    
+    // 타이핑 애니메이션 적용
+    const messageElement = document.getElementById('filterStatsMessage');
+    if (messageElement) {
+        messageElement.innerHTML = `<span class="typing-animation">${message}</span>`;
+    }
+}
         
         // 통계 업데이트
         function updateStats() {
@@ -2714,6 +2732,7 @@ case 'preparing':
 </body>
 
 </html>
+
 
 
 
