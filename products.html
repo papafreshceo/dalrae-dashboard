@@ -547,7 +547,7 @@
     <!-- 리스트 헤더 -->
     <div class="list-header">
         <div class="result-count">
-            총 <span id="resultCount">0</span>개 상품
+            총 <span id="resultCount">0</span>개 옵션상품
         </div>
         <div class="view-options">
             <button class="view-btn active" onclick="setView('table')">📋 목록보기</button>
@@ -667,22 +667,36 @@
         }
         
         // 검색
-        function searchProducts() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+function searchProducts() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    
+    if (!searchTerm) {
+        filteredProducts = [...allProducts];
+    } else {
+        filteredProducts = allProducts.filter(p => {
+            // 모든 필드를 검색 대상으로 포함
+            const searchFields = [
+                p.대분류,
+                p.품목,
+                p.품종,
+                p.옵션명,
+                p.옵션코드,
+                p.규격1,
+                p.규격2,
+                p.규격3,
+                p.발송지주소,
+                p.공급상태,
+                p.셀러공급가
+            ].map(field => (field || '').toLowerCase());
             
-            if (!searchTerm) {
-                filteredProducts = [...allProducts];
-            } else {
-                filteredProducts = allProducts.filter(p => {
-                    const productName = (p.품종 || p.품목 || '').toLowerCase();
-                    const optionName = (p.옵션명 || '').toLowerCase();
-                    return productName.includes(searchTerm) || optionName.includes(searchTerm);
-                });
-            }
-            
-            currentPage = 1;
-            updateDisplay();
-        }
+            // 검색어가 어느 필드에든 포함되어 있으면 true
+            return searchFields.some(field => field.includes(searchTerm));
+        });
+    }
+    
+    currentPage = 1;
+    updateDisplay();
+}
         
         // 필터 적용
         function applyFilter(filter) {
@@ -762,7 +776,7 @@
             const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
             
             if (products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;">검색 결과가 없습니다.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;">검색된 옵션상품이 없습니다.</td></tr>;
                 return;
             }
             
@@ -839,7 +853,7 @@
             const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
             
             if (products.length === 0) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;">검색 결과가 없습니다.</div>';
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;">검색 옵션상품이 없습니다.</div>';
                 return;
             }
             
@@ -1060,3 +1074,4 @@
     </script>
 </body>
 </html>
+
