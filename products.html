@@ -776,7 +776,7 @@ function searchProducts() {
             const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
             
             if (products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;">검색된 옵션상품이 없습니다.</td></tr>
+                tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;">검색된 옵션상품이 없습니다.</td></tr>;
                 return;
             }
             
@@ -829,10 +829,10 @@ function searchProducts() {
                         <td><span class="status-badge ${statusClass}">${statusText}</span></td>
                         <td class="price-cell"><span class="price">${price}원</span></td>
                         <td>
-                            <button class="badge-chart" onclick="event.stopPropagation(); openPriceChart('', '${(p.옵션명 || '').replace(/'/g, "\\'")}')">
+    <button class="badge-chart" data-option-name="${p.옵션명 || ''}" onclick="event.stopPropagation(); openPriceChart('', this.dataset.optionName);">
         가격차트
     </button>
-                        </td>
+</td>
                         <td>${startDate}</td>
                         <td>${endDate}</td>
                         <td>
@@ -1091,6 +1091,7 @@ function searchProducts() {
     </script>
 </body>
 </html>
+
 
 
 
