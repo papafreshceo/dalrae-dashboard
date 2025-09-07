@@ -20,65 +20,13 @@
             min-height: 100vh;
         }
         
-        /* 헤더 */
-        .top-header {
-            background: white;
-            border-bottom: 1px solid #e8e9eb;
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo-img { 
-            height: 36px;
-            object-fit: contain;
-        }
-        
-        .nav-menu {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .nav-btn {
-            padding: 10px 16px;
-            background: white;
-            border: 1px solid #e1e3e5;
-            border-radius: 8px;
-            color: #5a5c60;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .nav-btn:hover {
-            background: #f5f6f7;
-            border-color: #667eea;
-            color: #667eea;
-        }
-        
-        .nav-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
-        }
-        
         /* 검색 섹션 */
         .search-section {
             background: white;
             padding: 30px;
             margin-bottom: 30px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-top: 20px;
         }
         
         .search-container {
@@ -465,17 +413,6 @@
         
         /* 모바일 반응형 */
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .nav-menu {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                width: 100%;
-            }
-            
             .search-box {
                 flex-direction: column;
             }
@@ -507,9 +444,8 @@
     <link rel="stylesheet" href="common-styles.css">
 </head>
 <body>
-<!-- 공통 헤더 -->
-<div id="header-container"></div>
-  
+    <!-- 공통 헤더 -->
+    <div id="header-container"></div>
 
     <!-- 검색 섹션 -->
     <div class="search-section">
@@ -595,7 +531,16 @@
         </div>
     </div>
 
+    <script src="header.js"></script>
     <script>
+        // 헤더 초기화
+        window.addEventListener('DOMContentLoaded', function() {
+            DalraeHeader.init({
+                containerId: 'header-container',
+                activePage: 'products'
+            });
+        });
+
         // 전역 변수
         let allProducts = [];
         let filteredProducts = [];
@@ -631,15 +576,9 @@
             return isNaN(date.getTime()) ? null : date;
         }
         
-        // 페이지 로드
-        window.onload = function() {
-            loadData();
-            setupEventListeners();
-        };
-        
         // 데이터 로드
         function loadData() {
-            fetch('https://dalrae-dashboard.vercel.app/api/products')
+            fetch('/api/products')
             .then(response => response.json())
             .then(data => {
                 allProducts = data.filter(p => {
@@ -654,37 +593,39 @@
             });
         }
         
+        // 페이지 로드 시 데이터 로드
+        loadData();
+        setupEventListeners();
+        
         // 검색
-function searchProducts() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-    
-    if (!searchTerm) {
-        filteredProducts = [...allProducts];
-    } else {
-        filteredProducts = allProducts.filter(p => {
-            // 모든 필드를 검색 대상으로 포함
-            const searchFields = [
-                p.대분류,
-                p.품목,
-                p.품종,
-                p.옵션명,
-                p.옵션코드,
-                p.규격1,
-                p.규격2,
-                p.규격3,
-                p.발송지주소,
-                p.공급상태,
-                p.셀러공급가
-            ].map(field => (field || '').toLowerCase());
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             
-            // 검색어가 어느 필드에든 포함되어 있으면 true
-            return searchFields.some(field => field.includes(searchTerm));
-        });
-    }
-    
-    currentPage = 1;
-    updateDisplay();
-}
+            if (!searchTerm) {
+                filteredProducts = [...allProducts];
+            } else {
+                filteredProducts = allProducts.filter(p => {
+                    const searchFields = [
+                        p.대분류,
+                        p.품목,
+                        p.품종,
+                        p.옵션명,
+                        p.옵션코드,
+                        p.규격1,
+                        p.규격2,
+                        p.규격3,
+                        p.발송지주소,
+                        p.공급상태,
+                        p.셀러공급가
+                    ].map(field => (field || '').toLowerCase());
+                    
+                    return searchFields.some(field => field.includes(searchTerm));
+                });
+            }
+            
+            currentPage = 1;
+            updateDisplay();
+        }
         
         // 필터 적용
         function applyFilter(filter) {
@@ -758,85 +699,83 @@ function searchProducts() {
         }
         
         // 테이블 렌더링
-// 테이블 렌더링
-function renderTable(products) {
-    const tbody = document.getElementById('productTableBody');
-    const today = new Date();
-    const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-    
-    if (products.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;">검색된 옵션상품이 없습니다.</td></tr>';
-        return;
-    }
-    
-    tbody.innerHTML = products.map(p => {
-        const name = p.품종 || p.품목 || '-';
-        const specs = [p.규격1, p.규격2, p.규격3].filter(s => s).join(' ');
-        const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
-        
-        let statusClass = 'status-active';
-        let statusText = p.공급상태 || '미정';
-        
-        if (p.시작일) {
-            const start = parseDate(p.시작일);
-            if (start && start > today && start <= twenty) {
-                statusClass = 'status-preparing';
-                statusText = '출하준비중';
+        function renderTable(products) {
+            const tbody = document.getElementById('productTableBody');
+            const today = new Date();
+            const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
+            
+            if (products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;">검색된 옵션상품이 없습니다.</td></tr>';
+                return;
             }
-        }
-        
-        if (p.공급상태 === '시즌종료') {
-            statusClass = 'status-paused';
-            statusText = '시즌종료';
-        } else if (p.공급상태 === '공급중지') {
-            statusClass = 'status-stopped';
-            statusText = '공급중지';
-        } else if (p.공급상태 === '공급중' && statusText !== '출하준비중') {
-            statusClass = 'status-active';
-            statusText = '공급중';
-        }
-        
-        const startDate = p.시작일 ? formatDate(parseDate(p.시작일)) : '-';
-        const endDate = p.종료일 ? formatDate(parseDate(p.종료일)) : '-';
-        
-        const hasDetail = p.상세페이지제공 && p.상세페이지제공.trim() !== '';
-        const hasImage = p.이미지제공 && p.이미지제공.trim() !== '';
-        
-        // 옵션명 안전하게 처리
-        const safeOptionName = (p.옵션명 || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-        
-        return `
-            <tr>
-                <td>
-                    ${p.썸네일 ? 
-                        `<img src="${p.썸네일}" class="product-thumb" alt="${name}">` :
-                        `<div class="product-thumb"></div>`
+            
+            tbody.innerHTML = products.map(p => {
+                const name = p.품종 || p.품목 || '-';
+                const specs = [p.규격1, p.규격2, p.규격3].filter(s => s).join(' ');
+                const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
+                
+                let statusClass = 'status-active';
+                let statusText = p.공급상태 || '미정';
+                
+                if (p.시작일) {
+                    const start = parseDate(p.시작일);
+                    if (start && start > today && start <= twenty) {
+                        statusClass = 'status-preparing';
+                        statusText = '출하준비중';
                     }
-                </td>
-                <td><span class="product-name">${name}</span></td>
-                <td>${p.옵션명 || '-'}</td>
-                <td>${specs || '-'}</td>
-                <td>${p.발송지주소 || '-'}</td>
-                <td>${p.발송기한 || '-'}</td>
-                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                <td class="price-cell"><span class="price">${price}원</span></td>
-                <td>
-                    <button class="badge-chart" data-option-name="${safeOptionName}" onclick="event.stopPropagation(); openPriceChart('', this.dataset.optionName);">
-                        가격차트
-                    </button>
-                </td>
-                <td>${startDate}</td>
-                <td>${endDate}</td>
-                <td>
-                    <div class="badge-provide">
-                        ${hasDetail ? '<span class="badge-detail">상세</span>' : ''}
-                        ${hasImage ? '<span class="badge-image">이미지</span>' : ''}
-                    </div>
-                </td>
-            </tr>
-        `;
-    }).join('');
-}
+                }
+                
+                if (p.공급상태 === '시즌종료') {
+                    statusClass = 'status-paused';
+                    statusText = '시즌종료';
+                } else if (p.공급상태 === '공급중지') {
+                    statusClass = 'status-stopped';
+                    statusText = '공급중지';
+                } else if (p.공급상태 === '공급중' && statusText !== '출하준비중') {
+                    statusClass = 'status-active';
+                    statusText = '공급중';
+                }
+                
+                const startDate = p.시작일 ? formatDate(parseDate(p.시작일)) : '-';
+                const endDate = p.종료일 ? formatDate(parseDate(p.종료일)) : '-';
+                
+                const hasDetail = p.상세페이지제공 && p.상세페이지제공.trim() !== '';
+                const hasImage = p.이미지제공 && p.이미지제공.trim() !== '';
+                
+                const safeOptionName = (p.옵션명 || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                
+                return `
+                    <tr>
+                        <td>
+                            ${p.썸네일 ? 
+                                `<img src="${p.썸네일}" class="product-thumb" alt="${name}">` :
+                                `<div class="product-thumb"></div>`
+                            }
+                        </td>
+                        <td><span class="product-name">${name}</span></td>
+                        <td>${p.옵션명 || '-'}</td>
+                        <td>${specs || '-'}</td>
+                        <td>${p.발송지주소 || '-'}</td>
+                        <td>${p.발송기한 || '-'}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td class="price-cell"><span class="price">${price}원</span></td>
+                        <td>
+                            <button class="badge-chart" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${safeOptionName}');">
+                                가격차트
+                            </button>
+                        </td>
+                        <td>${startDate}</td>
+                        <td>${endDate}</td>
+                        <td>
+                            <div class="badge-provide">
+                                ${hasDetail ? '<span class="badge-detail">상세</span>' : ''}
+                                ${hasImage ? '<span class="badge-image">이미지</span>' : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
         
         // 그리드 렌더링
         function renderGrid(products) {
@@ -893,134 +832,117 @@ function renderTable(products) {
         }
         
         // 가격 차트 열기
-function openPriceChart(optionCode, optionName) {
-    console.log('차트 열기:', optionName);
-    
-    const chartModal = document.getElementById('chartModal');
-    document.getElementById('chartModalTitle').textContent = optionName || '가격 변동 차트';
-    
-    chartModal.classList.add('show');
-    
-    document.getElementById('chartModalBody').innerHTML = `
-        <div style="text-align:center;padding:50px;">
-            <div style="color:#999;">데이터를 불러오는 중...</div>
-        </div>
-    `;
-    
-    if (priceDataCache[optionName]) {
-        console.log('캐시 사용');
-        displayChart(priceDataCache[optionName], optionName);
-    } else {
-        console.log('API 호출 - 옵션명:', optionName);
-        
-        fetch(`https://dalrae-dashboard.vercel.app/api/price-history?optionName=${encodeURIComponent(optionName)}`)
-        .then(response => {
-            console.log('응답 상태:', response.status);
-            return response.json();
-        })
-        .then(data => {
-            console.log('받은 데이터:', data);
+        function openPriceChart(optionCode, optionName) {
+            const chartModal = document.getElementById('chartModal');
+            document.getElementById('chartModalTitle').textContent = optionName || '가격 변동 차트';
             
-            // 해당 옵션명의 데이터만 필터링
-            const filteredData = data.filter(item => item.옵션명 === optionName);
-            console.log('필터링된 데이터:', filteredData);
+            chartModal.classList.add('show');
             
-            if (filteredData && filteredData.length > 0) {
-                priceDataCache[optionName] = filteredData;
+            document.getElementById('chartModalBody').innerHTML = `
+                <div style="text-align:center;padding:50px;">
+                    <div style="color:#999;">데이터를 불러오는 중...</div>
+                </div>
+            `;
+            
+            if (priceDataCache[optionCode]) {
+                displayChart(priceDataCache[optionCode], optionName);
+            } else {
+                fetch(`/api/price-history?optionCode=${optionCode}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        priceDataCache[optionCode] = data;
+                    }
+                    displayChart(data, optionName);
+                })
+                .catch(error => {
+                    console.error('차트 데이터 로드 실패:', error);
+                    showNoChartData();
+                });
             }
-            displayChart(filteredData, optionName);
-        })
-        .catch(error => {
-            console.error('차트 데이터 로드 실패:', error);
-            showNoChartData();
-        });
-    }
-}
+        }
         
         // 차트 표시
-function displayChart(data, optionName) {
-    if (!data || data.length === 0) {
-        showNoChartData();
-        return;
-    }
-    
-    // 차트 컨테이너 HTML 먼저 설정
-    document.getElementById('chartModalBody').innerHTML = `
-        <div class="chart-container">
-            <canvas id="priceChartCanvas"></canvas>
-        </div>
-    `;
-    
-    // DOM이 준비될 때까지 잠시 대기
-    setTimeout(() => {
-        const canvas = document.getElementById('priceChartCanvas');
-        if (!canvas) {
-            console.error('캔버스 요소를 찾을 수 없습니다');
-            showNoChartData();
-            return;
-        }
-        
-        const ctx = canvas.getContext('2d');
-        
-        data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
-        
-        const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
-        
-        if (priceChart) {
-            priceChart.destroy();
-        }
-        
-        priceChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data.map(d => {
-                    const date = new Date(d.날짜);
-                    return `${date.getMonth() + 1}/${date.getDate()}`;
-                }),
-                datasets: [{
-                    label: '공급가',
-                    data: prices,
-                    borderColor: 'rgb(102, 126, 234)',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    tension: 0.1,
-                    borderWidth: 2,
-                    pointRadius: 4,
-                    pointBackgroundColor: 'rgb(102, 126, 234)',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointHoverRadius: 6,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return '공급가: ' + context.parsed.y.toLocaleString() + '원';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return value.toLocaleString() + '원';
-                            }
-                        }
-                    }
-                }
+        function displayChart(data, optionName) {
+            if (!data || data.length === 0) {
+                showNoChartData();
+                return;
             }
-        });
-    }, 100);
-}
+            
+            document.getElementById('chartModalBody').innerHTML = `
+                <div class="chart-container">
+                    <canvas id="priceChartCanvas"></canvas>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                const canvas = document.getElementById('priceChartCanvas');
+                if (!canvas) {
+                    showNoChartData();
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                
+                data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
+                
+                const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
+                
+                if (priceChart) {
+                    priceChart.destroy();
+                }
+                
+                priceChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.map(d => {
+                            const date = new Date(d.날짜);
+                            return `${date.getMonth() + 1}/${date.getDate()}`;
+                        }),
+                        datasets: [{
+                            label: '공급가',
+                            data: prices,
+                            borderColor: 'rgb(102, 126, 234)',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.1,
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            pointBackgroundColor: 'rgb(102, 126, 234)',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointHoverRadius: 6,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return '공급가: ' + context.parsed.y.toLocaleString() + '원';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toLocaleString() + '원';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }, 100);
+        }
         
         // 차트 데이터 없음 표시
         function showNoChartData() {
@@ -1101,14 +1023,5 @@ function displayChart(data, optionName) {
             });
         }
     </script>
-    <script src="header.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
