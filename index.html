@@ -14,8 +14,6 @@
       gtag('js', new Date());
       gtag('config', 'G-WBYD1EM6GP');
     </script>
-
-
     
     <title>달래마켓 대시보드</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -1433,6 +1431,28 @@
         let activeProductFilter = 'all';
         let priceChart = null;
         
+        // 날짜 파싱 함수 추가
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            
+            // "07-01" 또는 "7-1" 형식인 경우
+            if (dateStr.length <= 5 && dateStr.includes('-')) {
+                const [month, day] = dateStr.split('-');
+                const currentYear = new Date().getFullYear();
+                const testDate = new Date(currentYear, parseInt(month) - 1, parseInt(day));
+                
+                // 날짜가 과거라면 다음 연도로 설정
+                const today = new Date();
+                if (testDate < today) {
+                    return new Date(currentYear + 1, parseInt(month) - 1, parseInt(day));
+                }
+                return testDate;
+            }
+            
+            // 정상적인 날짜 형식
+            return new Date(dateStr);
+        }
+        
         // 캐싱 시스템
         let priceDataCache = {};
         let isPreloading = false;
@@ -1527,7 +1547,7 @@
         
         // 데이터 로드
         function loadData() {
-        // Vercel API 호출
+            // Vercel API 호출
             fetch('/api/products')
             .then(response => response.json())
             .then(processData)
@@ -1761,8 +1781,6 @@
             };
             
             const today = new Date();
-            const twentyDays = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-            const sevenDays = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
             
             allProducts.forEach(p => {
                 const variety = p.품종 || p.품목 || '';
@@ -1787,18 +1805,24 @@
                 }
                 
                 if (p.시작일) {
-                    const start = new Date(p.시작일);
-                    if (start > today && start <= twentyDays) {
-                        productSets.preparing.add(variety);
-                        stats.preparing.options++;
+                    const start = parseDate(p.시작일);
+                    if (start) {
+                        const diffDays = Math.ceil((start - today) / (1000 * 60 * 60 * 24));
+                        if (diffDays > 0 && diffDays <= 20) {
+                            productSets.preparing.add(variety);
+                            stats.preparing.options++;
+                        }
                     }
                 }
                 
                 if (p.종료일) {
-                    const end = new Date(p.종료일);
-                    if (end >= today && end <= sevenDays) {
-                        productSets.ending.add(variety);
-                        stats.ending.options++;
+                    const end = parseDate(p.종료일);
+                    if (end) {
+                        const diffDays = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+                        if (diffDays >= 0 && diffDays <= 7) {
+                            productSets.ending.add(variety);
+                            stats.ending.options++;
+                        }
                     }
                 }
             });
@@ -1813,671 +1837,3 @@
             });
             
             return stats;
-        }
-        
-        // 상품 카드 렌더링 (개선)
-        function renderProductCards() {
-            const grid = document.getElementById('productsGrid');
-            const groups = {};
-            
-            filteredProducts.forEach(p => {
-                const key = p.품종 || p.품목 || '기타';
-                if (!groups[key]) groups[key] = [];
-                groups[key].push(p);
-            });
-            
-            const sortedGroups = Object.entries(groups).sort((a, b) => {
-                const getStatusPriority = (products) => {
-                    const first = products[0];
-                    const today = new Date();
-                    const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-                    
-                    if (first.공급상태 === '공급중') return 1;
-                    
-                    if (first.시작일) {
-                        const start = new Date(first.시작일);
-                        if (start > today && start <= twenty) return 2;
-                    }
-                    
-                    if (first.공급상태 === '시즌종료') return 3;
-                    if (first.공급상태 === '공급중지') return 4;
-                    
-                    return 5;
-                };
-                
-                const priorityA = getStatusPriority(a[1]);
-                const priorityB = getStatusPriority(b[1]);
-                
-                if (priorityA === priorityB) {
-                    return a[0].localeCompare(b[0], 'ko');
-                }
-                
-                return priorityA - priorityB;
-            });
-            
-            let html = '';
-            let currentStatus = '';
-            
-            sortedGroups.forEach(([variety, products]) => {
-                const first = products[0];
-                const today = new Date();
-                const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-                
-                let groupStatus = '';
-                let statusClass = '';
-                if (first.공급상태 === '공급중') {
-                    groupStatus = '공급중';
-                    statusClass = 'status-active';
-                } else if (first.시작일) {
-                    const start = new Date(first.시작일);
-                    if (start > today && start <= twenty) {
-                        groupStatus = '출하준비중';
-                        statusClass = 'status-preparing';
-                    }
-                }
-                if (!groupStatus && first.공급상태 === '시즌종료') {
-                    groupStatus = '시즌종료';
-                    statusClass = 'status-paused';
-                } else if (!groupStatus && first.공급상태 === '공급중지') {
-                    groupStatus = '공급중지';
-                    statusClass = 'status-stopped';
-                } else if (!groupStatus) {
-                    groupStatus = '기타';
-                    statusClass = '';
-                }
-                
-                if (currentStatus !== groupStatus) {
-                    if (currentStatus !== '') {
-                        html += '<div class="group-divider"></div>';
-                    }
-                    html += `
-                        <div class="group-title-wrapper">
-                            <div class="group-title ${statusClass}">
-                                ${groupStatus}
-                            </div>
-                        </div>
-                    `;
-                    currentStatus = groupStatus;
-                }
-                
-                html += createProductCard(variety, products);
-            });
-            
-            grid.innerHTML = html || 
-                '<div style="grid-column:1/-1;text-align:center;color:#999;padding:30px;">표시할 상품이 없습니다</div>';
-        }
-        
-        // 상품 카드 생성
-        function createProductCard(variety, products) {
-            const first = products[0];
-            const today = new Date();
-            const isMobile = window.innerWidth <= 768;
-            
-            let minDate = new Date('2099-12-31');
-            let maxDate = new Date('1900-01-01');
-            
-            products.forEach(p => {
-                if (p.시작일) {
-                    const d = new Date(p.시작일);
-                    if (d < minDate) minDate = d;
-                }
-                if (p.종료일) {
-                    const d = new Date(p.종료일);
-                    if (d > maxDate) maxDate = d;
-                }
-            });
-            
-            let seasonIcon = '⚫';
-            let seasonText = '시즌종료';
-            
-            const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-            const seven = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-            
-            if (today >= minDate && today <= maxDate) {
-                if (maxDate <= seven) {
-                    seasonIcon = '🟡';
-                    seasonText = '종료임박';
-                } else {
-                    seasonIcon = '🟢';
-                    seasonText = '시즌중';
-                }
-            } else if (minDate > today && minDate <= twenty) {
-                seasonIcon = '🟡';
-                seasonText = '출하준비';
-            }
-            
-            const hasDetail = products.some(p => p.상세페이지제공 && p.상세페이지제공.trim() !== '');
-            const hasImage = products.some(p => p.이미지제공 && p.이미지제공.trim() !== '');
-            
-            const name = first.품목 && first.품목 !== variety ? 
-                `${first.품목}(${variety})` : variety;
-            
-            const formatDate = (d) => {
-                return `${String(d.getMonth()+1).padStart(2,'0')}월 ${String(d.getDate()).padStart(2,'0')}일`;
-            };
-            
-            let statusClass = '';
-            let badgeClass = '';
-            if (first.공급상태 === '공급중') {
-                statusClass = 'status-active';
-                badgeClass = 'status-active';
-            } else if (first.공급상태 === '시즌종료') {
-                badgeClass = 'status-paused';
-            } else if (first.공급상태 === '공급중지') {
-                badgeClass = 'status-stopped';
-            } else if (first.공급상태 === '준비중') {
-                badgeClass = 'status-preparing';
-            }
-            
-            // 모바일용 HTML 구조
-            if (isMobile) {
-                return `
-                    <div class="product-card ${statusClass}" onclick="showModal('${variety}')">
-                        <div class="product-content">
-                            <div class="product-row1">
-                                <span class="product-title">${name}</span>
-                                <div class="product-status-options">
-                                    <span class="status-badge ${badgeClass}">${first.공급상태 || '미정'}</span>
-                                    <span style="color:#7a7c80;font-size:11px;">옵션 ${products.length}개</span>
-                                </div>
-                            </div>
-                            <div class="product-row2">
-                                📅 ${formatDate(minDate)} ~ ${formatDate(maxDate)}
-                            </div>
-                            <div class="product-divider"></div>
-                            <div class="product-footer">
-                                <div class="footer-left">
-                                    <span class="season-icon">${seasonIcon}</span>
-                                    <span class="season-text">${seasonText}</span>
-                                    <span class="badge-free">무료배송</span>
-                                    ${hasDetail ? '<span class="badge-detail">상세페이지</span>' : ''}
-                                    ${hasImage ? '<span class="badge-image">이미지</span>' : ''}
-                                </div>
-                            </div>
-                        </div>
-                        ${first.썸네일 ? 
-                            `<img src="${first.썸네일}" class="product-thumbnail" alt="${name}">` :
-                            `<div class="product-thumbnail"></div>`
-                        }
-                    </div>
-                `;
-            }
-            
-            // 데스크탑용 HTML (기존)
-            return `
-                <div class="product-card ${statusClass}" onclick="showModal('${variety}')">
-                    ${first.썸네일 ? 
-                        `<img src="${first.썸네일}" class="product-thumbnail" alt="${name}">` :
-                        `<div class="product-thumbnail"></div>`
-                    }
-                    <div class="product-content">
-                        <div class="product-row1">
-                            <span class="product-title">${name}</span>
-                            <span class="status-badge ${badgeClass}">${first.공급상태 || '미정'}</span>
-                            <span style="color:#7a7c80;font-size:14px;">옵션 ${products.length}개</span>
-                        </div>
-                        <div class="product-row2">
-                            📅 ${formatDate(minDate)} ~ ${formatDate(maxDate)}
-                        </div>
-                        <div class="product-divider"></div>
-                        <div class="product-footer">
-                            <div class="footer-left">
-                                <span class="season-icon">${seasonIcon}</span>
-                                <span class="season-text">${seasonText}</span>
-                                <span class="badge-free">무료배송</span>
-                                ${hasDetail ? '<span class="badge-detail">상세페이지</span>' : ''}
-                                ${hasImage ? '<span class="badge-image">이미지</span>' : ''}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // 모든 옵션의 가격 데이터 선로딩
-        function preloadAllPriceData(optionCodes) {
-            if (isPreloading || !optionCodes || optionCodes.length === 0) return;
-            
-            // 캐시에 없는 것만 필터링
-            const uncachedCodes = optionCodes.filter(code => !priceDataCache[code]);
-            
-            if (uncachedCodes.length === 0) return;
-            
-            isPreloading = true;
-            console.log('백그라운드 선로딩 시작:', uncachedCodes.length + '개 옵션');
-            
-            /* 일단 선로딩 기능 비활성화
-            if (typeof google !== 'undefined' && google.script && google.script.run) {
-            google.script.run
-                .withSuccessHandler(function(data) {
-            // 캐시에 저장
-            Object.keys(data).forEach(code => {
-                if (data[code] && data[code].length > 0) {
-                    priceDataCache[code] = data[code];
-                }
-            });
-            isPreloading = false;
-            console.log('선로딩 완료, 캐시 크기:', Object.keys(priceDataCache).length);
-        })
-        .withFailureHandler(function(error) {
-            console.error('선로딩 실패:', error);
-            isPreloading = false;
-        })
-        .getAllPriceHistory(uncachedCodes);
-        }
-            */
-        }
-        
-        // 모달 표시
-        function showModal(variety) {
-            const modal = document.getElementById('optionsModal');
-            const products = allProducts.filter(p => (p.품종 || p.품목) === variety);
-            
-            document.getElementById('modalTitle').textContent = `${variety} (${products.length}개)`;
-            
-            // 백그라운드에서 가격 데이터 선로딩
-            const optionCodes = products.map(p => p.옵션코드).filter(code => code);
-            preloadAllPriceData(optionCodes);
-            
-            let html = '';
-            const isMobile = window.innerWidth <= 768;
-            
-            products.forEach(p => {
-                const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
-                
-                let statusClass = 'status-active';
-                if (p.공급상태 === '시즌종료') statusClass = 'status-paused';
-                if (p.공급상태 === '공급중지') statusClass = 'status-stopped';
-                if (p.공급상태 === '준비중') statusClass = 'status-preparing';
-                
-                let specs = '';
-                if (p.규격1) specs += p.규격1;
-                if (p.규격2) specs += (specs ? ' ' : '') + p.규격2;
-                if (p.규격3) specs += (specs ? ' ' : '') + p.규격3;
-                
-                if (isMobile) {
-                    // 모바일 레이아웃
-                    html += `
-                        <div class="option-card">
-                            ${p.썸네일 ? 
-                                `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` :
-                                `<div class="option-thumb"></div>`
-                            }
-                            <div class="option-info">
-                                <div class="option-info-row1">
-                                    <div style="flex: 1;">
-                                        <strong style="color: #667eea;">${p.옵션명 || '옵션명 없음'}</strong>
-                                    </div>
-                                </div>
-                                <div class="option-info-row2">
-                                    ${p.발송지주소 ? `발송지: ${p.발송지주소}` : ''}
-                                </div>
-                                <div class="option-price-row">
-                                    <span class="option-price">${price}원</span>
-                                    <span class="status-badge ${statusClass}" style="font-size:10px;">
-                                        ${p.공급상태 || '미정'}
-                                    </span>
-                                </div>
-                                <div class="option-badges">
-                                    <span class="badge-free">무료배송</span>
-                                    <button class="badge-chart" 
-                                            onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
-                                        📊 가격차트
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    // 데스크탑 레이아웃
-                    html += `
-                        <div class="option-card">
-                            ${p.썸네일 ? 
-                                `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` :
-                                `<div class="option-thumb"></div>`
-                            }
-                            <div class="option-info">
-                                <span class="option-col" style="width: 60px; color: #666; font-size: 13px; font-weight: 600;">옵션명</span>
-                                <span class="option-col" style="width: 200px; color: #667eea; font-size: 14px; font-weight: 500;">${p.옵션명 || '옵션명 없음'}</span>
-                                <span class="option-col" style="width: 150px; color: #7a7c80; font-size: 13px;">${specs}</span>
-                                <span class="option-col" style="width: 50px; color: #666; font-size: 12px;">${p.발송지주소 ? '발송지' : ''}</span>
-                                <span class="option-col" style="width: 120px; color: #999; font-size: 12px;">${p.발송지주소 || ''}</span>
-                                <span class="option-col" style="flex: 1; text-align: right;">
-                                    <span style="color: #667eea; font-size: 16px; font-weight: 600; margin-right: 15px;">${price}원</span>
-                                    <span class="status-badge ${statusClass}" style="font-size:11px;">
-                                        ${p.공급상태 || '미정'}
-                                    </span>
-                                    <span class="badge-free" style="margin-left: 8px;">무료배송</span>
-                                    <button class="badge-chart" style="margin-left: 8px;" 
-                                            onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
-                                        📊 가격차트
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            
-            document.getElementById('modalBody').innerHTML = html;
-            modal.classList.add('show');
-        }
-        
-        // 모달 닫기
-        function closeModal() {
-            document.getElementById('optionsModal').classList.remove('show');
-        }
-        
-        // 가격 차트 열기
-        function openPriceChart(optionCode, optionName) {
-            console.log('차트 열기:', optionCode, optionName);
-            
-            // 옵션 모달 닫기
-            closeModal();
-            
-            // 차트 모달 열기
-            const chartModal = document.getElementById('chartModal');
-            document.getElementById('chartModalTitle').textContent = optionName;
-            
-            // 차트 컨텐츠 초기화
-            document.getElementById('chartModalBody').innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <div style="color: #999;">📊 데이터를 불러오는 중...</div>
-                </div>
-            `;
-            
-            chartModal.classList.add('show');
-            
-            // 캐시 확인
-            if (priceDataCache[optionCode]) {
-                console.log('캐시 적중:', optionCode);
-                setTimeout(() => displayChart(priceDataCache[optionCode], optionName), 100);
-            } else {
-                // 캐시 미스 - 개별 로드
-                console.log('캐시 미스, 개별 로드:', optionCode);
-                
-                fetch(`/api/price-history?optionCode=${optionCode}`)
-            .then(response => response.json())
-            .then(function(data) {
-                console.log('개별 로드 완료:', data);
-                if (data && data.length > 0) {
-                    priceDataCache[optionCode] = data;
-        }
-        displayChart(data, optionName);
-    })
-    .catch(function(error) {
-        console.error('차트 데이터 로드 실패:', error);
-        showNoChartData();
-    });
-            }
-        }
-        
-        // 차트 표시
-        function displayChart(data, optionName) {
-            if (!data || data.length === 0) {
-                showNoChartData();
-                return;
-            }
-            
-            // 날짜순 정렬
-            data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
-            
-            // 통계 계산
-            const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
-            const currentPrice = prices[prices.length - 1];
-            const maxPrice = Math.max(...prices);
-            const minPrice = Math.min(...prices);
-            const avgPrice = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
-            
-            // 날짜 포맷
-            const firstDate = new Date(data[0].날짜).toLocaleDateString('ko-KR');
-            const lastDate = new Date(data[data.length - 1].날짜).toLocaleDateString('ko-KR');
-            
-            // 모바일 여부 확인
-            const isMobile = window.innerWidth <= 768;
-            
-            // HTML 생성
-            const html = `
-                <div style="text-align: center; margin-bottom: ${isMobile ? '12px' : '20px'};">
-                    <div style="font-size: ${isMobile ? '10px' : '14px'}; color: #7a7c80;">${firstDate} ~ ${lastDate}</div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="priceChartCanvas"></canvas>
-                </div>
-                <div class="chart-stats">
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">현재 가격</div>
-                        <div class="chart-stat-value current">${currentPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">최고 가격</div>
-                        <div class="chart-stat-value increase">${maxPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">최저 가격</div>
-                        <div class="chart-stat-value decrease">${minPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">평균 가격</div>
-                        <div class="chart-stat-value">${avgPrice.toLocaleString()}원</div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('chartModalBody').innerHTML = html;
-            
-            // 차트 그리기
-            const ctx = document.getElementById('priceChartCanvas').getContext('2d');
-            
-            if (priceChart) {
-                priceChart.destroy();
-            }
-            
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map(d => {
-                        const date = new Date(d.날짜);
-                        return `${date.getMonth() + 1}/${date.getDate()}`;
-                    }),
-                    datasets: [{
-                        label: '공급가',
-                        data: prices,
-                        borderColor: 'rgb(102, 126, 234)',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.1,
-                        borderWidth: isMobile ? 1 : 2,
-                        pointRadius: isMobile ? 2 : 4,
-                        pointBackgroundColor: 'rgb(102, 126, 234)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: isMobile ? 1 : 2,
-                        pointHoverRadius: isMobile ? 3 : 6,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return '공급가: ' + context.parsed.y.toLocaleString() + '원';
-                                }
-                            },
-                            titleFont: {
-                                size: isMobile ? 10 : 12
-                            },
-                            bodyFont: {
-                                size: isMobile ? 10 : 12
-                            },
-                            padding: isMobile ? 4 : 8
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                font: {
-                                    size: isMobile ? 8 : 12
-                                },
-                                maxRotation: isMobile ? 45 : 0,
-                                autoSkip: true,
-                                maxTicksLimit: isMobile ? 6 : 12
-                            },
-                            grid: {
-                                display: !isMobile
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            max: Math.ceil(maxPrice * 1.2),
-                            ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString() + '원';
-                                },
-                                font: {
-                                    size: isMobile ? 8 : 12
-                                },
-                                maxTicksLimit: isMobile ? 5 : 8
-                            },
-                            grid: {
-                                display: !isMobile
-                            }
-                        }
-                    },
-                    layout: {
-                        padding: {
-                            left: isMobile ? 2 : 10,
-                            right: isMobile ? 2 : 10,
-                            top: isMobile ? 2 : 10,
-                            bottom: isMobile ? 2 : 10
-                        }
-                    }
-                }
-            });
-        }
-        
-        // 차트 데이터 없음 표시
-        function showNoChartData() {
-            document.getElementById('chartModalBody').innerHTML = `
-                <div class="no-data-message">
-                    <div class="no-data-icon">📉</div>
-                    <div class="no-data-title">가격 변동 데이터가 없습니다</div>
-                    <div class="no-data-text">이 옵션의 가격 이력이 아직 기록되지 않았습니다.</div>
-                </div>
-            `;
-        }
-        
-        // 차트 모달 닫기
-        function closeChartModal() {
-            document.getElementById('chartModal').classList.remove('show');
-            if (priceChart) {
-                priceChart.destroy();
-                priceChart = null;
-            }
-        }
-        
-        // 필터 적용 - 품목 필터로 변경
-        function applyFilters() {
-            filteredProducts = [...allProducts];
-            
-            // 대분류 필터
-            if (activeTypeFilter !== 'all') {
-                const typeMap = {
-                    'agricultural': '농산물',
-                    'seafood': '수산물', 
-                    'livestock': '축산물',
-                    'imported': '농산물(수입)'
-                };
-                filteredProducts = filteredProducts.filter(p => 
-                    p.대분류 === typeMap[activeTypeFilter]
-                );
-            }
-            
-            // 상태 필터
-            if (activeStatusFilter !== 'all') {
-                const today = new Date();
-                const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-                const seven = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-                
-                switch(activeStatusFilter) {
-                    case 'active':
-                        filteredProducts = filteredProducts.filter(p => p.공급상태 === '공급중');
-                        break;
-                    case 'paused':
-                        filteredProducts = filteredProducts.filter(p => p.공급상태 === '시즌종료');
-                        break;
-                    case 'stopped':
-                        filteredProducts = filteredProducts.filter(p => p.공급상태 === '공급중지');
-                        break;
-                    case 'preparing':
-                        filteredProducts = filteredProducts.filter(p => {
-                            if (!p.시작일) return false;
-                            const start = new Date(p.시작일);
-                            return start > today && start <= twenty;
-                        });
-                        break;
-                    case 'ending':
-                        filteredProducts = filteredProducts.filter(p => {
-                            if (!p.종료일) return false;
-                            const end = new Date(p.종료일);
-                            return end >= today && end <= seven;
-                        });
-                        break;
-                }
-            }
-            
-            // 품목 필터 (품종 제외)
-            if (activeProductFilter !== 'all') {
-                filteredProducts = filteredProducts.filter(p => {
-                    const item = p.품목 || '';
-                    return item === activeProductFilter;
-                });
-            }
-            
-            updateDashboard();
-        }
-        
-        // 이벤트 리스너 설정
-        function setupEventListeners() {
-            // 필터 클릭 이벤트
-            document.querySelectorAll('.tag-filter').forEach(tag => {
-                tag.addEventListener('click', function() {
-                    handleFilterClick(this);
-                });
-            });
-            
-            // 모달 외부 클릭 시 닫기
-            document.getElementById('optionsModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
-            
-            document.getElementById('chartModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeChartModal();
-                }
-            });
-            
-            // ESC 키로 모달 닫기
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (document.getElementById('chartModal').classList.contains('show')) {
-                        closeChartModal();
-                    } else if (document.getElementById('optionsModal').classList.contains('show')) {
-                        closeModal();
-                    }
-                }
-            });
-        }
-    </script>
-</body>
-
-</html>
-
-
-
