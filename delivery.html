@@ -135,27 +135,56 @@
             z-index: 10;
         }
         
-        /* 일요일 특별 배송 스타일 */
-        .sunday-delivery-icon {
+        /* 배송 아이콘 스타일 - 디자인 3 강조 효과 */
+        .delivery-icon-box {
             position: absolute;
             bottom: 15px;
             right: 15px;
             width: 35px;
             height: 35px;
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-            border: 2px solid #2196f3;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        
+        .delivery-icon-box.sunday-special {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 2px solid #2196f3;
             box-shadow: 0 3px 8px rgba(33, 150, 243, 0.3);
         }
         
-        .sunday-delivery-icon .check {
+        .delivery-icon-box.sunday-special .icon {
             color: #2196f3;
             font-size: 20px;
             font-weight: bold;
             text-shadow: 0 1px 2px rgba(33, 150, 243, 0.2);
+        }
+        
+        .delivery-icon-box.delivery-available {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            border: 2px solid #4caf50;
+            box-shadow: 0 3px 8px rgba(76, 175, 80, 0.3);
+        }
+        
+        .delivery-icon-box.delivery-available .icon {
+            color: #4caf50;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(76, 175, 80, 0.2);
+        }
+        
+        .delivery-icon-box.no-delivery {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border: 2px solid #ff5252;
+            box-shadow: 0 3px 8px rgba(255, 82, 82, 0.3);
+        }
+        
+        .delivery-icon-box.no-delivery .icon {
+            color: #ff5252;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(255, 82, 82, 0.2);
         }
         
         /* 모바일 반응형 */
@@ -188,14 +217,14 @@
                 font-size: 12px;
             }
             
-            .sunday-delivery-icon {
+            .delivery-icon-box {
                 width: 30px;
                 height: 30px;
                 bottom: 10px;
                 right: 10px;
             }
             
-            .sunday-delivery-icon .check {
+            .delivery-icon-box .icon {
                 font-size: 16px;
             }
         }
@@ -236,10 +265,13 @@
                 <h3 style="font-size: 16px; font-weight: 600; color: #3a3b3d; margin-bottom: 10px;">📌 발송 안내</h3>
                 <ul style="list-style: none; padding: 0; margin: 0;">
                     <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• ✓ 발송가능: 평일 및 일요일 특별 배송</li>
-                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• ❌ 발송불가: 공휴일/주말/휴무일</li>
-                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 16px; height: 16px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 2px solid #2196f3; border-radius: 3px; vertical-align: middle;"></span> 파란색: 일요일 특별 배송</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• ❌ 발송불가: 공휴일/토요일/휴무일</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 16px; height: 16px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 2px solid #2196f3; border-radius: 3px; vertical-align: middle;"></span> 파란색 박스: 일요일 특별 배송</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 16px; height: 16px; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border: 2px solid #4caf50; border-radius: 3px; vertical-align: middle;"></span> 초록색 박스: 평일 배송 가능</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 16px; height: 16px; background: linear-gradient(135deg, #ffebee, #ffcdd2); border: 2px solid #ff5252; border-radius: 3px; vertical-align: middle;"></span> 빨간색 박스: 배송 불가</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px; margin-top: 8px; font-weight: 500;">배지 색상:</li>
                     <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #ff9800; border-radius: 2px; vertical-align: middle;"></span> 주황색: 공휴일</li>
-                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #2196f3; border-radius: 2px; vertical-align: middle;"></span> 파란색 배지: 임시공휴일</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #2196f3; border-radius: 2px; vertical-align: middle;"></span> 파란색: 임시공휴일</li>
                     <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #9c27b0; border-radius: 2px; vertical-align: middle;"></span> 보라색: 기타</li>
                     <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #ff5252; border-radius: 2px; vertical-align: middle;"></span> 빨간색: 발송 이슈</li>
                 </ul>
@@ -472,42 +504,43 @@
                 let badges = [];
                 let deliveryIcon = '';
 
-                // 일요일 특별 처리
+                // 배송 아이콘 처리 - 디자인 3 강조 효과 적용
                 if (isSunday) {
-                    if (!canDeliver) {  // N인 경우 - 일요일 특별 배송
-                        // 일요일 특별 배송 - 파란색 아이콘
+                    if (!canDeliver) {  
+                        // 일요일 N인 경우 - 일요일 특별 배송 (파란색)
                         deliveryIcon = `
-                            <div class="sunday-delivery-icon">
-                                <div class="check">✓</div>
+                            <div class="delivery-icon-box sunday-special">
+                                <div class="icon">✓</div>
                             </div>
                         `;
-                    } else {  // Y인 경우 - 일반 배송
-                        // 일요일인데 일반 배송 가능 - 초록색 아이콘
+                    } else {  
+                        // 일요일 Y인 경우 - 일반 배송 가능 (초록색)
                         deliveryIcon = `
-                            <div class="weekday-delivery-icon">
-                                <div class="check">✓</div>
+                            <div class="delivery-icon-box delivery-available">
+                                <div class="icon">✓</div>
                             </div>
                         `;
                     }
                 } else {
                     // 일요일이 아닌 경우
                     if (canDeliver) {
-                        // 평일 배송 가능 - 초록색 아이콘
+                        // 평일 배송 가능 (초록색)
                         deliveryIcon = `
-                            <div class="weekday-delivery-icon">
-                                <div class="check">✓</div>
+                            <div class="delivery-icon-box delivery-available">
+                                <div class="icon">✓</div>
                             </div>
                         `;
                     } else {
-                        // 배송 불가 - 빨간색 아이콘
+                        // 배송 불가 (빨간색)
                         deliveryIcon = `
-                            <div class="no-delivery-icon">
-                                <div class="x">✕</div>
+                            <div class="delivery-icon-box no-delivery">
+                                <div class="icon">✕</div>
                             </div>
                         `;
                     }
                 }
 
+                // 배지 처리
                 if (deliveryInfo.issue) {
                     badges.push(`<div style="background: #ff5252; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px; font-weight: 500;">${deliveryInfo.issue}</div>`);
                 }
@@ -527,8 +560,7 @@
                             ${day}
                         </div>
                         ${deliveryIcon}
-                        ${badges.length > 0 && !isSunday ? `<div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 90%;">${badges.join('')}</div>` : ''}
-                        ${badges.length > 0 && isSunday ? `<div style="position: absolute; top: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 90%; z-index: 1;">${badges.join('')}</div>` : ''}
+                        ${badges.length > 0 ? `<div style="position: absolute; top: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 90%; z-index: 1;">${badges.join('')}</div>` : ''}
                     </div>
                 `;
             }
