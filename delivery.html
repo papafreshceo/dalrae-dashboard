@@ -331,19 +331,29 @@
             }
         }
 
-        // 구글 시트 데이터 가져오기
-        async function fetchSheetData() {
-            const response = await fetch('/api/delivery');
-            const data = await response.json();
-            
-            window.deliverySheetData = data;
-            
-            if (!data || data.length === 0) {
-                throw new Error('시트 데이터가 없습니다');
-            }
-            
-            return data;
+// 구글 시트 데이터 가져오기
+async function fetchSheetData() {
+    const response = await fetch('/api/delivery');
+    const data = await response.json();
+    
+    // 각 행을 9개로 확장
+    const expandedData = data.map(row => {
+        if (!row) return Array(9).fill('');
+        const newRow = [...row];
+        while (newRow.length < 9) {
+            newRow.push('');
         }
+        return newRow;
+    });
+    
+    window.deliverySheetData = expandedData;
+    
+    if (!expandedData || expandedData.length === 0) {
+        throw new Error('시트 데이터가 없습니다');
+    }
+    
+    return expandedData;
+}
 
         // 공휴일 데이터 가져오기
         async function fetchHolidays() {
