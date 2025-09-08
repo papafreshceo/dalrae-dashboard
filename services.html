@@ -204,233 +204,45 @@
       80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, -2px); }
     }
 
-    /* 네온사인 효과 스타일 - 연한 주황색 버전 */
+    /* 네온사인 효과 스타일 - 보라색 버전 */
     .neon-text-purple {
       font-weight: 700;
-      color: #9333ea;  /* 텍스트는 보라색 */
+      color: #a855f7;
       text-shadow: 
-        0 0 20px rgba(255, 204, 153, 0.8),
-        0 0 40px rgba(255, 204, 153, 0.6),
-        0 0 60px rgba(255, 183, 122, 0.5),
-        0 0 80px rgba(255, 183, 122, 0.4),
-        0 0 100px rgba(255, 162, 91, 0.3),
-        0 0 120px rgba(255, 162, 91, 0.25),
-        0 0 140px rgba(255, 142, 61, 0.2),
-        0 0 180px rgba(255, 142, 61, 0.15),
-        0 0 220px rgba(255, 122, 30, 0.1),
-        0 0 260px rgba(255, 122, 30, 0.08),
-        0 0 300px rgba(255, 102, 0, 0.05);
-      animation: flicker-purple 3s infinite alternate;
+        0 0 10px #a855f7,
+        0 0 20px #a855f7,
+        0 0 30px #a855f7,
+        0 0 40px #8b5cf6,
+        0 0 70px #8b5cf6,
+        0 0 80px #8b5cf6,
+        0 0 100px #8b5cf6,
+        0 0 150px #8b5cf6;
+      animation: flicker-purple 2s infinite alternate;
     }
 
     @keyframes flicker-purple {
       0%, 100% {
         text-shadow: 
-          0 0 15px rgba(255, 204, 153, 0.7),
-          0 0 30px rgba(255, 204, 153, 0.5),
-          0 0 45px rgba(255, 183, 122, 0.4),
-          0 0 60px rgba(255, 183, 122, 0.35),
-          0 0 75px rgba(255, 162, 91, 0.3),
-          0 0 90px rgba(255, 162, 91, 0.25),
-          0 0 105px rgba(255, 142, 61, 0.2),
-          0 0 135px rgba(255, 142, 61, 0.15),
-          0 0 165px rgba(255, 122, 30, 0.1),
-          0 0 195px rgba(255, 122, 30, 0.08),
-          0 0 225px rgba(255, 102, 0, 0.05);
+          0 0 5px #a855f7,
+          0 0 10px #a855f7,
+          0 0 15px #a855f7,
+          0 0 20px #8b5cf6,
+          0 0 35px #8b5cf6,
+          0 0 40px #8b5cf6,
+          0 0 50px #8b5cf6,
+          0 0 75px #8b5cf6;
       }
       50% {
         text-shadow: 
-          0 0 20px rgba(255, 204, 153, 0.8),
-          0 0 40px rgba(255, 204, 153, 0.6),
-          0 0 60px rgba(255, 183, 122, 0.5),
-          0 0 80px rgba(255, 183, 122, 0.4),
-          0 0 100px rgba(255, 162, 91, 0.3),
-          0 0 120px rgba(255, 162, 91, 0.25),
-          0 0 140px rgba(255, 142, 61, 0.2),
-          0 0 180px rgba(255, 142, 61, 0.15),
-          0 0 220px rgba(255, 122, 30, 0.1),
-          0 0 260px rgba(255, 122, 30, 0.08),
-          0 0 300px rgba(255, 102, 0, 0.05);
+          0 0 10px #a855f7,
+          0 0 20px #a855f7,
+          0 0 30px #a855f7,
+          0 0 40px #8b5cf6,
+          0 0 70px #8b5cf6,
+          0 0 80px #8b5cf6,
+          0 0 100px #8b5cf6,
+          0 0 150px #8b5cf6;
       }
-    }
-
-    /* 포트폴리오 갤러리 스타일 */
-    .portfolio-section {
-      margin: 60px 0;
-      padding: 40px;
-      background: white;
-      border-radius: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-
-    .portfolio-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .portfolio-title {
-      font-size: 36px;
-      font-weight: 800;
-      color: #1e293b;
-      margin-bottom: 12px;
-    }
-
-    .portfolio-subtitle {
-      font-size: 18px;
-      color: #64748b;
-    }
-
-    .portfolio-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 30px;
-      flex-wrap: wrap;
-    }
-
-    .portfolio-tab {
-      padding: 10px 20px;
-      background: #f1f5f9;
-      border: 2px solid transparent;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #64748b;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .portfolio-tab:hover {
-      background: #e2e8f0;
-    }
-
-    .portfolio-tab.active {
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      color: white;
-      border-color: transparent;
-    }
-
-    .portfolio-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .portfolio-item {
-      position: relative;
-      border-radius: 12px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.3s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .portfolio-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    }
-
-    .portfolio-item img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .portfolio-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-      padding: 20px;
-      transform: translateY(100%);
-      transition: transform 0.3s;
-    }
-
-    .portfolio-item:hover .portfolio-overlay {
-      transform: translateY(0);
-    }
-
-    .portfolio-overlay-title {
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .portfolio-overlay-desc {
-      color: rgba(255,255,255,0.8);
-      font-size: 13px;
-    }
-
-    /* 라이트박스 */
-    .lightbox {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 9999;
-      padding: 20px;
-    }
-
-    .lightbox.active {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .lightbox-content {
-      max-width: 90%;
-      max-height: 90%;
-      position: relative;
-    }
-
-    .lightbox-content img {
-      width: 100%;
-      height: auto;
-      max-height: 80vh;
-      object-fit: contain;
-    }
-
-    .lightbox-close {
-      position: absolute;
-      top: -40px;
-      right: 0;
-      color: white;
-      font-size: 32px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 0;
-    }
-
-    .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,0.2);
-      color: white;
-      border: none;
-      padding: 20px;
-      cursor: pointer;
-      font-size: 24px;
-      border-radius: 8px;
-      transition: background 0.3s;
-    }
-
-    .lightbox-nav:hover {
-      background: rgba(255,255,255,0.3);
-    }
-
-    .lightbox-prev {
-      left: 20px;
-    }
-
-    .lightbox-next {
-      right: 20px;
     }
 
     /* 서비스 탭 버튼 */
@@ -1058,10 +870,6 @@
       .split-hero-section {
         grid-template-columns: 1fr;
       }
-
-      .portfolio-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      }
     }
 
     @media (max-width: 768px) {
@@ -1122,36 +930,6 @@
       </div>
     </div>
 
-    <!-- 포트폴리오 갤러리 -->
-    <div class="portfolio-section">
-      <div class="portfolio-header">
-        <h2 class="portfolio-title">📸 포트폴리오</h2>
-        <p class="portfolio-subtitle">달래마켓의 다양한 촬영 작업물을 확인해보세요</p>
-      </div>
-
-      <div class="portfolio-tabs">
-        <button class="portfolio-tab active" onclick="filterPortfolio('all')">전체</button>
-        <button class="portfolio-tab" onclick="filterPortfolio('indoor')">실내 촬영</button>
-        <button class="portfolio-tab" onclick="filterPortfolio('outdoor')">야외 촬영</button>
-        <button class="portfolio-tab" onclick="filterPortfolio('cooking')">요리 촬영</button>
-        <button class="portfolio-tab" onclick="filterPortfolio('drone')">드론 촬영</button>
-      </div>
-
-      <div class="portfolio-grid" id="portfolioGrid">
-        <!-- 포트폴리오 아이템들 -->
-      </div>
-    </div>
-
-    <!-- 라이트박스 -->
-    <div class="lightbox" id="lightbox">
-      <div class="lightbox-content">
-        <button class="lightbox-close" onclick="closeLightbox()">×</button>
-        <img id="lightboxImage" src="" alt="">
-        <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">‹</button>
-        <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">›</button>
-      </div>
-    </div>
-
     <!-- 서비스 전환 버튼 -->
     <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 40px;">
       <button id="photo-service-btn" class="service-tab-btn active" onclick="switchService('photo')">
@@ -1179,11 +957,11 @@
                     <div class="location-title">일반 실내 촬영</div>
                   </div>
                 </div>
-                <div class="location-price">50,000원</div>
+                <div class="location-price" id="indoor-base-price">30,000원</div>
               </div>
               <div class="location-body">
-                <div class="default-info">
-                  📦 기본 제공: 사진 50매, 영상길이 5분 이상 **(총 재생시간)
+                <div class="default-info" id="indoor-default-info">
+                  📦 기본 제공: 사진 50매, 영상길이 10분 이상 **(총 재생시간)
                 </div>
                 <div class="option-group">
                   <label class="option-label">추가 수량</label>
@@ -1194,7 +972,7 @@
                       <input type="number" id="indoor-photo" value="0" min="0" readonly>
                       <button onclick="adjustQuantity('indoor-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;">매 (500원/매)</span>
+                    <span style="font-size: 12px; color: #94a3b8;" id="indoor-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1203,7 +981,7 @@
                       <input type="number" id="indoor-video" value="0" min="0" readonly>
                       <button onclick="adjustQuantity('indoor-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;">분 (2,000원/분)</span>
+                    <span style="font-size: 12px; color: #94a3b8;" id="indoor-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1211,11 +989,11 @@
                   <div class="checkbox-options">
                     <div class="checkbox-option">
                       <input type="checkbox" id="indoor-hand" onchange="calculateQuote()">
-                      <label for="indoor-hand">핸드컷 (+30,000원)</label>
+                      <label for="indoor-hand" id="indoor-hand-label">핸드컷 (+30,000원)</label>
                     </div>
                     <div class="checkbox-option">
                       <input type="checkbox" id="indoor-model" onchange="calculateQuote()">
-                      <label for="indoor-model">모델컷 (+500,000원)</label>
+                      <label for="indoor-model" id="indoor-model-label">모델컷 (+200,000원)</label>
                     </div>
                   </div>
                 </div>
@@ -1232,10 +1010,10 @@
                     <div class="location-subtitle">** 산지 농부를 모델로 촬영</div>
                   </div>
                 </div>
-                <div class="location-price">100,000원</div>
+                <div class="location-price" id="outdoor-base-price">50,000원</div>
               </div>
               <div class="location-body">
-                <div class="default-info">
+                <div class="default-info" id="outdoor-default-info">
                   📦 기본 제공: 사진 50매, 영상길이 5분 이상 **(총 재생시간)
                 </div>
                 <div class="option-group">
@@ -1247,7 +1025,7 @@
                       <input type="number" id="outdoor-photo" value="0" min="0" readonly>
                       <button onclick="adjustQuantity('outdoor-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;">매 (500원/매)</span>
+                    <span style="font-size: 12px; color: #94a3b8;" id="outdoor-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1256,7 +1034,7 @@
                       <input type="number" id="outdoor-video" value="0" min="0" readonly>
                       <button onclick="adjustQuantity('outdoor-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;">분 (2,000원/분)</span>
+                    <span style="font-size: 12px; color: #94a3b8;" id="outdoor-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1264,11 +1042,11 @@
                   <div class="checkbox-options">
                     <div class="checkbox-option">
                       <input type="checkbox" id="outdoor-hand" onchange="calculateQuote()">
-                      <label for="outdoor-hand">핸드컷 (+30,000원)</label>
+                      <label for="outdoor-hand" id="outdoor-hand-label">핸드컷 (+30,000원)</label>
                     </div>
                     <div class="checkbox-option">
                       <input type="checkbox" id="outdoor-model" onchange="calculateQuote()">
-                      <label for="outdoor-model">모델컷 (+500,000원)</label>
+                      <label for="outdoor-model" id="outdoor-model-label">모델컷 (+200,000원)</label>
                     </div>
                   </div>
                 </div>
@@ -1284,10 +1062,10 @@
                     <div class="location-title">요리 촬영</div>
                   </div>
                 </div>
-                <div class="location-price">100,000원</div>
+                <div class="location-price" id="cooking-base-price">60,000원</div>
               </div>
               <div class="location-body">
-                <div class="default-info">
+                <div class="default-info" id="cooking-default-info">
                   📦 기본 제공: 1개 메뉴 (사진 30매), 영상길이 3분 이상 **(총 재생시간)
                 </div>
                 <div class="option-group">
@@ -1299,7 +1077,7 @@
                       <input type="number" id="cooking-menu" value="0" min="0" readonly>
                       <button onclick="adjustQuantity('cooking-menu', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;">개 (메뉴당 30,000원 추가)</span>
+                    <span style="font-size: 12px; color: #94a3b8;" id="cooking-menu-cost">개 (메뉴당 30,000원 추가)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1311,7 +1089,7 @@
                       <input type="number" id="cooking-photo" value="0" min="0" readonly>
                       <button onclick="adjustQuantity('cooking-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;">매 (500원/매)</span>
+                    <span style="font-size: 12px; color: #94a3b8;" id="cooking-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1320,7 +1098,7 @@
                       <input type="number" id="cooking-video" value="0" min="0" readonly>
                       <button onclick="adjustQuantity('cooking-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;">분 (2,000원/분)</span>
+                    <span style="font-size: 12px; color: #94a3b8;" id="cooking-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1328,11 +1106,11 @@
                   <div class="checkbox-options">
                     <div class="checkbox-option">
                       <input type="checkbox" id="cooking-hand" onchange="calculateQuote()">
-                      <label for="cooking-hand">핸드컷 (+10,000원)</label>
+                      <label for="cooking-hand" id="cooking-hand-label">핸드컷 (+30,000원)</label>
                     </div>
                     <div class="checkbox-option">
                       <input type="checkbox" id="cooking-model" onchange="calculateQuote()">
-                      <label for="cooking-model">모델컷 (+500,000원)</label>
+                      <label for="cooking-model" id="cooking-model-label">모델컷 (+200,000원)</label>
                     </div>
                   </div>
                 </div>
@@ -1348,11 +1126,11 @@
                     <div class="location-title">드론 촬영</div>
                   </div>
                 </div>
-                <div class="location-price">150,000원</div>
+                <div class="location-price" id="drone-base-price">90,000원</div>
               </div>
               <div class="location-body">
-                <div class="default-info">
-                  📦 기본 제공: 사진 30매, 영상길이 3분 이상 **(총 재생시간)
+                <div class="default-info" id="drone-default-info">
+                  📦 기본 제공: 사진 20매, 영상길이 5분 이상 **(총 재생시간)
                 </div>
                 <div class="option-group">
                   <label class="option-label">추가 수량</label>
@@ -1363,7 +1141,7 @@
                       <input type="number" id="drone-photo" value="0" min="0" readonly>
                       <button onclick="adjustQuantity('drone-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;">매 (500원/매)</span>
+                    <span style="font-size: 12px; color: #94a3b8;" id="drone-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1372,7 +1150,7 @@
                       <input type="number" id="drone-video" value="0" min="0" readonly>
                       <button onclick="adjustQuantity('drone-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;">분 (2,000원/분)</span>
+                    <span style="font-size: 12px; color: #94a3b8;" id="drone-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1423,7 +1201,7 @@
               <div class="edit-option-card">
                 <div class="edit-option-header">
                   <div class="edit-title">일반 편집</div>
-                  <div class="edit-description">고객이 시나리오 제공 (30,000원 + 20,000원/분)</div>
+                  <div class="edit-description">고객이 시나리오 제공 (<span id="basic-edit-price">30,000원</span>/분)</div>
                 </div>
                 <div class="duration-grid">
                   <div class="duration-item">
@@ -1466,7 +1244,9 @@
                 <div class="edit-option-header">
                   <div class="edit-title">풀 편집</div>
                   <div class="edit-description">썸네일, 시나리오, 자막 등 모든 작업 위임</div>
-                  <div class="edit-description" style="color: #3b82f6; margin-top: 4px;">50,000원 + 50,000원/분</div>
+                  <div class="edit-description" style="color: #3b82f6; margin-top: 4px;">
+                    1분: <span id="full-edit-base">70,000원</span> / 2분 이상: +<span id="full-edit-per">20,000원</span>/분
+                  </div>
                 </div>
                 <div class="duration-grid">
                   <div class="duration-item">
@@ -1612,79 +1392,9 @@
               <span class="price-label">매칭 + 방문 패키지</span>
               <span class="price-amount">200,000원</span>
             </div>
-            <div class="price-item">
-              <span class="price-label">추가 방문 (1일당)</span>
-              <span class="price-amount">100,000원</span>
-            </div>
           </div>
-        </div>
-      </div>
-
-      <div class="farm-service-card">
-        <div class="farm-service-title">
-          <span style="font-size: 32px;">📌</span>
-          <span>이용 안내</span>
-        </div>
-        <div class="service-list">
-          <div class="service-item">
-            <div class="service-icon">1</div>
-            <div class="service-text">
-              <strong>상담 신청</strong><br>
-              원하시는 품목과 조건을 알려주시면 적합한 농가를 추천해 드립니다.
-            </div>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">2</div>
-            <div class="service-text">
-              <strong>농가 매칭</strong><br>
-              2-3곳의 검증된 농가를 추천하고 상세 정보를 제공합니다.
-            </div>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">3</div>
-            <div class="service-text">
-              <strong>산지 방문</strong><br>
-              원하실 경우 산지 방문을 동행하여 직접 확인하실 수 있습니다.
-            </div>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">4</div>
-            <div class="service-text">
-              <strong>계약 진행</strong><br>
-              양측이 합의하면 계약을 진행합니다. 이후 달래마켓은 특별한 사정이 없는 한 관여하지 않습니다.
-            </div>
-          </div>
-        </div>
-
-        <div style="padding: 16px; background: #fef3c7; border-radius: 8px; margin-top: 24px;">
-          <p style="font-size: 13px; color: #92400e; margin: 0;">
-            <strong>⚠️ 중요 안내</strong><br>
-            매칭 완료 후 거래는 판매자와 농가 간 직접 거래로 진행되며, 달래마켓은 특별한 사정이 없는 한 관여하지 않습니다.
-            품질 문제, 계약 분쟁 등은 당사자 간 해결하셔야 합니다.
-          </p>
-        </div>
-      </div>
-
-      <div class="farm-service-card">
-        <div class="farm-service-title">
-          <span style="font-size: 32px;">💼</span>
-          <span>문의 및 신청</span>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px;">
-          <div style="padding: 20px; background: #f8fafc; border-radius: 12px; text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">📞</div>
-            <div style="font-size: 14px; color: #64748b; margin-bottom: 4px;">전화 문의</div>
-            <div style="font-size: 18px; font-weight: 700; color: #1e293b;">010-2688-1388</div>
-          </div>
-          <div style="padding: 20px; background: #f8fafc; border-radius: 12px; text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">💬</div>
-            <div style="font-size: 14px; color: #64748b; margin-bottom: 4px;">카카오톡</div>
-            <div style="font-size: 18px; font-weight: 700; color: #1e293b;">@달래마켓</div>
-          </div>
-          <div style="padding: 20px; background: #f8fafc; border-radius: 12px; text-align: center;">
-            <div style="font-size: 24px; margin-bottom: 8px;">✉️</div>
-            <div style="font-size: 14px; color: #64748b; margin-bottom: 4px;">이메일</div>
-            <div style="font-size: 18px; font-weight: 700; color: #1e293b;">contact@dalrae.com</div>
+          <div style="margin-top: 16px; padding: 12px; background: #f0f9ff; border-radius: 8px; font-size: 13px; color: #0369a1;">
+            💡 매칭 후 달래마켓에서는 특별한 사정이 없는 한 관여하지 않습니다
           </div>
         </div>
       </div>
@@ -1692,76 +1402,62 @@
   </div>
 
   <script>
-    // 가격 설정 - 실제 시트 데이터 기반
+    // 가격 설정 객체
     const PRICE_CONFIG = {
       locations: {
-        indoor: { 
-          name: '일반 실내', 
+        indoor: {
+          basePrice: 30000,
+          basePhoto: 50,
+          baseVideo: 10,
+          photoAddCost: 500,
+          videoAddCost: 2000,
+          handCost: 30000,
+          modelCost: 200000,
+          sceneAddCost: 30000
+        },
+        outdoor: {
           basePrice: 50000,
           basePhoto: 50,
           baseVideo: 5,
-          locationCost: 10000,
-          sceneAddCost: 1000,
           photoAddCost: 500,
           videoAddCost: 2000,
           handCost: 30000,
-          modelCost: 500000
+          modelCost: 200000,
+          sceneAddCost: 50000
         },
-        outdoor: { 
-          name: '야외', 
-          basePrice: 100000, 
-          basePhoto: 50, 
-          baseVideo: 5,
-          locationCost: 10000,
-          sceneAddCost: 1000,
-          photoAddCost: 500,
-          videoAddCost: 2000,
-          handCost: 30000,
-          modelCost: 500000
-        },
-        cooking: { 
-          name: '요리', 
-          basePrice: 100000, 
-          basePhoto: 30, 
+        cooking: {
+          basePrice: 60000,
+          basePhoto: 30,
           baseVideo: 3,
-          locationCost: 10000,
-          sceneAddCost: 1000,
           photoAddCost: 500,
           videoAddCost: 2000,
           menuCost: 30000,
-          handCost: 10000,
-          modelCost: 500000
+          handCost: 30000,
+          modelCost: 200000,
+          sceneAddCost: 60000
         },
-        drone: { 
-          name: '드론', 
-          basePrice: 150000, 
-          basePhoto: 30, 
-          baseVideo: 3,
-          locationCost: 10000,
-          sceneAddCost: 5000,
+        drone: {
+          basePrice: 90000,
+          basePhoto: 20,
+          baseVideo: 5,
           photoAddCost: 500,
           videoAddCost: 2000,
           handCost: 0,
-          modelCost: 0
+          modelCost: 0,
+          sceneAddCost: 90000
         }
       },
       editing: {
         basic: {
           basePrice: 30000,
-          perMinute: 20000
+          perMinute: 30000
         },
         full: {
-          basePrice: 50000,
-          perMinute: 50000
+          basePrice: 70000,
+          perMinute: 20000
         }
       },
-      baseLocationCost: 10000,
-      farm: {
-        matching: 100000,
-        visit: 150000,
-        package: 200000,
-        additionalVisit: 100000
-      }
+      baseLocationCost: 30000
     };
 
     // API에서 가격 데이터 로드
@@ -1891,8 +1587,265 @@
       }
     }
 
-    // 나머지 JavaScript 함수들...
-    // (이하 모든 함수들 계속 이어짐)
-  </script>
-</body>
-</html>
+    // 모든 가격 표시 업데이트
+    function updateAllPrices() {
+      // 기본 가격 업데이트
+      document.getElementById('indoor-base-price').textContent = formatPrice(PRICE_CONFIG.locations.indoor.basePrice);
+      document.getElementById('outdoor-base-price').textContent = formatPrice(PRICE_CONFIG.locations.outdoor.basePrice);
+      document.getElementById('cooking-base-price').textContent = formatPrice(PRICE_CONFIG.locations.cooking.basePrice);
+      document.getElementById('drone-base-price').textContent = formatPrice(PRICE_CONFIG.locations.drone.basePrice);
+      
+      // 기본 제공 정보 업데이트
+      document.getElementById('indoor-default-info').textContent = 
+        `📦 기본 제공: 사진 ${PRICE_CONFIG.locations.indoor.basePhoto}매, 영상길이 ${PRICE_CONFIG.locations.indoor.baseVideo}분 이상 **(총 재생시간)`;
+      document.getElementById('outdoor-default-info').textContent = 
+        `📦 기본 제공: 사진 ${PRICE_CONFIG.locations.outdoor.basePhoto}매, 영상길이 ${PRICE_CONFIG.locations.outdoor.baseVideo}분 이상 **(총 재생시간)`;
+      document.getElementById('cooking-default-info').textContent = 
+        `📦 기본 제공: 1개 메뉴 (사진 ${PRICE_CONFIG.locations.cooking.basePhoto}매), 영상길이 ${PRICE_CONFIG.locations.cooking.baseVideo}분 이상 **(총 재생시간)`;
+      document.getElementById('drone-default-info').textContent = 
+        `📦 기본 제공: 사진 ${PRICE_CONFIG.locations.drone.basePhoto}매, 영상길이 ${PRICE_CONFIG.locations.drone.baseVideo}분 이상 **(총 재생시간)`;
+      
+      // 추가 비용 업데이트
+      document.getElementById('indoor-photo-cost').textContent = `매 (${formatPrice(PRICE_CONFIG.locations.indoor.photoAddCost)}/매)`;
+      document.getElementById('indoor-video-cost').textContent = `분 (${formatPrice(PRICE_CONFIG.locations.indoor.videoAddCost)}/분)`;
+      document.getElementById('outdoor-photo-cost').textContent = `매 (${formatPrice(PRICE_CONFIG.locations.outdoor.photoAddCost)}/매)`;
+      document.getElementById('outdoor-video-cost').textContent = `분 (${formatPrice(PRICE_CONFIG.locations.outdoor.videoAddCost)}/분)`;
+      document.getElementById('cooking-photo-cost').textContent = `매 (${formatPrice(PRICE_CONFIG.locations.cooking.photoAddCost)}/매)`;
+      document.getElementById('cooking-video-cost').textContent = `분 (${formatPrice(PRICE_CONFIG.locations.cooking.videoAddCost)}/분)`;
+      document.getElementById('cooking-menu-cost').textContent = `개 (메뉴당 ${formatPrice(PRICE_CONFIG.locations.cooking.menuCost)} 추가)`;
+      document.getElementById('drone-photo-cost').textContent = `매 (${formatPrice(PRICE_CONFIG.locations.drone.photoAddCost)}/매)`;
+      document.getElementById('drone-video-cost').textContent = `분 (${formatPrice(PRICE_CONFIG.locations.drone.videoAddCost)}/분)`;
+      
+      // 옵션 비용 업데이트
+      document.getElementById('indoor-hand-label').textContent = `핸드컷 (+${formatPrice(PRICE_CONFIG.locations.indoor.handCost)})`;
+      document.getElementById('indoor-model-label').textContent = `모델컷 (+${formatPrice(PRICE_CONFIG.locations.indoor.modelCost)})`;
+      document.getElementById('outdoor-hand-label').textContent = `핸드컷 (+${formatPrice(PRICE_CONFIG.locations.outdoor.handCost)})`;
+      document.getElementById('outdoor-model-label').textContent = `모델컷 (+${formatPrice(PRICE_CONFIG.locations.outdoor.modelCost)})`;
+      document.getElementById('cooking-hand-label').textContent = `핸드컷 (+${formatPrice(PRICE_CONFIG.locations.cooking.handCost)})`;
+      document.getElementById('cooking-model-label').textContent = `모델컷 (+${formatPrice(PRICE_CONFIG.locations.cooking.modelCost)})`;
+      
+      // 편집 가격 업데이트
+      document.getElementById('basic-edit-price').textContent = formatPrice(PRICE_CONFIG.editing.basic.perMinute);
+      document.getElementById('full-edit-base').textContent = formatPrice(PRICE_CONFIG.editing.full.basePrice);
+      document.getElementById('full-edit-per').textContent = formatPrice(PRICE_CONFIG.editing.full.perMinute);
+      
+      // 견적 재계산
+      calculateQuote();
+    }
+
+    // 서비스 전환
+    function switchService(service) {
+      const photoBtn = document.getElementById('photo-service-btn');
+      const farmBtn = document.getElementById('farm-service-btn');
+      const photoSection = document.getElementById('photo-service');
+      const farmSection = document.getElementById('farm-service');
+      
+      if (service === 'photo') {
+        photoBtn.classList.add('active');
+        farmBtn.classList.remove('active');
+        photoSection.classList.add('active');
+        farmSection.classList.remove('active');
+      } else {
+        farmBtn.classList.add('active');
+        photoBtn.classList.remove('active');
+        farmSection.classList.add('active');
+        photoSection.classList.remove('active');
+      }
+    }
+
+    // 로케이션 토글
+    function toggleLocation(type) {
+      const card = document.getElementById(`${type}-card`);
+      const checkbox = document.getElementById(`${type}-check`);
+      
+      card.classList.toggle('active');
+      checkbox.checked = card.classList.contains('active');
+      
+      // 체크박스 이벤트 연결
+      checkbox.onchange = function() {
+        if (checkbox.checked) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+          // 옵션 초기화
+          document.getElementById(`${type}-photo`).value = 0;
+          document.getElementById(`${type}-video`).value = 0;
+          if (type === 'cooking') {
+            document.getElementById('cooking-menu').value = 0;
+          }
+          document.getElementById(`${type}-hand`).checked = false;
+          document.getElementById(`${type}-model`).checked = false;
+        }
+        calculateQuote();
+      };
+      
+      calculateQuote();
+    }
+
+    // 수량 조절
+    function adjustQuantity(id, delta) {
+      const input = document.getElementById(id);
+      const newValue = Math.max(0, parseInt(input.value) + delta);
+      input.value = newValue;
+      calculateQuote();
+    }
+
+    // 편집 수량 조절
+    function adjustEditQuantity(type, delta) {
+      const input = document.getElementById(`edit-${type}`);
+      const newValue = Math.max(0, parseInt(input.value) + delta);
+      input.value = newValue;
+      calculateQuote();
+    }
+
+    // 가격 포맷
+    function formatPrice(price) {
+      return price.toLocaleString() + '원';
+    }
+
+    // 견적 계산
+    function calculateQuote() {
+      let totalCost = 0;
+      let locationCost = 0;
+      let transitionCost = 0;
+      let photoCost = 0;
+      let videoCost = 0;
+      let handCost = 0;
+      let modelCost = 0;
+      let menuCost = 0;
+      let editCost = 0;
+      
+      let totalPhotos = 0;
+      let totalVideos = 0;
+      let totalEditVideos = 0;
+      
+      const activeLocations = [];
+      const statsGrid = document.getElementById('statsGrid');
+      statsGrid.innerHTML = '';
+      
+      // 각 로케이션 체크
+      ['indoor', 'outdoor', 'cooking', 'drone'].forEach(type => {
+        const checkbox = document.getElementById(`${type}-check`);
+        if (checkbox && checkbox.checked) {
+          activeLocations.push(type);
+          const config = PRICE_CONFIG.locations[type];
+          
+          // 기본 비용
+          locationCost += config.basePrice;
+          
+          // 기본 제공 수량
+          let locationPhotos = config.basePhoto;
+          let locationVideos = config.baseVideo;
+          
+          // 추가 사진/영상
+          const addPhotos = parseInt(document.getElementById(`${type}-photo`).value) || 0;
+          const addVideos = parseInt(document.getElementById(`${type}-video`).value) || 0;
+          
+          photoCost += addPhotos * config.photoAddCost;
+          videoCost += addVideos * config.videoAddCost;
+          
+          locationPhotos += addPhotos;
+          locationVideos += addVideos;
+          
+          // 요리 메뉴 추가
+          if (type === 'cooking') {
+            const addMenus = parseInt(document.getElementById('cooking-menu').value) || 0;
+            menuCost += addMenus * config.menuCost;
+            locationPhotos += addMenus * 30; // 메뉴당 30매 추가
+          }
+          
+          // 핸드컷/모델컷
+          if (document.getElementById(`${type}-hand`)?.checked) {
+            handCost += config.handCost;
+          }
+          if (document.getElementById(`${type}-model`)?.checked) {
+            modelCost += config.modelCost;
+          }
+          
+          totalPhotos += locationPhotos;
+          totalVideos += locationVideos;
+          
+          // 통계 표시
+          const statItem = document.createElement('div');
+          statItem.className = 'stat-item';
+          statItem.innerHTML = `
+            <div class="stat-location">${getLocationName(type)}</div>
+            <div class="stat-details">
+              <span>사진</span>
+              <span class="stat-value">${locationPhotos}매</span>
+            </div>
+            <div class="stat-details">
+              <span>영상</span>
+              <span class="stat-value">${locationVideos}분</span>
+            </div>
+          `;
+          statsGrid.appendChild(statItem);
+        }
+      });
+      
+      // 로케이션 전환 비용
+      if (activeLocations.length > 1) {
+        transitionCost = (activeLocations.length - 1) * PRICE_CONFIG.baseLocationCost;
+      }
+      
+      // 편집 비용 계산
+      ['basic', 'full'].forEach(editType => {
+        ['1min', '2min', '3min', '5min'].forEach(duration => {
+          const count = parseInt(document.getElementById(`edit-${editType}-${duration}`).value) || 0;
+          if (count > 0) {
+            totalEditVideos += count;
+            const minutes = parseInt(duration.replace('min', ''));
+            
+            if (editType === 'basic') {
+              editCost += count * minutes * PRICE_CONFIG.editing.basic.perMinute;
+            } else {
+              // 풀 편집: 1분은 기본요금, 2분 이상은 추가 요금
+              if (minutes === 1) {
+                editCost += count * PRICE_CONFIG.editing.full.basePrice;
+              } else {
+                editCost += count * (PRICE_CONFIG.editing.full.basePrice + (minutes - 1) * PRICE_CONFIG.editing.full.perMinute);
+              }
+            }
+          }
+        });
+      });
+      
+      // 통계 업데이트
+      document.getElementById('totalPhotos').textContent = totalPhotos + '매';
+      document.getElementById('totalVideos').textContent = totalVideos + '분';
+      document.getElementById('totalEditVideos').textContent = totalEditVideos + '개';
+      
+      // 견적 항목 업데이트
+      document.getElementById('locationCost').textContent = formatPrice(locationCost);
+      document.getElementById('transitionCost').textContent = formatPrice(transitionCost);
+      document.getElementById('menuCost').textContent = formatPrice(menuCost);
+      document.getElementById('photoCost').textContent = formatPrice(photoCost);
+      document.getElementById('videoCost').textContent = formatPrice(videoCost);
+      document.getElementById('handCost').textContent = formatPrice(handCost);
+      document.getElementById('modelCost').textContent = formatPrice(modelCost);
+      document.getElementById('editCost').textContent = formatPrice(editCost);
+      
+      // 총 비용
+      totalCost = locationCost + transitionCost + menuCost + photoCost + videoCost + handCost + modelCost + editCost;
+      document.getElementById('totalAmount').textContent = formatPrice(totalCost);
+    }
+
+    // 로케이션 이름 가져오기
+    function getLocationName(type) {
+      const names = {
+        indoor: '일반 실내 촬영',
+        outdoor: '야외 촬영',
+        cooking: '요리 촬영',
+        drone: '드론 촬영'
+      };
+      return names[type] || type;
+    }
+
+    // 페이지 로드 시 실행
+    window.addEventListener('DOMContentLoaded', function() {
+      // API에서 가격 데이터 로드
+      loadPricesFromSheet();
+      
+      // 초기 견적 계산
+      calculateQuote();
+    });
