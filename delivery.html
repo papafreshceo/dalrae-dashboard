@@ -73,10 +73,12 @@
         
         .weekday.sunday {
             color: #ff5252;
+            font-weight: 700;
         }
         
         .weekday.saturday {
             color: #2196f3;
+            font-weight: 700;
         }
         
         .days-grid {
@@ -119,14 +121,20 @@
             font-weight: 700;
         }
         
-        .day-cell.sunday .day-number,
+        /* 날짜 색상 스타일 */
         .day-number.sunday {
             color: #ff5252;
+            font-weight: 700;
         }
         
-        .day-cell.saturday .day-number,
         .day-number.saturday {
             color: #2196f3;
+            font-weight: 700;
+        }
+        
+        .day-number.holiday {
+            color: #ff5252;
+            font-weight: 700;
         }
         
         .day-cell:hover {
@@ -268,8 +276,8 @@
                     <li style="padding: 5px 0 5px 15px; color: #5a5c60; font-size: 14px;">• 평일: 발송 가능 (시트에 N 입력시 불가)</li>
                     <li style="padding: 5px 0 5px 15px; color: #5a5c60; font-size: 14px;">• 토요일: 발송 불가</li>
                     <li style="padding: 5px 0 5px 15px; color: #5a5c60; font-size: 14px;">• 일요일: 특별 발송 가능</li>
-                    <li style="padding: 5px 0 5px 15px; color: #5a5c60; font-size: 14px;">• 공휴일 전날: 발송 불가</li>
-                    <li style="padding: 5px 0 5px 15px; color: #5a5c60; font-size: 14px;">• 연휴 마지막날: 특별 발송 가능</li>
+                    <li style="padding: 5px 0 5px 15px; color: #5a5c60; font-size: 14px;">• 공휴일/일요일 전날: 발송 불가 (무조건)</li>
+                    <li style="padding: 5px 0 5px 15px; color: #5a5c60; font-size: 14px;">• 연휴 마지막날: 특별 발송 가능 (다음날이 평일인 경우만)</li>
                     
                     <li style="padding: 10px 0 5px 0; color: #5a5c60; font-size: 14px; font-weight: 600;">아이콘 설명:</li>
                     <li style="padding: 5px 0 5px 15px; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 1px solid #2196f3; border-radius: 2px; vertical-align: middle;"></span> 파란색: 특별 발송 (일요일/연휴 마지막)</li>
@@ -370,7 +378,7 @@
             const currentInfo = deliveryMap[dateStr];
             const nextInfo = deliveryMap[nextDateStr];
             
-            // 현재날이 공휴일/일요일이고, 다음날이 평일(월-금)인 경우
+            // 현재날이 공휴일/일요일이고, 다음날이 평일(월-금)이면서 공휴일이 아닌 경우만
             if (currentInfo && (currentInfo.holiday || currentInfo.tempHoliday || currentInfo.dayOfWeek === 0)) {
                 if (nextInfo && nextInfo.dayOfWeek >= 1 && nextInfo.dayOfWeek <= 5 && !nextInfo.holiday && !nextInfo.tempHoliday) {
                     return true;
@@ -441,7 +449,7 @@
                     canDeliver = false;
                     deliveryType = 'none';
                 }
-                // 2. 공휴일/일요일 전날은 무조건 배송 불가 (최우선)
+                // 2. 공휴일/일요일 전날은 무조건 배송 불가 (최우선, 시트 Y도 무시)
                 else if (isBeforeHoliday(dateStr, deliveryMap)) {
                     canDeliver = false;
                     deliveryType = 'none';
@@ -451,12 +459,12 @@
                     canDeliver = true;
                     deliveryType = 'special';
                 }
-                // 4. 연휴 마지막날은 특별 배송 (시트 N 무시)
+                // 4. 연휴 마지막날은 특별 배송 (다음날이 평일인 경우만)
                 else if (isLastDayOfHolidayPeriod(dateStr, deliveryMap)) {
                     canDeliver = true;
                     deliveryType = 'special';
                 }
-                // 5. 시트에 명시적으로 N이 있으면 배송 불가 (일요일/연휴마지막 제외)
+                // 5. 시트에 명시적으로 N이 있으면 배송 불가
                 else if (sheetValue === 'N') {
                     canDeliver = false;
                     deliveryType = 'none';
@@ -472,11 +480,8 @@
                     deliveryType = 'normal';
                 }
                 
-                // 시트에 Y가 명시되어 있으면 특별 배송으로 override (토요일 제외)
-                if (sheetValue === 'Y' && !canDeliver && dayOfWeek !== 6) {
-                    canDeliver = true;
-                    deliveryType = 'special';
-                }
+                // 시트에 Y가 있어도 공휴일 전날이면 무조건 배송 불가
+                // (이미 위에서 처리됨)
                 
                 deliveryMap[dateStr].canDeliver = canDeliver;
                 deliveryMap[dateStr].deliveryType = deliveryType;
@@ -598,8 +603,17 @@
                 const isToday = currentDate.getFullYear() === deliveryYear && 
                                currentDate.getMonth() === deliveryMonth && 
                                currentDate.getDate() === day;
-                const isWeekend = deliveryInfo.dayOfWeek === 0 || deliveryInfo.dayOfWeek === 6;
                 const isSunday = deliveryInfo.dayOfWeek === 0;
+                const isSaturday = deliveryInfo.dayOfWeek === 6;
+                const isHoliday = deliveryInfo.holiday || deliveryInfo.tempHoliday;
+                
+                // 날짜 색상 클래스 결정
+                let dayNumberClass = '';
+                if (isSunday || isHoliday) {
+                    dayNumberClass = 'holiday'; // 빨간색
+                } else if (isSaturday) {
+                    dayNumberClass = 'saturday'; // 파란색
+                }
                 
                 let badges = [];
                 let deliveryIcon = '';
@@ -644,7 +658,7 @@
                 
                 html += `
                     <div class="day-cell ${isToday ? 'today' : ''}" data-date="${dateStr}" style="position: relative;">
-                        <div class="day-number ${isWeekend ? (isSunday ? 'sunday' : 'saturday') : ''}">
+                        <div class="day-number ${dayNumberClass}">
                             ${day}
                         </div>
                         ${deliveryIcon}
