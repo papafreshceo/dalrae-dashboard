@@ -94,6 +94,7 @@
             padding: 8px;
             position: relative;
             transition: all 0.2s;
+            overflow: hidden;
         }
         
         .day-number {
@@ -134,6 +135,29 @@
             z-index: 10;
         }
         
+        /* 일요일 특별 배송 스타일 */
+        .sunday-delivery-icon {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 2px solid #2196f3;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 8px rgba(33, 150, 243, 0.3);
+        }
+        
+        .sunday-delivery-icon .check {
+            color: #2196f3;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(33, 150, 243, 0.2);
+        }
+        
         /* 모바일 반응형 */
         @media (max-width: 768px) {
             .calendar-container {
@@ -163,6 +187,17 @@
             .day-number {
                 font-size: 12px;
             }
+            
+            .sunday-delivery-icon {
+                width: 30px;
+                height: 30px;
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .sunday-delivery-icon .check {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -177,11 +212,11 @@
             <span>배송캘린더</span>
         </h2>
         
-        <!-- 배송 안내 메시지 -->
-        <div id="deliveryNotices" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; color: white; box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);">
-            <div style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+        <!-- 배송 안내 메시지 - 연한 하늘색 그라데이션 -->
+        <div id="deliveryNotices" style="background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 50%, #E0F6FF 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(135, 206, 235, 0.2);">
+            <div style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.5); padding-bottom: 10px;">
                 <span style="font-size: 24px; margin-right: 10px;">📢</span>
-                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">공지사항</h3>
+                <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #0066A0;">공지사항</h3>
             </div>
             <div id="noticesList" style="display: flex; flex-direction: column; gap: 12px;">
                 <!-- 여기에 공지사항 동적 추가 -->
@@ -200,13 +235,13 @@
             <div class="delivery-info">
                 <h3 style="font-size: 16px; font-weight: 600; color: #3a3b3d; margin-bottom: 10px;">📌 발송 안내</h3>
                 <ul style="list-style: none; padding: 0; margin: 0;">
-
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• ✓ 발송가능: 평일 및 일요일 특별 배송</li>
                     <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• ❌ 발송불가: 공휴일/주말/휴무일</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 16px; height: 16px; background: linear-gradient(135deg, #e3f2fd, #bbdefb); border: 2px solid #2196f3; border-radius: 3px; vertical-align: middle;"></span> 파란색: 일요일 특별 배송</li>
                     <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #ff9800; border-radius: 2px; vertical-align: middle;"></span> 주황색: 공휴일</li>
-                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #2196f3; border-radius: 2px; vertical-align: middle;"></span> 파란색: 임시공휴일</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #2196f3; border-radius: 2px; vertical-align: middle;"></span> 파란색 배지: 임시공휴일</li>
                     <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #9c27b0; border-radius: 2px; vertical-align: middle;"></span> 보라색: 기타</li>
                     <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• <span style="display: inline-block; width: 12px; height: 12px; background: #ff5252; border-radius: 2px; vertical-align: middle;"></span> 빨간색: 발송 이슈</li>
-                    
                 </ul>
             </div>
         </div>
@@ -344,11 +379,11 @@
                 
                 if (header && content) {
                     noticesHTML += `
-                        <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px; backdrop-filter: blur(10px); border-left: 3px solid rgba(255, 255, 255, 0.5);">
-                            <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+                        <div style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; padding: 12px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                            <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; color: #0066A0;">
                                 ${header}
                             </div>
-                            <div style="font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.95);">
+                            <div style="font-size: 13px; line-height: 1.6; color: #333;">
                                 ${content}
                             </div>
                         </div>
@@ -362,9 +397,9 @@
             } else {
                 // 기본 메시지
                 noticesList.innerHTML = `
-                    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px;">
-                        <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px;">배송 일정 안내</div>
-                        <div style="font-size: 13px; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
+                    <div style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; padding: 12px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0;">
+                        <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px; color: #0066A0;">배송 일정 안내</div>
+                        <div style="font-size: 13px; line-height: 1.5; color: #333;">
                             평일 오전 10시 이전 주문 시 당일 발송됩니다.<br>
                             주말 및 공휴일은 발송이 없습니다.
                         </div>
@@ -384,16 +419,16 @@
             let html = `
                 <div class="delivery-nav-controls" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;">
                     <button onclick="changeDeliveryMonth(-1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer; transition: all 0.2s;" 
-                            onmouseover="this.style.background='#f5f6f7'; this.style.borderColor='#667eea';" 
+                            onmouseover="this.style.background='#f5f6f7'; this.style.borderColor='#2196f3';" 
                             onmouseout="this.style.background='white'; this.style.borderColor='#e1e3e5';">◀</button>
                     <div style="font-size: 18px; font-weight: 600; min-width: 150px; text-align: center;">
                         ${deliveryYear}년 ${deliveryMonth + 1}월
                     </div>
                     <button onclick="changeDeliveryMonth(1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer; transition: all 0.2s;"
-                            onmouseover="this.style.background='#f5f6f7'; this.style.borderColor='#667eea';" 
+                            onmouseover="this.style.background='#f5f6f7'; this.style.borderColor='#2196f3';" 
                             onmouseout="this.style.background='white'; this.style.borderColor='#e1e3e5';">▶</button>
                     <button onclick="goToToday()" style="padding: 8px 16px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer; margin-left: 10px; font-size: 14px; font-weight: 500; transition: all 0.2s;"
-                            onmouseover="this.style.background='#667eea'; this.style.color='white'; this.style.borderColor='#667eea';" 
+                            onmouseover="this.style.background='#2196f3'; this.style.color='white'; this.style.borderColor='#2196f3';" 
                             onmouseout="this.style.background='white'; this.style.color='black'; this.style.borderColor='#e1e3e5';">오늘</button>
                 </div>
             `;
@@ -431,9 +466,54 @@
                                currentDate.getMonth() === deliveryMonth && 
                                currentDate.getDate() === day;
                 const isWeekend = deliveryInfo.dayOfWeek === 0 || deliveryInfo.dayOfWeek === 6;
+                const isSunday = deliveryInfo.dayOfWeek === 0;
                 const canDeliver = deliveryInfo.canDeliver === true || deliveryInfo.canDeliver === 'Y';
                 
                 let badges = [];
+                let deliveryIcon = '';
+
+                // 일요일 특별 처리
+                if (isSunday) {
+                    if (canDeliver) {
+                        // 일요일인데 배송 가능한 경우 - 파란색 특별 배송 아이콘
+                        deliveryIcon = `
+                            <div class="sunday-delivery-icon">
+                                <div class="check">✓</div>
+                            </div>
+                        `;
+                    } else {
+                        // 일요일인데 배송 불가능한 경우 - 파란색 X 표시
+                        deliveryIcon = `
+                            <div style="
+                                position: absolute;
+                                bottom: 15px;
+                                right: 15px;
+                                width: 35px;
+                                height: 35px;
+                                background: linear-gradient(135deg, #fce4ec, #ffcdd2);
+                                border: 2px solid #2196f3;
+                                border-radius: 4px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                box-shadow: 0 2px 6px rgba(33, 150, 243, 0.2);
+                            ">
+                                <div style="
+                                    color: #2196f3;
+                                    font-size: 20px;
+                                    font-weight: bold;
+                                ">✕</div>
+                            </div>
+                        `;
+                    }
+                } else {
+                    // 일요일이 아닌 경우 기존 로직
+                    if (canDeliver) {
+                        deliveryIcon = '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; opacity: 0.2;">📦</div>';
+                    } else {
+                        deliveryIcon = '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; opacity: 0.5;">❌</div>';
+                    }
+                }
 
                 if (deliveryInfo.issue) {
                     badges.push(`<div style="background: #ff5252; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px; font-weight: 500;">${deliveryInfo.issue}</div>`);
@@ -450,11 +530,12 @@
                 
                 html += `
                     <div class="day-cell ${isToday ? 'today' : ''}" data-date="${dateStr}" style="position: relative;">
-                        <div class="day-number ${isWeekend ? (deliveryInfo.dayOfWeek === 0 ? 'sunday' : 'saturday') : ''}">
+                        <div class="day-number ${isWeekend ? (isSunday ? 'sunday' : 'saturday') : ''}">
                             ${day}
                         </div>
-                        ${canDeliver ? '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; opacity: 0.2;">📦</div>' : '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; opacity: 0.5;">❌</div>'}
-                        ${badges.length > 0 ? `<div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 90%;">${badges.join('')}</div>` : ''}
+                        ${deliveryIcon}
+                        ${badges.length > 0 && !isSunday ? `<div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 90%;">${badges.join('')}</div>` : ''}
+                        ${badges.length > 0 && isSunday ? `<div style="position: absolute; top: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; width: 90%; z-index: 1;">${badges.join('')}</div>` : ''}
                     </div>
                 `;
             }
