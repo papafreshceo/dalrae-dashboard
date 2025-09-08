@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: process.env.SHEET_ID,
-      range: 'DELIVERY!A:F',
+      range: 'DELIVERY!A:g',
     });
 
     const rows = response.data.values || [];
@@ -25,3 +25,4 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Failed to fetch delivery data' });
   }
 }
+
