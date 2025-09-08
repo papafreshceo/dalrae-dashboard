@@ -474,44 +474,37 @@
 
                 // 일요일 특별 처리
                 if (isSunday) {
-                    if (canDeliver) {
-                        // 일요일인데 배송 가능한 경우 - 파란색 특별 배송 아이콘
+                    if (!canDeliver) {  // N인 경우 - 일요일 특별 배송
+                        // 일요일 특별 배송 - 파란색 아이콘
                         deliveryIcon = `
                             <div class="sunday-delivery-icon">
                                 <div class="check">✓</div>
                             </div>
                         `;
-                    } else {
-                        // 일요일인데 배송 불가능한 경우 - 파란색 X 표시
+                    } else {  // Y인 경우 - 일반 배송
+                        // 일요일인데 일반 배송 가능 - 초록색 아이콘
                         deliveryIcon = `
-                            <div style="
-                                position: absolute;
-                                bottom: 15px;
-                                right: 15px;
-                                width: 35px;
-                                height: 35px;
-                                background: linear-gradient(135deg, #fce4ec, #ffcdd2);
-                                border: 2px solid #2196f3;
-                                border-radius: 4px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                box-shadow: 0 2px 6px rgba(33, 150, 243, 0.2);
-                            ">
-                                <div style="
-                                    color: #2196f3;
-                                    font-size: 20px;
-                                    font-weight: bold;
-                                ">✕</div>
+                            <div class="weekday-delivery-icon">
+                                <div class="check">✓</div>
                             </div>
                         `;
                     }
                 } else {
-                    // 일요일이 아닌 경우 기존 로직
+                    // 일요일이 아닌 경우
                     if (canDeliver) {
-                        deliveryIcon = '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 32px; opacity: 0.2;">📦</div>';
+                        // 평일 배송 가능 - 초록색 아이콘
+                        deliveryIcon = `
+                            <div class="weekday-delivery-icon">
+                                <div class="check">✓</div>
+                            </div>
+                        `;
                     } else {
-                        deliveryIcon = '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; opacity: 0.5;">❌</div>';
+                        // 배송 불가 - 빨간색 아이콘
+                        deliveryIcon = `
+                            <div class="no-delivery-icon">
+                                <div class="x">✕</div>
+                            </div>
+                        `;
                     }
                 }
 
