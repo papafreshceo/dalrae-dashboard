@@ -2294,7 +2294,9 @@ const DELIVERY_CONFIG = {
     SHEET_NAME: 'DELIVERY',
     RANGE: 'A:F'
 };
-
+// 배송 캘린더 월 관리 변수
+let deliveryMonth = new Date().getMonth();
+let deliveryYear = new Date().getFullYear();
 // 배송 캘린더 데이터 로드
 async function loadDeliveryData() {
     try {
@@ -2391,16 +2393,25 @@ function renderDeliveryCalendar(deliveryData) {
     if (!container) return;
     
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
+    
+    // 네비게이션 추가
+    let html = `
+        <div class="delivery-nav-controls" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <button onclick="changeDeliveryMonth(-1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer;">◀</button>
+            <div style="font-size: 18px; font-weight: 600; min-width: 150px; text-align: center;">
+                ${deliveryYear}년 ${deliveryMonth + 1}월
+            </div>
+            <button onclick="changeDeliveryMonth(1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer;">▶</button>
+        </div>
+    `;
     
     // 월 그리드 생성
-    const firstDay = new Date(currentYear, currentMonth, 1);
-    const lastDay = new Date(currentYear, currentMonth + 1, 0);
+    const firstDay = new Date(deliveryYear, deliveryMonth, 1);
+    const lastDay = new Date(deliveryYear, deliveryMonth + 1, 0);
     const startDay = firstDay.getDay();
     const totalDays = lastDay.getDate();
     
-    let html = `
+    html += `
         <div class="delivery-month-view">
             <div class="weekdays">
                 <div class="weekday sunday">일</div>
@@ -2421,14 +2432,16 @@ function renderDeliveryCalendar(deliveryData) {
     
     // 현재 달 날짜
     for (let day = 1; day <= totalDays; day++) {
-        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dateStr = `${deliveryYear}-${String(deliveryMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const deliveryInfo = deliveryData[dateStr] || {};
         
-        const isToday = currentDate.getDate() === day;
+        const isToday = currentDate.getFullYear() === deliveryYear && 
+                       currentDate.getMonth() === deliveryMonth && 
+                       currentDate.getDate() === day;
         const isWeekend = deliveryInfo.dayOfWeek === 0 || deliveryInfo.dayOfWeek === 6;
         const isHoliday = deliveryInfo.holiday || deliveryInfo.tempHoliday;
         const hasOther = deliveryInfo.other;
-        const canDeliver = deliveryInfo.canDeliver !== false;
+        const canDeliver = deliveryInfo.canDeliver === true || deliveryInfo.canDeliver === 'Y';
         
         let cellClass = 'day-cell';
         if (isToday) cellClass += ' today';
@@ -2450,9 +2463,6 @@ function renderDeliveryCalendar(deliveryData) {
             } else if (isWeekend) {
                 statusText = '주말';
                 statusClass = 'weekend-label';
-            } else {
-                statusText = '배송불가';
-                statusClass = 'no-delivery-label';
             }
         }
         
@@ -2460,7 +2470,7 @@ function renderDeliveryCalendar(deliveryData) {
             <div class="${cellClass}" data-date="${dateStr}">
                 <div class="day-number">${day}</div>
                 ${statusText ? `<div class="delivery-status ${statusClass}">${statusText}</div>` : ''}
-                <div class="delivery-icon">${canDeliver ? '📦' : '❌'}</div>
+                ${!canDeliver ? '<div class="delivery-icon">❌</div>' : ''}
             </div>
         `;
     }
@@ -2477,7 +2487,7 @@ function renderDeliveryCalendar(deliveryData) {
     `;
     
     container.innerHTML = html;
-}
+}}
 
 // 배송 캘린더 스타일 추가
 function addDeliveryCalendarStyles() {
@@ -2571,7 +2581,20 @@ function initDeliveryCalendar() {
     // 데이터 로드
     loadDeliveryData();
 }
+// 배송 캘린더 월 변경
+function changeDeliveryMonth(direction) {
+    deliveryMonth += direction;
+    if (deliveryMonth > 11) {
+        deliveryMonth = 0;
+        deliveryYear++;
+    } else if (deliveryMonth < 0) {
+        deliveryMonth = 11;
+        deliveryYear--;
+    }
+    loadDeliveryData();
+}
 
+window.changeDeliveryMonth = changeDeliveryMonth;
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', function() {
     // 기존 초기화 코드 후에 추가
