@@ -561,6 +561,77 @@
             background: #f5f6f7;
             border-radius: 8px;
         }
+
+        /* 배송 캘린더 추가 스타일 */
+        .delivery-month-view {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .delivery-month-view .day-cell {
+            position: relative;
+            min-height: 100px;
+            transition: all 0.2s;
+        }
+
+        @media (max-width: 768px) {
+            .delivery-month-view {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .delivery-month-view .weekdays,
+            .delivery-month-view .days-grid {
+                min-width: 600px;
+            }
+        }
+        
+        .delivery-month-view .day-cell.today {
+            background: #fff8f0 !important;
+        }
+        
+        .delivery-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 18px;
+        }
+        
+        .delivery-status {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
+            text-align: center;
+        }
+        
+        .holiday-label {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .other-label {
+            background: #9c27b0;
+            color: white;
+        }
+        
+        .weekend-label {
+            background: #2196f3;
+            color: white;
+        }
+        
+        .no-delivery-label {
+            background: #f44336;
+            color: white;
+        }
+        
+        .delivery-month-view .day-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
         
         /* 상품 정보 툴팁 */
         .tooltip {
@@ -1109,40 +1180,41 @@
         </div>
     </div>
 
-<!-- 배송 캘린더 섹션 -->
-<div class="calendar-container" style="margin-top: 40px;">
-    <h2 class="section-title">🚚 배송캘린더</h2>
-    
-    <div class="delivery-calendar-wrapper">
-        <div id="deliveryCalendarContent">
-            <div style="text-align: center; padding: 40px;">
-                <div style="color: #999;">📦 배송 캘린더 로딩 중...</div>
+    <!-- 배송 캘린더 섹션 -->
+    <div class="calendar-container" style="margin-top: 40px;">
+        <h2 class="section-title">🚚 배송캘린더</h2>
+        
+        <!-- 배송 안내 메시지 (캘린더 위에 위치) -->
+        <div id="deliveryNotices" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; color: white; box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);">
+            <div style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
+                <span style="font-size: 24px; margin-right: 10px;">📢</span>
+                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">공지사항</h3>
+            </div>
+            <div id="noticesList" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- 여기에 공지사항 동적 추가 -->
             </div>
         </div>
-
-        <!-- 배송 안내 메시지 -->
-<div id="deliveryNotices" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
-    <div style="display: flex; align-items: center; margin-bottom: 15px;">
-        <span style="font-size: 24px; margin-right: 10px;">📢</span>
-        <h3 style="margin: 0; font-size: 18px;">공지사항</h3>
-    </div>
-    <div id="noticesList" style="display: flex; flex-direction: column; gap: 12px;">
-        <!-- 여기에 공지사항 동적 추가 -->
-    </div>
-</div>
         
-        <!-- 배송 안내 정보 -->
-        <div class="delivery-info">
-            <h3 style="font-size: 16px; font-weight: 600; color: #3a3b3d; margin-bottom: 10px;">📌 배송 안내</h3>
-            <ul style="list-style: none; padding: 0; margin: 0;">
-                <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 📦 배송가능</li>
-                <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• ❌ 배송불가 (공휴일/주말/휴무)</li>
-                <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 주황색: 공휴일</li>
-                <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 보라색: 휴가/기타</li>
-            </ul>
+        <!-- 배송 캘린더 본체 -->
+        <div class="delivery-calendar-wrapper">
+            <div id="deliveryCalendarContent">
+                <div style="text-align: center; padding: 40px;">
+                    <div style="color: #999;">📦 배송 캘린더 로딩 중...</div>
+                </div>
+            </div>
+            
+            <!-- 배송 안내 정보 -->
+            <div class="delivery-info">
+                <h3 style="font-size: 16px; font-weight: 600; color: #3a3b3d; margin-bottom: 10px;">📌 배송 안내</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 📦 배송가능</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• ❌ 배송불가 (공휴일/주말/휴무)</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 주황색: 공휴일</li>
+                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 보라색: 휴가/기타</li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- 툴팁 -->
     <div class="tooltip" id="tooltip">
@@ -1353,9 +1425,9 @@
                 if (!startDate || !endDate) return;
                 
                 // 연도를 넘어가는 경우 처리
-if (startDate > endDate) {
-    endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
-}
+                if (startDate > endDate) {
+                    endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
+                }
                 
                 if (!productMap[item]) {
                     productMap[item] = {
@@ -1663,7 +1735,7 @@ if (startDate > endDate) {
             container.appendChild(bar);
         }
 
-// 년 보기 렌더링
+        // 년 보기 렌더링
         function renderYearView() {
             const container = document.getElementById('yearTimelineContainer');
             let html = '';
@@ -1857,6 +1929,7 @@ if (startDate > endDate) {
                 showModal(varieties[0]); // 일단 첫번째 품종 표시
             }
         }
+
         // 모달 표시
         function showModal(variety) {
             const modal = document.getElementById('optionsModal');
@@ -2286,6 +2359,274 @@ if (startDate > endDate) {
             });
         }
 
+        // 배송 캘린더 관련 코드
+        let deliveryMonth = new Date().getMonth();
+        let deliveryYear = new Date().getFullYear();
+
+        // 배송 캘린더 데이터 로드
+        async function loadDeliveryData() {
+            try {
+                // 1. 구글 시트 데이터 가져오기
+                const sheetData = await fetchSheetData();
+                console.log('시트 데이터 로드:', sheetData);
+                
+                // 2. 공휴일 데이터 가져오기
+                const holidays = await fetchHolidays();
+                
+                // 3. 데이터 병합
+                const deliveryMap = processDeliveryData(sheetData, holidays);
+                
+                // 4. 캘린더 렌더링
+                renderDeliveryCalendar(deliveryMap);
+                
+                // 5. 안내 메시지 표시
+                displayDeliveryNotices(sheetData);
+                
+            } catch (error) {
+                console.error('배송 데이터 로드 실패:', error);
+                document.getElementById('deliveryCalendarContent').innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="color: #999;">📦 배송 캘린더 데이터를 불러올 수 없습니다.</div>
+                    </div>
+                `;
+            }
+        }
+
+        // 구글 시트 데이터 가져오기
+        async function fetchSheetData() {
+            const response = await fetch('/api/delivery');
+            const data = await response.json();
+            
+            window.deliverySheetData = data;
+            
+            if (!data || data.length === 0) {
+                throw new Error('시트 데이터가 없습니다');
+            }
+            
+            return data;
+        }
+
+        // 공휴일 데이터 가져오기
+        async function fetchHolidays() {
+            const currentYear = new Date().getFullYear();
+            const holidays = {};
+            
+            for (let year = currentYear; year <= currentYear + 1; year++) {
+                try {
+                    const response = await fetch(`https://date.nager.at/api/v3/publicholidays/${year}/KR`);
+                    const data = await response.json();
+                    
+                    data.forEach(holiday => {
+                        holidays[holiday.date] = {
+                            name: holiday.localName || holiday.name,
+                            type: holiday.types?.includes('Authorities') ? '임시공휴일' : '공휴일'
+                        };
+                    });
+                } catch (error) {
+                    console.error(`${year}년 공휴일 로드 실패:`, error);
+                }
+            }
+            
+            return holidays;
+        }
+
+        // 데이터 처리 및 병합
+        function processDeliveryData(sheetData, holidays) {
+            const deliveryMap = {};
+            
+            sheetData.forEach((row, index) => {
+                if (index === 0) return; // 헤더 행 건너뛰기
+                
+                const [date, dayName, sheetHoliday, sheetTempHoliday, other, deliveryYN, issue, noticeHeader, noticeContent] = row;
+                
+                if (!date) return;
+                
+                const dateObj = new Date(date.replace(/\. /g, '-'));
+                const formattedDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+                
+                const apiHoliday = holidays[formattedDate];
+                
+                const canDeliver = deliveryYN && deliveryYN.toString().toUpperCase() === 'Y';
+                
+                deliveryMap[formattedDate] = {
+                    date: formattedDate,
+                    dayName: dayName || getDayNameFromDate(formattedDate),
+                    holiday: sheetHoliday || (apiHoliday?.type === '공휴일' ? apiHoliday.name : ''),
+                    tempHoliday: sheetTempHoliday || (apiHoliday?.type === '임시공휴일' ? apiHoliday.name : ''),
+                    other: other || '',
+                    issue: issue || '',
+                    canDeliver: canDeliver,
+                    dayOfWeek: new Date(formattedDate).getDay()
+                };
+            });
+            
+            return deliveryMap;
+        }
+
+        // 날짜에서 요일 구하기
+        function getDayNameFromDate(dateStr) {
+            const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+            const date = new Date(dateStr);
+            return days[date.getDay()];
+        }
+
+        // 배송 안내 메시지 표시
+        function displayDeliveryNotices(sheetData) {
+            const noticesList = document.getElementById('noticesList');
+            if (!noticesList) {
+                console.log('noticesList 요소를 찾을 수 없습니다');
+                return;
+            }
+            
+            let noticesHTML = '';
+            
+            // H열(인덱스 7)과 I열(인덱스 8) 읽기
+            sheetData.forEach((row, index) => {
+                // 헤더 행 건너뛰기
+                if (index === 0) return;
+                
+                const header = row[7]; // H열 - 제목
+                const content = row[8]; // I열 - 내용
+                
+                if (header && content) {
+                    noticesHTML += `
+                        <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px; backdrop-filter: blur(10px); border-left: 3px solid rgba(255, 255, 255, 0.5);">
+                            <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
+                                ${header}
+                            </div>
+                            <div style="font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.95);">
+                                ${content}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            if (noticesHTML) {
+                noticesList.innerHTML = noticesHTML;
+                console.log('안내 메시지가 표시되었습니다');
+            } else {
+                // 기본 메시지
+                noticesList.innerHTML = `
+                    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px;">
+                        <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px;">배송 일정 안내</div>
+                        <div style="font-size: 13px; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
+                            평일 오전 10시 이전 주문 시 당일 발송됩니다.<br>
+                            주말 및 공휴일은 발송이 없습니다.
+                        </div>
+                    </div>
+                `;
+                console.log('기본 안내 메시지가 표시되었습니다');
+            }
+        }
+
+        // 배송 캘린더 렌더링
+        function renderDeliveryCalendar(deliveryData) {
+            const container = document.getElementById('deliveryCalendarContent');
+            if (!container) return;
+            
+            const currentDate = new Date();
+            
+            let html = `
+                <div class="delivery-nav-controls" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;">
+                    <button onclick="changeDeliveryMonth(-1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer;">◀</button>
+                    <div style="font-size: 18px; font-weight: 600; min-width: 150px; text-align: center;">
+                        ${deliveryYear}년 ${deliveryMonth + 1}월
+                    </div>
+                    <button onclick="changeDeliveryMonth(1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer;">▶</button>
+                </div>
+            `;
+            
+            const firstDay = new Date(deliveryYear, deliveryMonth, 1);
+            const lastDay = new Date(deliveryYear, deliveryMonth + 1, 0);
+            const startDay = firstDay.getDay();
+            const totalDays = lastDay.getDate();
+            
+            html += `
+                <div class="delivery-month-view">
+                    <div class="weekdays">
+                        <div class="weekday sunday">일</div>
+                        <div class="weekday">월</div>
+                        <div class="weekday">화</div>
+                        <div class="weekday">수</div>
+                        <div class="weekday">목</div>
+                        <div class="weekday">금</div>
+                        <div class="weekday saturday">토</div>
+                    </div>
+                    <div class="days-grid">
+            `;
+            
+            // 이전 달 빈 칸
+            for (let i = 0; i < startDay; i++) {
+                html += `<div class="day-cell other-month"></div>`;
+            }
+            
+            // 현재 달 날짜
+            for (let day = 1; day <= totalDays; day++) {
+                const dateStr = `${deliveryYear}-${String(deliveryMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const deliveryInfo = deliveryData[dateStr] || {};
+                
+                const isToday = currentDate.getFullYear() === deliveryYear && 
+                               currentDate.getMonth() === deliveryMonth && 
+                               currentDate.getDate() === day;
+                const isWeekend = deliveryInfo.dayOfWeek === 0 || deliveryInfo.dayOfWeek === 6;
+                const canDeliver = deliveryInfo.canDeliver === true || deliveryInfo.canDeliver === 'Y';
+                
+                let badges = [];
+
+                if (deliveryInfo.issue) {
+                    badges.push(`<div style="background: #ff5252; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px;">${deliveryInfo.issue}</div>`);
+                }
+                if (deliveryInfo.other) {
+                    badges.push(`<div style="background: #9c27b0; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px;">${deliveryInfo.other}</div>`);
+                }
+                if (deliveryInfo.holiday) {
+                    badges.push(`<div style="background: #ff9800; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px;">${deliveryInfo.holiday}</div>`);
+                }
+                if (deliveryInfo.tempHoliday) {
+                    badges.push(`<div style="background: #2196f3; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px;">${deliveryInfo.tempHoliday}</div>`);
+                }
+                
+                html += `
+                    <div class="day-cell ${isToday ? 'today' : ''}" data-date="${dateStr}" style="position: relative;">
+                        <div class="day-number ${isWeekend ? (deliveryInfo.dayOfWeek === 0 ? 'sunday' : 'saturday') : ''}">
+                            ${day}
+                        </div>
+                        ${!canDeliver ? '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-70%, -70%); font-size: 48px; opacity: 0.5;">❌</div>' : ''}
+                        ${badges.length > 0 ? `<div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center;">${badges.join('')}</div>` : ''}
+                    </div>
+                `;
+            }
+            
+            // 다음 달 빈 칸
+            const remainingCells = 42 - (startDay + totalDays);
+            for (let i = 0; i < remainingCells; i++) {
+                html += `<div class="day-cell other-month"></div>`;
+            }
+            
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+
+        // 배송 캘린더 월 변경
+        function changeDeliveryMonth(direction) {
+            deliveryMonth += direction;
+            if (deliveryMonth > 11) {
+                deliveryMonth = 0;
+                deliveryYear++;
+            } else if (deliveryMonth < 0) {
+                deliveryMonth = 11;
+                deliveryYear--;
+            }
+            loadDeliveryData();
+        }
+
+        window.changeDeliveryMonth = changeDeliveryMonth;
+
         // DOM 로드 완료 후 초기화
         window.addEventListener('DOMContentLoaded', function() {
             DalraeHeader.init({
@@ -2296,387 +2637,10 @@ if (startDate > endDate) {
             updatePeriodDisplay();
             loadData();
             setupEventListeners();
-        });
-
-        // 배송 캘린더 설정
-const DELIVERY_CONFIG = {
-    SHEET_ID: '여기에_시트_ID_입력',
-    API_KEY: '여기에_API_키_입력',
-    SHEET_NAME: 'DELIVERY',
-    RANGE: 'A:F'
-};
-// 배송 캘린더 월 관리 변수
-let deliveryMonth = new Date().getMonth();
-let deliveryYear = new Date().getFullYear();
-// 배송 캘린더 데이터 로드
-async function loadDeliveryData() {
-    try {
-        // 1. 구글 시트 데이터 가져오기
-        const sheetData = await fetchSheetData();
-        
-        // 2. 공휴일 데이터 가져오기
-        const holidays = await fetchHolidays();
-        
-        // 3. 데이터 병합
-        const deliveryMap = processDeliveryData(sheetData, holidays);
-        
-        // 4. 캘린더 렌더링
-        renderDeliveryCalendar(deliveryMap);
-        // 안내 메시지 표시
-displayDeliveryNotices(sheetData);
-        
-    } catch (error) {
-        console.error('배송 데이터 로드 실패:', error);
-    }
-}
-
-// 구글 시트 데이터 가져오기
-async function fetchSheetData() {
-    const response = await fetch('/api/delivery');
-    const data = await response.json(); // ✅ 먼저 data 선언 및 할당
-    
-    // 전체 데이터를 loadDeliveryData에 전달하도록 수정
-    window.deliverySheetData = data; // ✅ 이제 data 사용 가능
-    
-    if (!data || data.length === 0) {
-        throw new Error('시트 데이터가 없습니다');
-    }
-    
-    return data;
-}
-
-// 공휴일 데이터 가져오기 (Nager.Date API)
-async function fetchHolidays() {
-    const currentYear = new Date().getFullYear();
-    const holidays = {};
-    
-    // 현재 연도와 다음 연도 공휴일 가져오기
-    for (let year = currentYear; year <= currentYear + 1; year++) {
-        try {
-            const response = await fetch(`https://date.nager.at/api/v3/publicholidays/${year}/KR`);
-            const data = await response.json();
             
-            data.forEach(holiday => {
-                holidays[holiday.date] = {
-                    name: holiday.localName || holiday.name,
-                    type: holiday.types?.includes('Authorities') ? '임시공휴일' : '공휴일'
-                };
-            });
-        } catch (error) {
-            console.error(`${year}년 공휴일 로드 실패:`, error);
-        }
-    }
-    
-    return holidays;
-}
-
-// 데이터 처리 및 병합
-function processDeliveryData(sheetData, holidays) {
-    const deliveryMap = {};
-    
-    sheetData.forEach(row => {
-        const [date, dayName, sheetHoliday, sheetTempHoliday, other, deliveryYN, issue] = row;
-        
-        if (!date) return;
-        
-        // 날짜 형식 변환: "2025. 1. 1" -> "2025-01-01"
-        const dateObj = new Date(date.replace(/\. /g, '-'));
-        const formattedDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
-        
-        // API 공휴일 정보
-        const apiHoliday = holidays[formattedDate];
-        
-        // 발송 가능 여부 확인
-        const canDeliver = deliveryYN && deliveryYN.toString().toUpperCase() === 'Y';
-        
-        deliveryMap[formattedDate] = {
-            date: formattedDate,
-            dayName: dayName || getDayNameFromDate(formattedDate),
-            holiday: sheetHoliday || (apiHoliday?.type === '공휴일' ? apiHoliday.name : ''),
-            tempHoliday: sheetTempHoliday || (apiHoliday?.type === '임시공휴일' ? apiHoliday.name : ''),
-            other: other || '',
-            issue: issue || '',
-            canDeliver: canDeliver,
-            dayOfWeek: new Date(formattedDate).getDay()
-        };
-    });
-    
-    return deliveryMap;
-}
-// 날짜에서 요일 구하기
-function getDayNameFromDate(dateStr) {
-    const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-    const date = new Date(dateStr);
-    return days[date.getDay()];
-}
-
-// 배송 캘린더 렌더링
-function renderDeliveryCalendar(deliveryData) {
-    const container = document.getElementById('deliveryCalendarContent');
-    if (!container) return;
-    
-    const currentDate = new Date();
-    
-    // 네비게이션 추가
-    let html = `
-        <div class="delivery-nav-controls" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;">
-            <button onclick="changeDeliveryMonth(-1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer;">◀</button>
-            <div style="font-size: 18px; font-weight: 600; min-width: 150px; text-align: center;">
-                ${deliveryYear}년 ${deliveryMonth + 1}월
-            </div>
-            <button onclick="changeDeliveryMonth(1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer;">▶</button>
-        </div>
-    `;
-    
-    // 월 그리드 생성
-    const firstDay = new Date(deliveryYear, deliveryMonth, 1);
-    const lastDay = new Date(deliveryYear, deliveryMonth + 1, 0);
-    const startDay = firstDay.getDay();
-    const totalDays = lastDay.getDate();
-    
-    html += `
-        <div class="delivery-month-view">
-            <div class="weekdays">
-                <div class="weekday sunday">일</div>
-                <div class="weekday">월</div>
-                <div class="weekday">화</div>
-                <div class="weekday">수</div>
-                <div class="weekday">목</div>
-                <div class="weekday">금</div>
-                <div class="weekday saturday">토</div>
-            </div>
-            <div class="days-grid">
-    `;
-    
-    // 이전 달 빈 칸
-    for (let i = 0; i < startDay; i++) {
-        html += `<div class="day-cell other-month"></div>`;
-    }
-    
-    // 현재 달 날짜
-    for (let day = 1; day <= totalDays; day++) {
-        const dateStr = `${deliveryYear}-${String(deliveryMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const deliveryInfo = deliveryData[dateStr] || {};
-        
-        const isToday = currentDate.getFullYear() === deliveryYear && 
-                       currentDate.getMonth() === deliveryMonth && 
-                       currentDate.getDate() === day;
-        const isWeekend = deliveryInfo.dayOfWeek === 0 || deliveryInfo.dayOfWeek === 6;
-        const isHoliday = deliveryInfo.holiday || deliveryInfo.tempHoliday;
-        const hasOther = deliveryInfo.other;
-        const canDeliver = deliveryInfo.canDeliver === true || deliveryInfo.canDeliver === 'Y';
-        
-        let cellClass = 'day-cell';
-        if (isToday) cellClass += ' today';
-        if (isWeekend) cellClass += deliveryInfo.dayOfWeek === 0 ? ' sunday' : ' saturday';
-        if (!canDeliver) cellClass += ' no-delivery';
-        if (isHoliday) cellClass += ' holiday';
-        if (hasOther) cellClass += ' other-reason';
-        
-         let badges = [];
-
-// 우선순위대로 배지 추가
-if (deliveryInfo.issue) {
-    badges.push(`<div style="background: #ff5252; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px;">${deliveryInfo.issue}</div>`);
-}
-if (deliveryInfo.other) {
-    badges.push(`<div style="background: #9c27b0; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px;">${deliveryInfo.other}</div>`);
-}
-if (deliveryInfo.holiday) {
-    badges.push(`<div style="background: #ff9800; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px;">${deliveryInfo.holiday}</div>`);
-}
-if (deliveryInfo.tempHoliday) {
-    badges.push(`<div style="background: #2196f3; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px;">${deliveryInfo.tempHoliday}</div>`);
-}
-        // 주말 라벨 제거
-        
-        html += `
-            <div class="day-cell ${isToday ? 'today' : ''}" data-date="${dateStr}" style="position: relative;">
-                <div class="day-number ${isWeekend ? (deliveryInfo.dayOfWeek === 0 ? 'sunday' : 'saturday') : ''}">
-                    ${day}
-                </div>
-                ${!canDeliver ? '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-70%, -70%); font-size: 48px; opacity: 0.5;">❌</div>' : ''}
-                ${badges.length > 0 ? `<div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center;">${badges.join('')}</div>` : ''}
-            </div>
-        `;
-    }
-    
-    // 다음 달 빈 칸
-    const remainingCells = 42 - (startDay + totalDays);
-    for (let i = 0; i < remainingCells; i++) {
-        html += `<div class="day-cell other-month"></div>`;
-    }
-    
-    html += `
-            </div>
-        </div>
-    `;
-    
-    container.innerHTML = html;
-}
-
-// 배송 캘린더 스타일 추가
-function addDeliveryCalendarStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .delivery-month-view {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-
-        
-        .delivery-month-view .day-cell {
-            position: relative;
-            min-height: 100px;
-            transition: all 0.2s;
-        }
-
-        @media (max-width: 768px) {
-    .delivery-month-view {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .delivery-month-view .weekdays,
-    .delivery-month-view .days-grid {
-        min-width: 600px;
-    }
-}
-        
-          .delivery-month-view .day-cell.today {
-            background: #fff8f0 !important;
-        }
-        
-        .delivery-icon {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            font-size: 18px;
-        }
-        
-        .delivery-status {
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-top: 4px;
-            text-align: center;
-        }
-        
-        .holiday-label {
-            background: #ff9800;
-            color: white;
-        }
-        
-        .other-label {
-            background: #9c27b0;
-            color: white;
-        }
-        
-        .weekend-label {
-            background: #2196f3;
-            color: white;
-        }
-        
-        .no-delivery-label {
-            background: #f44336;
-            color: white;
-        }
-        
-        .delivery-month-view .day-cell:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-// 배송 캘린더 HTML 구조 추가 (기존 배송 캘린더 섹션 대체)
-function initDeliveryCalendar() {
-    const deliverySection = document.querySelector('.delivery-calendar-wrapper');
-    if (deliverySection) {
-        deliverySection.innerHTML = `
-            <div id="deliveryCalendarContent">
-                <div style="text-align: center; padding: 40px;">
-                    <div style="color: #999;">📦 배송 캘린더 로딩 중...</div>
-                </div>
-            </div>
-        `;
-    }
-    
-    // 스타일 추가
-    addDeliveryCalendarStyles();
-    
-    // 데이터 로드
-    loadDeliveryData();
-}
-        // 배송 안내 메시지 표시
-function displayDeliveryNotices(sheetData) {
-    const noticesList = document.getElementById('noticesList');
-    if (!noticesList) return;
-    
-    let noticesHTML = '';
-    
-    // H열(인덱스 7)과 I열(인덱스 8) 읽기
-    sheetData.forEach(row => {
-        const header = row[7]; // H열 - 제목
-        const content = row[8]; // I열 - 내용
-        
-        if (header && content) {
-            noticesHTML += `
-                <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px; backdrop-filter: blur(10px);">
-                    <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px; color: #fff;">
-                        ${header}
-                    </div>
-                    <div style="font-size: 13px; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
-                        ${content}
-                    </div>
-                </div>
-            `;
-        }
-    });
-    
-    if (noticesHTML) {
-        noticesList.innerHTML = noticesHTML;
-    } else {
-        // 기본 메시지
-        noticesList.innerHTML = `
-            <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px;">
-                <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px;">배송 일정 안내</div>
-                <div style="font-size: 13px; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
-                    평일 오전 10시 이전 주문 시 당일 발송됩니다.<br>
-                    주말 및 공휴일은 발송이 없습니다.
-                </div>
-            </div>
-        `;
-    }
-}
-        
-// 배송 캘린더 월 변경
-function changeDeliveryMonth(direction) {
-    deliveryMonth += direction;
-    if (deliveryMonth > 11) {
-        deliveryMonth = 0;
-        deliveryYear++;
-    } else if (deliveryMonth < 0) {
-        deliveryMonth = 11;
-        deliveryYear--;
-    }
-    loadDeliveryData();
-}
-
-window.changeDeliveryMonth = changeDeliveryMonth;
-// 페이지 로드 시 실행
-document.addEventListener('DOMContentLoaded', function() {
-    // 기존 초기화 코드 후에 추가
-    setTimeout(initDeliveryCalendar, 1000);
-});
+            // 배송 캘린더 초기화
+            setTimeout(loadDeliveryData, 1000);
+        });
     </script>
 </body>
 </html>
-
-
-                             
