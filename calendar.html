@@ -2363,26 +2363,30 @@ function processDeliveryData(sheetData, holidays) {
         
         if (!date) return;
         
-        // API 공휴일 정보
-        const apiHoliday = holidays[date];
+        // 날짜 형식 변환: "2025. 1. 1" -> "2025-01-01"
+        const dateObj = new Date(date.replace(/\. /g, '-'));
+        const formattedDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
         
-        // 발송 가능 여부 확인 - 대소문자 처리
+        // API 공휴일 정보
+        const apiHoliday = holidays[formattedDate];
+        
+        // 발송 가능 여부 확인
         const canDeliver = deliveryYN && deliveryYN.toString().toUpperCase() === 'Y';
         
-        deliveryMap[date] = {
-            date: date,
-            dayName: dayName || getDayNameFromDate(date),
+        deliveryMap[formattedDate] = {
+            date: formattedDate,
+            dayName: dayName || getDayNameFromDate(formattedDate),
             holiday: sheetHoliday || (apiHoliday?.type === '공휴일' ? apiHoliday.name : ''),
             tempHoliday: sheetTempHoliday || (apiHoliday?.type === '임시공휴일' ? apiHoliday.name : ''),
             other: other || '',
-            canDeliver: canDeliver,  // true/false로 명확하게
-            dayOfWeek: new Date(date).getDay()
+            issue: issue || '',
+            canDeliver: canDeliver,
+            dayOfWeek: new Date(formattedDate).getDay()
         };
     });
     
     return deliveryMap;
 }
-
 // 날짜에서 요일 구하기
 function getDayNameFromDate(dateStr) {
     const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
@@ -2513,6 +2517,18 @@ function addDeliveryCalendarStyles() {
             min-height: 100px;
             transition: all 0.2s;
         }
+
+        @media (max-width: 768px) {
+    .delivery-month-view {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .delivery-month-view .weekdays,
+    .delivery-month-view .days-grid {
+        min-width: 600px;
+    }
+}
         
           .delivery-month-view .day-cell.today {
             background: #fff8f0 !important;
