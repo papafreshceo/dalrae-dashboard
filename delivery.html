@@ -441,20 +441,20 @@
                     canDeliver = false;
                     deliveryType = 'none';
                 }
-                // 2. 일요일은 무조건 특별 배송 (시트 N 무시)
+                // 2. 공휴일/일요일 전날은 무조건 배송 불가 (최우선)
+                else if (isBeforeHoliday(dateStr, deliveryMap)) {
+                    canDeliver = false;
+                    deliveryType = 'none';
+                }
+                // 3. 일요일은 특별 배송 (시트 N 무시)
                 else if (dayOfWeek === 0) {
                     canDeliver = true;
                     deliveryType = 'special';
                 }
-                // 3. 연휴 마지막날은 무조건 특별 배송 (시트 N 무시)
+                // 4. 연휴 마지막날은 특별 배송 (시트 N 무시)
                 else if (isLastDayOfHolidayPeriod(dateStr, deliveryMap)) {
                     canDeliver = true;
                     deliveryType = 'special';
-                }
-                // 4. 공휴일 전날은 무조건 배송 불가
-                else if (isBeforeHoliday(dateStr, deliveryMap)) {
-                    canDeliver = false;
-                    deliveryType = 'none';
                 }
                 // 5. 시트에 명시적으로 N이 있으면 배송 불가 (일요일/연휴마지막 제외)
                 else if (sheetValue === 'N') {
