@@ -62,6 +62,98 @@
       margin-bottom: 16px;
       position: relative;
       z-index: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* 글리치 효과 스타일 */
+    .glitch-text {
+      font-weight: 900;
+      color: #fff;
+      position: relative;
+      letter-spacing: 2px;
+    }
+
+    .glitch-text::before,
+    .glitch-text::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .glitch-text::before {
+      animation: glitch-1 0.5s infinite;
+      color: #00ffff;
+      z-index: -1;
+    }
+
+    .glitch-text::after {
+      animation: glitch-2 0.5s infinite;
+      color: #ff00ff;
+      z-index: -2;
+    }
+
+    @keyframes glitch-1 {
+      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+      20% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, 2px); }
+      40% { clip-path: inset(50% 0 20% 0); transform: translate(2px, -2px); }
+      60% { clip-path: inset(10% 0 60% 0); transform: translate(-2px, 1px); }
+      80% { clip-path: inset(70% 0 10% 0); transform: translate(1px, -1px); }
+    }
+
+    @keyframes glitch-2 {
+      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+      20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+      40% { clip-path: inset(20% 0 40% 0); transform: translate(-2px, 1px); }
+      60% { clip-path: inset(40% 0 30% 0); transform: translate(1px, 2px); }
+      80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, -2px); }
+    }
+
+    /* 네온사인 효과 스타일 */
+    .neon-text {
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 
+        0 0 7px #fff,
+        0 0 10px #fff,
+        0 0 21px #fff,
+        0 0 42px #0fa,
+        0 0 82px #0fa,
+        0 0 92px #0fa,
+        0 0 102px #0fa,
+        0 0 151px #0fa;
+      animation: flicker 1.5s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0%, 100% {
+        text-shadow: 
+          0 0 7px #fff,
+          0 0 10px #fff,
+          0 0 21px #fff,
+          0 0 42px #0fa,
+          0 0 82px #0fa,
+          0 0 92px #0fa,
+          0 0 102px #0fa,
+          0 0 151px #0fa;
+      }
+      50% {
+        text-shadow: 
+          0 0 4px #fff,
+          0 0 7px #fff,
+          0 0 13px #fff,
+          0 0 25px #0fa,
+          0 0 45px #0fa,
+          0 0 55px #0fa,
+          0 0 70px #0fa,
+          0 0 90px #0fa;
+      }
     }
 
     .hero-subtitle {
@@ -72,6 +164,67 @@
       position: relative;
       z-index: 1;
       line-height: 1.5;
+    }
+
+    /* 새로운 분할 히어로 섹션 */
+    .split-hero-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      border-radius: 24px;
+      padding: 40px 30px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.2), transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-card-title {
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 800;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card-text {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .hero-card-note {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      z-index: 1;
     }
 
     /* 서비스 탭 버튼 */
@@ -501,7 +654,7 @@
       margin-top: 6px;
     }
 
-    /* 농가 연결 서비스 스타일 */
+    /* 농가 매칭 서비스 스타일 */
     .farm-service-card {
       background: white;
       border-radius: 16px;
@@ -612,6 +765,10 @@
       .right-panel {
         position: static;
       }
+
+      .split-hero-section {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 768px) {
@@ -626,6 +783,10 @@
       .checkbox-options {
         flex-direction: column;
       }
+
+      .hero-card {
+        padding: 30px 20px;
+      }
     }
   </style>
 </head>
@@ -634,12 +795,40 @@
   <div id="header-container"></div>
 
   <div class="main-container">
-    <!-- 히어로 섹션 -->
+    <!-- 기존 히어로 섹션 -->
     <div class="hero-section">
-      <h1 class="hero-title">UNIQUE 상품 사진 & 농가 연결 서비스</h1>
+      <h1 class="hero-title">
+        <span class="glitch-text" data-text="UNIQUE 상품 사진">UNIQUE 상품 사진</span>
+        <span>&</span>
+        <span class="neon-text">농가 매칭 서비스</span>
+      </h1>
       <p class="hero-subtitle">상품의 가치를 높이는 중복 없이 고유한 나만의 상품 사진으로 판매에 도전하세요.</p>
       <p class="hero-subtitle">결론은 가격과 품질!! 농가 매칭 서비스로 산지가격으로 상품을 소싱 해드립니다.</p>
       <p style="font-size: 14px; opacity: 0.9; margin-top: 12px; position: relative; z-index: 1;">(매칭 후 달래마켓에서는 특별한 사정이 없는 한 관여하지 않습니다)</p>
+    </div>
+
+    <!-- 새로운 분할 히어로 섹션 -->
+    <div class="split-hero-section">
+      <div class="hero-card">
+        <h2 class="hero-card-title">
+          <span class="glitch-text" data-text="UNIQUE 상품 사진">UNIQUE 상품 사진</span>
+        </h2>
+        <p class="hero-card-text">
+          상품의 가치를 높이는 중복 없이 고유한 나만의 상품 사진으로 판매에 도전하세요
+        </p>
+      </div>
+      
+      <div class="hero-card">
+        <h2 class="hero-card-title">
+          <span class="neon-text">농가 매칭 서비스</span>
+        </h2>
+        <p class="hero-card-text">
+          결론은 가격과 품질!! 농가 매칭 서비스로 산지가격으로 상품을 소싱 해드립니다.
+        </p>
+        <p class="hero-card-note">
+          (매칭 후 달래마켓에서는 특별한 사정이 없는 한 관여하지 않습니다)
+        </p>
+      </div>
     </div>
 
     <!-- 서비스 전환 버튼 -->
@@ -648,7 +837,7 @@
         📸 촬영 서비스
       </button>
       <button id="farm-service-btn" class="service-tab-btn" onclick="switchService('farm')">
-        🤝 농가 연결 서비스
+        🤝 농가 매칭 서비스
       </button>
     </div>
 
@@ -977,12 +1166,12 @@
       </div>
     </div>
 
-    <!-- 농가 연결 서비스 섹션 -->
+    <!-- 농가 매칭 서비스 섹션 -->
     <div id="farm-service" class="service-section">
       <div class="farm-service-card">
         <div class="farm-service-title">
           <span style="font-size: 32px;">🤝</span>
-          <span>농가 연결 서비스</span>
+          <span>농가 매칭 서비스</span>
         </div>
         <div class="farm-service-desc">
           믿을 수 있는 산지 농가와 직접 연결해 드립니다. 품질 좋은 상품을 산지 가격으로 소싱하여 경쟁력 있는 가격으로 판매하실 수 있도록 지원합니다.
