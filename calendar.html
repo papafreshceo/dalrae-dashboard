@@ -2317,17 +2317,14 @@ async function loadDeliveryData() {
 
 // 구글 시트 데이터 가져오기
 async function fetchSheetData() {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${DELIVERY_CONFIG.SHEET_ID}/values/${DELIVERY_CONFIG.SHEET_NAME}!${DELIVERY_CONFIG.RANGE}?key=${DELIVERY_CONFIG.API_KEY}`;
-    
-    const response = await fetch(url);
+    const response = await fetch('/api/delivery');
     const data = await response.json();
     
-    if (!data.values || data.values.length === 0) {
+    if (!data || data.length === 0) {
         throw new Error('시트 데이터가 없습니다');
     }
     
-    // 헤더 제거하고 데이터만 반환
-    return data.values.slice(1);
+    return data;
 }
 
 // 공휴일 데이터 가져오기 (Nager.Date API)
