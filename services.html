@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <title>서비스 & 셀프견적</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', -apple-system, sans-serif; background:#0f172a; color:#0b1223; }
+
+    /* 공통 헤더 (사용자 제공 스펙 기반 요약) */
+    .top-header { background:#fff; border-bottom:1px solid #e8e9eb; padding:20px 0; position:relative; z-index:100; }
+    .header-content { max-width:1400px; margin:0 auto; padding:0 30px; display:grid; grid-template-columns:200px 1fr auto; align-items:center; gap:20px; }
+    .logo-img { height:36px; object-fit:contain; cursor:pointer; }
+    .menu-container { position:relative; background:white; transition:all .3s; }
+    .menu-container.sticky { position:fixed; top:0; left:0; right:0; z-index:200; box-shadow:0 2px 8px rgba(0,0,0,.1); padding:10px 0; }
+    .menu-wrapper { max-width:1400px; margin:0 auto; padding:0 30px; display:flex; justify-content:center; gap:20px; }
+    .nav-menu { display:flex; gap:8px; }
+    .nav-btn { display:flex; align-items:center; gap:6px; padding:10px 16px; background:#fff; border:1px solid #e1e3e5; border-radius:8px; color:#5a5c60; font-size:14px; font-weight:500; cursor:pointer; transition:all .2s; white-space:nowrap; }
+    .nav-btn:hover { background:#f5f6f7; border-color:#667eea; color:#667eea; }
+    .nav-btn.active { background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:#fff; border-color:transparent; }
+    .center-button { display:none; }
+
+    /* 페이지 레이아웃 */
+    .container { max-width:1200px; margin:40px auto; padding:0 20px; }
+    .hero { margin-top:10px; display:grid; gap:16px; }
+    .title { color:#f8fafc; font-size:clamp(24px,4vw,40px); font-weight:800; }
+    .subtitle { color:#cbd5e1; font-size:clamp(14px,2.2vw,18px); }
+
+    /* 카드 */
+    .card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:22px; backdrop-filter: blur(10px); box-shadow:0 10px 30px rgba(0,0,0,0.25); }
+    .card h3 { color:#e5e7eb; font-size:20px; margin-bottom:12px; }
+    .muted { color:#9fb0c7; font-size:14px; }
+
+    /* 서비스 목록 */
+    .services { display:grid; grid-template-columns:1fr; gap:16px; margin-top:20px; }
+    .service-item { display:grid; gap:8px; }
+    .service-item ul { margin-left:18px; color:#cbd5e1; }
+    .badge { display:inline-block; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; background:#1e293b; color:#a5b4fc; border:1px solid rgba(165,180,252,.35); }
+
+    /* 셀프견적 폼 */
+    .grid { display:grid; gap:12px; }
+    .grid.two { grid-template-columns: repeat(2, 1fr); }
+    .grid.three { grid-template-columns: repeat(3, 1fr); }
+    .field { display:grid; gap:6px; }
+    label { color:#cbd5e1; font-size:13px; }
+    input[type="number"], input[type="text"], select { padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.08); color:#f8fafc; outline:none; }
+    input::placeholder { color:#9fb0c7; }
+    .switch { display:flex; align-items:center; gap:8px; }
+    .row { display:flex; gap:10px; align-items: center; flex-wrap: wrap; }
+
+    .btn { padding:12px 18px; border-radius:12px; border:none; cursor:pointer; font-weight:700; }
+    .btn-primary { background:linear-gradient(270deg,#ffffff,#ff9a9e,#fecfef,#a8e6cf,#ffffff); background-size:400% 100%; animation: shine 3.75s ease-in-out infinite; color:#1f2937; box-shadow:0 6px 18px rgba(255,154,158,0.25); }
+    .btn-primary:hover { transform: translateY(-1px) scale(1.01); }
+    .btn-ghost { background:transparent; border:1px solid rgba(255,255,255,0.2); color:#cbd5e1; }
+    @keyframes shine { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+    .total-box { display:grid; gap:6px; padding:16px; border-radius:16px; background:rgba(15,23,42,0.6); border:1px solid rgba(255,255,255,0.12); color:#e5e7eb; }
+    .total-row { display:flex; justify-content:space-between; }
+    .total { font-size:24px; font-weight:800; color:#a5b4fc; }
+
+    /* 계좌 안내 */
+    .bank-box { display:grid; gap:8px; padding:16px; border-radius:16px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); color:#e5e7eb; }
+    .copy { font-size:12px; color:#9fb0c7; cursor:pointer; }
+
+    /* 반응형 */
+    @media (max-width: 900px) {
+      .grid.two, .grid.three { grid-template-columns: 1fr; }
+    }
+      /* 셀프견적 Stepper */
+    .stepper{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);border-radius:10px;padding:6px}
+    .stepper input[type=number]{background:transparent;border:none;width:90px;color:#f8fafc;text-align:center;padding:6px 4px}
+    .stepper .step{width:32px;height:32px;border:none;border-radius:8px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff}
+    .stepper .step:active{transform:scale(.98)}
+    input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+    input[type=number]{-moz-appearance:textfield}
+  </style>
+</head>
+<body>
+  <!-- 공통 헤더 -->
+  <div id="header-container"></div>
+
+  <div class="container">
+    <section class="hero">
+      <h1 class="title">서비스 안내 & 셀프견적</h1>
+      <p class="subtitle">판매자님을 위한 촬영·연결·현장지원 서비스. 아래에서 필요 항목을 선택해 대략적인 견적을 바로 확인하세요. <span class="muted">(실 견적은 현장/요구사항에 따라 달라질 수 있습니다)</span></p>
+    </section>
+
+    <!-- 서비스 소개 -->
+    <section class="services">
+      <div class="card service-item">
+        <div class="row"><span class="badge">촬영 서비스</span></div>
+        <h3>상품 사진 · 영상 · 드론 촬영</h3>
+        <ul>
+          <li>기본 상품사진 <strong>20매 / 30,000원</strong> (색보정 포함)</li>
+          <li>판매자 요청에 따른 <strong>추가 사진 촬영</strong> 가능 (영상은 <strong>현장 원본만 제공</strong>, 편집 서비스 제공하지 않음)</li>
+          <li><strong>드론 촬영</strong>으로 과수원 전경/수확 현장 등 항공뷰 제공</li>
+          <li>사람의 손/팔 등 모델 핸드가 들어가는 컷, <strong>요리/조리</strong> 컷은 추가비용 적용</li>
+          <li>장소가 여러 곳(예: 실내 + 과수원)일 경우 <strong>장소 추가 비용</strong> 적용</li>
+        </ul>
+        <span class="muted">※ 교통/주차/허가비(드론 포함) 등은 별도일 수 있습니다.</span>
+      </div>
+
+      <div class="card service-item">
+        <div class="row"><span class="badge">연결 서비스</span></div>
+        <h3>산지 방문 · 농장 방문 · 농가 연결<\/h3>
+        <ul>
+          <li>직접 산지의 농부와 대화하고, <strong>현장 사진\/영상 촬영</strong>까지 가능합니다. (영상은 원본만 제공)</li>
+          <li>판매자와 상품을 공급해 줄 <strong>적합한 농가를 직접 연결<\/strong><\/li>
+          <li><strong>현장 방문 동행<\/strong> 및 통역\/조율 지원(필요 시)<\/li>
+          <li>후보 농가 리스트 제안 및 <strong>샘플 납품 테스트<\/strong> 일정 조율 가능<\/li>
+          <li>물량·단가·포장·라벨 등 <strong>거래 조건 사전 협의 지원<\/strong><\/li>
+          <li><strong>사전 상담 후 일정\/비용 확정 (유료)<\/strong> — 지역·일정·업무 범위에 따라 변동<\/li>
+        </ul>
+        <span class="muted">※ 지역/일정/업무 범위에 따라 비용이 달라질 수 있습니다.</span>
+      </div>
+    </section>
+
+    <!-- 셀프견적기 -->
+    <section class="card" style="margin-top:20px;">
+      <h3>셀프견적</h3>
+      <p class="muted">필요 항목을 선택하면 예상 견적이 계산됩니다. <strong>실 견적과는 차이</strong>가 있을 수 있으며, 방문/요구조건을 확인한 뒤 확정됩니다.</p>
+      <div class="grid two" style="margin-top:12px;">
+        <!-- 사진 촬영 -->
+        <div class="field">
+          <label>사진 촬영 수량 (기본 20매 / 30,000원)</label>
+          <div class="row">
+            <input type="number" id="photoCount" min="0" step="10" placeholder="예: 20, 30, 40" value="20" />
+            <span class="muted">10매 추가당 +10,000원</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>촬영 장소 수</label>
+          <div class="row">
+            <input type="number" id="locationCount" min="1" value="1" />
+            <span class="muted">추가 장소 1곳당 +15,000원 (예: 실내 + 과수원)</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>모델 핸드/신체 등장 컷 수</label>
+          <div class="row">
+            <input type="number" id="handShots" min="0" value="0" />
+            <span class="muted">컷 1~5장 +10,000원, 6~10장 +18,000원</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>요리/조리 컷 수</label>
+          <div class="row">
+            <input type="number" id="cookShots" min="0" value="0" />
+            <span class="muted">컷 1~5장 +15,000원, 6~10장 +28,000원</span>
+          </div>
+        </div>
+
+        </div>
+        <div class="field">
+          <label>드론 촬영(비행 블록)</label>
+          <div class="row">
+            <input type="number" id="droneBlocks" min="0" value="0" />
+            <span class="muted">1블록(최대 20분) +60,000원 / 추가 블록 +30,000원</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>연결 서비스 이용</label>
+          <select id="connectService">
+            <option value="none" selected>선택 안 함</option>
+            <option value="visit">산지/농장 방문 동행</option>
+            <option value="match">농가 연결(컨택 및 조율)</option>
+            <option value="both">방문 + 연결</option>
+          </select>
+          <span class="muted">방문/연결 기본비: 50,000원 / 둘 다 선택 시 묶음 80,000원</span>
+        </div>
+        <div class="field">
+          <label>현장 이동 거리(선택)</label>
+          <div class="row">
+            <input type="number" id="distanceKm" min="0" value="0" />
+            <span class="muted">기본 20km 포함, 초과 km당 +800원</span>
+          </div>
+        </div>
+      </div>
+
+      
+
+      <div id="result" class="total-box" style="margin-top:14px; display:grid;" aria-live="polite">
+        <div class="total-row"><span>사진 기본</span><span id="rPhotoBase">-</span></div>
+        <div class="total-row"><span>추가 사진</span><span id="rPhotoExtra">-</span></div>
+        <div class="total-row"><span>장소 추가</span><span id="rLocations">-</span></div>
+        <div class="total-row"><span>모델 핸드/신체</span><span id="rHands">-</span></div>
+        <div class="total-row"><span>요리/조리</span><span id="rCook">-</span></div>
+                <div class="total-row"><span>드론</span><span id="rDrone">-</span></div>
+        <div class="total-row"><span>연결 서비스</span><span id="rConnect">-</span></div>
+        <div class="total-row"><span>이동거리</span><span id="rDistance">-</span></div>
+        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.12); margin:6px 0;" />
+        <div class="total-row" style="align-items:end;">
+          <span class="muted">예상 합계(부가세 별도)</span>
+          <span class="total" id="rTotal">-</span>
+        </div>
+        <span class="muted">※ 본 셀프견적은 참고용이며, 실제 촬영 전 상담/요구사항 확인 후 최종 확정됩니다.</span>
+      </div>
+    </section>
+
+    <!-- 입금 계좌 안내 -->
+    <section class="card" style="margin-top:20px;">
+      <h3>입금 계좌 안내</h3>
+      <div class="bank-box">
+        <div>은행명: <strong id="bankName">농협</strong></div>
+        <div>계좌번호: <strong id="bankAccount">000-00-000000</strong></div>
+        <div>예금주: <strong id="bankHolder">홍길동</strong></div>
+        <div class="copy" onclick="copyBank()">계좌정보 복사하기</div>
+      </div>
+      <p class="muted" style="margin-top:8px;">※ 세금계산서/현금영수증 발행 가능합니다. 입금 후 카카오톡/이메일로 주문명과 함께 알려주세요.</p>
+    </section>
+  </div>
+
+  <!-- 공통 헤더 스크립트 (간소화 버전) + 계산 로직 -->
+  <script>
+  // ===== 가격 정책 (영상 편집 없음) =====
+  const PRICE = {
+    photoBaseCount: 20,
+    photoBasePrice: 30000,
+    photoExtraPer10: 10000,
+    locationExtra: 15000, // 추가 장소 1곳당
+    handsTier1: 10000,    // 1~5장
+    handsTier2: 18000,    // 6~10장
+    cookTier1: 15000,     // 1~5장
+    cookTier2: 28000,     // 6~10장
+    droneFirstBlock: 60000, // 첫 20분
+    droneNextBlock: 30000,  // 추가 20분당
+    connectVisit: 50000,
+    connectMatch: 50000,
+    connectBundle: 80000,  // 방문+연결 묶음
+    distanceBaseKm: 20,
+    distancePerKm: 800
+  };
+
+  function formatKRW(n){ return (Number(n)||0).toLocaleString('ko-KR') + '원'; }
+
+  function calcQuote(){
+    const g = id => document.getElementById(id);
+    const photoCount = Math.max(0, parseInt(g('photoCount')?.value || 0));
+    const locationCount = Math.max(1, parseInt(g('locationCount')?.value || 1));
+    const handShots = Math.max(0, parseInt(g('handShots')?.value || 0));
+    const cookShots = Math.max(0, parseInt(g('cookShots')?.value || 0));
+    const droneBlocks = Math.max(0, parseInt(g('droneBlocks')?.value || 0));
+    const connect = g('connectService')?.value || 'none';
+    const distanceKm = Math.max(0, parseInt(g('distanceKm')?.value || 0));
+
+    // 사진 기본 및 추가
+    const photoBase = photoCount > 0 ? PRICE.photoBasePrice : 0;
+    const extraCount = Math.max(0, photoCount - PRICE.photoBaseCount);
+    const photoExtra = Math.ceil(extraCount / 10) * PRICE.photoExtraPer10;
+
+    // 장소 추가 (첫 장소 포함)
+    const addLocations = Math.max(0, locationCount - 1);
+    const locationFee = addLocations * PRICE.locationExtra;
+
+    // 모델 핸드/신체
+    let handsFee = 0;
+    if (handShots >= 1 && handShots <= 5) handsFee = PRICE.handsTier1;
+    else if (handShots >= 6) handsFee = PRICE.handsTier2;
+
+    // 요리/조리
+    let cookFee = 0;
+    if (cookShots >= 1 && cookShots <= 5) cookFee = PRICE.cookTier1;
+    else if (cookShots >= 6) cookFee = PRICE.cookTier2;
+
+    // 드론
+    let droneFee = 0;
+    if (droneBlocks >= 1) droneFee = PRICE.droneFirstBlock + (droneBlocks - 1) * PRICE.droneNextBlock;
+
+    // 연결 서비스
+    let connectFee = 0;
+    if (connect === 'visit') connectFee = PRICE.connectVisit;
+    else if (connect === 'match') connectFee = PRICE.connectMatch;
+    else if (connect === 'both') connectFee = PRICE.connectBundle;
+
+    // 이동 거리
+    const extraKm = Math.max(0, distanceKm - PRICE.distanceBaseKm);
+    const distanceFee = extraKm * PRICE.distancePerKm;
+
+    const total = photoBase + photoExtra + locationFee + handsFee + cookFee + droneFee + connectFee + distanceFee;
+
+    // 출력 (실시간)
+    const set = (id, v) => { const el = g(id); if (el) el.textContent = v ? formatKRW(v) : '-'; };
+    set('rPhotoBase', photoBase);
+    set('rPhotoExtra', photoExtra);
+    set('rLocations', locationFee);
+    set('rHands', handsFee);
+    set('rCook', cookFee);
+    set('rDrone', droneFee);
+    set('rConnect', connectFee);
+    set('rDistance', distanceFee);
+    const totalEl = g('rTotal'); if (totalEl) totalEl.textContent = formatKRW(total);
+  }
+
+  // 스테퍼 UI로 숫자 증감 (흰색 버튼 X)
+  function wrapStepper(id){
+    const input = document.getElementById(id);
+    if(!input) return;
+    if(input.parentElement && input.parentElement.classList.contains('stepper')) return;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'stepper';
+    const dec = document.createElement('button'); dec.type='button'; dec.className='step dec'; dec.setAttribute('aria-label','감소'); dec.textContent='−';
+    const inc = document.createElement('button'); inc.type='button'; inc.className='step inc'; inc.setAttribute('aria-label','증가'); inc.textContent='+';
+    const parent = input.parentElement;
+    parent.insertBefore(wrapper, input);
+    wrapper.appendChild(dec);
+    wrapper.appendChild(input);
+    wrapper.appendChild(inc);
+    function adjust(delta){
+      const step = parseInt(input.getAttribute('step')) || 1;
+      const min = parseInt(input.getAttribute('min')) || 0;
+      let v = parseInt(input.value||0); if(isNaN(v)) v = 0;
+      v += delta * step; if (v < min) v = min;
+      input.value = v; input.dispatchEvent(new Event('input', {bubbles:true}));
+    }
+    dec.addEventListener('click', ()=>adjust(-1));
+    inc.addEventListener('click', ()=>adjust(1));
+  }
+
+  function enhanceSteppers(){
+    ['photoCount','locationCount','handShots','cookShots','droneBlocks','distanceKm'].forEach(wrapStepper);
+  }
+
+  function setupLiveQuote(){
+    ['photoCount','locationCount','handShots','cookShots','droneBlocks','distanceKm'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){ el.addEventListener('input', calcQuote); }
+    });
+    const sel = document.getElementById('connectService');
+    if(sel){ sel.addEventListener('change', calcQuote); }
+  }
+
+  function copyBank(){
+    const t = `은행명: ${document.getElementById('bankName').textContent}
+계좌번호: ${document.getElementById('bankAccount').textContent}
+예금주: ${document.getElementById('bankHolder').textContent}`;
+    navigator.clipboard.writeText(t).then(()=>alert('계좌정보가 복사되었습니다.'));
+  }
+
+  // ===== 공통 헤더 (기존 로직 유지) =====
+  (function() {
+    function createHeader() {
+      return `
+          <header class=\"top-header\">
+            <div class=\"header-content\">
+              <img src=\"https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png\" alt=\"달래마켓\" class=\"logo-img\" onclick=\"location.href='index.html'\" />
+              <div class=\"center-button\"></div>
+              <nav class=\"nav-menu\" id=\"mainMenu\">
+                <button class=\"nav-btn\" data-page=\"dashboard\"><span>📊</span><span>대시보드</span></button>
+                <button class=\"nav-btn\" data-page=\"products\"><span>📦</span><span>상품리스트</span></button>
+                <button class=\"nav-btn\" data-page=\"calendar\"><span>📅</span><span>상품캘린더</span></button>
+                <button class=\"nav-btn\" data-page=\"orders\"><span>📋</span><span>주문관리</span></button>
+                <button class=\"nav-btn active\" data-page=\"services\"><span>🎯</span><span>서비스&프로그램</span></button>
+                <button class=\"nav-btn\" data-page=\"notice\"><span>📢</span><span>공지사항</span></button>
+              </nav>
+            </div>
+          </header>
+          <div class=\"menu-container\" id=\"menuContainer\"><div class=\"menu-wrapper\" id=\"menuWrapper\" style=\"display:none;\"></div></div>
+        `;
+    }
+
+    function handleMenuClick(e) {
+      const page = e.currentTarget.dataset.page;
+      const pageUrls = {
+        'dashboard': 'index.html',
+        'products': 'products.html',
+        'calendar': 'calendar.html',
+        'orders': 'orders.html',
+        'services': 'services.html',
+        'notice': 'notice.html'
+      };
+      if (page && pageUrls[page]) location.href = pageUrls[page];
+    }
+
+    function setupStickyMenu() {
+      setTimeout(() => {
+        const header = document.querySelector('.top-header');
+        const menuContainer = document.getElementById('menuContainer');
+        const menuWrapper = document.getElementById('menuWrapper');
+        const mainMenu = document.getElementById('mainMenu');
+        if (!header || !menuContainer || !menuWrapper || !mainMenu) return;
+
+        const stickyOffset = header.offsetTop + header.offsetHeight;
+        window.addEventListener('scroll', () => {
+          if (window.pageYOffset > stickyOffset) {
+            if (!menuContainer.classList.contains('sticky')) {
+              menuContainer.classList.add('sticky');
+              menuWrapper.style.display = 'flex';
+              menuWrapper.innerHTML = '';
+              const mainMenuClone = mainMenu.cloneNode(true);
+              menuWrapper.appendChild(mainMenuClone);
+              mainMenuClone.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', handleMenuClick));
+            }
+          } else {
+            menuContainer.classList.remove('sticky');
+            menuWrapper.style.display = 'none';
+          }
+        });
+      }, 100);
+    }
+
+    function initHeader() {
+      const container = document.getElementById('header-container');
+      if (!container) return;
+      container.innerHTML = createHeader();
+      document.querySelectorAll('.nav-btn[data-page]').forEach(btn => btn.addEventListener('click', handleMenuClick));
+      setupStickyMenu();
+    }
+
+    window.DalraeHeader = { init: initHeader };
+  })();
+
+  // 초기화: 헤더, 스테퍼, 라이브 견적
+  window.addEventListener('DOMContentLoaded', () => {
+    DalraeHeader.init();
+    enhanceSteppers();
+    setupLiveQuote();
+    calcQuote();
+  });
+</script>
+</body>
+</html>
