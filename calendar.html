@@ -2366,13 +2366,16 @@ function processDeliveryData(sheetData, holidays) {
         // API 공휴일 정보
         const apiHoliday = holidays[date];
         
+        // 발송 가능 여부 확인 - 대소문자 처리
+        const canDeliver = deliveryYN && deliveryYN.toString().toUpperCase() === 'Y';
+        
         deliveryMap[date] = {
             date: date,
             dayName: dayName || getDayNameFromDate(date),
             holiday: sheetHoliday || (apiHoliday?.type === '공휴일' ? apiHoliday.name : ''),
             tempHoliday: sheetTempHoliday || (apiHoliday?.type === '임시공휴일' ? apiHoliday.name : ''),
             other: other || '',
-            canDeliver: deliveryYN === 'Y',
+            canDeliver: canDeliver,  // true/false로 명확하게
             dayOfWeek: new Date(date).getDay()
         };
     });
@@ -2468,9 +2471,11 @@ function renderDeliveryCalendar(deliveryData) {
         
         html += `
             <div class="${cellClass}" data-date="${dateStr}">
-                <div class="day-number">${day}</div>
+                <div class="day-number" style="position: relative;">
+                    ${day}
+                    ${!canDeliver ? '<span style="position: absolute; right: -5px; top: -5px; font-size: 20px; opacity: 0.5;">❌</span>' : ''}
+                </div>
                 ${statusText ? `<div class="delivery-status ${statusClass}">${statusText}</div>` : ''}
-                ${!canDeliver ? '<div class="delivery-icon">❌</div>' : ''}
             </div>
         `;
     }
