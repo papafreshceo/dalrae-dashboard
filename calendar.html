@@ -2333,9 +2333,10 @@ displayDeliveryNotices(sheetData);
 // 구글 시트 데이터 가져오기
 async function fetchSheetData() {
     const response = await fetch('/api/delivery');
+    const data = await response.json(); // ✅ 먼저 data 선언 및 할당
+    
     // 전체 데이터를 loadDeliveryData에 전달하도록 수정
-window.deliverySheetData = data; // 전역 변수에 저장
-    const data = await response.json();
+    window.deliverySheetData = data; // ✅ 이제 data 사용 가능
     
     if (!data || data.length === 0) {
         throw new Error('시트 데이터가 없습니다');
