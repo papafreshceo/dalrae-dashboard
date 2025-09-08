@@ -13,6 +13,8 @@
             font-family: 'Noto Sans KR', -apple-system, sans-serif; 
             background: #fafbfc;
             min-height: 100vh;
+            margin: 0;
+            padding: 0;
         }
         
         /* 캘린더 컨테이너 */
@@ -194,46 +196,240 @@
             font-weight: bold;
             text-shadow: 0 1px 2px rgba(255, 82, 82, 0.2);
         }
+
+        /* 네비게이션 버튼 스타일 */
+        .nav-button {
+            padding: 8px 12px;
+            border: 1px solid #e1e3e5;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-button:hover {
+            background: #f5f6f7;
+            border-color: #2196f3;
+        }
+
+        .today-button {
+            padding: 8px 16px;
+            border: 1px solid #e1e3e5;
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .today-button:hover {
+            background: #2196f3;
+            color: white;
+            border-color: #2196f3;
+        }
         
-        /* 모바일 반응형 */
+        /* 모바일 반응형 개선 */
         @media (max-width: 768px) {
+            body {
+                background: white;
+            }
+
             .calendar-container {
-                padding: 0 15px;
+                padding: 0 10px;
+                margin: 10px auto;
             }
             
             .section-title {
-                font-size: 20px;
+                font-size: 18px;
+                margin-bottom: 15px;
+                padding: 0 5px;
+            }
+
+            /* 공지사항 모바일 최적화 */
+            #deliveryNotices {
+                margin: 0 -10px 15px -10px;
+                border-radius: 0;
+                padding: 15px;
+            }
+
+            #deliveryNotices h3 {
+                font-size: 16px;
+            }
+
+            .notice-card {
+                border-radius: 6px !important;
+            }
+
+            .notice-header h4 {
+                font-size: 13px !important;
+            }
+
+            .notice-content p {
+                font-size: 12px !important;
+            }
+
+            /* 캘린더 래퍼 모바일 최적화 */
+            .delivery-calendar-wrapper {
+                padding: 10px;
+                border-radius: 8px;
+                box-shadow: none;
+                border: 1px solid #e8e9eb;
+            }
+
+            /* 네비게이션 컨트롤 모바일 최적화 */
+            .delivery-nav-controls {
+                gap: 8px !important;
+                margin-bottom: 15px !important;
+            }
+
+            .delivery-nav-controls > div {
+                font-size: 16px !important;
+                min-width: 120px !important;
+            }
+
+            .nav-button {
+                padding: 6px 10px;
+                font-size: 16px;
+                min-width: 35px;
+            }
+
+            .today-button {
+                padding: 6px 12px;
+                font-size: 13px;
+                margin-left: 5px;
             }
             
             .delivery-month-view {
+                padding: 0;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
-                padding: 10px;
             }
-            
-            .delivery-month-view .weekdays,
-            .delivery-month-view .days-grid {
-                min-width: 600px;
+
+            /* 캘린더 그리드 모바일 최적화 */
+            .weekdays, .days-grid {
+                min-width: 100%;
+                gap: 0;
+            }
+
+            .weekday {
+                padding: 8px 2px;
+                font-size: 11px;
+                font-weight: 600;
             }
             
             .day-cell {
-                min-height: 100px;
-                padding: 6px;
+                min-height: 70px;
+                padding: 4px;
+                aspect-ratio: 1;
+            }
+
+            .day-cell:hover {
+                transform: none;
+                box-shadow: none;
             }
             
             .day-number {
-                font-size: 12px;
+                font-size: 11px;
+                font-weight: 600;
+            }
+
+            /* 배지 모바일 최적화 */
+            .day-cell div[style*="position: absolute"] {
+                top: 20px !important;
+            }
+
+            .day-cell div[style*="background: #ff5252"],
+            .day-cell div[style*="background: #9c27b0"],
+            .day-cell div[style*="background: #ff9800"],
+            .day-cell div[style*="background: #2196f3"] {
+                font-size: 8px !important;
+                padding: 1px 3px !important;
+                border-radius: 2px !important;
             }
             
+            /* 배송 아이콘 모바일 최적화 */
             .delivery-icon-box {
-                width: 18px;
-                height: 18px;
-                bottom: 8px;
-                right: 8px;
+                width: 16px;
+                height: 16px;
+                bottom: 4px;
+                right: 4px;
+                border-radius: 2px;
             }
             
             .delivery-icon-box .icon {
                 font-size: 10px;
+            }
+
+            /* 배송 안내 정보 모바일 최적화 */
+            .delivery-info {
+                margin-top: 15px;
+                padding: 12px;
+                border-radius: 6px;
+            }
+
+            .delivery-info h3 {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .delivery-info ul li {
+                font-size: 12px !important;
+                padding: 3px 0 !important;
+            }
+
+            .delivery-info ul li[style*="padding: 5px 0 5px 15px"] {
+                padding-left: 10px !important;
+            }
+
+            /* 아이콘 인디케이터 크기 조정 */
+            .delivery-info span[style*="display: inline-block"] {
+                width: 10px !important;
+                height: 10px !important;
+            }
+        }
+
+        /* 태블릿 최적화 */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .calendar-container {
+                padding: 0 20px;
+            }
+
+            .day-cell {
+                min-height: 100px;
+            }
+
+            .delivery-icon-box {
+                width: 18px;
+                height: 18px;
+            }
+        }
+
+        /* 작은 모바일 화면 최적화 */
+        @media (max-width: 380px) {
+            .section-title {
+                font-size: 16px;
+            }
+
+            .day-cell {
+                min-height: 60px;
+            }
+
+            .delivery-nav-controls > div {
+                font-size: 14px !important;
+                min-width: 100px !important;
+            }
+
+            .nav-button {
+                padding: 5px 8px;
+                font-size: 14px;
+            }
+
+            .today-button {
+                padding: 5px 10px;
+                font-size: 12px;
             }
         }
     </style>
@@ -249,11 +445,11 @@
             <span>배송캘린더</span>
         </h2>
         
-        <!-- 배송 안내 메시지 - 연한 하늘색 그라데이션 -->
-        <div id="deliveryNotices" style="background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 50%, #E0F6FF 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(135, 206, 235, 0.2);">
-            <div style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.5); padding-bottom: 10px;">
+        <!-- 배송 안내 메시지 - 흰색 배경으로 변경 -->
+        <div id="deliveryNotices" style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #e8e9eb;">
+            <div style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #e8e9eb; padding-bottom: 10px;">
                 <span style="font-size: 24px; margin-right: 10px;">📢</span>
-                <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #0066A0;">공지사항</h3>
+                <h3 style="margin: 0; font-size: 18px; font-weight: 600; color: #3a3b3d;">공지사항</h3>
             </div>
             <div id="noticesList" style="display: flex; flex-direction: column; gap: 12px;">
                 <!-- 여기에 공지사항 동적 추가 -->
@@ -502,7 +698,7 @@ async function fetchSheetData() {
             return days[date.getDay()];
         }
 
-// 배송 안내 메시지 표시
+// 배송 안내 메시지 표시 - 흰색 배경, 좌측 바 제거
 function displayDeliveryNotices(sheetData) {
     const noticesList = document.getElementById('noticesList');
     if (!noticesList) {
@@ -517,9 +713,6 @@ function displayDeliveryNotices(sheetData) {
     // H열(인덱스 7)과 I열(인덱스 8) 읽기
     console.log('공지사항 데이터 확인:');
     sheetData.forEach((row, index) => {
-        // 헤더 행 건너뛰기 제거 - API에서 이미 제거했음!
-        // if (index === 0) return; // ← 이 줄 삭제!!!
-        
         const header = row[7]; // H열 - 메시지 제목
         const content = row[8]; // I열 - 메시지 내용
         
@@ -528,18 +721,18 @@ function displayDeliveryNotices(sheetData) {
         if (header && content && header.trim() !== '' && content.trim() !== '') {
             hasNotices = true;
             noticesHTML += `
-                <div class="notice-card" style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; transition: all 0.3s ease;">
-                    <div class="notice-header" style="padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; min-height: 35px;" onclick="toggleNotice(${noticeIndex})">
-                        <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: #0066A0; line-height: 1.2; flex: 1;">
+                <div class="notice-card" style="background: #f8f9fa; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; transition: all 0.3s ease;">
+                    <div class="notice-header" style="padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; min-height: 35px; background: #f8f9fa;" onclick="toggleNotice(${noticeIndex})">
+                        <h4 style="margin: 0; font-size: 14px; font-weight: 600; color: #3a3b3d; line-height: 1.2; flex: 1;">
                             ${header}
                         </h4>
-                        <button class="toggle-btn" id="toggle-btn-${noticeIndex}" style="background: none; border: none; cursor: pointer; padding: 3px; color: #0066A0; font-size: 16px; transition: transform 0.3s ease; margin-left: 10px;">
+                        <button class="toggle-btn" id="toggle-btn-${noticeIndex}" style="background: none; border: none; cursor: pointer; padding: 3px; color: #5a5c60; font-size: 16px; transition: transform 0.3s ease; margin-left: 10px;">
                             ▼
                         </button>
                     </div>
-                    <div class="notice-content" id="notice-content-${noticeIndex}" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
-                        <div style="padding: 0 15px 12px 15px;">
-                            <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #333; font-weight: 400;">
+                    <div class="notice-content" id="notice-content-${noticeIndex}" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: white;">
+                        <div style="padding: 12px 15px;">
+                            <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #5a5c60;">
                                 ${content.replace(/\n/g, '<br>')}
                             </p>
                         </div>
@@ -556,18 +749,18 @@ function displayDeliveryNotices(sheetData) {
             } else {
                 // 기본 메시지
                 noticesList.innerHTML = `
-                    <div class="notice-card" style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0; overflow: hidden;">
-                        <div class="notice-header" style="padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; min-height: 35px;" onclick="toggleNotice(0)">
-                            <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: #0066A0; line-height: 1.2;">
+                    <div class="notice-card" style="background: #f8f9fa; border-radius: 8px; overflow: hidden;">
+                        <div class="notice-header" style="padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; min-height: 35px;" onclick="toggleNotice(0)">
+                            <h4 style="margin: 0; font-size: 14px; font-weight: 600; color: #3a3b3d; line-height: 1.2;">
                                 배송 일정 안내
                             </h4>
-                            <button class="toggle-btn" id="toggle-btn-0" style="background: none; border: none; cursor: pointer; padding: 3px; color: #0066A0; font-size: 16px; transition: transform 0.3s ease; margin-left: 10px;">
+                            <button class="toggle-btn" id="toggle-btn-0" style="background: none; border: none; cursor: pointer; padding: 3px; color: #5a5c60; font-size: 16px; transition: transform 0.3s ease; margin-left: 10px;">
                                 ▼
                             </button>
                         </div>
-                        <div class="notice-content" id="notice-content-0" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
-                            <div style="padding: 0 15px 12px 15px;">
-                                <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #333; font-weight: 400;">
+                        <div class="notice-content" id="notice-content-0" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease; background: white;">
+                            <div style="padding: 12px 15px;">
+                                <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #5a5c60;">
                                     평일 오전 10시 이전 주문 시 당일 발송됩니다.<br>
                                     주말 및 공휴일은 발송이 없습니다.
                                 </p>
@@ -626,18 +819,12 @@ function displayDeliveryNotices(sheetData) {
             
             let html = `
                 <div class="delivery-nav-controls" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <button onclick="changeDeliveryMonth(-1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer; transition: all 0.2s;" 
-                            onmouseover="this.style.background='#f5f6f7'; this.style.borderColor='#2196f3';" 
-                            onmouseout="this.style.background='white'; this.style.borderColor='#e1e3e5';">◀</button>
+                    <button onclick="changeDeliveryMonth(-1)" class="nav-button">◀</button>
                     <div style="font-size: 18px; font-weight: 600; min-width: 150px; text-align: center;">
                         ${deliveryYear}년 ${deliveryMonth + 1}월
                     </div>
-                    <button onclick="changeDeliveryMonth(1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer; transition: all 0.2s;"
-                            onmouseover="this.style.background='#f5f6f7'; this.style.borderColor='#2196f3';" 
-                            onmouseout="this.style.background='white'; this.style.borderColor='#e1e3e5';">▶</button>
-                    <button onclick="goToToday()" style="padding: 8px 16px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer; margin-left: 10px; font-size: 14px; font-weight: 500; transition: all 0.2s;"
-                            onmouseover="this.style.background='#2196f3'; this.style.color='white'; this.style.borderColor='#2196f3';" 
-                            onmouseout="this.style.background='white'; this.style.color='black'; this.style.borderColor='#e1e3e5';">오늘</button>
+                    <button onclick="changeDeliveryMonth(1)" class="nav-button">▶</button>
+                    <button onclick="goToToday()" class="today-button">오늘</button>
                 </div>
             `;
             
