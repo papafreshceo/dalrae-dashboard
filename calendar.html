@@ -1655,7 +1655,7 @@
             container.appendChild(bar);
         }
 
-        // 년 보기 렌더링
+// 년 보기 렌더링
         function renderYearView() {
             const container = document.getElementById('yearTimelineContainer');
             let html = '';
@@ -1691,11 +1691,8 @@
                     html += `
                         <div class="year-timeline-bar bar-single"
                              data-product-name="${product.name}"
-                             style="left: ${startOffset}%; width: ${width}%; background: ${productColors[product.name]};"
-                             onclick="showModalForProduct('${product.name}')"
-                             onmouseover="yearBarHover(event, '${product.name}
-', ${JSON.stringify(product).replace(/"/g, '&quot;')})"
-                             onmouseout="yearBarOut('${product.name}')">
+                             data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
+                             style="left: ${startOffset}%; width: ${width}%; background: ${productColors[product.name]};">
                             ${product.name}
                         </div>
                     `;
@@ -1707,10 +1704,8 @@
                     html += `
                         <div class="year-timeline-bar bar-start"
                              data-product-name="${product.name}"
-                             style="left: ${firstStart}%; width: ${firstWidth}%; background: ${productColors[product.name]};"
-                             onclick="showModalForProduct('${product.name}')"
-                             onmouseover="yearBarHover(event, '${product.name}', ${JSON.stringify(product).replace(/"/g, '&quot;')})"
-                             onmouseout="yearBarOut('${product.name}')">
+                             data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
+                             style="left: ${firstStart}%; width: ${firstWidth}%; background: ${productColors[product.name]};">
                             ${product.name}
                         </div>
                     `;
@@ -1720,10 +1715,8 @@
                     html += `
                         <div class="year-timeline-bar bar-end"
                              data-product-name="${product.name}"
-                             style="left: 0; width: ${secondWidth}%; background: ${productColors[product.name]};"
-                             onclick="showModalForProduct('${product.name}')"
-                             onmouseover="yearBarHover(event, '${product.name}', ${JSON.stringify(product).replace(/"/g, '&quot;')})"
-                             onmouseout="yearBarOut('${product.name}')">
+                             data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
+                             style="left: 0; width: ${secondWidth}%; background: ${productColors[product.name]};">
                         </div>
                     `;
                 }
@@ -1747,23 +1740,32 @@
             }
             
             container.innerHTML = html;
-        }
-
-        // 년 보기 호버 이벤트 핸들러
-        function yearBarHover(event, productName, product) {
-            // 같은 품목의 모든 바에 hover-active 클래스 추가
-            document.querySelectorAll(`.year-timeline-bar[data-product-name="${productName}"]`).forEach(bar => {
-                bar.classList.add('hover-active');
-            });
-            showTooltip(event, product);
-        }
-
-        function yearBarOut(productName) {
-            // 같은 품목의 모든 바에서 hover-active 클래스 제거
-            document.querySelectorAll(`.year-timeline-bar[data-product-name="${productName}"]`).forEach(bar => {
-                bar.classList.remove('hover-active');
-            });
-            hideTooltip();
+            
+            // 년도 보기 이벤트 바인딩
+            setTimeout(() => {
+                document.querySelectorAll('.year-timeline-bar').forEach(bar => {
+                    const productName = bar.dataset.productName;
+                    const productData = bar.dataset.product ? JSON.parse(bar.dataset.product) : null;
+                    
+                    bar.onclick = () => showModalForProduct(productName);
+                    
+                    bar.onmouseover = (e) => {
+                        document.querySelectorAll(`.year-timeline-bar[data-product-name="${productName}"]`).forEach(b => {
+                            b.classList.add('hover-active');
+                        });
+                        if (productData) {
+                            showTooltip(e, productData);
+                        }
+                    };
+                    
+                    bar.onmouseout = () => {
+                        document.querySelectorAll(`.year-timeline-bar[data-product-name="${productName}"]`).forEach(b => {
+                            b.classList.remove('hover-active');
+                        });
+                        hideTooltip();
+                    };
+                });
+            }, 100);
         }
 
         // 범례 업데이트
@@ -1847,7 +1849,6 @@
                 showModal(varieties[0]); // 일단 첫번째 품종 표시
             }
         }
-
         // 모달 표시
         function showModal(variety) {
             const modal = document.getElementById('optionsModal');
