@@ -341,7 +341,16 @@
             color: #2196f3;
         }
         
-        /* 월 타임라인 */
+        /* 월 타임라인 바 */
+        .month-timeline-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        
         .month-timeline-bar {
             position: absolute;
             height: 14px;
@@ -357,6 +366,7 @@
             cursor: pointer;
             box-shadow: 0 1px 3px rgba(0,0,0,0.15);
             z-index: 10;
+            pointer-events: auto;
         }
         
         .month-timeline-bar:hover {
@@ -728,7 +738,7 @@
         <!-- 월 보기 -->
         <div id="monthView" class="month-view">
             <div class="month-scroll-wrapper">
-                <div class="month-calendar-content" id="monthCalendarContent">
+                <div class="month-calendar-content">
                     <div class="weekdays">
                         <div class="weekday sunday">일</div>
                         <div class="weekday">월</div>
@@ -1039,10 +1049,9 @@
             updateLegend();
         }
 
-        // 월 보기 렌더링 - 심플하게 재작성
+        // 월 보기 렌더링
         function renderMonthView() {
             const grid = document.getElementById('daysGrid');
-            const monthContent = document.getElementById('monthCalendarContent');
             
             const baseYear = 2025;
             const firstDay = new Date(baseYear, currentMonth, 1);
@@ -1081,15 +1090,18 @@
                 html += `<div class="day-cell other-month"><div class="day-number">${day}</div></div>`;
             }
             
+            // 타임라인 래퍼 추가
+            html += '<div class="month-timeline-wrapper" id="monthTimelineWrapper"></div>';
+            
             grid.innerHTML = html;
             
-            // 타임라인 추가 - 그리드 렌더링 후 실행
+            // 타임라인 추가
             setTimeout(() => {
                 drawMonthTimelines();
-            }, 50);
+            }, 100);
         }
 
-        // 월 타임라인 그리기 - 완전히 새로 작성
+        // 월 타임라인 그리기
         function drawMonthTimelines() {
             // 이번 달 품목 필터링
             monthProductTimelines = productTimelines.filter(product => {
@@ -1101,17 +1113,17 @@
                 if (startYear === endYear) {
                     return currentMonth >= startMonth && currentMonth <= endMonth;
                 } else {
-                    // 연도 넘어가는 경우
                     return currentMonth >= startMonth || currentMonth <= endMonth;
                 }
             });
             
-            const monthContent = document.getElementById('monthCalendarContent');
+            const wrapper = document.getElementById('monthTimelineWrapper');
+            if (!wrapper) return;
+            
+            wrapper.innerHTML = '';
+            
             const grid = document.getElementById('daysGrid');
             const cells = grid.querySelectorAll('.day-cell');
-            
-            // 기존 타임라인 제거
-            monthContent.querySelectorAll('.month-timeline-bar').forEach(bar => bar.remove());
             
             // 각 품목별로 타임라인 그리기
             monthProductTimelines.forEach((product, productIndex) => {
@@ -1152,37 +1164,83 @@
                 if (startCellIndex === -1) return;
                 
                 const startCell = cells[startCellIndex];
-                const rect = startCell.getBoundingClientRect();
-                const gridRect = grid.getBoundingClientRect();
+                const cellWidth = startCell.offsetWidth;
+                const cellHeight = startCell.offsetHeight;
                 
                 // 위치 계산
                 const col = startCellIndex % 7;
                 const row = Math.floor(startCellIndex / 7);
-                const cellWidth = rect.width;
-                const cellHeight = rect.height;
                 
-                // 바 생성
-                const bar = document.createElement('div');
-                bar.className = 'month-timeline-bar';
-                bar.style.background = productColors[product.name];
-                bar.textContent = product.name;
+                // 여러 주에 걸쳐있는지 확인
+                const duration = displayEnd - displayStart + 1;
+                const endCol = (col + duration - 1) % 7;
+                const endRow = row + Math.floor((col + duration - 1) / 7);
                 
-                // 위치 설정
-                const left = startCell.offsetLeft + 2;
-                const top = startCell.offsetTop + 30 + (productIndex % 5) * 16;
-                const days = displayEnd - displayStart + 1;
-                const width = cellWidth * days - 4;
+                // 타임라인 바 위치 조정 (품목별로 겹치지 않게)
+                const barOffset = (productIndex % 5) * 16;
                 
-                bar.style.left = `${left}px`;
-                bar.style.top = `${top}px`;
-                bar.style.width = `${width}px`;
-                
-                // 툴팁 이벤트
-                bar.onmouseover = (e) => showTooltip(e, product);
-                bar.onmouseout = hideTooltip;
-                
-                monthContent.appendChild(bar);
+                if (endRow > row) {
+                    // 여러 주에 걸친 경우 - 첫 주
+                    const firstWeekDays = 7 - col;
+                    createTimelineBar(wrapper, {
+                        left: col * cellWidth + 2,
+                        top: row * cellHeight + 30 + barOffset,
+                        width: firstWeekDays * cellWidth - 4,
+                        color: productColors[product.name],
+                        text: product.name,
+                        product: product
+                    });
+                    
+                    // 중간 주들
+                    for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
+                        createTimelineBar(wrapper, {
+                            left: 2,
+                            top: weekRow * cellHeight + 30 + barOffset,
+                            width: 7 * cellWidth - 4,
+                            color: productColors[product.name],
+                            text: product.name,
+                            product: product
+                        });
+                    }
+                    
+                    // 마지막 주
+                    const lastWeekDays = endCol + 1;
+                    createTimelineBar(wrapper, {
+                        left: 2,
+                        top: endRow * cellHeight + 30 + barOffset,
+                        width: lastWeekDays * cellWidth - 4,
+                        color: productColors[product.name],
+                        text: '',
+                        product: product
+                    });
+                } else {
+                    // 한 주 내에 있는 경우
+                    createTimelineBar(wrapper, {
+                        left: col * cellWidth + 2,
+                        top: row * cellHeight + 30 + barOffset,
+                        width: duration * cellWidth - 4,
+                        color: productColors[product.name],
+                        text: product.name,
+                        product: product
+                    });
+                }
             });
+        }
+
+        // 타임라인 바 생성 헬퍼 함수
+        function createTimelineBar(container, options) {
+            const bar = document.createElement('div');
+            bar.className = 'month-timeline-bar';
+            bar.style.left = `${options.left}px`;
+            bar.style.top = `${options.top}px`;
+            bar.style.width = `${options.width}px`;
+            bar.style.background = options.color;
+            bar.textContent = options.text;
+            
+            bar.onmouseover = (e) => showTooltip(e, options.product);
+            bar.onmouseout = hideTooltip;
+            
+            container.appendChild(bar);
         }
 
         // 년 보기 렌더링
