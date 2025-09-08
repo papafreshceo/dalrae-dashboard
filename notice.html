@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>공지사항 - 달래마켓</title>
+    <script src="header.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        /* 메인 컨테이너 */
+        .notice-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* 페이지 헤더 */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            color: white;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* 검색 및 필터 바 */
+        .filter-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .filter-tag {
+            padding: 8px 16px;
+            background: #f1f5f9;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-tag:hover {
+            background: #e2e8f0;
+        }
+
+        .filter-tag.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* 공지사항 그리드 */
+        .notice-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        /* 고정 공지사항 */
+        .pinned-section {
+            margin-bottom: 32px;
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        /* 공지사항 카드 */
+        .notice-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notice-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+        }
+
+        .notice-card.pinned {
+            border: 2px solid #fbbf24;
+            background: linear-gradient(to right, #fffbeb, white);
+        }
+
+        .pinned-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #fbbf24;
+            color: #78350f;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 1;
+        }
+
+        .notice-card-header {
+            padding: 24px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .notice-thumbnail {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+            flex-shrink: 0;
+        }
+
+        .notice-content {
+            flex: 1;
+        }
+
+        .notice-date {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .notice-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .notice-excerpt {
+            font-size: 14px;
+            color: #64748b;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .notice-meta {
+            display: flex;
+            gap: 16px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        /* 공지사항 상세 모달 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s;
+        }
+
+        .modal-header {
+            padding: 32px;
+            border-bottom: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: #f1f5f9;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #e2e8f0;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        .modal-thumbnail {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin-bottom: 24px;
+        }
+
+        .modal-section {
+            margin-bottom: 32px;
+        }
+
+        .modal-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 12px;
+            padding-left: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .modal-section-content {
+            font-size: 15px;
+            color: #475569;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* 로딩 상태 */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* 빈 상태 */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .empty-message {
+            font-size: 14px;
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .notice-container {
+                padding: 20px 15px;
+            }
+
+            .page-header {
+                padding: 30px 20px;
+                border-radius: 16px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .filter-bar {
+                padding: 16px;
+            }
+
+            .search-box {
+                min-width: 100%;
+            }
+
+            .notice-card-header {
+                padding: 20px;
+                flex-direction: column;
+            }
+
+            .notice-thumbnail {
+                width: 100%;
+                height: 200px;
+            }
+
+            .modal-content {
+                border-radius: 16px;
+            }
+
+            .modal-header,
+            .modal-body {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 공통 헤더 -->
+    <div id="header-container"></div>
+
+    <div class="notice-container">
+        <!-- 페이지 헤더 -->
+        <div class="page-header">
+            <h1 class="page-title">📢 공지사항</h1>
+            <p class="page-subtitle">달래마켓의 새로운 소식과 중요한 안내사항을 확인하세요</p>
+        </div>
+
+        <!-- 검색 및 필터 -->
+        <div class="filter-bar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="searchInput" placeholder="공지사항 검색...">
+            </div>
+            <div class="filter-tags">
+                <button class="filter-tag active" data-filter="all">전체</button>
+                <button class="filter-tag" data-filter="pinned">고정</button>
+                <button class="filter-tag" data-filter="recent">최신</button>
+            </div>
+        </div>
+
+        <!-- 공지사항 리스트 -->
+        <div id="noticeList">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상세보기 모달 -->
+    <div class="modal-overlay" id="noticeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal()">✕</button>
+                <div id="modalHeader"></div>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        let noticesData = [];
+        let currentFilter = 'all';
+
+        // 공지사항 데이터 로드
+        async function loadNotices() {
+            try {
+                const response = await fetch('/api/notice');
+                const data = await response.json();
+                
+                // 데이터 파싱 (헤더 행 제외)
+                noticesData = data.slice(1).map((row, index) => ({
+                    id: row[0] || index + 1,
+                    date: row[1] || '',
+                    isPinned: row[2] === 'Y',
+                    title: row[3] || '제목 없음',
+                    titleThumbnail: row[4] || '',
+                    contentThumbnail: row[5] || '',
+                    header1: row[6] || '',
+                    content1: row[7] || '',
+                    header2: row[8] || '',
+                    content2: row[9] || '',
+                    header3: row[10] || '',
+                    content3: row[11] || ''
+                })).filter(notice => notice.title && notice.title !== '제목 없음');
+
+                // 날짜순 정렬 (최신순)
+                noticesData.sort((a, b) => {
+                    if (a.isPinned && !b.isPinned) return -1;
+                    if (!a.isPinned && b.isPinned) return 1;
+                    return new Date(b.date) - new Date(a.date);
+                });
+
+                renderNotices();
+            } catch (error) {
+                console.error('공지사항 로드 실패:', error);
+                showEmptyState();
+            }
+        }
+
+        // 공지사항 렌더링
+        function renderNotices() {
+            const container = document.getElementById('noticeList');
+            
+            let filteredNotices = noticesData;
+            
+            // 필터 적용
+            if (currentFilter === 'pinned') {
+                filteredNotices = noticesData.filter(n => n.isPinned);
+            } else if (currentFilter === 'recent') {
+                const oneWeekAgo = new Date();
+                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+                filteredNotices = noticesData.filter(n => new Date(n.date) >= oneWeekAgo);
+            }
+
+            // 검색어 적용
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (searchTerm) {
+                filteredNotices = filteredNotices.filter(n => 
+                    n.title.toLowerCase().includes(searchTerm) ||
+                    n.content1.toLowerCase().includes(searchTerm) ||
+                    n.content2.toLowerCase().includes(searchTerm) ||
+                    n.content3.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            if (filteredNotices.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            // 고정 공지와 일반 공지 분리
+            const pinnedNotices = filteredNotices.filter(n => n.isPinned);
+            const regularNotices = filteredNotices.filter(n => !n.isPinned);
+
+            let html = '';
+
+            // 고정 공지사항
+            if (pinnedNotices.length > 0) {
+                html += `
+                    <div class="pinned-section">
+                        <div class="section-label">
+                            <span>📌</span>
+                            <span>고정 공지사항</span>
+                        </div>
+                        <div class="notice-grid">
+                            ${pinnedNotices.map(notice => createNoticeCard(notice, true)).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 일반 공지사항
+            if (regularNotices.length > 0) {
+                html += `
+                    <div class="notice-grid">
+                        ${regularNotices.map(notice => createNoticeCard(notice, false)).join('')}
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // 공지사항 카드 생성
+        function createNoticeCard(notice, isPinned) {
+            const excerpt = notice.content1 ? 
+                (notice.content1.length > 100 ? notice.content1.substring(0, 100) + '...' : notice.content1) : 
+                '내용이 없습니다.';
+
+            return `
+                <div class="notice-card ${isPinned ? 'pinned' : ''}" onclick="showNoticeDetail(${noticesData.indexOf(notice)})">
+                    ${isPinned ? '<div class="pinned-badge">📌 고정</div>' : ''}
+                    <div class="notice-card-header">
+                        ${notice.titleThumbnail ? `
+                            <img src="${notice.titleThumbnail}" alt="${notice.title}" class="notice-thumbnail" onerror="this.style.display='none'">
+                        ` : ''}
+                        <div class="notice-content">
+                            <div class="notice-date">${formatDate(notice.date)}</div>
+                            <h3 class="notice-title">${notice.title}</h3>
+                            <p class="notice-excerpt">${excerpt}</p>
+                            <div class="notice-meta">
+                                <span class="meta-item">
+                                    <span>👁</span>
+                                    <span>자세히 보기</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 공지사항 상세 보기
+        function showNoticeDetail(index) {
+            const notice = noticesData[index];
+            const modal = document.getElementById('noticeModal');
+            const modalHeader = document.getElementById('modalHeader');
+            const modalBody = document.getElementById('modalBody');
+
+            // 헤더 내용
+            modalHeader.innerHTML = `
+                <div class="notice-date">${formatDate(notice.date)}</div>
+                <h2 class="notice-title" style="font-size: 24px; margin-top: 8px;">${notice.title}</h2>
+            `;
+
+            // 바디 내용
+            let bodyHtml = '';
+            
+            if (notice.contentThumbnail) {
+                bodyHtml += `<img src="${notice.contentThumbnail}" alt="${notice.title}" class="modal-thumbnail" onerror="this.style.display='none'">`;
+            }
+
+            // 섹션 1
+            if (notice.header1 || notice.content1) {
+                bodyHtml += `
+                    <div class="modal-section">
+                        ${notice.header1 ? `<h3 class="modal-section-title">${notice.header1}</h3>` : ''}
+                        ${notice.content1 ? `<div class="modal-section-content">${notice.content1}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            // 섹션 2
+            if (notice.header2 || notice.content2) {
+                bodyHtml += `
+                    <div class="modal-section">
+                        ${notice.header2 ? `<h3 class="modal-section-title">${notice.header2}</h3>` : ''}
+                        ${notice.content2 ? `<div class="modal-section-content">${notice.content2}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            // 섹션 3
+            if (notice.header3 || notice.content3) {
+                bodyHtml += `
+                    <div class="modal-section">
+                        ${notice.header3 ? `<h3 class="modal-section-title">${notice.header3}</h3>` : ''}
+                        ${notice.content3 ? `<div class="modal-section-content">${notice.content3}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            modalBody.innerHTML = bodyHtml;
+            modal.classList.add('active');
+        }
+
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('noticeModal').classList.remove('active');
+        }
+
+        // 빈 상태 표시
+        function showEmptyState() {
+            document.getElementById('noticeList').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📭</div>
+                    <div class="empty-title">공지사항이 없습니다</div>
+                    <div class="empty-message">새로운 공지사항이 등록되면 여기에 표시됩니다.</div>
+                </div>
+            `;
+        }
+
+        // 날짜 포맷
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+            
+            if (diff === 0) return '오늘';
+            if (diff === 1) return '어제';
+            if (diff < 7) return `${diff}일 전`;
+            
+            return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+        }
+
+        // 필터 이벤트
+        document.addEventListener('DOMContentLoaded', function() {
+            // 필터 태그 클릭
+            document.querySelectorAll('.filter-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    renderNotices();
+                });
+            });
+
+            // 검색 입력
+            document.getElementById('searchInput').addEventListener('input', renderNotices);
+
+            // 모달 외부 클릭 시 닫기
+            document.getElementById('noticeModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            // 데이터 로드
+            loadNotices();
+
+            // 헤더 활성화
+            setTimeout(() => {
+                if (window.DalraeHeader && window.DalraeHeader.setActivePage) {
+                    window.DalraeHeader.setActivePage('notice');
+                }
+            }, 200);
+        });
+    </script>
+</body>
+</html>
