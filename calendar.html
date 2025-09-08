@@ -384,7 +384,6 @@
             border-radius: 7px;
         }
         
-        /* 호버 효과 더 크게 */
         .month-timeline-bar:hover,
         .month-timeline-bar.hover-active {
             transform: scale(1.15) translateY(-2px);
@@ -490,7 +489,6 @@
             border-radius: 12px;
         }
         
-        /* 년 보기 호버 효과도 더 크게 */
         .year-timeline-bar:hover,
         .year-timeline-bar.hover-active {
             transform: scale(1.08) translateY(-2px);
@@ -500,7 +498,7 @@
             filter: brightness(1.1);
         }
         
-        /* 오늘 날짜 세로선 - 그라데이션 애니메이션 */
+        /* 오늘 날짜 세로선 */
         .year-today-line {
             position: absolute;
             top: 0;
@@ -547,93 +545,7 @@
             border-radius: 6px;
         }
         
-        /* 배송 캘린더 */
-        .delivery-calendar-wrapper {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        
-        .delivery-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f5f6f7;
-            border-radius: 8px;
-        }
-
-        /* 배송 캘린더 추가 스타일 */
-        .delivery-month-view {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        .delivery-month-view .day-cell {
-            position: relative;
-            min-height: 100px;
-            transition: all 0.2s;
-        }
-
-        @media (max-width: 768px) {
-            .delivery-month-view {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .delivery-month-view .weekdays,
-            .delivery-month-view .days-grid {
-                min-width: 600px;
-            }
-        }
-        
-        .delivery-month-view .day-cell.today {
-            background: #fff8f0 !important;
-        }
-        
-        .delivery-icon {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            font-size: 18px;
-        }
-        
-        .delivery-status {
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-top: 4px;
-            text-align: center;
-        }
-        
-        .holiday-label {
-            background: #ff9800;
-            color: white;
-        }
-        
-        .other-label {
-            background: #9c27b0;
-            color: white;
-        }
-        
-        .weekend-label {
-            background: #2196f3;
-            color: white;
-        }
-        
-        .no-delivery-label {
-            background: #f44336;
-            color: white;
-        }
-        
-        .delivery-month-view .day-cell:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
-        
-        /* 상품 정보 툴팁 */
+        /* 툴팁 */
         .tooltip {
             position: fixed;
             background: white;
@@ -663,7 +575,7 @@
             line-height: 1.4;
         }
         
-        /* 모달 스타일 추가 */
+        /* 모달 스타일 */
         .modal {
             display: none;
             position: fixed;
@@ -879,11 +791,6 @@
                 padding: 0 15px;
             }
             
-            .menu-container.sticky .menu-wrapper {
-                padding: 0 10px;
-                gap: 8px;
-            }
-            
             .center-button {
                 order: -1;
             }
@@ -898,11 +805,6 @@
             .nav-btn {
                 padding: 6px 4px;
                 font-size: 11px;
-            }
-            
-            .nav-btn span {
-                display: inline-block;
-                white-space: nowrap;
             }
             
             .special-btn {
@@ -920,13 +822,6 @@
                 align-items: center;
                 gap: 0;
                 flex-wrap: nowrap;
-            }
-            
-            .nav-controls {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-                flex: 0 0 auto;
             }
             
             .month-year-display {
@@ -947,12 +842,6 @@
                 font-size: 12px;
             }
             
-            .view-toggle {
-                display: flex;
-                gap: 4px;
-                flex: 0 0 auto;
-            }
-            
             .toggle-btn {
                 padding: 6px 10px;
                 font-size: 12px;
@@ -966,49 +855,9 @@
                 padding: 10px;
             }
             
-            .month-calendar-content {
-                min-width: 600px;
-            }
-            
             .day-cell {
                 min-height: 100px;
                 padding: 6px;
-            }
-            
-            .day-number {
-                font-size: 12px;
-            }
-            
-            .month-timeline-bar {
-                height: 12px;
-                font-size: 8px;
-                padding: 0 4px;
-            }
-            
-            .year-view {
-                padding: 10px;
-            }
-            
-            .year-calendar-content {
-                min-width: 900px;
-            }
-            
-            .legend {
-                padding: 10px;
-                gap: 10px;
-            }
-            
-            /* 모바일 옵션카드 최적화 */
-            .option-card {
-                flex-direction: row;
-                align-items: flex-start;
-                padding: 10px;
-                gap: 10px;
-            }
-            
-            .option-thumb {
-                width: 40px;
-                height: 40px;
             }
             
             .option-info {
@@ -1018,88 +867,14 @@
                 gap: 6px;
             }
             
-            .option-info-row1 {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 12px;
-            }
-            
-            .option-info-row2 {
-                font-size: 11px;
-                color: #999;
-            }
-            
-            .option-price-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 6px;
-                padding-top: 6px;
-                border-top: 1px solid #e8e9eb;
-            }
-            
-            .option-price {
-                font-size: 14px;
-                font-weight: 600;
-                color: #667eea;
-            }
-            
-            .option-badges {
-                display: flex;
-                gap: 4px;
-                margin-top: 6px;
-            }
-            
-            .badge-free,
-            .badge-chart {
-                padding: 2px 6px;
-                font-size: 10px;
-            }
-            
-            /* 모바일 차트 모달 스타일 */
             .chart-modal-content {
                 padding: 18px;
                 width: 95%;
             }
             
-            .chart-modal-content .modal-header {
-                margin-bottom: 15px;
-            }
-            
-            .chart-modal-content .modal-header h2 {
-                font-size: 16px;
-            }
-            
-            .chart-modal-content .modal-close {
-                width: 24px;
-                height: 24px;
-                font-size: 14px;
-            }
-            
             .chart-container {
                 height: 180px;
                 margin: 3px 0;
-            }
-            
-            .chart-stats {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 4px;
-                margin-top: 8px;
-            }
-            
-            .chart-stat-box {
-                padding: 5px 2px;
-                border-radius: 5px;
-            }
-            
-            .chart-stat-label {
-                font-size: 8px;
-                margin-bottom: 2px;
-            }
-            
-            .chart-stat-value {
-                font-size: 11px;
             }
         }
     </style>
@@ -1177,42 +952,6 @@
         <!-- 범례 -->
         <div class="legend" id="legend">
             <!-- 동적 생성 -->
-        </div>
-    </div>
-
-    <!-- 배송 캘린더 섹션 -->
-    <div class="calendar-container" style="margin-top: 40px;">
-        <h2 class="section-title">🚚 배송캘린더</h2>
-        
-        <!-- 배송 안내 메시지 (캘린더 위에 위치) -->
-        <div id="deliveryNotices" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; color: white; box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);">
-            <div style="display: flex; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px;">
-                <span style="font-size: 24px; margin-right: 10px;">📢</span>
-                <h3 style="margin: 0; font-size: 18px; font-weight: 600;">공지사항</h3>
-            </div>
-            <div id="noticesList" style="display: flex; flex-direction: column; gap: 12px;">
-                <!-- 여기에 공지사항 동적 추가 -->
-            </div>
-        </div>
-        
-        <!-- 배송 캘린더 본체 -->
-        <div class="delivery-calendar-wrapper">
-            <div id="deliveryCalendarContent">
-                <div style="text-align: center; padding: 40px;">
-                    <div style="color: #999;">📦 배송 캘린더 로딩 중...</div>
-                </div>
-            </div>
-            
-            <!-- 배송 안내 정보 -->
-            <div class="delivery-info">
-                <h3 style="font-size: 16px; font-weight: 600; color: #3a3b3d; margin-bottom: 10px;">📌 배송 안내</h3>
-                <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 📦 배송가능</li>
-                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• ❌ 배송불가 (공휴일/주말/휴무)</li>
-                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 주황색: 공휴일</li>
-                    <li style="padding: 5px 0; color: #5a5c60; font-size: 14px;">• 보라색: 휴가/기타</li>
-                </ul>
-            </div>
         </div>
     </div>
 
@@ -1381,15 +1120,11 @@
 
         // 데이터 로드
         function loadData() {
-            // 샘플 데이터로 즉시 초기화
             allProducts = getSampleData();
             processProductTimelines();
             assignColors();
-            
-            // 초기 렌더링
             renderCalendar();
             
-            // API 데이터 로드 시도
             fetch('/api/products')
             .then(response => response.json())
             .then(data => {
@@ -1424,7 +1159,6 @@
                 
                 if (!startDate || !endDate) return;
                 
-                // 연도를 넘어가는 경우 처리
                 if (startDate > endDate) {
                     endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
                 }
@@ -1497,13 +1231,11 @@
             
             let html = '';
             
-            // 이전 달
             for (let i = startDay - 1; i >= 0; i--) {
                 const day = prevTotalDays - i;
                 html += `<div class="day-cell other-month"><div class="day-number">${day}</div></div>`;
             }
             
-            // 현재 달
             for (let day = 1; day <= totalDays; day++) {
                 const date = new Date(baseYear, currentMonth, day);
                 const isToday = today.getMonth() === currentMonth && today.getDate() === day;
@@ -1517,18 +1249,15 @@
                 </div>`;
             }
             
-            // 다음 달
             const remainingCells = 42 - (startDay + totalDays);
             for (let day = 1; day <= remainingCells; day++) {
                 html += `<div class="day-cell other-month"><div class="day-number">${day}</div></div>`;
             }
             
-            // 타임라인 래퍼 추가
             html += '<div class="month-timeline-wrapper" id="monthTimelineWrapper"></div>';
             
             grid.innerHTML = html;
             
-            // 타임라인 추가
             setTimeout(() => {
                 drawMonthTimelines();
             }, 100);
@@ -1536,7 +1265,6 @@
 
         // 월 타임라인 그리기
         function drawMonthTimelines() {
-            // 이번 달 품목 필터링
             monthProductTimelines = productTimelines.filter(product => {
                 const startMonth = product.startDate.getMonth();
                 const endMonth = product.endDate.getMonth();
@@ -1558,18 +1286,15 @@
             const grid = document.getElementById('daysGrid');
             const cells = grid.querySelectorAll('.day-cell');
             
-            // 각 품목별로 타임라인 그리기
             monthProductTimelines.forEach((product, productIndex) => {
                 const startMonth = product.startDate.getMonth();
                 const startDay = product.startDate.getDate();
                 const endMonth = product.endDate.getMonth();
                 const endDay = product.endDate.getDate();
                 
-                // 이번 달 표시 범위 계산
                 let displayStart, displayEnd;
                 const lastDayOfMonth = new Date(2025, currentMonth + 1, 0).getDate();
                 
-                // 이번 달의 실제 시작일 판단
                 const hasStartInMonth = (startMonth === currentMonth);
                 
                 if (startMonth === currentMonth) {
@@ -1588,7 +1313,6 @@
                     return;
                 }
                 
-                // 시작 셀 찾기
                 let startCellIndex = -1;
                 cells.forEach((cell, idx) => {
                     if (!cell.classList.contains('other-month') && 
@@ -1603,20 +1327,16 @@
                 const cellWidth = startCell.offsetWidth;
                 const cellHeight = startCell.offsetHeight;
                 
-                // 위치 계산
                 const col = startCellIndex % 7;
                 const row = Math.floor(startCellIndex / 7);
                 
-                // 여러 주에 걸쳐있는지 확인
                 const duration = displayEnd - displayStart + 1;
                 const endCol = (col + duration - 1) % 7;
                 const endRow = row + Math.floor((col + duration - 1) / 7);
                 
-                // 타임라인 바 위치 조정 (품목별로 겹치지 않게)
                 const barOffset = (productIndex % 5) * 16;
                 
                 if (endRow > row) {
-                    // 여러 주에 걸친 경우 - 첫 주
                     const firstWeekDays = 7 - col;
                     const isFirstSegment = hasStartInMonth;
                     const showName = isFirstSegment || (!hasStartInMonth && displayStart === 1);
@@ -1634,7 +1354,6 @@
                         isSingle: false
                     });
                     
-                    // 중간 주들
                     for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
                         createTimelineBar(wrapper, {
                             left: 2,
@@ -1650,7 +1369,6 @@
                         });
                     }
                     
-                    // 마지막 주
                     const lastWeekDays = endCol + 1;
                     const isLastSegment = (endMonth === currentMonth);
                     
@@ -1667,7 +1385,6 @@
                         isSingle: false
                     });
                 } else {
-                    // 한 주 내에 있는 경우
                     const isStartBar = (startMonth === currentMonth);
                     const isEndBar = (endMonth === currentMonth);
                     const showName = isStartBar || (!hasStartInMonth && displayStart === 1);
@@ -1688,12 +1405,11 @@
             });
         }
 
-        // 타임라인 바 생성 헬퍼 함수
+        // 타임라인 바 생성
         function createTimelineBar(container, options) {
             const bar = document.createElement('div');
             bar.className = 'month-timeline-bar';
             
-            // 라운딩 처리
             if (options.isSingle) {
                 bar.classList.add('bar-single');
             } else if (options.isStart) {
@@ -1709,15 +1425,12 @@
             bar.textContent = options.text;
             bar.dataset.productName = options.productName;
             
-            // 클릭 이벤트 추가
             bar.onclick = (e) => {
                 e.stopPropagation();
                 showModalForProduct(options.productName);
             };
             
-            // 호버 이벤트
             bar.onmouseover = (e) => {
-                // 같은 품목의 모든 바에 hover-active 클래스 추가
                 document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
                     b.classList.add('hover-active');
                 });
@@ -1725,7 +1438,6 @@
             };
             
             bar.onmouseout = () => {
-                // 같은 품목의 모든 바에서 hover-active 클래스 제거
                 document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
                     b.classList.remove('hover-active');
                 });
@@ -1755,12 +1467,10 @@
                 
                 html += `<div class="year-timeline-row">`;
                 
-                // 12개월 그리드
                 for (let m = 0; m < 12; m++) {
                     html += `<div class="year-month-cell"></div>`;
                 }
                 
-                // 타임라인 바
                 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 
                 if (startYear === endYear) {
@@ -1777,7 +1487,6 @@
                         </div>
                     `;
                 } else {
-                    // 연도 넘어가는 경우
                     const firstStart = (100 / 12) * (startMonth + startDay / monthDays[startMonth]);
                     const firstWidth = 100 - firstStart;
                     
@@ -1804,7 +1513,6 @@
                 html += `</div>`;
             });
             
-            // 오늘 날짜 세로선
             if (currentYearNow === 2025) {
                 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 const todayPosition = (100 / 12) * (currentMonthNow + currentDayNow / monthDays[currentMonthNow]);
@@ -1821,7 +1529,6 @@
             
             container.innerHTML = html;
             
-            // 년도 보기 이벤트 바인딩
             setTimeout(() => {
                 document.querySelectorAll('.year-timeline-bar').forEach(bar => {
                     const productName = bar.dataset.productName;
@@ -1873,7 +1580,6 @@
             const title = document.getElementById('tooltipTitle');
             const info = document.getElementById('tooltipInfo');
             
-            // 문자열인 경우 파싱
             if (typeof product === 'string') {
                 try {
                     product = JSON.parse(product);
@@ -1920,13 +1626,11 @@
                 varietyGroups[variety].push(p);
             });
             
-            // 품종이 하나만 있으면 바로 옵션 모달 표시
             const varieties = Object.keys(varietyGroups);
             if (varieties.length === 1) {
                 showModal(varieties[0]);
             } else {
-                // 여러 품종이 있으면 선택 모달 표시
-                showModal(varieties[0]); // 일단 첫번째 품종 표시
+                showModal(varieties[0]);
             }
         }
 
@@ -1952,68 +1656,32 @@
                 if (p.규격2) specs += (specs ? ' ' : '') + p.규격2;
                 if (p.규격3) specs += (specs ? ' ' : '') + p.규격3;
                 
-                if (isMobile) {
-                    // 모바일 레이아웃
-                    html += `
-                        <div class="option-card">
-                            ${p.썸네일 ? 
-                                `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` :
-                                `<div class="option-thumb"></div>`
-                            }
-                            <div class="option-info">
-                                <div class="option-info-row1">
-                                    <div style="flex: 1;">
-                                        <strong style="color: #667eea;">${p.옵션명 || '옵션명 없음'}</strong>
-                                    </div>
-                                </div>
-                                <div class="option-info-row2">
-                                    ${p.발송지주소 ? `발송지: ${p.발송지주소}` : ''}
-                                </div>
-                                <div class="option-price-row">
-                                    <span class="option-price">${price}원</span>
-                                    <span class="status-badge ${statusClass}" style="font-size:10px;">
-                                        ${p.공급상태 || '미정'}
-                                    </span>
-                                </div>
-                                <div class="option-badges">
-                                    <span class="badge-free">무료배송</span>
-                                    <button class="badge-chart" 
-                                            onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
-                                        📊 가격차트
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    // 데스크탑 레이아웃
-                    html += `
-                        <div class="option-card">
-                            ${p.썸네일 ? 
-                                `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` :
-                                `<div class="option-thumb"></div>`
-                            }
-                            <div class="option-info">
-                                <span class="option-col" style="width: 60px; color: #666; font-size: 13px; font-weight: 600;">옵션명</span>
-                                <span class="option-col" style="width: 200px; color: #667eea; font-size: 14px; font-weight: 500;">${p.옵션명 || '옵션명 없음'}</span>
-                                <span class="option-col" style="width: 150px; color: #7a7c80; font-size: 13px;">${specs}</span>
-                                <span class="option-col" style="width: 50px; color: #666; font-size: 12px;">${p.발송지주소 ? '발송지' : ''}</span>
-                                <span class="option-col" style="width: 120px; color: #999; font-size: 12px;">${p.발송지주소 || ''}</span>
-                                <span class="option-col" style="flex: 1; text-align: right;">
-                                    <span style="color: #667eea; font-size: 16px; font-weight: 600; margin-right: 15px;">${price}원</span>
-                                    <span class="status-badge ${statusClass}" style="font-size:11px;">
-                                        ${p.공급상태 || '미정'}
-                                    </span>
-                                    <span class="badge-free" style="margin-left: 8px;">무료배송</span>
-                                    <button class="badge-chart" style="margin-left: 8px;" 
-                                            onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
-                                        📊 가격차트
-                                    </button>
+                html += `
+                    <div class="option-card">
+                        ${p.썸네일 ? 
+                            `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` :
+                            `<div class="option-thumb"></div>`
+                        }
+                        <div class="option-info">
+                            <span class="option-col" style="width: 60px; color: #666; font-size: 13px; font-weight: 600;">옵션명</span>
+                            <span class="option-col" style="width: 200px; color: #667eea; font-size: 14px; font-weight: 500;">${p.옵션명 || '옵션명 없음'}</span>
+                            <span class="option-col" style="width: 150px; color: #7a7c80; font-size: 13px;">${specs}</span>
+                            <span class="option-col" style="width: 50px; color: #666; font-size: 12px;">${p.발송지주소 ? '발송지' : ''}</span>
+                            <span class="option-col" style="width: 120px; color: #999; font-size: 12px;">${p.발송지주소 || ''}</span>
+                            <span class="option-col" style="flex: 1; text-align: right;">
+                                <span style="color: #667eea; font-size: 16px; font-weight: 600; margin-right: 15px;">${price}원</span>
+                                <span class="status-badge ${statusClass}" style="font-size:11px;">
+                                    ${p.공급상태 || '미정'}
                                 </span>
-                            </div>
+                                <span class="badge-free" style="margin-left: 8px;">무료배송</span>
+                                <button class="badge-chart" style="margin-left: 8px;" 
+                                        onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
+                                    📊 가격차트
+                                </button>
+                            </span>
                         </div>
-                    `;
-                }
+                    </div>
+                `;
             });
             
             document.getElementById('modalBody').innerHTML = html;
@@ -2028,15 +1696,11 @@
         // 가격 차트 열기
         function openPriceChart(optionCode, optionName) {
             console.log('차트 열기:', optionCode, optionName);
-            
-            // 옵션 모달 닫기
             closeModal();
             
-            // 차트 모달 열기
             const chartModal = document.getElementById('chartModal');
             document.getElementById('chartModalTitle').textContent = optionName;
             
-            // 차트 컨텐츠 초기화
             document.getElementById('chartModalBody').innerHTML = `
                 <div style="text-align: center; padding: 20px;">
                     <div style="color: #999;">📊 데이터를 불러오는 중...</div>
@@ -2045,18 +1709,12 @@
             
             chartModal.classList.add('show');
             
-            // 캐시 확인
             if (priceDataCache[optionCode]) {
-                console.log('캐시 적중:', optionCode);
                 setTimeout(() => displayChart(priceDataCache[optionCode], optionName), 100);
             } else {
-                // 캐시 미스 - 개별 로드
-                console.log('캐시 미스, 개별 로드:', optionCode);
-                
                 fetch(`/api/price-history?optionCode=${optionCode}`)
                 .then(response => response.json())
                 .then(function(data) {
-                    console.log('개별 로드 완료:', data);
                     if (data && data.length > 0) {
                         priceDataCache[optionCode] = data;
                     }
@@ -2076,24 +1734,19 @@
                 return;
             }
             
-            // 날짜순 정렬
             data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
             
-            // 통계 계산
             const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
             const currentPrice = prices[prices.length - 1];
             const maxPrice = Math.max(...prices);
             const minPrice = Math.min(...prices);
             const avgPrice = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
             
-            // 날짜 포맷
             const firstDate = new Date(data[0].날짜).toLocaleDateString('ko-KR');
             const lastDate = new Date(data[data.length - 1].날짜).toLocaleDateString('ko-KR');
             
-            // 모바일 여부 확인
             const isMobile = window.innerWidth <= 768;
             
-            // HTML 생성
             const html = `
                 <div style="text-align: center; margin-bottom: ${isMobile ? '12px' : '20px'};">
                     <div style="font-size: ${isMobile ? '10px' : '14px'}; color: #7a7c80;">${firstDate} ~ ${lastDate}</div>
@@ -2123,7 +1776,6 @@
             
             document.getElementById('chartModalBody').innerHTML = html;
             
-            // 차트 그리기
             const ctx = document.getElementById('priceChartCanvas').getContext('2d');
             
             if (priceChart) {
@@ -2265,6 +1917,10 @@
                                     <span>📅</span>
                                     <span>상품캘린더</span>
                                 </button>
+                                <button class="nav-btn" data-page="delivery">
+                                    <span>🚚</span>
+                                    <span>배송캘린더</span>
+                                </button>
                                 <button class="nav-btn" data-page="orders">
                                     <span>📋</span>
                                     <span>주문관리</span>
@@ -2302,6 +1958,7 @@
                         'dashboard': 'index.html',
                         'products': 'products.html',
                         'calendar': 'calendar.html',
+                        'delivery': 'delivery.html',
                         'orders': 'orders.html',
                         'services': 'services.html',
                         'notice': 'notice.html'
@@ -2334,7 +1991,6 @@
 
         // 이벤트 리스너 설정
         function setupEventListeners() {
-            // 모달 외부 클릭 시 닫기
             document.getElementById('optionsModal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeModal();
@@ -2347,7 +2003,6 @@
                 }
             });
             
-            // ESC 키로 모달 닫기
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     if (document.getElementById('chartModal').classList.contains('show')) {
@@ -2359,274 +2014,6 @@
             });
         }
 
-        // 배송 캘린더 관련 코드
-        let deliveryMonth = new Date().getMonth();
-        let deliveryYear = new Date().getFullYear();
-
-        // 배송 캘린더 데이터 로드
-        async function loadDeliveryData() {
-            try {
-                // 1. 구글 시트 데이터 가져오기
-                const sheetData = await fetchSheetData();
-                console.log('시트 데이터 로드:', sheetData);
-                
-                // 2. 공휴일 데이터 가져오기
-                const holidays = await fetchHolidays();
-                
-                // 3. 데이터 병합
-                const deliveryMap = processDeliveryData(sheetData, holidays);
-                
-                // 4. 캘린더 렌더링
-                renderDeliveryCalendar(deliveryMap);
-                
-                // 5. 안내 메시지 표시
-                displayDeliveryNotices(sheetData);
-                
-            } catch (error) {
-                console.error('배송 데이터 로드 실패:', error);
-                document.getElementById('deliveryCalendarContent').innerHTML = `
-                    <div style="text-align: center; padding: 40px;">
-                        <div style="color: #999;">📦 배송 캘린더 데이터를 불러올 수 없습니다.</div>
-                    </div>
-                `;
-            }
-        }
-
-        // 구글 시트 데이터 가져오기
-        async function fetchSheetData() {
-            const response = await fetch('/api/delivery');
-            const data = await response.json();
-            
-            window.deliverySheetData = data;
-            
-            if (!data || data.length === 0) {
-                throw new Error('시트 데이터가 없습니다');
-            }
-            
-            return data;
-        }
-
-        // 공휴일 데이터 가져오기
-        async function fetchHolidays() {
-            const currentYear = new Date().getFullYear();
-            const holidays = {};
-            
-            for (let year = currentYear; year <= currentYear + 1; year++) {
-                try {
-                    const response = await fetch(`https://date.nager.at/api/v3/publicholidays/${year}/KR`);
-                    const data = await response.json();
-                    
-                    data.forEach(holiday => {
-                        holidays[holiday.date] = {
-                            name: holiday.localName || holiday.name,
-                            type: holiday.types?.includes('Authorities') ? '임시공휴일' : '공휴일'
-                        };
-                    });
-                } catch (error) {
-                    console.error(`${year}년 공휴일 로드 실패:`, error);
-                }
-            }
-            
-            return holidays;
-        }
-
-        // 데이터 처리 및 병합
-        function processDeliveryData(sheetData, holidays) {
-            const deliveryMap = {};
-            
-            sheetData.forEach((row, index) => {
-                if (index === 0) return; // 헤더 행 건너뛰기
-                
-                const [date, dayName, sheetHoliday, sheetTempHoliday, other, deliveryYN, issue, noticeHeader, noticeContent] = row;
-                
-                if (!date) return;
-                
-                const dateObj = new Date(date.replace(/\. /g, '-'));
-                const formattedDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
-                
-                const apiHoliday = holidays[formattedDate];
-                
-                const canDeliver = deliveryYN && deliveryYN.toString().toUpperCase() === 'Y';
-                
-                deliveryMap[formattedDate] = {
-                    date: formattedDate,
-                    dayName: dayName || getDayNameFromDate(formattedDate),
-                    holiday: sheetHoliday || (apiHoliday?.type === '공휴일' ? apiHoliday.name : ''),
-                    tempHoliday: sheetTempHoliday || (apiHoliday?.type === '임시공휴일' ? apiHoliday.name : ''),
-                    other: other || '',
-                    issue: issue || '',
-                    canDeliver: canDeliver,
-                    dayOfWeek: new Date(formattedDate).getDay()
-                };
-            });
-            
-            return deliveryMap;
-        }
-
-        // 날짜에서 요일 구하기
-        function getDayNameFromDate(dateStr) {
-            const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
-            const date = new Date(dateStr);
-            return days[date.getDay()];
-        }
-
-        // 배송 안내 메시지 표시
-        function displayDeliveryNotices(sheetData) {
-            const noticesList = document.getElementById('noticesList');
-            if (!noticesList) {
-                console.log('noticesList 요소를 찾을 수 없습니다');
-                return;
-            }
-            
-            let noticesHTML = '';
-            
-            // H열(인덱스 7)과 I열(인덱스 8) 읽기
-            sheetData.forEach((row, index) => {
-                // 헤더 행 건너뛰기
-                if (index === 0) return;
-                
-                const header = row[7]; // H열 - 제목
-                const content = row[8]; // I열 - 내용
-                
-                if (header && content) {
-                    noticesHTML += `
-                        <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px; backdrop-filter: blur(10px); border-left: 3px solid rgba(255, 255, 255, 0.5);">
-                            <div style="font-weight: 700; font-size: 14px; margin-bottom: 6px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.1);">
-                                ${header}
-                            </div>
-                            <div style="font-size: 13px; line-height: 1.6; color: rgba(255, 255, 255, 0.95);">
-                                ${content}
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            
-            if (noticesHTML) {
-                noticesList.innerHTML = noticesHTML;
-                console.log('안내 메시지가 표시되었습니다');
-            } else {
-                // 기본 메시지
-                noticesList.innerHTML = `
-                    <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px;">
-                        <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px;">배송 일정 안내</div>
-                        <div style="font-size: 13px; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
-                            평일 오전 10시 이전 주문 시 당일 발송됩니다.<br>
-                            주말 및 공휴일은 발송이 없습니다.
-                        </div>
-                    </div>
-                `;
-                console.log('기본 안내 메시지가 표시되었습니다');
-            }
-        }
-
-        // 배송 캘린더 렌더링
-        function renderDeliveryCalendar(deliveryData) {
-            const container = document.getElementById('deliveryCalendarContent');
-            if (!container) return;
-            
-            const currentDate = new Date();
-            
-            let html = `
-                <div class="delivery-nav-controls" style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 20px;">
-                    <button onclick="changeDeliveryMonth(-1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer;">◀</button>
-                    <div style="font-size: 18px; font-weight: 600; min-width: 150px; text-align: center;">
-                        ${deliveryYear}년 ${deliveryMonth + 1}월
-                    </div>
-                    <button onclick="changeDeliveryMonth(1)" style="padding: 8px 12px; border: 1px solid #e1e3e5; border-radius: 6px; background: white; cursor: pointer;">▶</button>
-                </div>
-            `;
-            
-            const firstDay = new Date(deliveryYear, deliveryMonth, 1);
-            const lastDay = new Date(deliveryYear, deliveryMonth + 1, 0);
-            const startDay = firstDay.getDay();
-            const totalDays = lastDay.getDate();
-            
-            html += `
-                <div class="delivery-month-view">
-                    <div class="weekdays">
-                        <div class="weekday sunday">일</div>
-                        <div class="weekday">월</div>
-                        <div class="weekday">화</div>
-                        <div class="weekday">수</div>
-                        <div class="weekday">목</div>
-                        <div class="weekday">금</div>
-                        <div class="weekday saturday">토</div>
-                    </div>
-                    <div class="days-grid">
-            `;
-            
-            // 이전 달 빈 칸
-            for (let i = 0; i < startDay; i++) {
-                html += `<div class="day-cell other-month"></div>`;
-            }
-            
-            // 현재 달 날짜
-            for (let day = 1; day <= totalDays; day++) {
-                const dateStr = `${deliveryYear}-${String(deliveryMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const deliveryInfo = deliveryData[dateStr] || {};
-                
-                const isToday = currentDate.getFullYear() === deliveryYear && 
-                               currentDate.getMonth() === deliveryMonth && 
-                               currentDate.getDate() === day;
-                const isWeekend = deliveryInfo.dayOfWeek === 0 || deliveryInfo.dayOfWeek === 6;
-                const canDeliver = deliveryInfo.canDeliver === true || deliveryInfo.canDeliver === 'Y';
-                
-                let badges = [];
-
-                if (deliveryInfo.issue) {
-                    badges.push(`<div style="background: #ff5252; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px;">${deliveryInfo.issue}</div>`);
-                }
-                if (deliveryInfo.other) {
-                    badges.push(`<div style="background: #9c27b0; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px;">${deliveryInfo.other}</div>`);
-                }
-                if (deliveryInfo.holiday) {
-                    badges.push(`<div style="background: #ff9800; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-bottom: 2px;">${deliveryInfo.holiday}</div>`);
-                }
-                if (deliveryInfo.tempHoliday) {
-                    badges.push(`<div style="background: #2196f3; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px;">${deliveryInfo.tempHoliday}</div>`);
-                }
-                
-                html += `
-                    <div class="day-cell ${isToday ? 'today' : ''}" data-date="${dateStr}" style="position: relative;">
-                        <div class="day-number ${isWeekend ? (deliveryInfo.dayOfWeek === 0 ? 'sunday' : 'saturday') : ''}">
-                            ${day}
-                        </div>
-                        ${!canDeliver ? '<div style="position: absolute; top: 50%; left: 50%; transform: translate(-70%, -70%); font-size: 48px; opacity: 0.5;">❌</div>' : ''}
-                        ${badges.length > 0 ? `<div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center;">${badges.join('')}</div>` : ''}
-                    </div>
-                `;
-            }
-            
-            // 다음 달 빈 칸
-            const remainingCells = 42 - (startDay + totalDays);
-            for (let i = 0; i < remainingCells; i++) {
-                html += `<div class="day-cell other-month"></div>`;
-            }
-            
-            html += `
-                    </div>
-                </div>
-            `;
-            
-            container.innerHTML = html;
-        }
-
-        // 배송 캘린더 월 변경
-        function changeDeliveryMonth(direction) {
-            deliveryMonth += direction;
-            if (deliveryMonth > 11) {
-                deliveryMonth = 0;
-                deliveryYear++;
-            } else if (deliveryMonth < 0) {
-                deliveryMonth = 11;
-                deliveryYear--;
-            }
-            loadDeliveryData();
-        }
-
-        window.changeDeliveryMonth = changeDeliveryMonth;
-
         // DOM 로드 완료 후 초기화
         window.addEventListener('DOMContentLoaded', function() {
             DalraeHeader.init({
@@ -2637,9 +2024,6 @@
             updatePeriodDisplay();
             loadData();
             setupEventListeners();
-            
-            // 배송 캘린더 초기화
-            setTimeout(loadDeliveryData, 1000);
         });
     </script>
 </body>
