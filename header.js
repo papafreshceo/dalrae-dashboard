@@ -28,6 +28,10 @@
                             <span>📅</span>
                             <span>상품캘린더</span>
                         </button>
+                        <button class="nav-btn" data-page="delivery">
+                            <span>🚚</span>
+                            <span>배송캘린더</span>
+                        </button>
                         <button class="nav-btn" data-page="orders">
                             <span>📋</span>
                             <span>주문관리</span>
@@ -142,6 +146,7 @@
                 'dashboard': 'index.html',
                 'products': 'products.html',
                 'calendar': 'calendar.html',
+                'delivery': 'delivery.html',  // 추가
                 'orders': 'orders.html',
                 'services': 'services.html',
                 'notice': 'notice.html'
@@ -206,3 +211,4 @@
         setActivePage: setActivePage
     };
 })();
+
