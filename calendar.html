@@ -1343,11 +1343,9 @@
                 if (!startDate || !endDate) return;
                 
                 // 연도를 넘어가는 경우 처리
-                if (startDate > endDate) {
-                    if (startDate.getMonth() >= 8 && endDate.getMonth() <= 3) {
-                        endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
-                    }
-                }
+if (startDate > endDate) {
+    endDate = new Date(endDate.getFullYear() + 1, endDate.getMonth(), endDate.getDate());
+}
                 
                 if (!productMap[item]) {
                     productMap[item] = {
