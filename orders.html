@@ -59,7 +59,11 @@
     .cta-wrap { display: flex; gap: 12px; align-items: center; }
     .hint { font-size: 13px; color: #94a3b8; }
 
-    /* 푸터 안내 */
+    /* 전화 링크 */
+    .phone-link { text-decoration: underline; font-weight: 700; color: #a5b4fc; }
+    .phone-link:hover { opacity: .9; }
+
+    /* 푸터 안내 (문구는 제거됨) */
     .footnote { margin-top: 18px; font-size: 13px; color: #93a3b8; }
 
     @media (max-width: 640px) {
@@ -84,9 +88,12 @@
       <div class="cta-wrap">
         <button class="special-btn" onclick="openOrderSystem()" aria-label="발주시스템 열기">🚜 발주시스템</button>
         <span class="hint">새 탭으로 열립니다</span>
+        <!-- 전화걸기 링크 추가 -->
+        <a class="phone-link" href="tel:010-2688-1388" aria-label="010-2688-1388로 전화">📞 010-2688-1388</a>
       </div>
 
-      <p class="footnote">문의가 필요하시면 상단 메뉴의 연락 경로를 이용해 주세요.</p>
+      <!-- 아래 문구는 요청으로 제거됨 -->
+      <!-- <p class="footnote">문의가 필요하시면 상단 메뉴의 연락 경로를 이용해 주세요.</p> -->
     </section>
   </main>
 
