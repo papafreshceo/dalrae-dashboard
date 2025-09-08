@@ -508,53 +508,53 @@ async function fetchSheetData() {
             return days[date.getDay()];
         }
 
-        // 배송 안내 메시지 표시
-        function displayDeliveryNotices(sheetData) {
-            const noticesList = document.getElementById('noticesList');
-            if (!noticesList) {
-                console.log('noticesList 요소를 찾을 수 없습니다');
-                return;
-            }
-            
-            let noticesHTML = '';
-            let hasNotices = false;
-            let noticeIndex = 0;
-            
-            // H열(인덱스 7)과 I열(인덱스 8) 읽기
-            console.log('공지사항 데이터 확인:');
-            sheetData.forEach((row, index) => {
-                // 헤더 행 건너뛰기
-                if (index === 0) return;
-                
-                const header = row[7]; // H열 - 메시지 제목
-                const content = row[8]; // I열 - 메시지 내용
-                
-                console.log(`행 ${index}: H열="${header}", I열="${content}"`);
-                
-                if (header && content && header.trim() !== '' && content.trim() !== '') {
-                    hasNotices = true;
-                    noticesHTML += `
-                        <div class="notice-card" style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; transition: all 0.3s ease;">
-                            <div class="notice-header" style="padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; min-height: 35px;" onclick="toggleNotice(${noticeIndex})">
-                                <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: #0066A0; line-height: 1.2; flex: 1;">
-                                    ${header}
-                                </h4>
-                                <button class="toggle-btn" id="toggle-btn-${noticeIndex}" style="background: none; border: none; cursor: pointer; padding: 3px; color: #0066A0; font-size: 16px; transition: transform 0.3s ease; margin-left: 10px;">
-                                    ▼
-                                </button>
-                            </div>
-                            <div class="notice-content" id="notice-content-${noticeIndex}" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
-                                <div style="padding: 0 15px 12px 15px;">
-                                    <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #333; font-weight: 400;">
-                                        ${content.replace(/\n/g, '<br>')}
-                                    </p>
-                                </div>
-                            </div>
+// 배송 안내 메시지 표시
+function displayDeliveryNotices(sheetData) {
+    const noticesList = document.getElementById('noticesList');
+    if (!noticesList) {
+        console.log('noticesList 요소를 찾을 수 없습니다');
+        return;
+    }
+    
+    let noticesHTML = '';
+    let hasNotices = false;
+    let noticeIndex = 0;
+    
+    // H열(인덱스 7)과 I열(인덱스 8) 읽기
+    console.log('공지사항 데이터 확인:');
+    sheetData.forEach((row, index) => {
+        // 헤더 행 건너뛰기 제거 - API에서 이미 제거했음!
+        // if (index === 0) return; // ← 이 줄 삭제!!!
+        
+        const header = row[7]; // H열 - 메시지 제목
+        const content = row[8]; // I열 - 메시지 내용
+        
+        console.log(`행 ${index}: H열="${header}", I열="${content}"`);
+        
+        if (header && content && header.trim() !== '' && content.trim() !== '') {
+            hasNotices = true;
+            noticesHTML += `
+                <div class="notice-card" style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; transition: all 0.3s ease;">
+                    <div class="notice-header" style="padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; min-height: 35px;" onclick="toggleNotice(${noticeIndex})">
+                        <h4 style="margin: 0; font-size: 14px; font-weight: 700; color: #0066A0; line-height: 1.2; flex: 1;">
+                            ${header}
+                        </h4>
+                        <button class="toggle-btn" id="toggle-btn-${noticeIndex}" style="background: none; border: none; cursor: pointer; padding: 3px; color: #0066A0; font-size: 16px; transition: transform 0.3s ease; margin-left: 10px;">
+                            ▼
+                        </button>
+                    </div>
+                    <div class="notice-content" id="notice-content-${noticeIndex}" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+                        <div style="padding: 0 15px 12px 15px;">
+                            <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #333; font-weight: 400;">
+                                ${content.replace(/\n/g, '<br>')}
+                            </p>
                         </div>
-                    `;
-                    noticeIndex++;
-                }
-            });
+                    </div>
+                </div>
+            `;
+            noticeIndex++;
+        }
+    });
             
             if (hasNotices) {
                 noticesList.innerHTML = noticesHTML;
