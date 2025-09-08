@@ -878,6 +878,7 @@
             }
         }
     </style>
+    <script src="header.js"></script>  <!-- 추가 -->
 </head>
 <body>
     <!-- 공통 헤더 -->
@@ -1889,105 +1890,9 @@
             }
         }
 
-        // 헤더 초기화 코드
-        (function() {
-            function createHeader() {
-                return `
-                    <header class="top-header">
-                        <div class="header-content">
-                            <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
-                                 alt="달래마켓" 
-                                 class="logo-img">
-                            <div class="center-button">
-                                <button class="nav-btn special-btn" onclick="openOrderSystem()">
-                                    <span>🚜</span>
-                                    <span>발주시스템</span>
-                                </button>
-                            </div>
-                            <nav class="nav-menu" id="mainMenu">
-                                <button class="nav-btn" data-page="dashboard">
-                                    <span>📊</span>
-                                    <span>대시보드</span>
-                                </button>
-                                <button class="nav-btn" data-page="products">
-                                    <span>📦</span>
-                                    <span>상품리스트</span>
-                                </button>
-                                <button class="nav-btn" data-page="calendar">
-                                    <span>📅</span>
-                                    <span>상품캘린더</span>
-                                </button>
-                                <button class="nav-btn" data-page="delivery">
-                                    <span>🚚</span>
-                                    <span>배송캘린더</span>
-                                </button>
-                                <button class="nav-btn" data-page="orders">
-                                    <span>📋</span>
-                                    <span>주문관리</span>
-                                </button>
-                                <button class="nav-btn" data-page="services">
-                                    <span>🎯</span>
-                                    <span>서비스&프로그램</span>
-                                </button>
-                                <button class="nav-btn" data-page="notice">
-                                    <span>📢</span>
-                                    <span>공지사항</span>
-                                </button>
-                            </nav>
-                        </div>
-                    </header>
-                    <div class="menu-container" id="menuContainer">
-                        <div class="menu-wrapper" id="menuWrapper" style="display: none;"></div>
-                    </div>
-                `;
-            }
 
-            function setActivePage(pageName) {
-                document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                document.querySelectorAll(`.nav-btn[data-page="${pageName}"]`).forEach(btn => {
-                    btn.classList.add('active');
-                });
-            }
 
-            function handleMenuClick(e) {
-                const page = e.currentTarget.dataset.page;
-                if (page) {
-                    const pageUrls = {
-                        'dashboard': 'index.html',
-                        'products': 'products.html',
-                        'calendar': 'calendar.html',
-                        'delivery': 'delivery.html',
-                        'orders': 'orders.html',
-                        'services': 'services.html',
-                        'notice': 'notice.html'
-                    };
-                    
-                    if (pageUrls[page]) {
-                        window.location.href = pageUrls[page];
-                    }
-                }
-            }
-
-            function initHeader(options = {}) {
-                const container = document.getElementById(options.containerId || 'header-container');
-                if (!container) return;
-                
-                container.innerHTML = createHeader();
-                
-                setActivePage(options.activePage || 'calendar');
-                
-                document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
-                    btn.addEventListener('click', handleMenuClick);
-                });
-            }
-
-            window.DalraeHeader = {
-                init: initHeader,
-                setActivePage: setActivePage
-            };
-        })();
+        
 
         // 이벤트 리스너 설정
         function setupEventListeners() {
@@ -2016,15 +1921,11 @@
 
         // DOM 로드 완료 후 초기화
         window.addEventListener('DOMContentLoaded', function() {
-            DalraeHeader.init({
-                containerId: 'header-container',
-                activePage: 'calendar'
-            });
-            
-            updatePeriodDisplay();
-            loadData();
-            setupEventListeners();
-        });
+    // header.js가 알아서 처리하므로 헤더 초기화 코드 불필요
+    updatePeriodDisplay();
+    loadData();
+    setupEventListeners();
+});
     </script>
 </body>
 </html>
