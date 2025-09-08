@@ -1,5 +1,185 @@
 // header.js - 달래마켓 공통 헤더
 (function() {
+    // 헤더 스타일 생성
+    function createHeaderStyles() {
+        const styles = `
+            /* 공통 헤더 스타일 */
+            * { 
+                margin: 0; 
+                padding: 0; 
+                box-sizing: border-box; 
+            }
+
+            /* 헤더 */
+            .top-header {
+                background: white;
+                border-bottom: 1px solid #e8e9eb;
+                padding: 20px 0;
+                position: relative;
+                z-index: 100;
+            }
+
+            .header-content {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 0 30px;
+                display: grid;
+                grid-template-columns: 200px 1fr auto;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .logo-img { 
+                height: 36px;
+                object-fit: contain;
+                cursor: pointer;
+            }
+
+            /* 메뉴 고정용 컨테이너 */
+            .menu-container {
+                position: relative;
+                background: white;
+                transition: all 0.3s;
+            }
+
+            .menu-container.sticky {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 200;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                padding: 10px 0;
+            }
+
+            .menu-wrapper {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 0 30px;
+                display: flex;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .center-button {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .nav-menu { 
+                display: flex; 
+                gap: 8px;
+            }
+
+            .nav-btn {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 10px 16px;
+                background: white;
+                border: 1px solid #e1e3e5;
+                border-radius: 8px;
+                color: #5a5c60;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                white-space: nowrap;
+                font-family: 'Noto Sans KR', -apple-system, sans-serif;
+            }
+
+            .nav-btn:hover {
+                background: #f5f6f7;
+                border-color: #667eea;
+                color: #667eea;
+            }
+
+            .nav-btn.active {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border-color: transparent;
+            }
+
+            /* 발주시스템 특별 스타일 */
+            .special-btn {
+                padding: 10px 24px;
+                background: linear-gradient(270deg, #ffffff, #ff9a9e, #fecfef, #a8e6cf, #ffffff);
+                background-size: 400% 100%;
+                color: #333;
+                border: none;
+                font-weight: 600;
+                animation: shine 3.75s ease-in-out infinite;
+                position: relative;
+                overflow: hidden;
+            }
+
+            @keyframes shine {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+
+            .special-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 4px 12px rgba(255, 154, 158, 0.4);
+            }
+
+            /* 모바일 반응형 */
+            @media (max-width: 768px) {
+                .top-header {
+                    padding: 15px 0;
+                }
+                
+                .logo-img {
+                    height: 22px;
+                }
+                
+                .header-content {
+                    grid-template-columns: 1fr;
+                    gap: 15px;
+                    padding: 0 15px;
+                }
+                
+                .menu-container.sticky .menu-wrapper {
+                    padding: 0 10px;
+                    gap: 8px;
+                }
+                
+                .center-button {
+                    order: -1;
+                }
+                
+                .nav-menu {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 4px;
+                    width: 100%;
+                }
+                
+                .nav-btn {
+                    padding: 6px 4px;
+                    font-size: 11px;
+                }
+                
+                .nav-btn span {
+                    display: inline-block;
+                    white-space: nowrap;
+                }
+                
+                .special-btn {
+                    width: 100%;
+                    padding: 8px 12px;
+                }
+            }
+        `;
+        
+        // style 태그 생성 및 추가
+        const styleElement = document.createElement('style');
+        styleElement.textContent = styles;
+        document.head.appendChild(styleElement);
+    }
+
     // 헤더 HTML 생성
     function createHeader() {
         const headerHTML = `
@@ -123,6 +303,15 @@
                         mainMenuClone.querySelectorAll('.nav-btn').forEach(btn => {
                             btn.addEventListener('click', handleMenuClick);
                         });
+                        
+                        // 현재 페이지 활성화 상태 유지
+                        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+                        const pageName = currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
+                        mainMenuClone.querySelectorAll('.nav-btn').forEach(btn => {
+                            if (btn.dataset.page === pageName) {
+                                btn.classList.add('active');
+                            }
+                        });
                     }
                 } else {
                     menuContainer.classList.remove('sticky');
@@ -146,7 +335,7 @@
                 'dashboard': 'index.html',
                 'products': 'products.html',
                 'calendar': 'calendar.html',
-                'delivery': 'delivery.html',  // 추가
+                'delivery': 'delivery.html',
                 'orders': 'orders.html',
                 'services': 'services.html',
                 'notice': 'notice.html'
@@ -167,6 +356,9 @@
 
     // 헤더 초기화
     function initHeader(options = {}) {
+        // 스타일 먼저 추가
+        createHeaderStyles();
+        
         // 옵션 설정
         const { 
             containerId = 'header-container',
@@ -205,10 +397,24 @@
         }
     }
 
+    // DOM이 로드되면 자동 초기화
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            // 헤더 컨테이너가 있으면 자동 초기화
+            if (document.getElementById('header-container')) {
+                initHeader();
+            }
+        });
+    } else {
+        // 이미 DOM이 로드된 경우
+        if (document.getElementById('header-container')) {
+            initHeader();
+        }
+    }
+
     // 전역으로 내보내기
     window.DalraeHeader = {
         init: initHeader,
         setActivePage: setActivePage
     };
 })();
-
