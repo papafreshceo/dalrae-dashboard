@@ -507,6 +507,7 @@
             
             let noticesHTML = '';
             let hasNotices = false;
+            let noticeIndex = 0;
             
             // H열(인덱스 7)과 I열(인덱스 8) 읽기
             sheetData.forEach((row, index) => {
@@ -519,15 +520,25 @@
                 if (header && content) {
                     hasNotices = true;
                     noticesHTML += `
-                        <div style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; padding: 15px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                            <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #0066A0; line-height: 1.3;">
-                                ${header}
-                            </h4>
-                            <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #333; font-weight: 400;">
-                                ${content}
-                            </p>
+                        <div class="notice-card" style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; transition: all 0.3s ease;">
+                            <div class="notice-header" style="padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleNotice(${noticeIndex})">
+                                <h4 style="margin: 0; font-size: 16px; font-weight: 700; color: #0066A0; line-height: 1.3; flex: 1;">
+                                    ${header}
+                                </h4>
+                                <button class="toggle-btn" id="toggle-btn-${noticeIndex}" style="background: none; border: none; cursor: pointer; padding: 5px; color: #0066A0; font-size: 20px; transition: transform 0.3s ease;">
+                                    ▼
+                                </button>
+                            </div>
+                            <div class="notice-content" id="notice-content-${noticeIndex}" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+                                <div style="padding: 0 15px 15px 15px;">
+                                    <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #333; font-weight: 400;">
+                                        ${content}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     `;
+                    noticeIndex++;
                 }
             });
             
@@ -537,19 +548,66 @@
             } else {
                 // 기본 메시지
                 noticesList.innerHTML = `
-                    <div style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; padding: 15px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0;">
-                        <h4 style="margin: 0 0 8px 0; font-size: 16px; font-weight: 700; color: #0066A0;">
-                            배송 일정 안내
-                        </h4>
-                        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #333; font-weight: 400;">
-                            평일 오전 10시 이전 주문 시 당일 발송됩니다.<br>
-                            주말 및 공휴일은 발송이 없습니다.
-                        </p>
+                    <div class="notice-card" style="background: rgba(255, 255, 255, 0.7); border-radius: 8px; backdrop-filter: blur(10px); border-left: 3px solid #0066A0; overflow: hidden;">
+                        <div class="notice-header" style="padding: 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleNotice(0)">
+                            <h4 style="margin: 0; font-size: 16px; font-weight: 700; color: #0066A0;">
+                                배송 일정 안내
+                            </h4>
+                            <button class="toggle-btn" id="toggle-btn-0" style="background: none; border: none; cursor: pointer; padding: 5px; color: #0066A0; font-size: 20px; transition: transform 0.3s ease;">
+                                ▼
+                            </button>
+                        </div>
+                        <div class="notice-content" id="notice-content-0" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+                            <div style="padding: 0 15px 15px 15px;">
+                                <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #333; font-weight: 400;">
+                                    평일 오전 10시 이전 주문 시 당일 발송됩니다.<br>
+                                    주말 및 공휴일은 발송이 없습니다.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 `;
                 console.log('기본 안내 메시지가 표시되었습니다');
             }
         }
+        
+        // 공지사항 토글 함수
+        function toggleNotice(index) {
+            const content = document.getElementById(`notice-content-${index}`);
+            const button = document.getElementById(`toggle-btn-${index}`);
+            
+            if (!content || !button) return;
+            
+            // 현재 상태 확인
+            const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+            
+            // 모든 다른 공지사항 닫기
+            const allContents = document.querySelectorAll('.notice-content');
+            const allButtons = document.querySelectorAll('.toggle-btn');
+            
+            allContents.forEach((el, i) => {
+                if (el && el.id !== `notice-content-${index}`) {
+                    el.style.maxHeight = '0';
+                }
+            });
+            
+            allButtons.forEach((btn, i) => {
+                if (btn && btn.id !== `toggle-btn-${index}`) {
+                    btn.style.transform = 'rotate(0deg)';
+                }
+            });
+            
+            // 현재 공지사항 토글
+            if (isOpen) {
+                content.style.maxHeight = '0';
+                button.style.transform = 'rotate(0deg)';
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                button.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        window.toggleNotice = toggleNotice;
 
         // 배송 캘린더 렌더링
         function renderDeliveryCalendar(deliveryData) {
