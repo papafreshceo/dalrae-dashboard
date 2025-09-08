@@ -436,28 +436,28 @@
                 let canDeliver = false;
                 let deliveryType = 'none'; // 'normal', 'special', 'none'
                 
-                // 1. 시트에 명시적으로 N이 있으면 무조건 배송 불가
-                if (sheetValue === 'N') {
+                // 1. 토요일은 무조건 배송 불가
+                if (dayOfWeek === 6) {
                     canDeliver = false;
                     deliveryType = 'none';
                 }
-                // 2. 토요일은 무조건 배송 불가
-                else if (dayOfWeek === 6) {
-                    canDeliver = false;
-                    deliveryType = 'none';
-                }
-                // 3. 일요일은 특별 배송
+                // 2. 일요일은 무조건 특별 배송 (시트 N 무시)
                 else if (dayOfWeek === 0) {
                     canDeliver = true;
                     deliveryType = 'special';
                 }
-                // 4. 연휴 마지막날 체크 (공휴일이면서 다음날이 평일)
+                // 3. 연휴 마지막날은 무조건 특별 배송 (시트 N 무시)
                 else if (isLastDayOfHolidayPeriod(dateStr, deliveryMap)) {
                     canDeliver = true;
                     deliveryType = 'special';
                 }
-                // 5. 공휴일 전날은 배송 불가
+                // 4. 공휴일 전날은 무조건 배송 불가
                 else if (isBeforeHoliday(dateStr, deliveryMap)) {
+                    canDeliver = false;
+                    deliveryType = 'none';
+                }
+                // 5. 시트에 명시적으로 N이 있으면 배송 불가 (일요일/연휴마지막 제외)
+                else if (sheetValue === 'N') {
                     canDeliver = false;
                     deliveryType = 'none';
                 }
@@ -472,8 +472,8 @@
                     deliveryType = 'normal';
                 }
                 
-                // 시트에 Y가 명시되어 있으면 특별 배송으로 override
-                if (sheetValue === 'Y' && !canDeliver) {
+                // 시트에 Y가 명시되어 있으면 특별 배송으로 override (토요일 제외)
+                if (sheetValue === 'Y' && !canDeliver && dayOfWeek !== 6) {
                     canDeliver = true;
                     deliveryType = 'special';
                 }
