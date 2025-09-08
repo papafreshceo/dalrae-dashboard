@@ -509,7 +509,7 @@
             background: linear-gradient(180deg, #FFD93D, #6BCF7F, #4A90E2, #FFD93D);
             background-size: 100% 300%;
             animation: gradientFlow 3s ease infinite;
-            z-index: 5;
+            z-index: 999;
             opacity: 0.8;
             box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
         }
@@ -1727,7 +1727,7 @@ if (startDate > endDate) {
                 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 const todayPosition = (100 / 12) * (currentMonthNow + currentDayNow / monthDays[currentMonthNow]);
                 
-                html += `<div class="year-today-line" style="left: ${todayPosition}%;"></div>`;
+                html += `<div class="year-today-line" style="left: ${todayPosition}%; z-index: 999;"></div>`;
                 html += `
                     <div style="position: absolute; left: ${todayPosition}%; top: -20px; transform: translateX(-50%); z-index: 20;">
                         <div style="background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
