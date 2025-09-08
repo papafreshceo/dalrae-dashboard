@@ -12,10 +12,25 @@ export default async function handler(req, res) {
       spreadsheetId: process.env.SHEET_ID,
       range: 'DELIVERY!A:I',
     });
+    
     const rows = response.data.values || [];
     
     // 헤더 제거
-    const deliveryData = rows.slice(1);
+    const headers = rows[0];
+    const deliveryData = rows.slice(1).map(row => {
+      // 행이 없으면 빈 배열 반환
+      if (!row) return [];
+      
+      // 현재 행 복사
+      const expandedRow = [...row];
+      
+      // 9개 열이 되도록 빈 문자열 추가
+      while (expandedRow.length < 9) {
+        expandedRow.push('');
+      }
+      
+      return expandedRow;
+    });
     
     res.status(200).json(deliveryData);
   } catch (error) {
