@@ -1119,6 +1119,17 @@
                 <div style="color: #999;">📦 배송 캘린더 로딩 중...</div>
             </div>
         </div>
+
+        <!-- 배송 안내 메시지 -->
+<div id="deliveryNotices" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 20px; margin-bottom: 20px; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);">
+    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+        <span style="font-size: 24px; margin-right: 10px;">📢</span>
+        <h3 style="margin: 0; font-size: 18px;">공지사항</h3>
+    </div>
+    <div id="noticesList" style="display: flex; flex-direction: column; gap: 12px;">
+        <!-- 여기에 공지사항 동적 추가 -->
+    </div>
+</div>
         
         <!-- 배송 안내 정보 -->
         <div class="delivery-info">
@@ -2311,6 +2322,8 @@ async function loadDeliveryData() {
         
         // 4. 캘린더 렌더링
         renderDeliveryCalendar(deliveryMap);
+        // 안내 메시지 표시
+displayDeliveryNotices(sheetData);
         
     } catch (error) {
         console.error('배송 데이터 로드 실패:', error);
@@ -2320,6 +2333,8 @@ async function loadDeliveryData() {
 // 구글 시트 데이터 가져오기
 async function fetchSheetData() {
     const response = await fetch('/api/delivery');
+    // 전체 데이터를 loadDeliveryData에 전달하도록 수정
+window.deliverySheetData = data; // 전역 변수에 저장
     const data = await response.json();
     
     if (!data || data.length === 0) {
@@ -2597,6 +2612,48 @@ function initDeliveryCalendar() {
     // 데이터 로드
     loadDeliveryData();
 }
+        // 배송 안내 메시지 표시
+function displayDeliveryNotices(sheetData) {
+    const noticesList = document.getElementById('noticesList');
+    if (!noticesList) return;
+    
+    let noticesHTML = '';
+    
+    // H열(인덱스 7)과 I열(인덱스 8) 읽기
+    sheetData.forEach(row => {
+        const header = row[7]; // H열 - 제목
+        const content = row[8]; // I열 - 내용
+        
+        if (header && content) {
+            noticesHTML += `
+                <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px; backdrop-filter: blur(10px);">
+                    <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px; color: #fff;">
+                        ${header}
+                    </div>
+                    <div style="font-size: 13px; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
+                        ${content}
+                    </div>
+                </div>
+            `;
+        }
+    });
+    
+    if (noticesHTML) {
+        noticesList.innerHTML = noticesHTML;
+    } else {
+        // 기본 메시지
+        noticesList.innerHTML = `
+            <div style="background: rgba(255, 255, 255, 0.15); border-radius: 8px; padding: 12px;">
+                <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px;">배송 일정 안내</div>
+                <div style="font-size: 13px; line-height: 1.5; color: rgba(255, 255, 255, 0.9);">
+                    평일 오전 10시 이전 주문 시 당일 발송됩니다.<br>
+                    주말 및 공휴일은 발송이 없습니다.
+                </div>
+            </div>
+        `;
+    }
+}
+        
 // 배송 캘린더 월 변경
 function changeDeliveryMonth(direction) {
     deliveryMonth += direction;
