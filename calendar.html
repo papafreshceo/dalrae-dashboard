@@ -373,7 +373,7 @@
             cursor: pointer;
             transition: all 0.2s;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            opacity: 0.75;
+            opacity: 0.85;
         }
         
         .month-timeline-bar:hover {
@@ -447,12 +447,6 @@
             border-right: 1px solid #f0f0f0;
         }
         
-        .year-month-cell.today-column {
-            background: linear-gradient(to bottom, rgba(102, 126, 234, 0.05), rgba(102, 126, 234, 0.02));
-            border-left: 2px solid #667eea;
-            border-right: 2px solid #667eea;
-        }
-        
         .year-timeline-bar {
             position: absolute;
             height: 24px;
@@ -491,6 +485,26 @@
             z-index: 100;
             box-shadow: 0 2px 6px rgba(0,0,0,0.2);
             opacity: 1;
+        }
+        
+        /* 오늘 날짜 세로선 - 그라데이션 애니메이션 */
+        .year-today-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #FFD93D, #6BCF7F, #4A90E2, #FFD93D);
+            background-size: 100% 300%;
+            animation: gradientFlow 3s ease infinite;
+            z-index: 5;
+            opacity: 0.8;
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        @keyframes gradientFlow {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 0% 100%; }
+            100% { background-position: 0% 0%; }
         }
         
         /* 범례 */
@@ -818,6 +832,7 @@
         let productTimelines = [];
         let productColors = {};
         let monthProductTimelines = [];
+        let dataLoaded = false;
 
         // 색상 팔레트
         const colorPalette = [
@@ -859,8 +874,10 @@
             }
             
             updatePeriodDisplay();
-            renderCalendar();
-            updateLegend();
+            if (dataLoaded) {
+                renderCalendar();
+                updateLegend();
+            }
         }
 
         // 이전 기간
@@ -871,8 +888,10 @@
                     currentMonth = 11;
                 }
                 updatePeriodDisplay();
-                renderCalendar();
-                updateLegend();
+                if (dataLoaded) {
+                    renderCalendar();
+                    updateLegend();
+                }
             }
         }
 
@@ -884,8 +903,10 @@
                     currentMonth = 0;
                 }
                 updatePeriodDisplay();
-                renderCalendar();
-                updateLegend();
+                if (dataLoaded) {
+                    renderCalendar();
+                    updateLegend();
+                }
             }
         }
 
@@ -894,8 +915,10 @@
             const today = new Date();
             currentMonth = today.getMonth();
             updatePeriodDisplay();
-            renderCalendar();
-            updateLegend();
+            if (dataLoaded) {
+                renderCalendar();
+                updateLegend();
+            }
         }
 
         // 기간 표시 업데이트
@@ -928,22 +951,51 @@
             return isNaN(date.getTime()) ? null : date;
         }
 
+        // 테스트용 샘플 데이터
+        function getSampleData() {
+            return [
+                {품목: '딸기', 대분류: '농산물', 시작일: '01-15', 종료일: '03-31', 옵션명: '설향', 품종: '설향', 공급상태: '공급중', '셀러공급Y/N': 'Y'},
+                {품목: '사과', 대분류: '농산물', 시작일: '10-01', 종료일: '02-28', 옵션명: '부사', 품종: '부사', 공급상태: '공급중', '셀러공급Y/N': 'Y'},
+                {품목: '배', 대분류: '농산물', 시작일: '09-15', 종료일: '01-31', 옵션명: '신고', 품종: '신고', 공급상태: '공급중', '셀러공급Y/N': 'Y'},
+                {품목: '귤', 대분류: '농산물', 시작일: '11-01', 종료일: '02-15', 옵션명: '감귤', 품종: '온주', 공급상태: '공급중', '셀러공급Y/N': 'Y'},
+                {품목: '토마토', 대분류: '농산물', 시작일: '03-01', 종료일: '11-30', 옵션명: '완숙', 품종: '완숙', 공급상태: '공급중', '셀러공급Y/N': 'Y'},
+                {품목: '포도', 대분류: '농산물', 시작일: '07-15', 종료일: '10-31', 옵션명: '샤인머스켓', 품종: '샤인머스켓', 공급상태: '공급중', '셀러공급Y/N': 'Y'},
+                {품목: '수박', 대분류: '농산물', 시작일: '06-01', 종료일: '08-31', 옵션명: '무등산', 품종: '무등산', 공급상태: '공급중', '셀러공급Y/N': 'Y'}
+            ];
+        }
+
         // 데이터 로드
         function loadData() {
+            console.log('데이터 로드 시작...');
+            
+            // 먼저 샘플 데이터로 초기화
+            allProducts = getSampleData();
+            processProductTimelines();
+            assignColors();
+            dataLoaded = true;
+            renderCalendar();
+            updateLegend();
+            
+            // 실제 데이터 로드 시도
             fetch('/api/products')
             .then(response => response.json())
             .then(data => {
+                console.log('API 데이터 로드 성공:', data.length);
                 allProducts = data.filter(p => {
                     const supplyStatus = p['셀러공급Y/N'] || '';
                     return supplyStatus.toString().trim() !== '미공급상품';
                 });
-                processProductTimelines();
-                assignColors();
-                renderCalendar();
-                updateLegend();
+                
+                if (allProducts.length > 0) {
+                    processProductTimelines();
+                    assignColors();
+                    dataLoaded = true;
+                    renderCalendar();
+                    updateLegend();
+                }
             })
             .catch(error => {
-                console.error('데이터 로드 에러:', error);
+                console.error('데이터 로드 에러, 샘플 데이터 사용:', error);
             });
         }
 
@@ -991,6 +1043,7 @@
             });
             
             productTimelines = Object.values(productMap);
+            console.log('처리된 타임라인:', productTimelines);
         }
 
         // 색상 할당
@@ -1012,9 +1065,11 @@
         // 범례 업데이트
         function updateLegend() {
             const legend = document.getElementById('legend');
-            let html = '';
+            if (!legend) return;
             
+            let html = '';
             let productsToShow = [];
+            
             if (currentView === 'month') {
                 productsToShow = monthProductTimelines;
             } else {
@@ -1045,6 +1100,7 @@
         // 월 보기 렌더링
         function renderMonthView() {
             const grid = document.getElementById('daysGrid');
+            if (!grid) return;
             
             const baseYear = 2025;
             const firstDay = new Date(baseYear, currentMonth, 1);
@@ -1059,6 +1115,7 @@
             
             let html = '';
             
+            // 이전 달 날짜
             for (let i = startDay - 1; i >= 0; i--) {
                 const day = prevTotalDays - i;
                 html += `<div class="day-cell other-month">
@@ -1066,6 +1123,7 @@
                 </div>`;
             }
             
+            // 현재 달 날짜
             for (let day = 1; day <= totalDays; day++) {
                 const date = new Date(baseYear, currentMonth, day);
                 const dayOfWeek = date.getDay();
@@ -1081,6 +1139,7 @@
                 </div>`;
             }
             
+            // 다음 달 날짜
             const remainingCells = 42 - (startDay + totalDays);
             for (let day = 1; day <= remainingCells; day++) {
                 html += `<div class="day-cell other-month">
@@ -1092,10 +1151,11 @@
             
             grid.innerHTML = html;
             
-            // 데이터가 로드되었을 때만 타임라인 추가
-            if (productTimelines && productTimelines.length > 0) {
-                setTimeout(() => addMonthTimelines(), 100);
-            }
+            // 타임라인 추가
+            setTimeout(() => {
+                addMonthTimelines();
+                updateLegend();
+            }, 100);
         }
 
         // 월 타임라인 추가
@@ -1103,6 +1163,11 @@
             const container = document.getElementById('monthTimelinesContainer');
             if (!container) return;
             
+            if (!productTimelines || productTimelines.length === 0) {
+                return;
+            }
+            
+            // 이번 달에 표시할 품목 필터링
             monthProductTimelines = productTimelines.filter(product => {
                 const startMonth = product.startDate.getMonth();
                 const endMonth = product.endDate.getMonth();
@@ -1117,8 +1182,12 @@
             });
             
             let html = '';
-            const cellWidth = document.querySelector('.day-cell').offsetWidth;
-            const cellHeight = document.querySelector('.day-cell').offsetHeight;
+            const dayCells = document.querySelectorAll('.day-cell:not(.other-month)');
+            if (!dayCells || dayCells.length === 0) return;
+            
+            const firstCell = dayCells[0];
+            const cellWidth = firstCell.offsetWidth;
+            const cellHeight = firstCell.offsetHeight;
             
             monthProductTimelines.forEach((product, index) => {
                 const startMonth = product.startDate.getMonth();
@@ -1130,7 +1199,8 @@
                 
                 let displayStart, displayEnd;
                 
-                if (startMonth === currentMonth) {
+                // 현재 월에서의 시작일
+                if (startMonth === currentMonth && startYear === 2025) {
                     displayStart = startDay;
                 } else if ((startYear < endYear && currentMonth <= endMonth) || 
                           (startMonth > currentMonth && startMonth > endMonth)) {
@@ -1139,8 +1209,9 @@
                     return;
                 }
                 
+                // 현재 월에서의 종료일
                 const lastDayOfMonth = new Date(2025, currentMonth + 1, 0).getDate();
-                if (endMonth === currentMonth) {
+                if (endMonth === currentMonth && endYear === 2025) {
                     displayEnd = endDay;
                 } else if ((startYear < endYear && currentMonth >= startMonth) || 
                           (endMonth < currentMonth && startMonth > endMonth)) {
@@ -1149,10 +1220,12 @@
                     return;
                 }
                 
-                const startCell = document.querySelector(`[data-day="${displayStart}"]`);
+                // 시작 셀 찾기
+                const startCell = document.querySelector(`.day-cell:not(.other-month)[data-day="${displayStart}"]`);
                 if (!startCell) return;
                 
-                const startIndex = Array.from(startCell.parentNode.children).indexOf(startCell);
+                const allCells = Array.from(document.querySelectorAll('.day-cell'));
+                const startIndex = allCells.indexOf(startCell);
                 const row = Math.floor(startIndex / 7);
                 const col = startIndex % 7;
                 
@@ -1180,7 +1253,9 @@
                     }
                 }
                 
+                // 타임라인 바 생성
                 if (endRow > row) {
+                    // 여러 주에 걸친 경우
                     const firstWeekDays = 7 - col;
                     const left = col * cellWidth + 2;
                     const top = row * cellHeight + 28 + rowOffset;
@@ -1198,6 +1273,7 @@
                         </div>
                     `;
                     
+                    // 중간 주들
                     for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
                         const weekTop = weekRow * cellHeight + 28 + rowOffset;
                         html += `
@@ -1213,6 +1289,7 @@
                         `;
                     }
                     
+                    // 마지막 주
                     const lastWeekDays = endCol + 1;
                     const lastTop = endRow * cellHeight + 28 + rowOffset;
                     const lastWidth = lastWeekDays * cellWidth - 4;
@@ -1229,6 +1306,7 @@
                         </div>
                     `;
                 } else {
+                    // 한 주 내에 있는 경우
                     const left = col * cellWidth + 2;
                     const top = row * cellHeight + 28 + rowOffset;
                     const width = duration * cellWidth - 4;
@@ -1253,6 +1331,8 @@
         // 년 보기 렌더링
         function renderYearView() {
             const container = document.getElementById('yearTimelineContainer');
+            if (!container) return;
+            
             let html = '';
             
             const today = new Date();
@@ -1270,26 +1350,18 @@
                 
                 html += `<div class="year-timeline-row">`;
                 
+                // 12개월 그리드 생성
                 for (let m = 0; m < 12; m++) {
-                    let cellClass = 'year-month-cell';
-                    
-                    if (currentYearNow === 2025 && m === currentMonthNow) {
-                        const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-                        const dayPercent = currentDayNow / monthDays[m];
-                        
-                        html += `<div class="${cellClass}" style="position: relative;">
-                            <div style="position: absolute; left: ${dayPercent * 100}%; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, #ff6b6b, #ff9a9e); z-index: 5; opacity: 0.7;"></div>
-                        </div>`;
-                    } else {
-                        html += `<div class="${cellClass}"></div>`;
-                    }
+                    html += `<div class="year-month-cell"></div>`;
                 }
                 
+                // 타임라인 바 계산
                 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 let barStartPercent, barWidthPercent;
                 let barClass = '';
                 
                 if (startYear === endYear) {
+                    // 같은 해 내에서
                     const startMonthOffset = (100 / 12) * startMonth;
                     const startDayOffset = (100 / 12) * (startDay / monthDays[startMonth]);
                     barStartPercent = startMonthOffset + startDayOffset;
@@ -1311,6 +1383,7 @@
                         </div>
                     `;
                 } else {
+                    // 연도를 넘어가는 경우
                     const startMonthOffset = (100 / 12) * startMonth;
                     const startDayOffset = (100 / 12) * (startDay / monthDays[startMonth]);
                     const firstBarStart = startMonthOffset + startDayOffset;
@@ -1343,11 +1416,14 @@
                 html += `</div>`;
             });
             
+            // 오늘 날짜 세로선 (그라데이션 애니메이션)
             if (currentYearNow === 2025 && currentMonthNow >= 0 && currentMonthNow <= 11) {
                 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 const monthOffset = (100 / 12) * currentMonthNow;
                 const dayOffset = (100 / 12) * (currentDayNow / monthDays[currentMonthNow]);
                 const todayPosition = monthOffset + dayOffset;
+                
+                html += `<div class="year-today-line" style="left: ${todayPosition}%;"></div>`;
                 
                 html += `
                     <div style="position: absolute; left: ${todayPosition}%; top: -20px; transform: translateX(-50%); z-index: 20;">
@@ -1577,8 +1653,8 @@
                 activePage: 'calendar'
             });
             
-            loadData();
             updatePeriodDisplay();
+            loadData();
         });
     </script>
 </body>
