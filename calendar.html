@@ -2453,29 +2453,25 @@ function renderDeliveryCalendar(deliveryData) {
         if (isHoliday) cellClass += ' holiday';
         if (hasOther) cellClass += ' other-reason';
         
-        let statusText = '';
+         let statusText = '';
         let statusClass = '';
         
-        if (!canDeliver) {
-            if (isHoliday) {
-                statusText = deliveryInfo.holiday || deliveryInfo.tempHoliday;
-                statusClass = 'holiday-label';
-            } else if (hasOther) {
-                statusText = deliveryInfo.other;
-                statusClass = 'other-label';
-            } else if (isWeekend) {
-                statusText = '주말';
-                statusClass = 'weekend-label';
-            }
+        if (isHoliday) {
+            statusText = deliveryInfo.holiday || deliveryInfo.tempHoliday;
+            statusClass = 'holiday-label';
+        } else if (hasOther) {
+            statusText = deliveryInfo.other;
+            statusClass = 'other-label';
         }
+        // 주말 라벨 제거
         
         html += `
-            <div class="${cellClass}" data-date="${dateStr}">
-                <div class="day-number" style="position: relative;">
+            <div class="day-cell ${isToday ? 'today' : ''}" data-date="${dateStr}" style="position: relative;">
+                <div class="day-number ${isWeekend ? (deliveryInfo.dayOfWeek === 0 ? 'sunday' : 'saturday') : ''}">
                     ${day}
-                    ${!canDeliver ? '<span style="position: absolute; right: -5px; top: -5px; font-size: 20px; opacity: 0.5;">❌</span>' : ''}
                 </div>
-                ${statusText ? `<div class="delivery-status ${statusClass}">${statusText}</div>` : ''}
+                ${!canDeliver ? '<div style="position: absolute; top: 5px; left: 50%; transform: translateX(-50%); font-size: 16px; opacity: 0.5;">❌</div>' : ''}
+                ${statusText ? `<div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: #ff9800; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; white-space: nowrap;">${statusText}</div>` : ''}
             </div>
         `;
     }
@@ -2511,16 +2507,8 @@ function addDeliveryCalendarStyles() {
             transition: all 0.2s;
         }
         
-        .delivery-month-view .day-cell.no-delivery {
-            background: #ffebee;
-        }
-        
-        .delivery-month-view .day-cell.holiday {
-            background: #fff3e0;
-        }
-        
-        .delivery-month-view .day-cell.other-reason {
-            background: #f3e5f5;
+          .delivery-month-view .day-cell.today {
+            background: #fff8f0 !important;
         }
         
         .delivery-icon {
