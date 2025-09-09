@@ -1200,6 +1200,8 @@
                         isStart: isFirstSegment,
                         isEnd: false,
                         isSingle: false
+                        cellWidth: cellWidth,  // 추가
+                        cellHeight: cellHeight  // 추가
                     });
                     
                     for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
@@ -1254,46 +1256,75 @@
         }
 
         // 타임라인 바 생성
-        function createTimelineBar(container, options) {
-            const bar = document.createElement('div');
-            bar.className = 'month-timeline-bar';
-            
-            if (options.isSingle) {
-                bar.classList.add('bar-single');
-            } else if (options.isStart) {
-                bar.classList.add('bar-start');
-            } else if (options.isEnd) {
-                bar.classList.add('bar-end');
-            }
-            
-            bar.style.left = `${options.left}px`;
-            bar.style.top = `${options.top}px`;
-            bar.style.width = `${options.width}px`;
-            bar.style.background = options.color;
-            bar.textContent = options.text;
-            bar.dataset.productName = options.productName;
-            
-            bar.onclick = (e) => {
-                e.stopPropagation();
-                showModalForProduct(options.productName);
-            };
-            
-            bar.onmouseover = (e) => {
-                document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
-                    b.classList.add('hover-active');
-                });
-                showTooltip(e, options.product);
-            };
-            
-            bar.onmouseout = () => {
-                document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
-                    b.classList.remove('hover-active');
-                });
-                hideTooltip();
-            };
-            
-            container.appendChild(bar);
-        }
+        // 타임라인 바 생성 함수 수정
+function createTimelineBar(container, options) {
+    // 기존 바 생성
+    const bar = document.createElement('div');
+    bar.className = 'month-timeline-bar';
+    
+    // 시작일인 경우 마커 추가
+    if (options.isStart) {
+        const startMarker = document.createElement('div');
+        startMarker.className = 'timeline-marker start';
+        startMarker.style.left = `${options.left + 10}px`;
+        startMarker.style.top = `${options.top + options.cellHeight/2 - 10}px`;
+        startMarker.style.borderColor = options.color;
+        startMarker.style.backgroundColor = 'white';
+        container.appendChild(startMarker);
+        
+        // 바는 중앙에서 시작
+        options.left = options.left + options.cellWidth/2;
+        options.width = options.width - options.cellWidth/2;
+    }
+    
+    // 종료일인 경우 마커 추가
+    if (options.isEnd) {
+        const endMarker = document.createElement('div');
+        endMarker.className = 'timeline-marker end';
+        endMarker.style.left = `${options.left + options.width - 10}px`;
+        endMarker.style.top = `${options.top + options.cellHeight/2 - 10}px`;
+        endMarker.style.backgroundColor = options.color;
+        container.appendChild(endMarker);
+        
+        // 바는 끝 전에 종료
+        options.width = options.width - 20;
+    }
+    
+    // 그라데이션 효과 적용
+    if (options.isStart || options.isSingle) {
+        bar.classList.add('gradient-bar');
+        bar.style.background = `linear-gradient(to right, ${options.color} 0%, ${options.color} 70%, transparent 100%)`;
+    }
+    
+    bar.style.left = `${options.left}px`;
+    bar.style.top = `${options.top}px`;
+    bar.style.width = `${options.width}px`;
+    bar.style.background = options.color;
+    bar.textContent = options.text;
+    bar.dataset.productName = options.productName;
+    
+    // 클릭 및 호버 이벤트
+    bar.onclick = (e) => {
+        e.stopPropagation();
+        showModalForProduct(options.productName);
+    };
+    
+    bar.onmouseover = (e) => {
+        document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
+            b.classList.add('hover-active');
+        });
+        showTooltip(e, options.product);
+    };
+    
+    bar.onmouseout = () => {
+        document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
+            b.classList.remove('hover-active');
+        });
+        hideTooltip();
+    };
+    
+    container.appendChild(bar);
+}
 
         // 년 보기 렌더링
         function renderYearView() {
