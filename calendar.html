@@ -9,745 +9,780 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="header.js"></script>
     <style>
-    /* 모던 미니멀 디자인 변수 */
-    :root {
-        --primary-color: #5B21B6;
-        --primary-light: #7C3AED;
-        --primary-dark: #4C1D95;
-        --text-primary: #000000;
-        --text-secondary: #666666;
-        --text-muted: #999999;
-        --bg-primary: #ffffff;
-        --bg-secondary: #fafafa;
-        --border-color: #e0e0e0;
-        --border-light: #f0f0f0;
-        --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-        --shadow-md: 0 2px 4px rgba(0,0,0,0.08);
-        --shadow-lg: 0 4px 8px rgba(0,0,0,0.1);
-    }
+        /* 모던 미니멀 디자인 변수 */
+        :root {
+            --primary-color: #5B21B6;
+            --primary-light: #7C3AED;
+            --primary-dark: #4C1D95;
+            --text-primary: #000000;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --border-color: #e0e0e0;
+            --border-light: #f0f0f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 2px 4px rgba(0,0,0,0.08);
+            --shadow-lg: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-    /* 기본 스타일 */
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    
-    body { 
-        font-family: 'Segoe UI', -apple-system, sans-serif;
-        font-weight: 300;
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        min-height: 100vh;
-        line-height: 1.6;
-    }
-    
-    /* 미니멀 캘린더 헤더 */
-    .calendar-header {
-        background: var(--bg-primary);
-        padding: 30px;
-        margin: 0 auto 30px;
-        max-width: 1400px;
-        border-bottom: 1px solid var(--border-color);
-    }
-    
-    .calendar-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-    
-    .nav-controls {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-    
-    .month-year-display {
-        font-size: 28px;
-        font-weight: 300;
-        color: var(--text-primary);
-        min-width: 150px;
-        text-align: center;
-        letter-spacing: -1px;
-    }
-    
-    /* 미니멀 네비게이션 버튼 */
-    .calendar-nav-btn {
-        background: transparent;
-        border: 1px solid var(--border-color);
-        border-radius: 2px;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-size: 18px;
-        color: var(--text-secondary);
-    }
-    
-    .calendar-nav-btn:hover {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-        background: var(--bg-secondary);
-    }
-    
-    /* 미니멀 오늘 버튼 */
-    .today-btn {
-        padding: 10px 24px;
-        background: transparent;
-        border: 1px solid var(--border-color);
-        border-radius: 2px;
-        color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 400;
-        cursor: pointer;
-        transition: all 0.2s;
-        letter-spacing: 0.5px;
-    }
-    
-    .today-btn:hover {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-    }
-    
-    /* 미니멀 뷰 토글 */
-    .view-toggle {
-        display: flex;
-        gap: 0;
-    }
-    
-    .toggle-btn {
-        padding: 10px 20px;
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
-        color: var(--text-secondary);
-        font-size: 14px;
-        font-weight: 400;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-    
-    .toggle-btn:first-child {
-        border-radius: 2px 0 0 2px;
-    }
-    
-    .toggle-btn:last-child {
-        border-radius: 0 2px 2px 0;
-        border-left: none;
-    }
-    
-    .toggle-btn:hover {
-        background: var(--bg-secondary);
-    }
-    
-    .toggle-btn.active {
-        background: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-    }
-    
-    /* 캘린더 컨테이너 */
-    .calendar-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0 30px;
-    }
-    
-    /* 미니멀 섹션 타이틀 */
-    .section-title {
-        font-size: 24px;
-        font-weight: 300;
-        color: var(--text-primary);
-        margin-bottom: 24px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--border-light);
-        letter-spacing: -0.5px;
-    }
-    
-    /* 미니멀 월 보기 */
-    .month-view {
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
-        padding: 0;
-    }
-    
-    .month-scroll-wrapper {
-        overflow-x: auto;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .month-scroll-wrapper::-webkit-scrollbar {
-        height: 6px;
-    }
-    
-    .month-scroll-wrapper::-webkit-scrollbar-track {
-        background: var(--bg-secondary);
-    }
-    
-    .month-scroll-wrapper::-webkit-scrollbar-thumb {
-        background: var(--border-color);
-        border-radius: 3px;
-    }
-    
-    .month-calendar-content {
-        min-width: 700px;
-        position: relative;
-    }
-    
-    .weekdays {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        border-bottom: 1px solid var(--border-light);
-    }
-    
-    .weekday {
-        padding: 16px;
-        text-align: center;
-        font-weight: 500;
-        font-size: 12px;
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    .weekday.sunday {
-        color: #ef4444;
-    }
-    
-    .weekday.saturday {
-        color: #3b82f6;
-    }
-    
-    .days-grid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        position: relative;
-    }
-    
-    .day-cell {
-        background: var(--bg-primary);
-        min-height: 120px;
-        padding: 12px;
-        position: relative;
-        border-right: 1px solid var(--border-light);
-        border-bottom: 1px solid var(--border-light);
-    }
-    
-    .day-cell:nth-child(7n) {
-        border-right: none;
-    }
-    
-    .day-number {
-        font-size: 14px;
-        font-weight: 400;
-        color: var(--text-primary);
-        margin-bottom: 8px;
-        position: relative;
-        z-index: 2;
-    }
-    
-    .day-cell.other-month .day-number {
-        color: var(--text-muted);
-    }
-    
-    .day-cell.today {
-        background: var(--bg-secondary);
-    }
-    
-    .day-cell.today .day-number {
-        color: var(--primary-color);
-        font-weight: 600;
-    }
-    
-    .day-cell.sunday .day-number {
-        color: #ef4444;
-    }
-    
-    .day-cell.saturday .day-number {
-        color: #3b82f6;
-    }
-    
-    /* 미니멀 타임라인 바 */
-    .month-timeline-wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        pointer-events: none;
-    }
-    
-    .month-timeline-bar {
-        position: absolute;
-        height: 12px;
-        font-size: 9px;
-        color: white;
-        display: flex;
-        align-items: center;
-        padding: 0 6px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: pointer;
-        z-index: 10;
-        pointer-events: auto;
-        transition: all 0.2s;
-        opacity: 0.9;
-    }
-    
-    .month-timeline-bar.bar-start {
-        border-radius: 2px 0 0 2px;
-    }
-    
-    .month-timeline-bar.bar-end {
-        border-radius: 0 2px 2px 0;
-    }
-    
-    .month-timeline-bar.bar-single {
-        border-radius: 2px;
-    }
-    
-    .month-timeline-bar:hover,
-    .month-timeline-bar.hover-active {
-        transform: translateY(-2px);
-        z-index: 100;
-        box-shadow: var(--shadow-lg);
-        opacity: 1;
-    }
-    
-    /* 미니멀 년 보기 */
-    .year-view {
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
-        padding: 0;
-        overflow-x: auto;
-        overflow-y: hidden;
-    }
-    
-    .year-view::-webkit-scrollbar {
-        height: 6px;
-    }
-    
-    .year-view::-webkit-scrollbar-track {
-        background: var(--bg-secondary);
-    }
-    
-    .year-view::-webkit-scrollbar-thumb {
-        background: var(--border-color);
-        border-radius: 3px;
-    }
-    
-    .year-calendar-content {
-        min-width: 1200px;
-    }
-    
-    .year-months-header {
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        border-bottom: 1px solid var(--border-color);
-    }
-    
-    .year-month-label {
-        padding: 14px;
-        text-align: center;
-        font-weight: 500;
-        font-size: 12px;
-        color: var(--text-secondary);
-        border-right: 1px solid var(--border-light);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .year-month-label:last-child {
-        border-right: none;
-    }
-    
-    .year-timeline-container {
-        position: relative;
-        min-height: 400px;
-        background: var(--bg-primary);
-        padding: 20px 10px;
-    }
-    
-    .year-timeline-row {
-        position: relative;
-        height: 32px;
-        margin-bottom: 8px;
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-    }
-    
-    .year-month-cell {
-        position: relative;
-        border-left: 1px solid var(--border-light);
-    }
-    
-    .year-month-cell:last-child {
-        border-right: 1px solid var(--border-light);
-    }
-    
-    .year-timeline-bar {
-        position: absolute;
-        height: 24px;
-        top: 4px;
-        color: white;
-        font-size: 11px;
-        display: flex;
-        align-items: center;
-        padding: 0 10px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: pointer;
-        transition: all 0.2s;
-        z-index: 10;
-        opacity: 0.85;
-    }
-    
-    .year-timeline-bar.bar-start {
-        border-radius: 2px 0 0 2px;
-    }
-    
-    .year-timeline-bar.bar-end {
-        border-radius: 0 2px 2px 0;
-    }
-    
-    .year-timeline-bar.bar-single {
-        border-radius: 2px;
-    }
-    
-    .year-timeline-bar:hover,
-    .year-timeline-bar.hover-active {
-        transform: scale(1.02);
-        z-index: 100;
-        box-shadow: var(--shadow-lg);
-        opacity: 1;
-    }
-    
-    /* 오늘 날짜 표시 */
-    .year-today-line {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: var(--primary-color);
-        z-index: 999;
-        opacity: 0.6;
-    }
-    
-    /* 미니멀 범례 */
-    .legend {
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
-        padding: 20px;
-        margin-top: 30px;
-        display: flex;
-        gap: 24px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 13px;
-        color: var(--text-secondary);
-    }
-    
-    .legend-color {
-        width: 20px;
-        height: 3px;
-        border-radius: 1px;
-    }
-    
-    /* 미니멀 툴팁 */
-    .tooltip {
-        position: fixed;
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
-        padding: 12px 16px;
-        box-shadow: var(--shadow-lg);
-        z-index: 1000;
-        min-width: 200px;
-        display: none;
-    }
-    
-    .tooltip.show {
-        display: block;
-    }
-    
-    .tooltip-title {
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--text-primary);
-        margin-bottom: 6px;
-    }
-    
-    .tooltip-info {
-        font-size: 12px;
-        color: var(--text-secondary);
-        line-height: 1.5;
-    }
-    
-    /* 미니멀 모달 */
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255,255,255,0.95);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .modal.show {
-        display: flex;
-    }
-    
-    .modal-content,
-    .chart-modal-content {
-        background: var(--bg-primary);
-        border: 1px solid var(--border-color);
-        max-width: 1400px;
-        width: 90%;
-        max-height: 85vh;
-        overflow-y: auto;
-        padding: 40px;
-        box-shadow: var(--shadow-lg);
-    }
-    
-    .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid var(--border-light);
-    }
-    
-    .modal-header h2 {
-        font-size: 24px;
-        font-weight: 300;
-        color: var(--text-primary);
-        letter-spacing: -0.5px;
-    }
-    
-    .modal-close {
-        background: transparent;
-        border: none;
-        width: 32px;
-        height: 32px;
-        cursor: pointer;
-        font-size: 24px;
-        font-weight: 300;
-        color: var(--text-secondary);
-        transition: all 0.2s;
-    }
-    
-    .modal-close:hover {
-        color: var(--text-primary);
-    }
-    
-    /* 미니멀 옵션 카드 */
-    .option-card {
-        display: flex;
-        gap: 20px;
-        padding: 20px;
-        background: var(--bg-primary);
-        border-bottom: 1px solid var(--border-light);
-        align-items: center;
-        transition: all 0.2s;
-    }
-    
-    .option-card:hover {
-        background: var(--bg-secondary);
-    }
-    
-    .option-thumb {
-        width: 48px;
-        height: 48px;
-        object-fit: cover;
-        background: var(--bg-secondary);
-        flex-shrink: 0;
-    }
-    
-    .option-info {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-    
-    /* 미니멀 차트 */
-    .chart-container {
-        position: relative;
-        height: 400px;
-        margin: 40px 0;
-        padding: 20px;
-        background: var(--bg-primary);
-        border: 1px solid var(--border-light);
-    }
-    
-    .chart-stats {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0;
-        margin-top: 40px;
-        border: 1px solid var(--border-color);
-    }
-    
-    .chart-stat-box {
-        padding: 20px;
-        text-align: center;
-        border-right: 1px solid var(--border-light);
-    }
-    
-    .chart-stat-box:last-child {
-        border-right: none;
-    }
-    
-    .chart-stat-label {
-        font-size: 11px;
-        color: var(--text-muted);
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-    
-    .chart-stat-value {
-        font-size: 24px;
-        font-weight: 300;
-        color: var(--text-primary);
-    }
-    
-    .chart-stat-value.current {
-        color: var(--primary-color);
-    }
-    
-    .increase { color: #ef4444; }
-    .decrease { color: #10b981; }
-    
-    /* 미니멀 상태 배지 */
-    .status-badge {
-        padding: 4px 10px;
-        font-size: 11px;
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .status-active {
-        background: transparent;
-        color: #10b981;
-        border: 1px solid #10b981;
-    }
-    
-    .status-paused {
-        background: transparent;
-        color: #f59e0b;
-        border: 1px solid #f59e0b;
-    }
-    
-    .status-stopped {
-        background: transparent;
-        color: #ef4444;
-        border: 1px solid #ef4444;
-    }
-    
-    .badge-free {
-        background: transparent;
-        color: var(--primary-color);
-        border: 1px solid var(--primary-color);
-        padding: 3px 10px;
-        font-size: 10px;
-        font-weight: 500;
-        margin-left: 8px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .badge-chart {
-        background: transparent;
-        color: var(--primary-color);
-        padding: 4px 12px;
-        font-size: 11px;
-        font-weight: 500;
-        cursor: pointer;
-        display: inline-block;
-        transition: all 0.2s;
-        border: 1px solid var(--primary-color);
-        margin-left: 8px;
-    }
-    
-    .badge-chart:hover {
-        background: var(--primary-color);
-        color: white;
-    }
-    
-    /* 데이터 없음 */
-    .no-data-message {
-        text-align: center;
-        padding: 100px 20px;
-        color: var(--text-muted);
-    }
-    
-    .no-data-icon {
-        font-size: 48px;
-        margin-bottom: 20px;
-        opacity: 0.3;
-    }
-    
-    .no-data-title {
-        font-size: 18px;
-        color: var(--text-secondary);
-        margin-bottom: 10px;
-        font-weight: 400;
-    }
-    
-    .no-data-text {
-        font-size: 14px;
-        color: var(--text-muted);
-    }
-    
-    /* 모바일 반응형 */
-    @media (max-width: 768px) {
+        /* 기본 스타일 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Segoe UI', -apple-system, sans-serif;
+            font-weight: 300;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* 미니멀 캘린더 헤더 */
         .calendar-header {
-            padding: 20px;
+            background: var(--bg-primary);
+            padding: 30px;
+            margin: 0 auto 30px;
+            max-width: 1400px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
         
         .month-year-display {
-            font-size: 20px;
+            font-size: 28px;
+            font-weight: 300;
+            color: var(--text-primary);
+            min-width: 150px;
+            text-align: center;
+            letter-spacing: -1px;
         }
         
+        /* 미니멀 네비게이션 버튼 */
         .calendar-nav-btn {
-            width: 36px;
-            height: 36px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 2px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 18px;
+            color: var(--text-secondary);
         }
         
+        .calendar-nav-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: var(--bg-secondary);
+        }
+        
+        /* 미니멀 오늘 버튼 */
+        .today-btn {
+            padding: 10px 24px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 2px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.5px;
+        }
+        
+        .today-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        /* 미니멀 뷰 토글 */
+        .view-toggle {
+            display: flex;
+            gap: 0;
+        }
+        
+        .toggle-btn {
+            padding: 10px 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .toggle-btn:first-child {
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .toggle-btn:last-child {
+            border-radius: 0 2px 2px 0;
+            border-left: none;
+        }
+        
+        .toggle-btn:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .toggle-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        /* 캘린더 컨테이너 */
         .calendar-container {
-            padding: 0 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+        
+        /* 미니멀 섹션 타이틀 */
+        .section-title {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
+            letter-spacing: -0.5px;
+        }
+        
+        /* 미니멀 월 보기 */
+        .month-view {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 0;
+        }
+        
+        .month-scroll-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .month-scroll-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .month-scroll-wrapper::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        
+        .month-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+        
+        .month-calendar-content {
+            min-width: 700px;
+            position: relative;
+        }
+        
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .weekday {
+            padding: 16px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .weekday.sunday {
+            color: #ef4444;
+        }
+        
+        .weekday.saturday {
+            color: #3b82f6;
+        }
+        
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            position: relative;
+        }
+        
+        .day-cell {
+            background: var(--bg-primary);
+            min-height: 120px;
+            padding: 12px;
+            position: relative;
+            border-right: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .day-cell:nth-child(7n) {
+            border-right: none;
+        }
+        
+        .day-number {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .day-cell.other-month .day-number {
+            color: var(--text-muted);
+        }
+        
+        .day-cell.today {
+            background: var(--bg-secondary);
+        }
+        
+        .day-cell.today .day-number {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .day-cell.sunday .day-number {
+            color: #ef4444;
+        }
+        
+        .day-cell.saturday .day-number {
+            color: #3b82f6;
+        }
+        
+        /* 타임라인 마커 스타일 */
+        .timeline-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            font-size: 12px;
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        .timeline-marker.start {
+            border: 2px solid;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .timeline-marker.end {
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .timeline-marker.end::before {
+            content: '✕';
+            font-size: 12px;
+        }
+        
+        /* 월 타임라인 바 */
+        .month-timeline-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        
+        .month-timeline-bar {
+            position: absolute;
+            height: 3px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            pointer-events: auto;
+            transition: all 0.2s;
+            opacity: 0.9;
+        }
+
+        .month-timeline-bar.gradient-line {
+            mask-image: linear-gradient(to right, black 0%, black 70%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to right, black 0%, black 70%, transparent 100%);
+        }
+        
+        .month-timeline-bar:hover,
+        .month-timeline-bar.hover-active {
+            transform: translateY(-2px);
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+            opacity: 1;
+        }
+
+        .timeline-text {
+            position: absolute;
+            font-size: 10px;
+            color: white;
+            padding: 2px 6px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 2px;
+            white-space: nowrap;
+            top: -18px;
+            left: 20px;
+            pointer-events: none;
+        }
+        
+        /* 미니멀 년 보기 */
+        .year-view {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 0;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        
+        .year-view::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .year-view::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        
+        .year-view::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+        
+        .year-calendar-content {
+            min-width: 1200px;
+        }
+        
+        .year-months-header {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .year-month-label {
+            padding: 14px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 12px;
+            color: var(--text-secondary);
+            border-right: 1px solid var(--border-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .year-month-label:last-child {
+            border-right: none;
+        }
+        
+        .year-timeline-container {
+            position: relative;
+            min-height: 400px;
+            background: var(--bg-primary);
+            padding: 20px 10px;
+        }
+        
+        .year-timeline-row {
+            position: relative;
+            height: 32px;
+            margin-bottom: 8px;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+        }
+        
+        .year-month-cell {
+            position: relative;
+            border-left: 1px solid var(--border-light);
+        }
+        
+        .year-month-cell:last-child {
+            border-right: 1px solid var(--border-light);
+        }
+        
+        .year-timeline-bar {
+            position: absolute;
+            height: 24px;
+            top: 4px;
+            color: white;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+            opacity: 0.85;
+        }
+        
+        .year-timeline-bar.bar-start {
+            border-radius: 2px 0 0 2px;
+        }
+        
+        .year-timeline-bar.bar-end {
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .year-timeline-bar.bar-single {
+            border-radius: 2px;
+        }
+        
+        .year-timeline-bar:hover,
+        .year-timeline-bar.hover-active {
+            transform: scale(1.02);
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+            opacity: 1;
+        }
+        
+        /* 오늘 날짜 표시 */
+        .year-today-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary-color);
+            z-index: 999;
+            opacity: 0.6;
+        }
+        
+        /* 미니멀 범례 */
+        .legend {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin-top: 30px;
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 3px;
+            border-radius: 1px;
+        }
+        
+        /* 미니멀 툴팁 */
+        .tooltip {
+            position: fixed;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 200px;
+            display: none;
+        }
+        
+        .tooltip.show {
+            display: block;
+        }
+        
+        .tooltip-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+        }
+        
+        .tooltip-info {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        /* 미니멀 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content,
+        .chart-modal-content {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            max-width: 1400px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .modal-header h2 {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+        
+        .modal-close {
+            background: transparent;
+            border: none;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+        
+        /* 미니멀 옵션 카드 */
+        .option-card {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
+            align-items: center;
+            transition: all 0.2s;
+        }
+        
+        .option-card:hover {
+            background: var(--bg-secondary);
+        }
+        
+        .option-thumb {
+            width: 48px;
+            height: 48px;
+            object-fit: cover;
+            background: var(--bg-secondary);
+            flex-shrink: 0;
+        }
+        
+        .option-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .option-col {
+            display: inline-block;
+            flex-shrink: 0;
+        }
+        
+        /* 미니멀 차트 */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 40px 0;
+            padding: 20px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
         }
         
         .chart-stats {
-            grid-template-columns: repeat(2, 1fr);
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            margin-top: 40px;
+            border: 1px solid var(--border-color);
         }
         
-        .chart-stat-box:nth-child(2) {
+        .chart-stat-box {
+            padding: 20px;
+            text-align: center;
+            border-right: 1px solid var(--border-light);
+        }
+        
+        .chart-stat-box:last-child {
             border-right: none;
         }
-    }
-</style>
-    
+        
+        .chart-stat-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .chart-stat-value {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--text-primary);
+        }
+        
+        .chart-stat-value.current {
+            color: var(--primary-color);
+        }
+        
+        .increase { color: #ef4444; }
+        .decrease { color: #10b981; }
+        
+        /* 미니멀 상태 배지 */
+        .status-badge {
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-active {
+            background: transparent;
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+        
+        .status-paused {
+            background: transparent;
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+        
+        .status-stopped {
+            background: transparent;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+        
+        .badge-free {
+            background: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 3px 10px;
+            font-size: 10px;
+            font-weight: 500;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-chart {
+            background: transparent;
+            color: var(--primary-color);
+            padding: 4px 12px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.2s;
+            border: 1px solid var(--primary-color);
+            margin-left: 8px;
+        }
+        
+        .badge-chart:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* 데이터 없음 */
+        .no-data-message {
+            text-align: center;
+            padding: 100px 20px;
+            color: var(--text-muted);
+        }
+        
+        .no-data-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        
+        .no-data-title {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+        
+        .no-data-text {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        /* 모바일 반응형 */
+        @media (max-width: 768px) {
+            .calendar-header {
+                padding: 20px;
+            }
+            
+            .month-year-display {
+                font-size: 20px;
+            }
+            
+            .calendar-nav-btn {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .calendar-container {
+                padding: 0 20px;
+            }
+            
+            .chart-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .chart-stat-box:nth-child(2) {
+                border-right: none;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- 공통 헤더 -->
@@ -880,7 +915,6 @@
             '#54A0FF', '#48DBFB', '#0ABDE3', '#C8D6E5', '#576574'
         ];
 
-        
         // 뷰 전환
         function setView(view) {
             currentView = view;
@@ -972,7 +1006,7 @@
 
         // 데이터 로드
         function loadData() {
-            
+            // API 호출
             fetch('/api/products')
             .then(response => response.json())
             .then(data => {
@@ -990,7 +1024,9 @@
                 }
             })
             .catch(error => {
-                console.error('API 로드 실패, 샘플 데이터 사용:', error);
+                console.error('API 로드 실패:', error);
+                allProducts = [];
+                renderCalendar();
             });
         }
 
@@ -1111,6 +1147,95 @@
             }, 100);
         }
 
+        // 개선된 타임라인 바 생성
+        function createTimelineBar(container, options) {
+            const cellCenterY = options.cellHeight / 2;
+            const cellCenterX = options.cellWidth / 2;
+            
+            // 시작 마커 생성
+            if (options.isStart || options.isSingle) {
+                const startMarker = document.createElement('div');
+                startMarker.className = 'timeline-marker start';
+                startMarker.style.left = `${options.left + cellCenterX - 10}px`;
+                startMarker.style.top = `${options.top + cellCenterY - 10}px`;
+                startMarker.style.borderColor = options.color;
+                container.appendChild(startMarker);
+            }
+            
+            // 종료 마커 생성
+            if (options.isEnd || options.isSingle) {
+                const endX = options.isSingle ? 
+                    options.left + options.width - cellCenterX : 
+                    options.left + options.width - cellCenterX;
+                    
+                const endMarker = document.createElement('div');
+                endMarker.className = 'timeline-marker end';
+                endMarker.style.left = `${endX - 10}px`;
+                endMarker.style.top = `${options.top + cellCenterY - 10}px`;
+                endMarker.style.backgroundColor = options.color;
+                container.appendChild(endMarker);
+            }
+            
+            // 타임라인 바 생성
+            const bar = document.createElement('div');
+            bar.className = 'month-timeline-bar';
+            
+            // 시작점 조정
+            let barLeft = options.left;
+            let barWidth = options.width;
+            
+            if (options.isStart || options.isSingle) {
+                barLeft = options.left + cellCenterX;
+                barWidth = options.width - cellCenterX;
+                bar.classList.add('gradient-line');
+            }
+            
+            if (options.isEnd && !options.isSingle) {
+                barWidth = barWidth - cellCenterX;
+            }
+            
+            if (options.isSingle) {
+                barWidth = options.width - options.cellWidth;
+            }
+            
+            bar.style.left = `${barLeft}px`;
+            bar.style.top = `${options.top + cellCenterY - 2}px`;
+            bar.style.width = `${Math.max(0, barWidth)}px`;
+            bar.style.backgroundColor = options.color;
+            bar.dataset.productName = options.productName;
+            
+            // 텍스트 라벨 추가 (시작점에만)
+            if (options.text && (options.isStart || options.isSingle)) {
+                const textLabel = document.createElement('div');
+                textLabel.className = 'timeline-text';
+                textLabel.textContent = options.text;
+                textLabel.style.backgroundColor = options.color;
+                bar.appendChild(textLabel);
+            }
+            
+            // 이벤트 핸들러
+            bar.onclick = (e) => {
+                e.stopPropagation();
+                showModalForProduct(options.productName);
+            };
+            
+            bar.onmouseover = (e) => {
+                document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
+                    b.classList.add('hover-active');
+                });
+                showTooltip(e, options.product);
+            };
+            
+            bar.onmouseout = () => {
+                document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
+                    b.classList.remove('hover-active');
+                });
+                hideTooltip();
+            };
+            
+            container.appendChild(bar);
+        }
+
         // 월 타임라인 그리기
         function drawMonthTimelines() {
             monthProductTimelines = productTimelines.filter(product => {
@@ -1182,7 +1307,7 @@
                 const endCol = (col + duration - 1) % 7;
                 const endRow = row + Math.floor((col + duration - 1) / 7);
                 
-                const barOffset = (productIndex % 5) * 16;
+                const barOffset = (productIndex % 5) * 16 + 20;
                 
                 if (endRow > row) {
                     const firstWeekDays = 7 - col;
@@ -1191,8 +1316,10 @@
                     
                     createTimelineBar(wrapper, {
                         left: col * cellWidth + 2,
-                        top: row * cellHeight + 30 + barOffset,
+                        top: row * cellHeight + barOffset,
                         width: firstWeekDays * cellWidth - 4,
+                        cellWidth: cellWidth,
+                        cellHeight: cellHeight,
                         color: productColors[product.name],
                         text: showName ? product.name : '',
                         product: product,
@@ -1200,15 +1327,15 @@
                         isStart: isFirstSegment,
                         isEnd: false,
                         isSingle: false
-                        cellWidth: cellWidth,  // 추가
-                        cellHeight: cellHeight  // 추가
                     });
                     
                     for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
                         createTimelineBar(wrapper, {
                             left: 2,
-                            top: weekRow * cellHeight + 30 + barOffset,
+                            top: weekRow * cellHeight + barOffset,
                             width: 7 * cellWidth - 4,
+                            cellWidth: cellWidth,
+                            cellHeight: cellHeight,
                             color: productColors[product.name],
                             text: '',
                             product: product,
@@ -1224,8 +1351,10 @@
                     
                     createTimelineBar(wrapper, {
                         left: 2,
-                        top: endRow * cellHeight + 30 + barOffset,
+                        top: endRow * cellHeight + barOffset,
                         width: lastWeekDays * cellWidth - 4,
+                        cellWidth: cellWidth,
+                        cellHeight: cellHeight,
                         color: productColors[product.name],
                         text: '',
                         product: product,
@@ -1241,8 +1370,10 @@
                     
                     createTimelineBar(wrapper, {
                         left: col * cellWidth + 2,
-                        top: row * cellHeight + 30 + barOffset,
+                        top: row * cellHeight + barOffset,
                         width: duration * cellWidth - 4,
+                        cellWidth: cellWidth,
+                        cellHeight: cellHeight,
                         color: productColors[product.name],
                         text: showName ? product.name : '',
                         product: product,
@@ -1254,77 +1385,6 @@
                 }
             });
         }
-
-        // 타임라인 바 생성
-        // 타임라인 바 생성 함수 수정
-function createTimelineBar(container, options) {
-    // 기존 바 생성
-    const bar = document.createElement('div');
-    bar.className = 'month-timeline-bar';
-    
-    // 시작일인 경우 마커 추가
-    if (options.isStart) {
-        const startMarker = document.createElement('div');
-        startMarker.className = 'timeline-marker start';
-        startMarker.style.left = `${options.left + 10}px`;
-        startMarker.style.top = `${options.top + options.cellHeight/2 - 10}px`;
-        startMarker.style.borderColor = options.color;
-        startMarker.style.backgroundColor = 'white';
-        container.appendChild(startMarker);
-        
-        // 바는 중앙에서 시작
-        options.left = options.left + options.cellWidth/2;
-        options.width = options.width - options.cellWidth/2;
-    }
-    
-    // 종료일인 경우 마커 추가
-    if (options.isEnd) {
-        const endMarker = document.createElement('div');
-        endMarker.className = 'timeline-marker end';
-        endMarker.style.left = `${options.left + options.width - 10}px`;
-        endMarker.style.top = `${options.top + options.cellHeight/2 - 10}px`;
-        endMarker.style.backgroundColor = options.color;
-        container.appendChild(endMarker);
-        
-        // 바는 끝 전에 종료
-        options.width = options.width - 20;
-    }
-    
-    // 그라데이션 효과 적용
-    if (options.isStart || options.isSingle) {
-        bar.classList.add('gradient-bar');
-        bar.style.background = `linear-gradient(to right, ${options.color} 0%, ${options.color} 70%, transparent 100%)`;
-    }
-    
-    bar.style.left = `${options.left}px`;
-    bar.style.top = `${options.top}px`;
-    bar.style.width = `${options.width}px`;
-    bar.style.background = options.color;
-    bar.textContent = options.text;
-    bar.dataset.productName = options.productName;
-    
-    // 클릭 및 호버 이벤트
-    bar.onclick = (e) => {
-        e.stopPropagation();
-        showModalForProduct(options.productName);
-    };
-    
-    bar.onmouseover = (e) => {
-        document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
-            b.classList.add('hover-active');
-        });
-        showTooltip(e, options.product);
-    };
-    
-    bar.onmouseout = () => {
-        document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
-            b.classList.remove('hover-active');
-        });
-        hideTooltip();
-    };
-    
-    container.appendChild(bar);
-}
 
         // 년 보기 렌더링
         function renderYearView() {
@@ -1399,7 +1459,7 @@ function createTimelineBar(container, options) {
                 html += `<div class="year-today-line" style="left: ${todayPosition}%; z-index: 999;"></div>`;
                 html += `
                     <div style="position: absolute; left: ${todayPosition}%; top: -20px; transform: translateX(-50%); z-index: 20;">
-                        <div style="background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+                        <div style="background: var(--primary-color); color: white; padding: 2px 8px; border-radius: 2px; font-size: 11px; font-weight: 600;">
                             오늘
                         </div>
                     </div>
@@ -1542,20 +1602,18 @@ function createTimelineBar(container, options) {
                             `<div class="option-thumb"></div>`
                         }
                         <div class="option-info">
-                            <span class="option-col" style="width: 60px; color: #666; font-size: 13px; font-weight: 600;">옵션명</span>
-                            <span class="option-col" style="width: 200px; color: #667eea; font-size: 14px; font-weight: 500;">${p.옵션명 || '옵션명 없음'}</span>
-                            <span class="option-col" style="width: 150px; color: #7a7c80; font-size: 13px;">${specs}</span>
-                            <span class="option-col" style="width: 50px; color: #666; font-size: 12px;">${p.발송지주소 ? '발송지' : ''}</span>
-                            <span class="option-col" style="width: 120px; color: #999; font-size: 12px;">${p.발송지주소 || ''}</span>
-                            <span class="option-col" style="flex: 1; text-align: right;">
-                                <span style="color: #667eea; font-size: 16px; font-weight: 600; margin-right: 15px;">${price}원</span>
-                                <span class="status-badge ${statusClass}" style="font-size:11px;">
+                            <span class="option-col" style="flex: 1; font-weight: 500;">${p.옵션명 || '옵션명 없음'}</span>
+                            <span class="option-col" style="width: 150px; color: var(--text-secondary); font-size: 13px;">${specs}</span>
+                            <span class="option-col" style="width: 150px; color: var(--text-muted); font-size: 12px;">${p.발송지주소 || ''}</span>
+                            <span class="option-col" style="text-align: right;">
+                                <span style="color: var(--primary-color); font-size: 16px; font-weight: 500; margin-right: 15px;">${price}원</span>
+                                <span class="status-badge ${statusClass}">
                                     ${p.공급상태 || '미정'}
                                 </span>
-                                <span class="badge-free" style="margin-left: 8px;">무료배송</span>
-                                <button class="badge-chart" style="margin-left: 8px;" 
+                                <span class="badge-free">무료배송</span>
+                                <button class="badge-chart" 
                                         onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
-                                    📊 가격차트
+                                    차트
                                 </button>
                             </span>
                         </div>
@@ -1582,7 +1640,7 @@ function createTimelineBar(container, options) {
             
             document.getElementById('chartModalBody').innerHTML = `
                 <div style="text-align: center; padding: 20px;">
-                    <div style="color: #999;">📊 데이터를 불러오는 중...</div>
+                    <div style="color: #999;">데이터를 불러오는 중...</div>
                 </div>
             `;
             
@@ -1624,11 +1682,9 @@ function createTimelineBar(container, options) {
             const firstDate = new Date(data[0].날짜).toLocaleDateString('ko-KR');
             const lastDate = new Date(data[data.length - 1].날짜).toLocaleDateString('ko-KR');
             
-            const isMobile = window.innerWidth <= 768;
-            
             const html = `
-                <div style="text-align: center; margin-bottom: ${isMobile ? '12px' : '20px'};">
-                    <div style="font-size: ${isMobile ? '10px' : '14px'}; color: #7a7c80;">${firstDate} ~ ${lastDate}</div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 14px; color: var(--text-secondary);">${firstDate} ~ ${lastDate}</div>
                 </div>
                 <div class="chart-container">
                     <canvas id="priceChartCanvas"></canvas>
@@ -1671,15 +1727,15 @@ function createTimelineBar(container, options) {
                     datasets: [{
                         label: '공급가',
                         data: prices,
-                        borderColor: 'rgb(102, 126, 234)',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderColor: 'var(--primary-color)',
+                        backgroundColor: 'rgba(91, 33, 182, 0.1)',
                         tension: 0.1,
-                        borderWidth: isMobile ? 1 : 2,
-                        pointRadius: isMobile ? 2 : 4,
-                        pointBackgroundColor: 'rgb(102, 126, 234)',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: 'var(--primary-color)',
                         pointBorderColor: '#fff',
-                        pointBorderWidth: isMobile ? 1 : 2,
-                        pointHoverRadius: isMobile ? 3 : 6,
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 6,
                         fill: true
                     }]
                 },
@@ -1695,53 +1751,33 @@ function createTimelineBar(container, options) {
                                 label: function(context) {
                                     return '공급가: ' + context.parsed.y.toLocaleString() + '원';
                                 }
-                            },
-                            titleFont: {
-                                size: isMobile ? 10 : 12
-                            },
-                            bodyFont: {
-                                size: isMobile ? 10 : 12
-                            },
-                            padding: isMobile ? 4 : 8
+                            }
                         }
                     },
                     scales: {
                         x: {
+                            grid: {
+                                display: false
+                            },
                             ticks: {
                                 font: {
-                                    size: isMobile ? 8 : 12
-                                },
-                                maxRotation: isMobile ? 45 : 0,
-                                autoSkip: true,
-                                maxTicksLimit: isMobile ? 6 : 12
-                            },
-                            grid: {
-                                display: !isMobile
+                                    size: 12
+                                }
                             }
                         },
                         y: {
                             beginAtZero: true,
-                            max: Math.ceil(maxPrice * 1.2),
+                            grid: {
+                                borderDash: [3, 3]
+                            },
                             ticks: {
                                 callback: function(value) {
                                     return value.toLocaleString() + '원';
                                 },
                                 font: {
-                                    size: isMobile ? 8 : 12
-                                },
-                                maxTicksLimit: isMobile ? 5 : 8
-                            },
-                            grid: {
-                                display: !isMobile
+                                    size: 12
+                                }
                             }
-                        }
-                    },
-                    layout: {
-                        padding: {
-                            left: isMobile ? 2 : 10,
-                            right: isMobile ? 2 : 10,
-                            top: isMobile ? 2 : 10,
-                            bottom: isMobile ? 2 : 10
                         }
                     }
                 }
