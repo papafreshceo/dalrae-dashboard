@@ -9,22 +9,21 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="header.js"></script>
     <style>
-    /* Soft UI 2.0 디자인 변수 - services.html과 동일 */
+    /* 모던 미니멀 디자인 변수 */
     :root {
-        --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #fafbfc 100%);
-        --card-gradient: linear-gradient(145deg, #f0f4f8, #d8dce4);
-        --button-gradient: linear-gradient(145deg, #6b7cdb, #8b9ceb);
-        --hero-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --primary-color: #6b7cdb;
-        --primary-light: #8b9ceb;
-        --primary-dark: #5a67d8;
-        --text-color: #4a5568;
-        --text-dark: #2d3748;
-        --shadow-soft: 3px 3px 6px #c8ccd4, -3px -3px 6px #ffffff;
-        --shadow-soft-sm: 2px 2px 4px #b8bcc4, -2px -2px 4px #ffffff;
-        --shadow-soft-lg: 5px 5px 10px #b8bcc4, -5px -5px 10px #ffffff;
-        --shadow-hover: 4px 4px 8px #b8bcc4, -4px -4px 8px #ffffff;
-        --shadow-inset: inset 2px 2px 4px #c8ccd4, inset -2px -2px 4px #ffffff;
+        --primary-color: #5B21B6;
+        --primary-light: #7C3AED;
+        --primary-dark: #4C1D95;
+        --text-primary: #000000;
+        --text-secondary: #666666;
+        --text-muted: #999999;
+        --bg-primary: #ffffff;
+        --bg-secondary: #fafafa;
+        --border-color: #e0e0e0;
+        --border-light: #f0f0f0;
+        --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+        --shadow-md: 0 2px 4px rgba(0,0,0,0.08);
+        --shadow-lg: 0 4px 8px rgba(0,0,0,0.1);
     }
 
     /* 기본 스타일 */
@@ -35,21 +34,21 @@
     }
     
     body { 
-        font-family: 'Noto Sans KR', -apple-system, sans-serif; 
-        background: var(--bg-gradient);
-        color: var(--text-color);
+        font-family: 'Segoe UI', -apple-system, sans-serif;
+        font-weight: 300;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
         min-height: 100vh;
-        overflow-x: hidden;
+        line-height: 1.6;
     }
     
-    /* Soft UI 캘린더 헤더 */
+    /* 미니멀 캘린더 헤더 */
     .calendar-header {
-        background: var(--card-gradient);
-        padding: 25px 35px;
-        margin: 30px auto;
+        background: var(--bg-primary);
+        padding: 30px;
+        margin: 0 auto 30px;
         max-width: 1400px;
-        border-radius: 25px;
-        box-shadow: var(--shadow-soft);
+        border-bottom: 1px solid var(--border-color);
     }
     
     .calendar-controls {
@@ -63,104 +62,93 @@
     .nav-controls {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 20px;
     }
     
     .month-year-display {
-        font-size: 26px;
-        font-weight: 700;
-        background: var(--button-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        font-size: 28px;
+        font-weight: 300;
+        color: var(--text-primary);
         min-width: 150px;
         text-align: center;
+        letter-spacing: -1px;
     }
     
-    /* Soft UI 네비게이션 버튼 */
+    /* 미니멀 네비게이션 버튼 */
     .calendar-nav-btn {
-        background: var(--card-gradient);
-        border: none;
-        border-radius: 12px;
-        width: 42px;
-        height: 42px;
+        background: transparent;
+        border: 1px solid var(--border-color);
+        border-radius: 2px;
+        width: 40px;
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.3s;
-        font-size: 20px;
-        color: var(--text-color);
-        box-shadow: var(--shadow-soft-sm);
+        transition: all 0.2s;
+        font-size: 18px;
+        color: var(--text-secondary);
     }
     
     .calendar-nav-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-hover);
+        border-color: var(--primary-color);
         color: var(--primary-color);
+        background: var(--bg-secondary);
     }
     
-    .calendar-nav-btn:active {
-        box-shadow: var(--shadow-inset);
-        transform: translateY(0);
-    }
-    
-    /* Soft UI 오늘 버튼 */
+    /* 미니멀 오늘 버튼 */
     .today-btn {
-        padding: 10px 20px;
-        background: var(--card-gradient);
-        border: none;
-        border-radius: 15px;
-        color: var(--text-color);
+        padding: 10px 24px;
+        background: transparent;
+        border: 1px solid var(--border-color);
+        border-radius: 2px;
+        color: var(--text-secondary);
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 400;
         cursor: pointer;
-        transition: all 0.3s;
-        box-shadow: var(--shadow-soft-sm);
+        transition: all 0.2s;
+        letter-spacing: 0.5px;
     }
     
     .today-btn:hover {
-        background: var(--button-gradient);
-        color: white;
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-hover);
+        border-color: var(--primary-color);
+        color: var(--primary-color);
     }
     
-    /* Soft UI 뷰 토글 */
+    /* 미니멀 뷰 토글 */
     .view-toggle {
         display: flex;
-        gap: 10px;
+        gap: 0;
     }
     
     .toggle-btn {
         padding: 10px 20px;
-        background: var(--card-gradient);
-        border: none;
-        border-radius: 15px;
-        color: var(--text-color);
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 400;
         cursor: pointer;
-        transition: all 0.3s;
-        box-shadow: var(--shadow-soft-sm);
+        transition: all 0.2s;
+    }
+    
+    .toggle-btn:first-child {
+        border-radius: 2px 0 0 2px;
+    }
+    
+    .toggle-btn:last-child {
+        border-radius: 0 2px 2px 0;
+        border-left: none;
     }
     
     .toggle-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-hover);
+        background: var(--bg-secondary);
     }
     
     .toggle-btn.active {
-        background: var(--button-gradient);
+        background: var(--primary-color);
         color: white;
-        box-shadow: var(--shadow-soft);
-        animation: tabActive 0.5s ease;
-    }
-    
-    @keyframes tabActive {
-        0% { transform: scale(0.95); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
+        border-color: var(--primary-color);
     }
     
     /* 캘린더 컨테이너 */
@@ -170,51 +158,41 @@
         padding: 0 30px;
     }
     
-    /* Soft UI 섹션 타이틀 */
+    /* 미니멀 섹션 타이틀 */
     .section-title {
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--text-dark);
-        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: 300;
+        color: var(--text-primary);
+        margin-bottom: 24px;
         padding-bottom: 12px;
-        position: relative;
+        border-bottom: 1px solid var(--border-light);
+        letter-spacing: -0.5px;
     }
     
-    .section-title::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 60px;
-        height: 3px;
-        background: var(--button-gradient);
-        border-radius: 3px;
-        animation: lineExpand 1s ease;
-    }
-    
-    @keyframes lineExpand {
-        from { width: 0; }
-        to { width: 60px; }
-    }
-    
-    /* Soft UI 월 보기 */
+    /* 미니멀 월 보기 */
     .month-view {
-        background: var(--card-gradient);
-        border-radius: 25px;
-        padding: 25px;
-        box-shadow: var(--shadow-soft);
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        padding: 0;
     }
     
     .month-scroll-wrapper {
         overflow-x: auto;
         overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
     }
     
     .month-scroll-wrapper::-webkit-scrollbar {
-        display: none;
+        height: 6px;
+    }
+    
+    .month-scroll-wrapper::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+    }
+    
+    .month-scroll-wrapper::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
     }
     
     .month-calendar-content {
@@ -225,87 +203,77 @@
     .weekdays {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 1px;
-        background: rgba(216, 220, 228, 0.3);
-        border: 1px solid rgba(216, 220, 228, 0.3);
-        margin-bottom: 1px;
-        border-radius: 12px 12px 0 0;
-        overflow: hidden;
+        border-bottom: 1px solid var(--border-light);
     }
     
     .weekday {
-        background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
-        padding: 14px;
+        padding: 16px;
         text-align: center;
-        font-weight: 600;
-        font-size: 13px;
-        color: var(--text-color);
+        font-weight: 500;
+        font-size: 12px;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
     
     .weekday.sunday {
-        color: #ff5252;
+        color: #ef4444;
     }
     
     .weekday.saturday {
-        color: #2196f3;
+        color: #3b82f6;
     }
     
     .days-grid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        gap: 1px;
-        background: rgba(216, 220, 228, 0.3);
-        border: 1px solid rgba(216, 220, 228, 0.3);
-        border-top: none;
         position: relative;
-        border-radius: 0 0 12px 12px;
-        overflow: hidden;
     }
     
     .day-cell {
-        background: linear-gradient(145deg, #fafbfc, #f0f4f8);
+        background: var(--bg-primary);
         min-height: 120px;
-        padding: 10px;
+        padding: 12px;
         position: relative;
-        transition: all 0.3s;
+        border-right: 1px solid var(--border-light);
+        border-bottom: 1px solid var(--border-light);
     }
     
-    .day-cell:hover {
-        background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
+    .day-cell:nth-child(7n) {
+        border-right: none;
     }
     
     .day-number {
         font-size: 14px;
-        font-weight: 600;
-        color: var(--text-dark);
-        margin-bottom: 4px;
+        font-weight: 400;
+        color: var(--text-primary);
+        margin-bottom: 8px;
         position: relative;
         z-index: 2;
     }
     
     .day-cell.other-month .day-number {
-        color: #ccc;
+        color: var(--text-muted);
     }
     
     .day-cell.today {
-        background: linear-gradient(145deg, rgba(107, 124, 219, 0.1), rgba(139, 156, 235, 0.05));
-        box-shadow: var(--shadow-inset);
+        background: var(--bg-secondary);
     }
     
     .day-cell.today .day-number {
         color: var(--primary-color);
-        font-weight: 700;
+        font-weight: 600;
     }
     
     .day-cell.sunday .day-number {
-        color: #ff5252;
+        color: #ef4444;
     }
     
     .day-cell.saturday .day-number {
-        color: #2196f3;
+        color: #3b82f6;
     }
     
-    /* 월 타임라인 바 - Soft UI */
+    /* 미니멀 타임라인 바 */
     .month-timeline-wrapper {
         position: absolute;
         top: 0;
@@ -317,7 +285,7 @@
     
     .month-timeline-bar {
         position: absolute;
-        height: 14px;
+        height: 12px;
         font-size: 9px;
         color: white;
         display: flex;
@@ -327,51 +295,52 @@
         overflow: hidden;
         text-overflow: ellipsis;
         cursor: pointer;
-        box-shadow: var(--shadow-soft-sm);
         z-index: 10;
         pointer-events: auto;
-        transition: all 0.3s;
-        opacity: 0.85;
+        transition: all 0.2s;
+        opacity: 0.9;
     }
     
     .month-timeline-bar.bar-start {
-        border-top-left-radius: 8px;
-        border-bottom-left-radius: 8px;
+        border-radius: 2px 0 0 2px;
     }
     
     .month-timeline-bar.bar-end {
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
+        border-radius: 0 2px 2px 0;
     }
     
     .month-timeline-bar.bar-single {
-        border-radius: 8px;
+        border-radius: 2px;
     }
     
     .month-timeline-bar:hover,
     .month-timeline-bar.hover-active {
-        transform: scale(1.1) translateY(-3px);
+        transform: translateY(-2px);
         z-index: 100;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        box-shadow: var(--shadow-lg);
         opacity: 1;
-        filter: brightness(1.1);
     }
     
-    /* Soft UI 년 보기 */
+    /* 미니멀 년 보기 */
     .year-view {
-        background: var(--card-gradient);
-        border-radius: 25px;
-        padding: 25px;
-        box-shadow: var(--shadow-soft);
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        padding: 0;
         overflow-x: auto;
         overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
     }
     
     .year-view::-webkit-scrollbar {
-        display: none;
+        height: 6px;
+    }
+    
+    .year-view::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+    }
+    
+    .year-view::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
     }
     
     .year-calendar-content {
@@ -381,20 +350,18 @@
     .year-months-header {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
-        border: 1px solid rgba(216, 220, 228, 0.3);
-        margin-bottom: 0;
-        border-radius: 12px 12px 0 0;
-        overflow: hidden;
+        border-bottom: 1px solid var(--border-color);
     }
     
     .year-month-label {
-        background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
-        padding: 12px;
+        padding: 14px;
         text-align: center;
-        font-weight: 600;
-        font-size: 13px;
-        color: var(--text-color);
-        border-right: 1px solid rgba(216, 220, 228, 0.3);
+        font-weight: 500;
+        font-size: 12px;
+        color: var(--text-secondary);
+        border-right: 1px solid var(--border-light);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .year-month-label:last-child {
@@ -404,33 +371,30 @@
     .year-timeline-container {
         position: relative;
         min-height: 400px;
-        background: linear-gradient(145deg, #fafbfc, #f0f4f8);
-        border: 1px solid rgba(216, 220, 228, 0.3);
-        border-top: none;
-        border-radius: 0 0 12px 12px;
-        padding: 10px;
+        background: var(--bg-primary);
+        padding: 20px 10px;
     }
     
     .year-timeline-row {
         position: relative;
-        height: 35px;
-        margin-bottom: 5px;
+        height: 32px;
+        margin-bottom: 8px;
         display: grid;
         grid-template-columns: repeat(12, 1fr);
     }
     
     .year-month-cell {
         position: relative;
-        border-left: 1px solid rgba(216, 220, 228, 0.2);
+        border-left: 1px solid var(--border-light);
     }
     
     .year-month-cell:last-child {
-        border-right: 1px solid rgba(216, 220, 228, 0.2);
+        border-right: 1px solid var(--border-light);
     }
     
     .year-timeline-bar {
         position: absolute;
-        height: 26px;
+        height: 24px;
         top: 4px;
         color: white;
         font-size: 11px;
@@ -441,66 +405,52 @@
         overflow: hidden;
         text-overflow: ellipsis;
         cursor: pointer;
-        transition: all 0.3s;
+        transition: all 0.2s;
         z-index: 10;
-        box-shadow: var(--shadow-soft-sm);
         opacity: 0.85;
     }
     
     .year-timeline-bar.bar-start {
-        border-top-left-radius: 13px;
-        border-bottom-left-radius: 13px;
+        border-radius: 2px 0 0 2px;
     }
     
     .year-timeline-bar.bar-end {
-        border-top-right-radius: 13px;
-        border-bottom-right-radius: 13px;
+        border-radius: 0 2px 2px 0;
     }
     
     .year-timeline-bar.bar-single {
-        border-radius: 13px;
+        border-radius: 2px;
     }
     
     .year-timeline-bar:hover,
     .year-timeline-bar.hover-active {
-        transform: scale(1.05) translateY(-2px);
+        transform: scale(1.02);
         z-index: 100;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        box-shadow: var(--shadow-lg);
         opacity: 1;
-        filter: brightness(1.1);
     }
     
-    /* 오늘 날짜 세로선 - 애니메이션 */
+    /* 오늘 날짜 표시 */
     .year-today-line {
         position: absolute;
         top: 0;
         bottom: 0;
         width: 2px;
-        background: linear-gradient(180deg, #FFD93D, #6BCF7F, #4A90E2, #FFD93D);
-        background-size: 100% 300%;
-        animation: gradientFlow 3s ease infinite;
+        background: var(--primary-color);
         z-index: 999;
-        opacity: 0.8;
-        box-shadow: 0 0 10px rgba(107, 124, 219, 0.4);
+        opacity: 0.6;
     }
     
-    @keyframes gradientFlow {
-        0% { background-position: 0% 0%; }
-        50% { background-position: 0% 100%; }
-        100% { background-position: 0% 0%; }
-    }
-    
-    /* Soft UI 범례 */
+    /* 미니멀 범례 */
     .legend {
-        background: var(--card-gradient);
-        border-radius: 20px;
-        padding: 18px 25px;
-        margin-top: 25px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        padding: 20px;
+        margin-top: 30px;
         display: flex;
-        gap: 18px;
+        gap: 24px;
         flex-wrap: wrap;
         justify-content: center;
-        box-shadow: var(--shadow-soft);
     }
     
     .legend-item {
@@ -508,57 +458,45 @@
         align-items: center;
         gap: 10px;
         font-size: 13px;
-        color: var(--text-color);
-        padding: 8px 14px;
-        background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
-        border-radius: 12px;
-        box-shadow: var(--shadow-inset);
+        color: var(--text-secondary);
     }
     
     .legend-color {
-        width: 22px;
-        height: 14px;
-        border-radius: 7px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        width: 20px;
+        height: 3px;
+        border-radius: 1px;
     }
     
-    /* Soft UI 툴팁 */
+    /* 미니멀 툴팁 */
     .tooltip {
         position: fixed;
-        background: var(--card-gradient);
-        border: none;
-        border-radius: 12px;
-        padding: 14px 16px;
-        box-shadow: var(--shadow-soft-lg);
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        padding: 12px 16px;
+        box-shadow: var(--shadow-lg);
         z-index: 1000;
-        min-width: 220px;
+        min-width: 200px;
         display: none;
     }
     
     .tooltip.show {
         display: block;
-        animation: fadeIn 0.3s ease;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-5px); }
-        to { opacity: 1; transform: translateY(0); }
     }
     
     .tooltip-title {
-        font-size: 15px;
-        font-weight: 700;
-        color: var(--text-dark);
-        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-bottom: 6px;
     }
     
     .tooltip-info {
         font-size: 12px;
-        color: var(--text-color);
+        color: var(--text-secondary);
         line-height: 1.5;
     }
     
-    /* Soft UI 모달 */
+    /* 미니멀 모달 */
     .modal {
         display: none;
         position: fixed;
@@ -566,8 +504,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.4);
-        backdrop-filter: blur(5px);
+        background: rgba(255,255,255,0.95);
         z-index: 1000;
         justify-content: center;
         align-items: center;
@@ -575,19 +512,18 @@
     
     .modal.show {
         display: flex;
-        animation: fadeIn 0.3s ease;
     }
     
     .modal-content,
     .chart-modal-content {
-        background: var(--card-gradient);
-        border-radius: 25px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
         max-width: 1400px;
         width: 90%;
         max-height: 85vh;
         overflow-y: auto;
-        padding: 35px;
-        box-shadow: var(--shadow-soft-lg);
+        padding: 40px;
+        box-shadow: var(--shadow-lg);
     }
     
     .modal-header {
@@ -595,267 +531,223 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border-light);
     }
     
     .modal-header h2 {
         font-size: 24px;
-        font-weight: 700;
-        color: var(--text-dark);
+        font-weight: 300;
+        color: var(--text-primary);
+        letter-spacing: -0.5px;
     }
     
     .modal-close {
-        background: linear-gradient(145deg, #f0f4f8, #e0e5ec);
+        background: transparent;
         border: none;
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
+        width: 32px;
+        height: 32px;
         cursor: pointer;
-        font-size: 20px;
-        color: var(--text-color);
-        box-shadow: var(--shadow-soft-sm);
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-size: 24px;
+        font-weight: 300;
+        color: var(--text-secondary);
+        transition: all 0.2s;
     }
     
     .modal-close:hover {
-        transform: rotate(90deg);
-        color: var(--primary-color);
-        box-shadow: var(--shadow-hover);
+        color: var(--text-primary);
     }
     
-    /* Soft UI 옵션 카드 */
+    /* 미니멀 옵션 카드 */
     .option-card {
         display: flex;
-        gap: 18px;
-        padding: 18px;
-        background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
-        border-radius: 18px;
-        margin-bottom: 12px;
+        gap: 20px;
+        padding: 20px;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-light);
         align-items: center;
-        box-shadow: var(--shadow-inset);
-        transition: all 0.3s;
+        transition: all 0.2s;
     }
     
     .option-card:hover {
-        transform: translateX(5px);
-        background: linear-gradient(145deg, #f0f4f8, #e0e5ec);
+        background: var(--bg-secondary);
     }
     
     .option-thumb {
-        width: 55px;
-        height: 55px;
-        border-radius: 10px;
+        width: 48px;
+        height: 48px;
         object-fit: cover;
-        background: rgba(216, 220, 228, 0.5);
+        background: var(--bg-secondary);
         flex-shrink: 0;
-        box-shadow: var(--shadow-soft-sm);
     }
     
     .option-info {
         flex: 1;
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 20px;
     }
     
-    .option-col {
-        display: inline-block;
-        flex-shrink: 0;
-    }
-    
-    /* Soft UI 차트 컨테이너 */
+    /* 미니멀 차트 */
     .chart-container {
         position: relative;
         height: 400px;
-        margin: 35px 0;
+        margin: 40px 0;
         padding: 20px;
-        background: linear-gradient(145deg, #fafbfc, #f0f4f8);
-        border-radius: 18px;
-        box-shadow: var(--shadow-inset);
+        background: var(--bg-primary);
+        border: 1px solid var(--border-light);
     }
     
     .chart-stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 18px;
-        margin-top: 35px;
+        gap: 0;
+        margin-top: 40px;
+        border: 1px solid var(--border-color);
     }
     
     .chart-stat-box {
-        background: var(--card-gradient);
-        border-radius: 15px;
-        padding: 18px;
+        padding: 20px;
         text-align: center;
-        box-shadow: var(--shadow-soft-sm);
-        transition: all 0.3s;
+        border-right: 1px solid var(--border-light);
     }
     
-    .chart-stat-box:hover {
-        transform: translateY(-3px);
-        box-shadow: var(--shadow-hover);
+    .chart-stat-box:last-child {
+        border-right: none;
     }
     
     .chart-stat-label {
-        font-size: 12px;
-        color: var(--text-color);
+        font-size: 11px;
+        color: var(--text-muted);
         margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
     
     .chart-stat-value {
-        font-size: 22px;
-        font-weight: 700;
-        color: var(--text-dark);
+        font-size: 24px;
+        font-weight: 300;
+        color: var(--text-primary);
     }
     
     .chart-stat-value.current {
-        background: var(--button-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: var(--primary-color);
     }
     
-    .increase { color: #ff5252; }
-    .decrease { color: #4caf50; }
+    .increase { color: #ef4444; }
+    .decrease { color: #10b981; }
     
-    /* Soft UI 상태 배지 */
+    /* 미니멀 상태 배지 */
     .status-badge {
-        padding: 5px 12px;
-        border-radius: 15px;
-        font-size: 12px;
-        font-weight: 600;
-        box-shadow: var(--shadow-soft-sm);
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .status-active {
-        background: linear-gradient(145deg, #e8f5e9, #c8e6c9);
-        color: #2e7d32;
+        background: transparent;
+        color: #10b981;
+        border: 1px solid #10b981;
     }
     
     .status-paused {
-        background: linear-gradient(145deg, #fff8e1, #ffe0b2);
-        color: #f57c00;
+        background: transparent;
+        color: #f59e0b;
+        border: 1px solid #f59e0b;
     }
     
     .status-stopped {
-        background: linear-gradient(145deg, #ffebee, #ffcdd2);
-        color: #c62828;
+        background: transparent;
+        color: #ef4444;
+        border: 1px solid #ef4444;
     }
     
     .badge-free {
-        background: var(--button-gradient);
-        color: white;
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 11px;
-        font-weight: 600;
+        background: transparent;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        padding: 3px 10px;
+        font-size: 10px;
+        font-weight: 500;
         margin-left: 8px;
-        box-shadow: var(--shadow-soft-sm);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
     .badge-chart {
-        background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-        color: white;
-        padding: 5px 14px;
-        border-radius: 12px;
+        background: transparent;
+        color: var(--primary-color);
+        padding: 4px 12px;
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 500;
         cursor: pointer;
         display: inline-block;
-        transition: all 0.3s;
-        border: none;
+        transition: all 0.2s;
+        border: 1px solid var(--primary-color);
         margin-left: 8px;
-        box-shadow: var(--shadow-soft-sm);
     }
     
     .badge-chart:hover {
-        transform: scale(1.05) translateY(-2px);
-        box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+        background: var(--primary-color);
+        color: white;
     }
     
-    /* 데이터 없음 메시지 */
+    /* 데이터 없음 */
     .no-data-message {
         text-align: center;
         padding: 100px 20px;
-        color: var(--text-color);
+        color: var(--text-muted);
     }
     
     .no-data-icon {
-        font-size: 64px;
+        font-size: 48px;
         margin-bottom: 20px;
-        opacity: 0.5;
+        opacity: 0.3;
     }
     
     .no-data-title {
-        font-size: 20px;
-        color: var(--text-dark);
+        font-size: 18px;
+        color: var(--text-secondary);
         margin-bottom: 10px;
-        font-weight: 600;
+        font-weight: 400;
     }
     
     .no-data-text {
         font-size: 14px;
-        color: var(--text-color);
+        color: var(--text-muted);
     }
     
     /* 모바일 반응형 */
     @media (max-width: 768px) {
         .calendar-header {
-            padding: 15px;
-            margin: 20px 15px;
-            border-radius: 18px;
+            padding: 20px;
         }
         
         .month-year-display {
-            font-size: 18px;
-            min-width: auto;
+            font-size: 20px;
         }
         
         .calendar-nav-btn {
             width: 36px;
             height: 36px;
-            font-size: 16px;
-        }
-        
-        .today-btn,
-        .toggle-btn {
-            padding: 8px 14px;
-            font-size: 12px;
         }
         
         .calendar-container {
-            padding: 0 15px;
-        }
-        
-        .month-view,
-        .year-view {
-            padding: 15px;
-            border-radius: 18px;
-        }
-        
-        .day-cell {
-            min-height: 100px;
-            padding: 8px;
-        }
-        
-        .modal-content,
-        .chart-modal-content {
-            padding: 20px;
-            width: 95%;
-            border-radius: 18px;
-        }
-        
-        .chart-container {
-            height: 200px;
-            padding: 15px;
+            padding: 0 20px;
         }
         
         .chart-stats {
             grid-template-columns: repeat(2, 1fr);
         }
+        
+        .chart-stat-box:nth-child(2) {
+            border-right: none;
+        }
     }
 </style>
+    
 </head>
 <body>
     <!-- 공통 헤더 -->
