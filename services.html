@@ -14,7 +14,6 @@
       box-sizing: border-box; 
     }
     
-
     body { 
       font-family: 'Noto Sans KR', -apple-system, sans-serif; 
       background: linear-gradient(135deg, #f5f7fa 0%, #fafbfc 100%);
@@ -166,7 +165,7 @@
       100% { transform: rotate(360deg); }
     }
 
-   /* 농가 매칭 서비스 카드 - 별빛 애니메이션 */
+    /* 농가 매칭 서비스 카드 - 별빛 애니메이션 */
     .hero-card:last-child {
       position: relative;
       overflow: visible;
@@ -936,130 +935,236 @@
       box-shadow: var(--shadow-inset);
     }
 
-    /* Soft UI 농가 매칭 서비스 */
-    .farm-service-card {
-      background: var(--card-gradient);
-      border-radius: 25px;
-      padding: 35px;
-      margin-bottom: 24px;
-      box-shadow: var(--shadow-soft-lg);
+    /* 농가 매칭 서비스 스타일 */
+    .farm-service-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .farm-service-header {
+      text-align: center;
+      margin-bottom: 50px;
     }
 
     .farm-service-title {
-      font-size: 26px;
-      font-weight: 700;
+      font-size: 32px;
+      font-weight: 800;
       background: linear-gradient(135deg, #6b7cdb 0%, #8b9ceb 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 12px;
     }
 
-    .farm-service-desc {
-      font-size: 15px;
+    .farm-service-subtitle {
+      font-size: 16px;
       color: var(--text-color);
       line-height: 1.6;
-      margin-bottom: 28px;
+      max-width: 700px;
+      margin: 0 auto;
     }
 
-    .service-list {
+    /* 요금제 카드 그리드 */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+
+    .pricing-card {
+      background: var(--card-gradient);
+      border-radius: 25px;
+      padding: 30px;
+      box-shadow: var(--shadow-soft);
+      transition: all 0.3s;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(107, 124, 219, 0.2);
+    }
+
+    .pricing-card.recommended {
+      border: 2px solid var(--primary-color);
+      transform: scale(1.05);
+    }
+
+    .pricing-card.recommended::before {
+      content: '추천';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--button-gradient);
+      color: white;
+      padding: 4px 16px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .pricing-plan {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .pricing-price {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #6b7cdb 0%, #8b9ceb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .pricing-features {
+      flex: 1;
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .service-item {
+    .pricing-feature {
       display: flex;
       align-items: flex-start;
-      gap: 14px;
-      padding: 14px;
-      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
-      border-radius: 12px;
-      box-shadow: var(--shadow-inset);
-      transition: all 0.3s;
-    }
-
-    .service-item:hover {
-      transform: translateX(5px);
-    }
-
-    .service-icon {
-      width: 26px;
-      height: 26px;
-      background: var(--button-gradient);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 13px;
-      font-weight: bold;
-      flex-shrink: 0;
-      box-shadow: var(--shadow-soft-sm);
-    }
-
-    .service-text {
-      flex: 1;
+      gap: 10px;
       font-size: 13px;
       color: var(--text-color);
       line-height: 1.5;
     }
 
-    .price-card {
-      background: var(--card-gradient);
-      border-radius: 18px;
-      padding: 22px;
-      margin-top: 28px;
-      box-shadow: var(--shadow-soft);
+    .pricing-feature::before {
+      content: '✓';
+      color: var(--primary-color);
+      font-weight: bold;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
     }
 
-    .price-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 18px;
-    }
-
-    .price-list {
+    /* 서비스 아코디언 */
+    .services-accordion {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 16px;
+      margin-bottom: 40px;
     }
 
-    .price-item {
+    .accordion-item {
+      background: var(--card-gradient);
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .accordion-item:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    .accordion-header {
+      padding: 20px 24px;
+      cursor: pointer;
       display: flex;
       justify-content: space-between;
-      padding: 12px 14px;
-      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
-      border-radius: 10px;
-      box-shadow: var(--shadow-inset);
+      align-items: center;
+      transition: all 0.3s;
     }
 
-    .price-label {
-      font-size: 13px;
-      color: var(--text-color);
+    .accordion-header:hover {
+      background: linear-gradient(145deg, #e8ecf0, #f8fbfe);
     }
 
-    .price-amount {
-      font-size: 15px;
+    .accordion-title {
+      font-size: 16px;
       font-weight: 700;
-      background: linear-gradient(135deg, #6b7cdb 0%, #8b9ceb 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .price-note {
-      margin-top: 18px;
-      padding: 12px 14px;
-      background: linear-gradient(145deg, rgba(139, 156, 235, 0.1), rgba(107, 124, 219, 0.05));
-      border-radius: 10px;
-      font-size: 12px;
+    .accordion-icon {
+      font-size: 18px;
+    }
+
+    .accordion-arrow {
+      font-size: 14px;
+      color: var(--primary-color);
+      transition: transform 0.3s;
+    }
+
+    .accordion-item.active .accordion-arrow {
+      transform: rotate(180deg);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .accordion-item.active .accordion-content {
+      max-height: 500px;
+    }
+
+    .accordion-body {
+      padding: 0 24px 20px;
+      font-size: 14px;
       color: var(--text-color);
-      box-shadow: var(--shadow-inset);
+      line-height: 1.6;
+    }
+
+    /* 연락처 카드 */
+    .contact-card {
+      background: var(--button-gradient);
+      border-radius: 25px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(107, 124, 219, 0.3);
+      color: white;
+    }
+
+    .contact-card-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .contact-card-text {
+      font-size: 15px;
+      margin-bottom: 20px;
+      opacity: 0.95;
+    }
+
+    .contact-phone {
+      font-size: 28px;
+      font-weight: 800;
+      color: white;
+      text-decoration: none;
+      display: inline-block;
+      padding: 12px 30px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 15px;
+      transition: all 0.3s;
+    }
+
+    .contact-phone:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
     }
 
     /* API 상태 표시 - Soft UI */
@@ -1114,6 +1219,15 @@
 
       .duration-grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .pricing-card.recommended {
+        transform: scale(1);
       }
     }
 
@@ -1173,6 +1287,18 @@
 
       .phone-link {
         font-size: 18px;
+      }
+
+      .farm-service-title {
+        font-size: 24px;
+      }
+
+      .pricing-price {
+        font-size: 24px;
+      }
+
+      .contact-phone {
+        font-size: 22px;
       }
     }
 
@@ -1254,7 +1380,7 @@
         📸 촬영 서비스
       </button>
       <button id="farm-service-btn" class="service-tab-btn" onclick="switchService('farm')">
-        🤝 농가 매칭 서비스
+        🔗 농가 매칭 서비스
       </button>
     </div>
 
@@ -1546,7 +1672,11 @@
                   <div class="edit-title">풀 편집</div>
                   <div class="edit-description">썸네일, 시나리오, 자막 등 모든 작업 위임</div>
                   <div class="edit-description" style="color: var(--primary-color); margin-top: 3px;">
-                    1분: <span id="full-edit-base">70,000원</span> / 2분 이상: +<span id="full-edit-per">20,000원</span>/분
+                    1분: <span id="full-edit-
+
+
+
+base">70,000원</span> / 2분 이상: +<span id="full-edit-per">20,000원</span>/분
                   </div>
                 </div>
                 <div class="duration-grid">
@@ -1644,57 +1774,57 @@
 
     <!-- 농가 매칭 서비스 섹션 -->
     <div id="farm-service" class="service-section">
-      <div class="farm-service-card">
-        <div class="farm-service-title">
-          <span style="font-size: 28px;">🤝</span>
-          <span>농가 매칭 서비스</span>
-        </div>
-        <div class="farm-service-desc">
-          믿을 수 있는 산지 농가와 직접 연결해 드립니다. 품질 좋은 상품을 산지 가격으로 소싱하여 경쟁력 있는 가격으로 판매하실 수 있도록 지원합니다.
-        </div>
-
-        <div class="service-list">
-          <div class="service-item">
-            <div class="service-icon">✓</div>
-            <div class="service-text">검증된 농가 리스트 제공 - 품질과 신뢰성이 확인된 농가만 추천</div>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">✓</div>
-            <div class="service-text">산지 방문 동행 - 직접 농장을 방문하여 상품 확인 및 협의 지원</div>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">✓</div>
-            <div class="service-text">가격 협상 지원 - 합리적인 가격으로 거래할 수 있도록 중재</div>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">✓</div>
-            <div class="service-text">샘플 테스트 조율 - 본격 거래 전 샘플 확인 일정 조율</div>
-          </div>
-          <div class="service-item">
-            <div class="service-icon">✓</div>
-            <div class="service-text">계약 조건 협의 - 물량, 배송, 결제 조건 등 세부사항 조율</div>
-          </div>
+      <div class="farm-service-container">
+        <!-- 서비스 헤더 -->
+        <div class="farm-service-header">
+          <h2 class="farm-service-title">
+            <span>🔗</span>
+            <span>농가 매칭 서비스</span>
+          </h2>
+          <p class="farm-service-subtitle">
+            믿을 수 있는 산지 농가와 직접 연결해 드립니다. 품질 좋은 상품을 산지 가격으로 소싱하여 경쟁력 있는 가격으로 판매하실 수 있도록 지원합니다.
+          </p>
         </div>
 
-        <div class="price-card">
-          <div class="price-title">📋 서비스 이용 요금</div>
-          <div class="price-list">
-            <div class="price-item">
-              <span class="price-label">농가 매칭 서비스</span>
-              <span class="price-amount">100,000원</span>
-            </div>
-            <div class="price-item">
-              <span class="price-label">산지 방문 동행 (1일)</span>
-              <span class="price-amount">150,000원</span>
-            </div>
-            <div class="price-item">
-              <span class="price-label">매칭 + 방문 패키지</span>
-              <span class="price-amount">200,000원</span>
+        <!-- 요금제 카드 -->
+        <div class="pricing-grid">
+          <div class="pricing-card" id="visit-card">
+            <h3 class="pricing-plan" id="visit-plan">방문견학동행</h3>
+            <div class="pricing-price" id="visit-price">150,000원</div>
+            <div class="pricing-features" id="visit-features">
+              <!-- 동적으로 생성됨 -->
             </div>
           </div>
-          <div class="price-note">
-            💡 매칭 후 달래마켓에서는 특별한 사정이 없는 한 관여하지 않습니다
+
+          <div class="pricing-card recommended" id="matching-card">
+            <h3 class="pricing-plan" id="matching-plan">농가매칭</h3>
+            <div class="pricing-price" id="matching-price">100,000원</div>
+            <div class="pricing-features" id="matching-features">
+              <!-- 동적으로 생성됨 -->
+            </div>
           </div>
+
+          <div class="pricing-card" id="full-card">
+            <h3 class="pricing-plan" id="full-plan">풀서비스</h3>
+            <div class="pricing-price" id="full-price">200,000원</div>
+            <div class="pricing-features" id="full-features">
+              <!-- 동적으로 생성됨 -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 서비스 상세 아코디언 -->
+        <div class="services-accordion" id="services-accordion">
+          <!-- 동적으로 생성됨 -->
+        </div>
+
+        <!-- 연락처 카드 -->
+        <div class="contact-card">
+          <h3 class="contact-card-title">농가 매칭 서비스 문의</h3>
+          <p class="contact-card-text">
+            최적의 농가 매칭을 위해 전문 상담을 제공합니다
+          </p>
+          <a href="tel:01026881388" class="contact-phone">📞 010-2688-1388</a>
         </div>
       </div>
     </div>
@@ -1756,7 +1886,25 @@
           perMinute: 20000
         }
       },
-      baseLocationCost: 30000
+      baseLocationCost: 30000,
+      farmService: {
+        visit: {
+          price: 150000,
+          planName: '방문견학동행',
+          features: []
+        },
+        matching: {
+          price: 100000,
+          planName: '농가매칭',
+          features: []
+        },
+        full: {
+          price: 200000,
+          planName: '풀서비스',
+          features: []
+        },
+        services: []
+      }
     };
 
     // API 상태 표시 함수
@@ -1772,7 +1920,7 @@
       }
     }
 
-    // API에서 가격 데이터 로드 (Vercel 서버리스 함수 사용)
+    // Google Apps Script에서 가격 데이터 로드
     async function loadPricesFromSheet() {
       try {
         console.log('서비스 가격 데이터 로딩 중...');
@@ -1814,11 +1962,21 @@
     function parseServicePrices(data) {
       console.log('파싱 시작:', data);
       
+      // 임시 저장 객체
+      const farmServiceData = {
+        titles: [],
+        descriptions: [],
+        visitFeatures: [],
+        matchingFeatures: [],
+        fullFeatures: []
+      };
+      
       // 데이터가 배열 형태로 오는 경우
       if (Array.isArray(data)) {
-        data.forEach(row => {
+        data.forEach((row, index) => {
           const itemName = row['구분'] || row[0];
           
+          // 촬영 서비스 가격 파싱
           switch(itemName) {
             case '기본요금':
               if (row['실내촬영']) PRICE_CONFIG.locations.indoor.basePrice = parseInt(String(row['실내촬영']).replace(/,/g, ''));
@@ -1897,14 +2055,127 @@
               if (row['드론촬영']) PRICE_CONFIG.locations.drone.modelCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
               break;
           }
+          
+          // 농가 매칭 서비스 데이터 파싱
+          // 제목 (2-6행)
+          if (row['제목'] && index >= 1 && index <= 5) {
+            farmServiceData.titles.push(row['제목']);
+          }
+          
+          // 설명내용 (2-6행)
+          if (row['설명내용'] && index >= 1 && index <= 5) {
+            farmServiceData.descriptions.push(row['설명내용']);
+          }
+          
+          // 요금제 데이터
+          // 2행: 플랜명
+          if (index === 1) {
+            if (row['방문견학동행']) PRICE_CONFIG.farmService.visit.planName = row['방문견학동행'];
+            if (row['농가매칭']) PRICE_CONFIG.farmService.matching.planName = row['농가매칭'];
+            if (row['풀서비스']) PRICE_CONFIG.farmService.full.planName = row['풀서비스'];
+          }
+          
+          // 1행: 가격 (숫자만 있는 경우)
+          if (index === 0) {
+            if (row['방문견학동행'] && !isNaN(parseInt(String(row['방문견학동행']).replace(/,/g, '')))) {
+              PRICE_CONFIG.farmService.visit.price = parseInt(String(row['방문견학동행']).replace(/,/g, ''));
+            }
+            if (row['농가매칭'] && !isNaN(parseInt(String(row['농가매칭']).replace(/,/g, '')))) {
+              PRICE_CONFIG.farmService.matching.price = parseInt(String(row['농가매칭']).replace(/,/g, ''));
+            }
+            if (row['풀서비스'] && !isNaN(parseInt(String(row['풀서비스']).replace(/,/g, '')))) {
+              PRICE_CONFIG.farmService.full.price = parseInt(String(row['풀서비스']).replace(/,/g, ''));
+            }
+          }
+          
+          // 3행부터: 각 플랜 특징
+          if (index >= 2) {
+            if (row['방문견학동행']) farmServiceData.visitFeatures.push(row['방문견학동행']);
+            if (row['농가매칭']) farmServiceData.matchingFeatures.push(row['농가매칭']);
+            if (row['풀서비스']) farmServiceData.fullFeatures.push(row['풀서비스']);
+          }
         });
+        
+        // 농가 매칭 서비스 데이터 설정
+        PRICE_CONFIG.farmService.visit.features = farmServiceData.visitFeatures.filter(f => f);
+        PRICE_CONFIG.farmService.matching.features = farmServiceData.matchingFeatures.filter(f => f);
+        PRICE_CONFIG.farmService.full.features = farmServiceData.fullFeatures.filter(f => f);
+        
+        // 서비스 아코디언 데이터 설정
+        PRICE_CONFIG.farmService.services = farmServiceData.titles.map((title, i) => ({
+          title: title,
+          description: farmServiceData.descriptions[i] || ''
+        })).filter(s => s.title);
         
         console.log('파싱 완료, 업데이트된 가격:', PRICE_CONFIG);
         updateAllPrices();
+        updateFarmServiceUI();
         
         // localStorage에 백업 저장
         localStorage.setItem('dalraeServicePrices', JSON.stringify(PRICE_CONFIG));
       }
+    }
+
+    // 농가 매칭 서비스 UI 업데이트
+    function updateFarmServiceUI() {
+      // 요금제 카드 업데이트
+      document.getElementById('visit-plan').textContent = PRICE_CONFIG.farmService.visit.planName;
+      document.getElementById('visit-price').textContent = formatPrice(PRICE_CONFIG.farmService.visit.price);
+      const visitFeatures = document.getElementById('visit-features');
+      visitFeatures.innerHTML = PRICE_CONFIG.farmService.visit.features
+        .map(f => `<div class="pricing-feature">${f}</div>`)
+        .join('');
+      
+      document.getElementById('matching-plan').textContent = PRICE_CONFIG.farmService.matching.planName;
+      document.getElementById('matching-price').textContent = formatPrice(PRICE_CONFIG.farmService.matching.price);
+      const matchingFeatures = document.getElementById('matching-features');
+      matchingFeatures.innerHTML = PRICE_CONFIG.farmService.matching.features
+        .map(f => `<div class="pricing-feature">${f}</div>`)
+        .join('');
+      
+      document.getElementById('full-plan').textContent = PRICE_CONFIG.farmService.full.planName;
+      document.getElementById('full-price').textContent = formatPrice(PRICE_CONFIG.farmService.full.price);
+      const fullFeatures = document.getElementById('full-features');
+      fullFeatures.innerHTML = PRICE_CONFIG.farmService.full.features
+        .map(f => `<div class="pricing-feature">${f}</div>`)
+        .join('');
+      
+      // 서비스 아코디언 생성
+      const accordion = document.getElementById('services-accordion');
+      accordion.innerHTML = PRICE_CONFIG.farmService.services
+        .map((service, index) => `
+          <div class="accordion-item" id="accordion-item-${index}">
+            <div class="accordion-header" onclick="toggleAccordion(${index})">
+              <div class="accordion-title">
+                <span class="accordion-icon">🌱</span>
+                <span>${service.title}</span>
+              </div>
+              <span class="accordion-arrow">▼</span>
+            </div>
+            <div class="accordion-content">
+              <div class="accordion-body">
+                ${service.description}
+              </div>
+            </div>
+          </div>
+        `)
+        .join('');
+    }
+
+    // 아코디언 토글
+    function toggleAccordion(index) {
+      const item = document.getElementById(`accordion-item-${index}`);
+      const allItems = document.querySelectorAll('.accordion-item');
+      
+      // 다른 아이템 닫기
+      allItems.forEach((el, i) => {
+        if (i !== index) {
+          el.classList.remove('active');
+        }
+      });
+      
+      // 현재 아이템 토글
+      item.classList.toggle('active');
     }
 
     // 모든 가격 표시 업데이트
@@ -2194,3 +2465,5 @@
   </script>
 </body>
 </html>
+
+                          
