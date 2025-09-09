@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <title>촬영 서비스 & 견적 - 뉴모피즘</title>
+  <title>촬영 서비스 & 견적 - Soft UI 2.0</title>
   <script src="header.js"></script>
   <style>
     * { 
@@ -16,25 +16,26 @@
     
     body { 
       font-family: 'Noto Sans KR', -apple-system, sans-serif; 
-      background: #ecf0f3;
+      background: linear-gradient(135deg, #e0e5ec 0%, #f0f4f8 100%);
       color: #4a5568;
       min-height: 100vh;
     }
 
-    /* 뉴모피즘 기본 스타일 변수 */
+    /* Soft UI 2.0 디자인 변수 */
     :root {
-      --bg-color: #ecf0f3;
+      --bg-gradient: linear-gradient(135deg, #e0e5ec 0%, #f0f4f8 100%);
+      --card-gradient: linear-gradient(145deg, #f0f4f8, #d8dce4);
+      --button-gradient: linear-gradient(145deg, #6b7cdb, #8b9ceb);
+      --primary-color: #6b7cdb;
+      --primary-light: #8b9ceb;
+      --primary-dark: #5a67d8;
       --text-color: #4a5568;
       --text-dark: #2d3748;
-      --primary-color: #667eea;
-      --primary-light: #7c8ff3;
-      --primary-dark: #5a67d8;
-      --shadow-light: #ffffff;
-      --shadow-dark: #d1d5d8;
-      --inner-shadow: inset 2px 2px 5px #d1d5d8, inset -2px -2px 5px #ffffff;
-      --outer-shadow: 5px 5px 10px #d1d5d8, -5px -5px 10px #ffffff;
-      --outer-shadow-sm: 3px 3px 6px #d1d5d8, -3px -3px 6px #ffffff;
-      --outer-shadow-lg: 8px 8px 16px #d1d5d8, -8px -8px 16px #ffffff;
+      --shadow-soft: 3px 3px 6px #c8ccd4, -3px -3px 6px #ffffff;
+      --shadow-soft-sm: 2px 2px 4px #b8bcc4, -2px -2px 4px #ffffff;
+      --shadow-soft-lg: 5px 5px 10px #b8bcc4, -5px -5px 10px #ffffff;
+      --shadow-hover: 4px 4px 8px #b8bcc4, -4px -4px 8px #ffffff;
+      --shadow-inset: inset 2px 2px 4px #c8ccd4, inset -2px -2px 4px #ffffff;
     }
 
     /* 메인 컨테이너 */
@@ -44,93 +45,105 @@
       padding: 30px;
     }
 
-    /* 뉴모피즘 히어로 섹션 */
+    /* Soft UI 히어로 섹션 */
     .hero-section {
       text-align: center;
-      margin-bottom: 50px;
-      padding: 60px 20px;
-      background: var(--bg-color);
+      margin-bottom: 40px;
+      padding: 50px 20px;
+      background: var(--card-gradient);
       border-radius: 30px;
-      box-shadow: var(--outer-shadow-lg);
+      box-shadow: var(--shadow-soft-lg);
     }
 
     .hero-title {
-      font-size: clamp(32px, 5vw, 48px);
+      font-size: clamp(28px, 4.5vw, 42px);
       font-weight: 800;
       margin-bottom: 16px;
-      color: var(--text-dark);
-      text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+      background: linear-gradient(135deg, #6b7cdb 0%, #8b9ceb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero-subtitle {
-      font-size: clamp(16px, 2.5vw, 20px);
-      max-width: 800px;
+      font-size: clamp(15px, 2.5vw, 18px);
+      max-width: 700px;
       margin: 0 auto;
       color: var(--text-color);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
-    /* 분할 히어로 섹션 - 뉴모피즘 */
+    /* 분할 히어로 섹션 - Soft UI */
     .split-hero-section {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      margin-bottom: 40px;
+      gap: 25px;
+      margin-bottom: 35px;
     }
 
     .hero-card {
-      background: var(--bg-color);
-      border-radius: 30px;
-      padding: 30px;
+      background: var(--card-gradient);
+      border-radius: 25px;
+      padding: 25px;
       text-align: center;
-      min-height: 200px;
+      min-height: 160px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      box-shadow: var(--outer-shadow);
-      position: relative;
+      box-shadow: var(--shadow-soft);
       transition: all 0.3s ease;
     }
 
     .hero-card:hover {
-      box-shadow: var(--outer-shadow-lg);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
     }
 
     .hero-card-title {
-      font-size: clamp(24px, 3vw, 36px);
-      font-weight: 800;
-      margin-bottom: 20px;
+      font-size: clamp(20px, 2.8vw, 32px);
+      font-weight: 700;
+      margin-bottom: 15px;
       color: var(--text-dark);
     }
 
     .hero-card-title .accent {
-      color: var(--primary-color);
+      background: linear-gradient(135deg, #6b7cdb 0%, #8b9ceb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero-card-text {
-      font-size: 16px;
+      font-size: 14px;
       color: var(--text-color);
-      line-height: 1.6;
-      max-width: 400px;
+      line-height: 1.5;
+      max-width: 350px;
       margin: 0 auto;
     }
 
     .hero-card-note {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-color);
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 1px solid #d1d5d8;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(216, 220, 228, 0.5);
       opacity: 0.8;
     }
 
-    /* 뉴모피즘 서비스 탭 버튼 */
+    /* Soft UI 서비스 탭 버튼 */
+    .service-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
     .service-tab-btn {
-      padding: 14px 28px;
-      background: var(--bg-color);
+      padding: 12px 24px;
+      background: var(--card-gradient);
       border: none;
-      border-radius: 20px;
-      font-size: 16px;
+      border-radius: 15px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--text-color);
       cursor: pointer;
@@ -138,17 +151,18 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: var(--outer-shadow-sm);
+      box-shadow: var(--shadow-soft-sm);
     }
 
     .service-tab-btn:hover {
-      box-shadow: var(--outer-shadow);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
     }
 
-    .service-tab-btn:active,
     .service-tab-btn.active {
-      box-shadow: var(--inner-shadow);
-      color: var(--primary-color);
+      background: var(--button-gradient);
+      color: white;
+      box-shadow: var(--shadow-soft);
     }
 
     /* 서비스 섹션 */
@@ -168,9 +182,9 @@
       align-items: start;
     }
 
-    /* 뉴모피즘 섹션 타이틀 */
+    /* Soft UI 섹션 타이틀 */
     .section-title {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
       color: var(--text-dark);
       margin-bottom: 20px;
@@ -183,13 +197,13 @@
       position: absolute;
       bottom: 0;
       left: 0;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, var(--primary-color), transparent);
-      border-radius: 2px;
+      width: 60px;
+      height: 3px;
+      background: var(--button-gradient);
+      border-radius: 3px;
     }
 
-    /* 뉴모피즘 로케이션 카드 */
+    /* Soft UI 로케이션 카드 */
     .location-list {
       display: flex;
       flex-direction: column;
@@ -197,35 +211,33 @@
     }
 
     .location-card {
-      background: var(--bg-color);
-      border-radius: 25px;
+      background: var(--card-gradient);
+      border-radius: 20px;
       overflow: hidden;
       transition: all 0.3s;
-      box-shadow: var(--outer-shadow);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .location-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
     }
 
     .location-card.active {
-      box-shadow: var(--inner-shadow);
+      box-shadow: var(--shadow-soft-lg);
     }
 
     .location-header {
-      padding: 20px;
+      padding: 18px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
       transition: all 0.2s;
-      position: relative;
     }
 
-    .location-card.active .location-header::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 20px;
-      right: 20px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, #d1d5d8, transparent);
+    .location-card.active .location-header {
+      border-bottom: 1px solid rgba(216, 220, 228, 0.3);
     }
 
     .location-info {
@@ -234,21 +246,22 @@
       gap: 12px;
     }
 
-    /* 뉴모피즘 체크박스 */
+    /* Soft UI 체크박스 */
     .location-checkbox {
       appearance: none;
-      width: 24px;
-      height: 24px;
-      background: var(--bg-color);
-      border-radius: 8px;
+      width: 22px;
+      height: 22px;
+      background: linear-gradient(145deg, #f0f4f8, #e0e5ec);
+      border-radius: 6px;
       cursor: pointer;
-      box-shadow: var(--outer-shadow-sm);
+      box-shadow: var(--shadow-soft-sm);
       position: relative;
       transition: all 0.3s;
     }
 
     .location-checkbox:checked {
-      box-shadow: var(--inner-shadow);
+      background: var(--button-gradient);
+      box-shadow: var(--shadow-inset);
     }
 
     .location-checkbox:checked::after {
@@ -257,94 +270,94 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: var(--primary-color);
+      color: white;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     .location-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--text-dark);
     }
 
     .location-price {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
-      color: var(--primary-color);
-      padding: 8px 16px;
-      background: var(--bg-color);
-      border-radius: 15px;
-      box-shadow: var(--inner-shadow);
+      background: var(--button-gradient);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft-sm);
     }
 
     .location-body {
       padding: 20px;
       display: none;
-      background: var(--bg-color);
+      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
     }
 
     .location-card.active .location-body {
       display: block;
     }
 
-    /* 뉴모피즘 기본 제공 정보 */
+    /* Soft UI 기본 제공 정보 */
     .default-info {
-      padding: 15px;
-      background: var(--bg-color);
-      border-radius: 15px;
-      margin-bottom: 20px;
-      font-size: 14px;
+      padding: 12px 16px;
+      background: linear-gradient(145deg, rgba(139, 156, 235, 0.1), rgba(107, 124, 219, 0.05));
+      border-radius: 12px;
+      margin-bottom: 18px;
+      font-size: 13px;
       color: var(--primary-color);
-      box-shadow: var(--inner-shadow);
+      box-shadow: var(--shadow-inset);
     }
 
     /* 옵션 그룹 */
     .option-group {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .option-label {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--text-dark);
       margin-bottom: 10px;
       display: block;
     }
 
-    /* 뉴모피즘 수량 조절 */
+    /* Soft UI 수량 조절 */
     .quantity-control {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .quantity-label {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-color);
-      min-width: 80px;
+      min-width: 70px;
     }
 
     .stepper {
       display: inline-flex;
       align-items: center;
-      background: var(--bg-color);
-      border-radius: 15px;
-      padding: 5px;
-      box-shadow: var(--outer-shadow-sm);
+      background: var(--card-gradient);
+      border-radius: 12px;
+      padding: 4px;
+      box-shadow: var(--shadow-soft-sm);
     }
 
     .stepper button {
-      width: 35px;
-      height: 35px;
+      width: 32px;
+      height: 32px;
       border: none;
-      background: var(--bg-color);
+      background: linear-gradient(145deg, #f0f4f8, #e0e5ec);
       color: var(--text-color);
       cursor: pointer;
-      font-size: 18px;
-      border-radius: 10px;
-      box-shadow: var(--outer-shadow-sm);
+      font-size: 16px;
+      border-radius: 8px;
+      box-shadow: var(--shadow-soft-sm);
       transition: all 0.3s;
       display: flex;
       align-items: center;
@@ -353,23 +366,26 @@
 
     .stepper button:hover {
       color: var(--primary-color);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
     }
 
     .stepper button:active {
-      box-shadow: var(--inner-shadow);
+      box-shadow: var(--shadow-inset);
+      transform: translateY(0);
     }
 
     .stepper input {
-      width: 70px;
+      width: 60px;
       border: none;
       background: transparent;
       text-align: center;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--text-dark);
       outline: none;
       -moz-appearance: textfield;
-      padding: 5px;
+      padding: 4px;
     }
 
     .stepper input::-webkit-outer-spin-button,
@@ -378,10 +394,10 @@
       margin: 0;
     }
 
-    /* 뉴모피즘 체크박스 옵션 */
+    /* Soft UI 체크박스 옵션 */
     .checkbox-options {
       display: flex;
-      gap: 16px;
+      gap: 14px;
       margin-top: 10px;
     }
 
@@ -389,32 +405,33 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 15px;
-      background: var(--bg-color);
-      border-radius: 15px;
+      padding: 8px 14px;
+      background: var(--card-gradient);
+      border-radius: 12px;
       cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: var(--outer-shadow-sm);
+      transition: all 0.3s;
+      box-shadow: var(--shadow-soft-sm);
     }
 
     .checkbox-option:hover {
-      box-shadow: var(--outer-shadow);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
     }
 
     .checkbox-option input {
       appearance: none;
-      width: 20px;
-      height: 20px;
-      background: var(--bg-color);
-      border-radius: 6px;
+      width: 18px;
+      height: 18px;
+      background: linear-gradient(145deg, #f0f4f8, #e0e5ec);
+      border-radius: 5px;
       cursor: pointer;
-      box-shadow: var(--outer-shadow-sm);
+      box-shadow: var(--shadow-soft-sm);
       position: relative;
       transition: all 0.3s;
     }
 
     .checkbox-option input:checked {
-      box-shadow: var(--inner-shadow);
+      background: var(--button-gradient);
     }
 
     .checkbox-option input:checked::after {
@@ -423,13 +440,13 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: var(--primary-color);
+      color: white;
       font-weight: bold;
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .checkbox-option label {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-dark);
       cursor: pointer;
     }
@@ -437,53 +454,54 @@
     .checkbox-option.disabled {
       opacity: 0.5;
       cursor: not-allowed;
+      pointer-events: none;
     }
 
-    /* 뉴모피즘 편집 옵션 */
+    /* Soft UI 편집 옵션 */
     .edit-options-grid {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 18px;
     }
 
     .edit-option-card {
-      padding: 20px;
-      background: var(--bg-color);
-      border-radius: 20px;
-      box-shadow: var(--outer-shadow);
+      padding: 18px;
+      background: var(--card-gradient);
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
     }
 
     .edit-option-header {
-      margin-bottom: 15px;
+      margin-bottom: 14px;
     }
 
     .edit-title {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text-dark);
       margin-bottom: 4px;
     }
 
     .edit-description {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-color);
     }
 
     .duration-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
 
     .duration-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px;
-      background: var(--bg-color);
-      border-radius: 12px;
-      font-size: 13px;
-      box-shadow: var(--inner-shadow);
+      padding: 8px 10px;
+      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
+      border-radius: 10px;
+      font-size: 12px;
+      box-shadow: var(--shadow-inset);
     }
 
     .duration-label {
@@ -494,39 +512,42 @@
     .duration-stepper {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
     }
 
     .duration-stepper button {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border: none;
-      background: var(--bg-color);
-      border-radius: 6px;
+      background: linear-gradient(145deg, #f0f4f8, #e0e5ec);
+      border-radius: 5px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
-      box-shadow: var(--outer-shadow-sm);
+      box-shadow: var(--shadow-soft-sm);
       color: var(--text-color);
+      font-size: 12px;
     }
 
     .duration-stepper button:hover {
       color: var(--primary-color);
+      transform: translateY(-1px);
     }
 
     .duration-stepper button:active {
-      box-shadow: var(--inner-shadow);
+      box-shadow: var(--shadow-inset);
+      transform: translateY(0);
     }
 
     .duration-stepper input {
-      width: 30px;
+      width: 25px;
       text-align: center;
       border: none;
       background: transparent;
       padding: 2px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-dark);
       outline: none;
@@ -544,138 +565,138 @@
       top: 30px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 22px;
     }
 
-    /* 뉴모피즘 통계 섹션 */
+    /* Soft UI 통계 섹션 */
     .statistics-section {
-      background: var(--bg-color);
-      border-radius: 25px;
-      padding: 24px;
-      box-shadow: var(--outer-shadow);
+      background: var(--card-gradient);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
     }
 
     .stats-grid {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 18px;
     }
 
     .stat-item {
-      padding: 12px;
-      background: var(--bg-color);
-      border-radius: 12px;
-      box-shadow: var(--inner-shadow);
+      padding: 10px 12px;
+      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
+      border-radius: 10px;
+      box-shadow: var(--shadow-inset);
     }
 
     .stat-location {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       color: var(--text-dark);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .stat-details {
       display: flex;
       justify-content: space-between;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--text-color);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .stat-value {
       font-weight: 600;
-      color: var(--primary-color);
+      background: linear-gradient(135deg, #6b7cdb 0%, #8b9ceb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .total-stats {
-      padding: 16px;
-      background: var(--bg-color);
-      border-radius: 15px;
-      box-shadow: var(--outer-shadow-sm);
+      padding: 14px;
+      background: var(--button-gradient);
+      border-radius: 12px;
+      box-shadow: var(--shadow-soft-sm);
     }
 
     .total-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      color: var(--text-dark);
+      color: white;
       margin-bottom: 8px;
     }
 
     .total-row {
       display: flex;
       justify-content: space-between;
-      padding: 6px 0;
-      font-size: 13px;
-    }
-
-    .total-label {
-      color: var(--text-color);
+      padding: 5px 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.9);
     }
 
     .total-value {
       font-weight: 700;
-      color: var(--primary-color);
+      color: white;
     }
 
-    /* 뉴모피즘 편집 섹션 */
+    /* Soft UI 편집 섹션 */
     .edit-section {
-      background: var(--bg-color);
-      border-radius: 25px;
-      padding: 24px;
-      box-shadow: var(--outer-shadow);
+      background: var(--card-gradient);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
     }
 
     .edit-section .section-title {
-      font-size: 18px;
-      margin-bottom: 16px;
+      font-size: 17px;
+      margin-bottom: 14px;
     }
 
     .edit-stats {
-      padding: 12px;
-      background: var(--bg-color);
-      border-radius: 12px;
-      margin-top: 16px;
-      font-size: 13px;
+      padding: 10px 12px;
+      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
+      border-radius: 10px;
+      margin-top: 14px;
+      font-size: 12px;
       color: var(--text-color);
-      box-shadow: var(--inner-shadow);
+      box-shadow: var(--shadow-inset);
     }
 
     .edit-stat-row {
       display: flex;
       justify-content: space-between;
-      padding: 4px 0;
+      padding: 3px 0;
     }
 
-    /* 뉴모피즘 최종 견적 */
+    /* Soft UI 최종 견적 */
     .final-quote {
-      background: var(--bg-color);
-      border-radius: 25px;
-      padding: 24px;
-      box-shadow: var(--outer-shadow-lg);
+      background: var(--card-gradient);
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--shadow-soft-lg);
     }
 
     .final-quote .section-title {
-      font-size: 18px;
-      margin-bottom: 16px;
+      font-size: 17px;
+      margin-bottom: 14px;
     }
 
     .quote-breakdown {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 8px;
+      margin-bottom: 18px;
     }
 
     .quote-item {
       display: flex;
       justify-content: space-between;
-      padding: 12px;
-      background: var(--bg-color);
-      border-radius: 12px;
-      font-size: 13px;
-      box-shadow: var(--inner-shadow);
+      padding: 10px 12px;
+      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
+      border-radius: 10px;
+      font-size: 12px;
+      box-shadow: var(--shadow-inset);
     }
 
     .quote-label {
@@ -688,171 +709,223 @@
     }
 
     .quote-total {
-      padding: 20px;
-      background: var(--bg-color);
-      border-radius: 20px;
+      padding: 18px;
+      background: var(--button-gradient);
+      border-radius: 16px;
       text-align: center;
-      box-shadow: var(--outer-shadow);
+      box-shadow: var(--shadow-soft);
+      color: white;
     }
 
     .quote-total-label {
-      font-size: 13px;
-      color: var(--text-color);
-      margin-bottom: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 6px;
     }
 
     .quote-total-amount {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
-      color: var(--primary-color);
-      text-shadow: 2px 2px 4px rgba(102, 126, 234, 0.2);
+      color: white;
+      text-shadow: 2px 2px 4px rgba(107, 124, 219, 0.3);
     }
 
     .quote-vat {
-      font-size: 12px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 6px;
+    }
+
+    .quote-contact {
+      margin-top: 16px;
+      padding: 14px;
+      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--shadow-inset);
+    }
+
+    .quote-contact-text {
+      font-size: 13px;
       color: var(--text-color);
-      margin-top: 8px;
-      opacity: 0.8;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .phone-link {
+      display: inline-block;
+      font-size: 20px;
+      font-weight: 700;
+      background: var(--button-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      transition: all 0.3s;
+      padding: 8px 16px;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .phone-link:hover {
+      transform: translateY(-2px);
+      text-shadow: 0 2px 4px rgba(107, 124, 219, 0.3);
+    }
+
+    .phone-link::before {
+      content: '📞 ';
+      font-size: 18px;
     }
 
     .quote-warning {
-      margin-top: 15px;
-      padding: 12px;
-      background: var(--bg-color);
-      border-radius: 12px;
-      font-size: 12px;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: linear-gradient(145deg, rgba(239, 68, 68, 0.05), rgba(252, 165, 165, 0.05));
+      border-radius: 10px;
+      font-size: 11px;
       color: var(--text-color);
-      box-shadow: var(--inner-shadow);
+      box-shadow: var(--shadow-inset);
     }
 
-    /* 뉴모피즘 농가 매칭 서비스 */
+    /* Soft UI 농가 매칭 서비스 */
     .farm-service-card {
-      background: var(--bg-color);
-      border-radius: 30px;
-      padding: 40px;
+      background: var(--card-gradient);
+      border-radius: 25px;
+      padding: 35px;
       margin-bottom: 24px;
-      box-shadow: var(--outer-shadow-lg);
+      box-shadow: var(--shadow-soft-lg);
     }
 
     .farm-service-title {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 20px;
+      background: linear-gradient(135deg, #6b7cdb 0%, #8b9ceb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 18px;
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
     .farm-service-desc {
-      font-size: 16px;
+      font-size: 15px;
       color: var(--text-color);
       line-height: 1.6;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
     }
 
     .service-list {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 12px;
     }
 
     .service-item {
       display: flex;
       align-items: flex-start;
-      gap: 15px;
-      padding: 15px;
-      background: var(--bg-color);
-      border-radius: 15px;
-      box-shadow: var(--inner-shadow);
+      gap: 14px;
+      padding: 14px;
+      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
+      border-radius: 12px;
+      box-shadow: var(--shadow-inset);
+      transition: all 0.3s;
+    }
+
+    .service-item:hover {
+      transform: translateX(5px);
     }
 
     .service-icon {
-      width: 28px;
-      height: 28px;
-      background: var(--bg-color);
+      width: 26px;
+      height: 26px;
+      background: var(--button-gradient);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--primary-color);
-      font-size: 14px;
+      color: white;
+      font-size: 13px;
       font-weight: bold;
       flex-shrink: 0;
-      box-shadow: var(--outer-shadow-sm);
+      box-shadow: var(--shadow-soft-sm);
     }
 
     .service-text {
       flex: 1;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-color);
       line-height: 1.5;
     }
 
     .price-card {
-      background: var(--bg-color);
-      border-radius: 20px;
-      padding: 25px;
-      margin-top: 30px;
-      box-shadow: var(--outer-shadow);
+      background: var(--card-gradient);
+      border-radius: 18px;
+      padding: 22px;
+      margin-top: 28px;
+      box-shadow: var(--shadow-soft);
     }
 
     .price-title {
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--text-dark);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .price-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .price-item {
       display: flex;
       justify-content: space-between;
-      padding: 15px;
-      background: var(--bg-color);
-      border-radius: 12px;
-      box-shadow: var(--inner-shadow);
+      padding: 12px 14px;
+      background: linear-gradient(145deg, #f5f8fb, #e5e9ed);
+      border-radius: 10px;
+      box-shadow: var(--shadow-inset);
     }
 
     .price-label {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-color);
     }
 
     .price-amount {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
-      color: var(--primary-color);
+      background: linear-gradient(135deg, #6b7cdb 0%, #8b9ceb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .price-note {
-      margin-top: 20px;
-      padding: 15px;
-      background: var(--bg-color);
-      border-radius: 12px;
-      font-size: 13px;
+      margin-top: 18px;
+      padding: 12px 14px;
+      background: linear-gradient(145deg, rgba(139, 156, 235, 0.1), rgba(107, 124, 219, 0.05));
+      border-radius: 10px;
+      font-size: 12px;
       color: var(--text-color);
-      box-shadow: var(--inner-shadow);
+      box-shadow: var(--shadow-inset);
     }
 
-    /* API 상태 표시 - 뉴모피즘 */
+    /* API 상태 표시 - Soft UI */
     .api-status {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      padding: 12px 20px;
-      background: var(--bg-color);
+      padding: 10px 18px;
+      background: var(--card-gradient);
       color: var(--text-color);
-      border-radius: 20px;
-      font-size: 12px;
+      border-radius: 15px;
+      font-size: 11px;
       display: none;
       z-index: 1000;
-      box-shadow: var(--outer-shadow);
+      box-shadow: var(--shadow-soft);
     }
 
     .api-status.loading {
@@ -882,6 +955,12 @@
 
       .split-hero-section {
         grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .hero-card {
+        min-height: 140px;
+        padding: 20px;
       }
 
       .duration-grid {
@@ -895,19 +974,83 @@
       }
 
       .hero-section {
-        padding: 40px 20px;
+        padding: 35px 20px;
+      }
+
+      .split-hero-section {
+        gap: 15px;
+      }
+
+      .hero-card {
+        min-height: 120px;
+        padding: 18px 15px;
+      }
+
+      .hero-card-title {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .hero-card-text {
+        font-size: 13px;
       }
 
       .checkbox-options {
         flex-direction: column;
       }
 
-      .hero-card {
-        padding: 20px 15px;
-      }
-
       .duration-grid {
         grid-template-columns: 1fr;
+      }
+
+      .location-header {
+        padding: 15px;
+      }
+
+      .location-body {
+        padding: 15px;
+      }
+
+      .service-tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .service-tab-btn {
+        width: 100%;
+        max-width: 250px;
+        justify-content: center;
+      }
+
+      .phone-link {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 24px;
+      }
+
+      .hero-subtitle {
+        font-size: 14px;
+      }
+
+      .location-title {
+        font-size: 15px;
+      }
+
+      .quantity-label {
+        min-width: 60px;
+        font-size: 12px;
+      }
+
+      .stepper input {
+        width: 50px;
+      }
+
+      .quote-total-amount {
+        font-size: 24px;
       }
     }
   </style>
@@ -923,7 +1066,7 @@
     <!-- 히어로 섹션 -->
     <div class="hero-section">
       <h1 class="hero-title">달래마켓만의 특별한 서비스</h1>
-      <p class="hero-subtitle">달래마켓은 지속적인 파트너십을 위해 언제나 최선을 다하고 있습니다</p>
+      <p class="hero-subtitle">지속적인 파트너십을 위해 언제나 최선을 다하고 있습니다</p>
     </div>
 
     <!-- 분할 히어로 섹션 -->
@@ -951,7 +1094,7 @@
     </div>
 
     <!-- 서비스 전환 버튼 -->
-    <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 40px;">
+    <div class="service-tabs">
       <button id="photo-service-btn" class="service-tab-btn active" onclick="switchService('photo')">
         📸 촬영 서비스
       </button>
@@ -990,7 +1133,7 @@
                       <input type="number" id="indoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('indoor-photo')">
                       <button onclick="adjustQuantity('indoor-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-color);" id="indoor-photo-cost">매 (500원/매)</span>
+                    <span style="font-size: 11px; color: var(--text-color);" id="indoor-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -999,7 +1142,7 @@
                       <input type="number" id="indoor-video" value="0" min="0" step="1" onchange="handleDirectInput('indoor-video')">
                       <button onclick="adjustQuantity('indoor-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-color);" id="indoor-video-cost">분 (2,000원/분)</span>
+                    <span style="font-size: 11px; color: var(--text-color);" id="indoor-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1040,7 +1183,7 @@
                       <input type="number" id="outdoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('outdoor-photo')">
                       <button onclick="adjustQuantity('outdoor-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-color);" id="outdoor-photo-cost">매 (500원/매)</span>
+                    <span style="font-size: 11px; color: var(--text-color);" id="outdoor-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1049,7 +1192,7 @@
                       <input type="number" id="outdoor-video" value="0" min="0" step="1" onchange="handleDirectInput('outdoor-video')">
                       <button onclick="adjustQuantity('outdoor-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-color);" id="outdoor-video-cost">분 (2,000원/분)</span>
+                    <span style="font-size: 11px; color: var(--text-color);" id="outdoor-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1090,7 +1233,7 @@
                       <input type="number" id="cooking-menu" value="0" min="0" step="1" onchange="handleDirectInput('cooking-menu')">
                       <button onclick="adjustQuantity('cooking-menu', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-color);" id="cooking-menu-cost">개 (메뉴당 30,000원 추가)</span>
+                    <span style="font-size: 11px; color: var(--text-color);" id="cooking-menu-cost">개 (메뉴당 30,000원 추가)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1102,7 +1245,7 @@
                       <input type="number" id="cooking-photo" value="0" min="0" step="10" onchange="handleDirectInput('cooking-photo')">
                       <button onclick="adjustQuantity('cooking-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-color);" id="cooking-photo-cost">매 (500원/매)</span>
+                    <span style="font-size: 11px; color: var(--text-color);" id="cooking-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1111,7 +1254,7 @@
                       <input type="number" id="cooking-video" value="0" min="0" step="1" onchange="handleDirectInput('cooking-video')">
                       <button onclick="adjustQuantity('cooking-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-color);" id="cooking-video-cost">분 (2,000원/분)</span>
+                    <span style="font-size: 11px; color: var(--text-color);" id="cooking-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1152,7 +1295,7 @@
                       <input type="number" id="drone-photo" value="0" min="0" step="10" onchange="handleDirectInput('drone-photo')">
                       <button onclick="adjustQuantity('drone-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-color);" id="drone-photo-cost">매 (500원/매)</span>
+                    <span style="font-size: 11px; color: var(--text-color);" id="drone-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1161,7 +1304,7 @@
                       <input type="number" id="drone-video" value="0" min="0" step="1" onchange="handleDirectInput('drone-video')">
                       <button onclick="adjustQuantity('drone-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: var(--text-color);" id="drone-video-cost">분 (2,000원/분)</span>
+                    <span style="font-size: 11px; color: var(--text-color);" id="drone-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1186,18 +1329,18 @@
         <div class="right-panel">
           <!-- 통계 섹션 -->
           <div class="statistics-section">
-            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--text-dark);">📊 촬영 통계</h3>
+            <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 14px; color: var(--text-dark);">📊 촬영 통계</h3>
             <div class="stats-grid" id="statsGrid">
               <!-- 동적으로 생성됨 -->
             </div>
             <div class="total-stats">
               <div class="total-title">📌 전체 합계</div>
               <div class="total-row">
-                <span class="total-label">총 사진 수량</span>
+                <span>총 사진 수량</span>
                 <span class="total-value" id="totalPhotos">0매</span>
               </div>
               <div class="total-row">
-                <span class="total-label">총 영상 수량</span>
+                <span>총 영상 수량</span>
                 <span class="total-value" id="totalVideos">0분</span>
               </div>
             </div>
@@ -1247,7 +1390,7 @@
                 <div class="edit-option-header">
                   <div class="edit-title">풀 편집</div>
                   <div class="edit-description">썸네일, 시나리오, 자막 등 모든 작업 위임</div>
-                  <div class="edit-description" style="color: var(--primary-color); margin-top: 4px;">
+                  <div class="edit-description" style="color: var(--primary-color); margin-top: 3px;">
                     1분: <span id="full-edit-base">70,000원</span> / 2분 이상: +<span id="full-edit-per">20,000원</span>/분
                   </div>
                 </div>
@@ -1329,9 +1472,15 @@
               <div class="quote-total-label">예상 총 비용</div>
               <div class="quote-total-amount" id="totalAmount">0원</div>
               <div class="quote-vat">* 부가세 별도</div>
-              <div class="quote-warning">
-                ⚠️ 본 견적은 예상 금액이며, 현장 상황에 따라 변동될 수 있습니다
+            </div>
+            <div class="quote-contact">
+              <div class="quote-contact-text">
+                진행 시 유선상담 조율 후 진행 가능합니다
               </div>
+              <a href="tel:01026881388" class="phone-link">010-2688-1388</a>
+            </div>
+            <div class="quote-warning">
+              ⚠️ 본 견적은 예상 금액이며, 현장 상황에 따라 변동될 수 있습니다
             </div>
           </div>
         </div>
@@ -1342,7 +1491,7 @@
     <div id="farm-service" class="service-section">
       <div class="farm-service-card">
         <div class="farm-service-title">
-          <span style="font-size: 32px;">🤝</span>
+          <span style="font-size: 28px;">🤝</span>
           <span>농가 매칭 서비스</span>
         </div>
         <div class="farm-service-desc">
@@ -1418,461 +1567,4 @@
           videoAddCost: 2000,
           handCost: 30000,
           modelCost: 200000,
-          sceneAddCost: 50000
-        },
-        cooking: {
-          basePrice: 60000,
-          basePhoto: 30,
-          baseVideo: 3,
-          photoAddCost: 500,
-          videoAddCost: 2000,
-          menuCost: 30000,
-          handCost: 30000,
-          modelCost: 200000,
-          sceneAddCost: 60000
-        },
-        drone: {
-          basePrice: 90000,
-          basePhoto: 20,
-          baseVideo: 5,
-          photoAddCost: 500,
-          videoAddCost: 2000,
-          handCost: 0,
-          modelCost: 0,
-          sceneAddCost: 90000
-        }
-      },
-      editing: {
-        basic: {
-          basePrice: 30000,
-          perMinute: 30000
-        },
-        full: {
-          basePrice: 70000,
-          perMinute: 20000
-        }
-      },
-      baseLocationCost: 30000
-    };
-
-    // API 상태 표시 함수
-    function showApiStatus(message, type) {
-      const statusEl = document.getElementById('apiStatus');
-      statusEl.textContent = message;
-      statusEl.className = `api-status ${type}`;
-      
-      if (type === 'success' || type === 'error') {
-        setTimeout(() => {
-          statusEl.className = 'api-status';
-        }, 3000);
-      }
-    }
-
-    // API에서 가격 데이터 로드 (Vercel 서버리스 함수 사용)
-    async function loadPricesFromSheet() {
-      try {
-        console.log('서비스 가격 데이터 로딩 중...');
-        showApiStatus('가격 데이터 로딩 중...', 'loading');
-        
-        // Vercel 서버리스 함수 호출
-        const response = await fetch('/api/services');
-        
-        if (response.ok) {
-          const data = await response.json();
-          
-          if (data && data.length > 0) {
-            console.log('Google Sheets 데이터 로드 성공:', data);
-            showApiStatus('가격 데이터 로드 완료', 'success');
-            parseServicePrices(data);
-          } else {
-            console.log('시트 응답이 비어있습니다. 기본 가격 사용');
-            showApiStatus('시트 데이터 없음 - 기본 가격 사용', 'error');
-          }
-        } else {
-          throw new Error(`API 응답 실패: ${response.status}`);
-        }
-      } catch (error) {
-        console.error('API 로드 실패:', error);
-        showApiStatus('API 연결 실패 - 기본 가격 사용', 'error');
-        
-        // localStorage 백업 확인
-        const savedPrices = localStorage.getItem('dalraeServicePrices');
-        if (savedPrices) {
-          const prices = JSON.parse(savedPrices);
-          Object.assign(PRICE_CONFIG, prices);
-          updateAllPrices();
-          console.log('localStorage 백업 데이터 사용');
-        }
-      }
-    }
-
-    // API 데이터 파싱 (SERVICES 시트 구조)
-    function parseServicePrices(data) {
-      console.log('파싱 시작:', data);
-      
-      // 데이터가 배열 형태로 오는 경우
-      if (Array.isArray(data)) {
-        data.forEach(row => {
-          const itemName = row['구분'] || row[0];
-          
-          switch(itemName) {
-            case '기본요금':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.basePrice = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.basePrice = parseInt(String(row['야외촬영']).replace(/,/g, ''));
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.basePrice = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.basePrice = parseInt(String(row['드론촬영']).replace(/,/g, ''));
-              if (row['일반편집']) PRICE_CONFIG.editing.basic.basePrice = parseInt(String(row['일반편집']).replace(/,/g, ''));
-              if (row['풀편집']) PRICE_CONFIG.editing.full.basePrice = parseInt(String(row['풀편집']).replace(/,/g, ''));
-              break;
-              
-            case '기본제공 사진(매)':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.basePhoto = parseInt(row['실내촬영']);
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.basePhoto = parseInt(row['야외촬영']);
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.basePhoto = parseInt(row['요리촬영']);
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.basePhoto = parseInt(row['드론촬영']);
-              break;
-              
-            case '기본제공 영상(분)':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.baseVideo = parseInt(row['실내촬영']);
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.baseVideo = parseInt(row['야외촬영']);
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.baseVideo = parseInt(row['요리촬영']);
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.baseVideo = parseInt(row['드론촬영']);
-              break;
-              
-            case '추가비용 사진(매)':
-              const photoAddCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (photoAddCost) {
-                PRICE_CONFIG.locations.indoor.photoAddCost = photoAddCost;
-                PRICE_CONFIG.locations.outdoor.photoAddCost = photoAddCost;
-                PRICE_CONFIG.locations.cooking.photoAddCost = photoAddCost;
-                PRICE_CONFIG.locations.drone.photoAddCost = photoAddCost;
-              }
-              break;
-              
-            case '추가비용 영상(분)':
-              const videoAddCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (videoAddCost) {
-                PRICE_CONFIG.locations.indoor.videoAddCost = videoAddCost;
-                PRICE_CONFIG.locations.outdoor.videoAddCost = videoAddCost;
-                PRICE_CONFIG.locations.cooking.videoAddCost = videoAddCost;
-                PRICE_CONFIG.locations.drone.videoAddCost = videoAddCost;
-              }
-              break;
-              
-            case '씬추가비용':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.sceneAddCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.sceneAddCost = parseInt(String(row['야외촬영']).replace(/,/g, ''));
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.sceneAddCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.sceneAddCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
-              break;
-              
-            case '요리메뉴당비용':
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.menuCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              break;
-              
-            case '기본로케이션비용':
-              if (row['실내촬영']) PRICE_CONFIG.baseLocationCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              break;
-              
-            case '편집영상 1분당 추가비용':
-              if (row['일반편집']) PRICE_CONFIG.editing.basic.perMinute = parseInt(String(row['일반편집']).replace(/,/g, ''));
-              if (row['풀편집']) PRICE_CONFIG.editing.full.perMinute = parseInt(String(row['풀편집']).replace(/,/g, ''));
-              break;
-              
-            case '핸드컷비용':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.handCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.handCost = parseInt(String(row['야외촬영']).replace(/,/g, ''));
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.handCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.handCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
-              break;
-              
-            case '모델컷비용':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.modelCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.modelCost = parseInt(String(row['야외촬영']).replace(/,/g, ''));
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.modelCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.modelCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
-              break;
-          }
-        });
-        
-        console.log('파싱 완료, 업데이트된 가격:', PRICE_CONFIG);
-        updateAllPrices();
-        
-        // localStorage에 백업 저장
-        localStorage.setItem('dalraeServicePrices', JSON.stringify(PRICE_CONFIG));
-      }
-    }
-
-    // 모든 가격 표시 업데이트
-    function updateAllPrices() {
-      // 기본 가격 업데이트
-      document.getElementById('indoor-base-price').textContent = formatPrice(PRICE_CONFIG.locations.indoor.basePrice);
-      document.getElementById('outdoor-base-price').textContent = formatPrice(PRICE_CONFIG.locations.outdoor.basePrice);
-      document.getElementById('cooking-base-price').textContent = formatPrice(PRICE_CONFIG.locations.cooking.basePrice);
-      document.getElementById('drone-base-price').textContent = formatPrice(PRICE_CONFIG.locations.drone.basePrice);
-      
-      // 기본 제공 정보 업데이트
-      document.getElementById('indoor-default-info').textContent = 
-        `📦 기본 제공: 사진 ${PRICE_CONFIG.locations.indoor.basePhoto}매, 영상길이 ${PRICE_CONFIG.locations.indoor.baseVideo}분 이상 **(총 재생시간)`;
-      document.getElementById('outdoor-default-info').textContent = 
-        `📦 기본 제공: 사진 ${PRICE_CONFIG.locations.outdoor.basePhoto}매, 영상길이 ${PRICE_CONFIG.locations.outdoor.baseVideo}분 이상 **(총 재생시간)`;
-      document.getElementById('cooking-default-info').textContent = 
-        `📦 기본 제공: 1개 메뉴 (사진 ${PRICE_CONFIG.locations.cooking.basePhoto}매), 영상길이 ${PRICE_CONFIG.locations.cooking.baseVideo}분 이상 **(총 재생시간)`;
-      document.getElementById('drone-default-info').textContent = 
-        `📦 기본 제공: 사진 ${PRICE_CONFIG.locations.drone.basePhoto}매, 영상길이 ${PRICE_CONFIG.locations.drone.baseVideo}분 이상 **(총 재생시간)`;
-      
-      // 추가 비용 업데이트
-      document.getElementById('indoor-photo-cost').textContent = `매 (${formatPrice(PRICE_CONFIG.locations.indoor.photoAddCost)}/매)`;
-      document.getElementById('indoor-video-cost').textContent = `분 (${formatPrice(PRICE_CONFIG.locations.indoor.videoAddCost)}/분)`;
-      document.getElementById('outdoor-photo-cost').textContent = `매 (${formatPrice(PRICE_CONFIG.locations.outdoor.photoAddCost)}/매)`;
-      document.getElementById('outdoor-video-cost').textContent = `분 (${formatPrice(PRICE_CONFIG.locations.outdoor.videoAddCost)}/분)`;
-      document.getElementById('cooking-photo-cost').textContent = `매 (${formatPrice(PRICE_CONFIG.locations.cooking.photoAddCost)}/매)`;
-      document.getElementById('cooking-video-cost').textContent = `분 (${formatPrice(PRICE_CONFIG.locations.cooking.videoAddCost)}/분)`;
-      document.getElementById('cooking-menu-cost').textContent = `개 (메뉴당 ${formatPrice(PRICE_CONFIG.locations.cooking.menuCost)} 추가)`;
-      document.getElementById('drone-photo-cost').textContent = `매 (${formatPrice(PRICE_CONFIG.locations.drone.photoAddCost)}/매)`;
-      document.getElementById('drone-video-cost').textContent = `분 (${formatPrice(PRICE_CONFIG.locations.drone.videoAddCost)}/분)`;
-      
-      // 옵션 비용 업데이트
-      document.getElementById('indoor-hand-label').textContent = `핸드컷 (+${formatPrice(PRICE_CONFIG.locations.indoor.handCost)})`;
-      document.getElementById('indoor-model-label').textContent = `모델컷 (+${formatPrice(PRICE_CONFIG.locations.indoor.modelCost)})`;
-      document.getElementById('outdoor-hand-label').textContent = `핸드컷 (+${formatPrice(PRICE_CONFIG.locations.outdoor.handCost)})`;
-      document.getElementById('outdoor-model-label').textContent = `모델컷 (+${formatPrice(PRICE_CONFIG.locations.outdoor.modelCost)})`;
-      document.getElementById('cooking-hand-label').textContent = `핸드컷 (+${formatPrice(PRICE_CONFIG.locations.cooking.handCost)})`;
-      document.getElementById('cooking-model-label').textContent = `모델컷 (+${formatPrice(PRICE_CONFIG.locations.cooking.modelCost)})`;
-      
-      // 편집 가격 업데이트
-      document.getElementById('basic-edit-price').textContent = formatPrice(PRICE_CONFIG.editing.basic.perMinute);
-      document.getElementById('full-edit-base').textContent = formatPrice(PRICE_CONFIG.editing.full.basePrice);
-      document.getElementById('full-edit-per').textContent = formatPrice(PRICE_CONFIG.editing.full.perMinute);
-      
-      // 견적 재계산
-      calculateQuote();
-    }
-
-    // 서비스 전환
-    function switchService(service) {
-      const photoBtn = document.getElementById('photo-service-btn');
-      const farmBtn = document.getElementById('farm-service-btn');
-      const photoSection = document.getElementById('photo-service');
-      const farmSection = document.getElementById('farm-service');
-      
-      if (service === 'photo') {
-        photoBtn.classList.add('active');
-        farmBtn.classList.remove('active');
-        photoSection.classList.add('active');
-        farmSection.classList.remove('active');
-      } else {
-        farmBtn.classList.add('active');
-        photoBtn.classList.remove('active');
-        farmSection.classList.add('active');
-        photoSection.classList.remove('active');
-      }
-    }
-
-    // 로케이션 토글
-    function toggleLocation(type) {
-      const card = document.getElementById(`${type}-card`);
-      const checkbox = document.getElementById(`${type}-check`);
-      
-      card.classList.toggle('active');
-      checkbox.checked = card.classList.contains('active');
-      
-      // 체크박스 이벤트 연결
-      checkbox.onchange = function() {
-        if (checkbox.checked) {
-          card.classList.add('active');
-        } else {
-          card.classList.remove('active');
-          // 옵션 초기화
-          document.getElementById(`${type}-photo`).value = 0;
-          document.getElementById(`${type}-video`).value = 0;
-          if (type === 'cooking') {
-            document.getElementById('cooking-menu').value = 0;
-          }
-          document.getElementById(`${type}-hand`).checked = false;
-          document.getElementById(`${type}-model`).checked = false;
-        }
-        calculateQuote();
-      };
-      
-      calculateQuote();
-    }
-
-    // 수량 조절 (키보드 입력 지원)
-    function adjustQuantity(id, delta) {
-      const input = document.getElementById(id);
-      const newValue = Math.max(0, parseInt(input.value || 0) + delta);
-      input.value = newValue;
-      calculateQuote();
-    }
-
-    // 편집 수량 조절 (키보드 입력 지원)
-    function adjustEditQuantity(type, delta) {
-      const input = document.getElementById(`edit-${type}`);
-      const newValue = Math.max(0, parseInt(input.value || 0) + delta);
-      input.value = newValue;
-      calculateQuote();
-    }
-
-    // 직접 입력 처리
-    function handleDirectInput(id) {
-      const input = document.getElementById(id);
-      const value = parseInt(input.value) || 0;
-      input.value = Math.max(0, value);
-      calculateQuote();
-    }
-
-    // 가격 포맷
-    function formatPrice(price) {
-      return price.toLocaleString() + '원';
-    }
-
-    // 견적 계산
-    function calculateQuote() {
-      let totalCost = 0;
-      let locationCost = 0;
-      let transitionCost = 0;
-      let photoCost = 0;
-      let videoCost = 0;
-      let handCost = 0;
-      let modelCost = 0;
-      let menuCost = 0;
-      let editCost = 0;
-      
-      let totalPhotos = 0;
-      let totalVideos = 0;
-      let totalEditVideos = 0;
-      
-      const activeLocations = [];
-      const statsGrid = document.getElementById('statsGrid');
-      statsGrid.innerHTML = '';
-      
-      // 각 로케이션 체크
-      ['indoor', 'outdoor', 'cooking', 'drone'].forEach(type => {
-        const checkbox = document.getElementById(`${type}-check`);
-        if (checkbox && checkbox.checked) {
-          activeLocations.push(type);
-          const config = PRICE_CONFIG.locations[type];
-          
-          // 기본 비용
-          locationCost += config.basePrice;
-          
-          // 기본 제공 수량
-          let locationPhotos = config.basePhoto;
-          let locationVideos = config.baseVideo;
-          
-          // 추가 사진/영상
-          const addPhotos = parseInt(document.getElementById(`${type}-photo`).value) || 0;
-          const addVideos = parseInt(document.getElementById(`${type}-video`).value) || 0;
-          
-          photoCost += addPhotos * config.photoAddCost;
-          videoCost += addVideos * config.videoAddCost;
-          
-          locationPhotos += addPhotos;
-          locationVideos += addVideos;
-          
-          // 요리 메뉴 추가
-          if (type === 'cooking') {
-            const addMenus = parseInt(document.getElementById('cooking-menu').value) || 0;
-            menuCost += addMenus * config.menuCost;
-            locationPhotos += addMenus * 30; // 메뉴당 30매 추가
-          }
-          
-          // 핸드컷/모델컷
-          if (document.getElementById(`${type}-hand`)?.checked) {
-            handCost += config.handCost;
-          }
-          if (document.getElementById(`${type}-model`)?.checked) {
-            modelCost += config.modelCost;
-          }
-          
-          totalPhotos += locationPhotos;
-          totalVideos += locationVideos;
-          
-          // 통계 표시
-          const statItem = document.createElement('div');
-          statItem.className = 'stat-item';
-          statItem.innerHTML = `
-            <div class="stat-location">${getLocationName(type)}</div>
-            <div class="stat-details">
-              <span>사진</span>
-              <span class="stat-value">${locationPhotos}매</span>
-            </div>
-            <div class="stat-details">
-              <span>영상</span>
-              <span class="stat-value">${locationVideos}분</span>
-            </div>
-          `;
-          statsGrid.appendChild(statItem);
-        }
-      });
-      
-      // 로케이션 전환 비용
-      if (activeLocations.length > 1) {
-        transitionCost = (activeLocations.length - 1) * PRICE_CONFIG.baseLocationCost;
-      }
-      
-      // 편집 비용 계산 (3분까지만)
-      ['basic', 'full'].forEach(editType => {
-        ['1min', '2min', '3min'].forEach(duration => {
-          const count = parseInt(document.getElementById(`edit-${editType}-${duration}`).value) || 0;
-          if (count > 0) {
-            totalEditVideos += count;
-            const minutes = parseInt(duration.replace('min', ''));
-            
-            if (editType === 'basic') {
-              editCost += count * minutes * PRICE_CONFIG.editing.basic.perMinute;
-            } else {
-              // 풀 편집: 1분은 기본요금, 2분 이상은 추가 요금
-              if (minutes === 1) {
-                editCost += count * PRICE_CONFIG.editing.full.basePrice;
-              } else {
-                editCost += count * (PRICE_CONFIG.editing.full.basePrice + (minutes - 1) * PRICE_CONFIG.editing.full.perMinute);
-              }
-            }
-          }
-        });
-      });
-      
-      // 통계 업데이트
-      document.getElementById('totalPhotos').textContent = totalPhotos + '매';
-      document.getElementById('totalVideos').textContent = totalVideos + '분';
-      document.getElementById('totalEditVideos').textContent = totalEditVideos + '개';
-      
-      // 견적 항목 업데이트
-      document.getElementById('locationCost').textContent = formatPrice(locationCost);
-      document.getElementById('transitionCost').textContent = formatPrice(transitionCost);
-      document.getElementById('menuCost').textContent = formatPrice(menuCost);
-      document.getElementById('photoCost').textContent = formatPrice(photoCost);
-      document.getElementById('videoCost').textContent = formatPrice(videoCost);
-      document.getElementById('handCost').textContent = formatPrice(handCost);
-      document.getElementById('modelCost').textContent = formatPrice(modelCost);
-      document.getElementById('editCost').textContent = formatPrice(editCost);
-      
-      // 총 비용
-      totalCost = locationCost + transitionCost + menuCost + photoCost + videoCost + handCost + modelCost + editCost;
-      document.getElementById('totalAmount').textContent = formatPrice(totalCost);
-    }
-
-    // 로케이션 이름 가져오기
-    function getLocationName(type) {
-      const names = {
-        indoor: '일반 실내 촬영',
-        outdoor: '야외 촬영',
-        cooking: '요리 촬영',
-        drone: '드론 촬영'
-      };
-      return names[type] || type;
-    }
-
-    // 페이지 로드 시 실행
-    window.addEventListener('DOMContentLoaded', function() {
-      // API에서 가격 데이터 로드
-      loadPricesFromSheet();
-      
-      // 초기 견적 계산
-      calculateQuote();
-    });
-  </script>
-</body>
-</html>
+          sceneAd
