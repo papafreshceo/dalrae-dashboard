@@ -237,7 +237,7 @@
             position: relative;
             border-right: 1px solid var(--border-light);
             border-bottom: 1px solid var(--border-light);
-            overflow: hidden; /* 추가: 넘치는 내용 숨김 */
+            overflow: hidden;
         }
         
         .day-cell:nth-child(7n) {
@@ -1237,187 +1237,167 @@
             container.appendChild(bar);
         }
 
-        // 월 타임라인 그리기
-function drawMonthTimelines() {
-    monthProductTimelines = productTimelines.filter(product => {
-        const startMonth = product.startDate.getMonth();
-        const endMonth = product.endDate.getMonth();
-        const startYear = product.startDate.getFullYear();
-        const endYear = product.endDate.getFullYear();
-        
-        if (startYear === endYear) {
-            return currentMonth >= startMonth && currentMonth <= endMonth;
-        } else {
-            return currentMonth >= startMonth || currentMonth <= endMonth;
-        }
-    });
-    
-    const wrapper = document.getElementById('monthTimelineWrapper');
-    if (!wrapper) return;
-    
-    wrapper.innerHTML = '';
-    
-    const grid = document.getElementById('daysGrid');
-    const cells = grid.querySelectorAll('.day-cell');
-    
-    // 각 행별로 타임라인 개수 추적
-    const rowTimelines = {};
-    
-    monthProductTimelines.forEach((product, productIndex) => {
-        const startMonth = product.startDate.getMonth();
-        const startDay = product.startDate.getDate();
-        const endMonth = product.endDate.getMonth();
-        const endDay = product.endDate.getDate();
-        
-        let displayStart, displayEnd;
-        const lastDayOfMonth = new Date(2025, currentMonth + 1, 0).getDate();
-        
-        const hasStartInMonth = (startMonth === currentMonth);
-        
-        if (startMonth === currentMonth) {
-            displayStart = startDay;
-        } else if (startMonth < currentMonth || (startMonth > currentMonth && startMonth > endMonth)) {
-            displayStart = 1;
-        } else {
-            return;
-        }
-        
-        if (endMonth === currentMonth) {
-            displayEnd = endDay;
-        } else if (endMonth > currentMonth || (endMonth < currentMonth && startMonth > endMonth)) {
-            displayEnd = lastDayOfMonth;
-        } else {
-            return;
-        }
-        
-        let startCellIndex = -1;
-        cells.forEach((cell, idx) => {
-            if (!cell.classList.contains('other-month') && 
-                cell.dataset.day === String(displayStart)) {
-                startCellIndex = idx;
-            }
-        });
-        
-        if (startCellIndex === -1) return;
-        
-        const startCell = cells[startCellIndex];
-        const cellWidth = startCell.offsetWidth;
-        const cellHeight = startCell.offsetHeight;
-        
-        const col = startCellIndex % 7;
-        const row = Math.floor(startCellIndex / 7);
-        
-        // 해당 행의 타임라인 인덱스 계산
-        const rowKey = `${row}`;
-        if (!rowTimelines[rowKey]) {
-            rowTimelines[rowKey] = 0;
-        }
-        const barIndex = rowTimelines[rowKey];
-        rowTimelines[rowKey]++;
-        
-        // 수정된 barOffset - 각 행 내에서만 계산
-        const barOffset = Math.min(barIndex * 18 + 30, cellHeight - 30);
-        
-        const duration = displayEnd - displayStart + 1;
-        const endCol = (col + duration - 1) % 7;
-        const endRow = row + Math.floor((col + duration - 1) / 7);
-        
-        if (endRow > row) {
-            // 여러 줄에 걸친 경우 - 각 줄별로 인덱스 관리
-            const firstWeekDays = 7 - col;
-            const isFirstSegment = hasStartInMonth;
-            const showName = isFirstSegment || (!hasStartInMonth && displayStart === 1);
-            
-            createTimelineBar(wrapper, {
-                left: col * cellWidth + 2,
-                top: row * cellHeight + barOffset,
-                width: firstWeekDays * cellWidth - 4,
-                cellWidth: cellWidth,
-                cellHeight: cellHeight,
-                color: productColors[product.name],
-                text: showName ? product.name : '',
-                product: product,
-                productName: product.name,
-                isStart: isFirstSegment,
-                isEnd: false,
-                isSingle: false
-            });
-            
-            // 중간 줄들
-            for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
-                const weekRowKey = `${weekRow}`;
-                if (!rowTimelines[weekRowKey]) {
-                    rowTimelines[weekRowKey] = 0;
-                }
-                const weekBarIndex = rowTimelines[weekRowKey];
-                rowTimelines[weekRowKey]++;
-                const weekBarOffset = Math.min(weekBarIndex * 18 + 30, cellHeight - 30);
+        // 월 타임라인 그리기 - 수정된 버전
+        function drawMonthTimelines() {
+            monthProductTimelines = productTimelines.filter(product => {
+                const startMonth = product.startDate.getMonth();
+                const endMonth = product.endDate.getMonth();
+                const startYear = product.startDate.getFullYear();
+                const endYear = product.endDate.getFullYear();
                 
-                createTimelineBar(wrapper, {
-                    left: 2,
-                    top: weekRow * cellHeight + weekBarOffset,
-                    width: 7 * cellWidth - 4,
-                    cellWidth: cellWidth,
-                    cellHeight: cellHeight,
-                    color: productColors[product.name],
-                    text: '',
-                    product: product,
-                    productName: product.name,
-                    isStart: false,
-                    isEnd: false,
-                    isSingle: false
-                });
-            }
-            
-            // 마지막 줄
-            const lastRowKey = `${endRow}`;
-            if (!rowTimelines[lastRowKey]) {
-                rowTimelines[lastRowKey] = 0;
-            }
-            const lastBarIndex = rowTimelines[lastRowKey];
-            rowTimelines[lastRowKey]++;
-            const lastBarOffset = Math.min(lastBarIndex * 18 + 30, cellHeight - 30);
-            
-            const lastWeekDays = endCol + 1;
-            const isLastSegment = (endMonth === currentMonth);
-            
-            createTimelineBar(wrapper, {
-                left: 2,
-                top: endRow * cellHeight + lastBarOffset,
-                width: lastWeekDays * cellWidth - 4,
-                cellWidth: cellWidth,
-                cellHeight: cellHeight,
-                color: productColors[product.name],
-                text: '',
-                product: product,
-                productName: product.name,
-                isStart: false,
-                isEnd: isLastSegment,
-                isSingle: false
+                if (startYear === endYear) {
+                    return currentMonth >= startMonth && currentMonth <= endMonth;
+                } else {
+                    return currentMonth >= startMonth || currentMonth <= endMonth;
+                }
             });
-        } else {
-            // 한 줄에 있는 경우
-            const isStartBar = (startMonth === currentMonth);
-            const isEndBar = (endMonth === currentMonth);
-            const showName = isStartBar || (!hasStartInMonth && displayStart === 1);
             
-            createTimelineBar(wrapper, {
-                left: col * cellWidth + 2,
-                top: row * cellHeight + barOffset,
-                width: duration * cellWidth - 4,
-                cellWidth: cellWidth,
-                cellHeight: cellHeight,
-                color: productColors[product.name],
-                text: showName ? product.name : '',
-                product: product,
-                productName: product.name,
-                isStart: isStartBar,
-                isEnd: isEndBar,
-                isSingle: isStartBar && isEndBar
+            const wrapper = document.getElementById('monthTimelineWrapper');
+            if (!wrapper) return;
+            
+            wrapper.innerHTML = '';
+            
+            const grid = document.getElementById('daysGrid');
+            const cells = grid.querySelectorAll('.day-cell');
+            
+            // 각 상품이 차지하는 행 위치를 저장
+            const productRowPositions = {};
+            
+            monthProductTimelines.forEach((product, productIndex) => {
+                const startMonth = product.startDate.getMonth();
+                const startDay = product.startDate.getDate();
+                const endMonth = product.endDate.getMonth();
+                const endDay = product.endDate.getDate();
+                
+                let displayStart, displayEnd;
+                const lastDayOfMonth = new Date(2025, currentMonth + 1, 0).getDate();
+                
+                const hasStartInMonth = (startMonth === currentMonth);
+                
+                if (startMonth === currentMonth) {
+                    displayStart = startDay;
+                } else if (startMonth < currentMonth || (startMonth > currentMonth && startMonth > endMonth)) {
+                    displayStart = 1;
+                } else {
+                    return;
+                }
+                
+                if (endMonth === currentMonth) {
+                    displayEnd = endDay;
+                } else if (endMonth > currentMonth || (endMonth < currentMonth && startMonth > endMonth)) {
+                    displayEnd = lastDayOfMonth;
+                } else {
+                    return;
+                }
+                
+                let startCellIndex = -1;
+                cells.forEach((cell, idx) => {
+                    if (!cell.classList.contains('other-month') && 
+                        cell.dataset.day === String(displayStart)) {
+                        startCellIndex = idx;
+                    }
+                });
+                
+                if (startCellIndex === -1) return;
+                
+                const startCell = cells[startCellIndex];
+                const cellWidth = startCell.offsetWidth;
+                const cellHeight = startCell.offsetHeight;
+                
+                const col = startCellIndex % 7;
+                const row = Math.floor(startCellIndex / 7);
+                
+                // 상품별로 일관된 위치 할당
+                if (!productRowPositions[product.name]) {
+                    productRowPositions[product.name] = Object.keys(productRowPositions).length;
+                }
+                const productPosition = productRowPositions[product.name];
+                const barOffset = Math.min(productPosition * 18 + 30, cellHeight - 30);
+                
+                const duration = displayEnd - displayStart + 1;
+                const endCol = (col + duration - 1) % 7;
+                const endRow = row + Math.floor((col + duration - 1) / 7);
+                
+                if (endRow > row) {
+                    // 여러 줄에 걸친 경우
+                    const firstWeekDays = 7 - col;
+                    const isFirstSegment = hasStartInMonth;
+                    const showName = isFirstSegment || (!hasStartInMonth && displayStart === 1);
+                    
+                    createTimelineBar(wrapper, {
+                        left: col * cellWidth + 2,
+                        top: row * cellHeight + barOffset,
+                        width: firstWeekDays * cellWidth - 4,
+                        cellWidth: cellWidth,
+                        cellHeight: cellHeight,
+                        color: productColors[product.name],
+                        text: showName ? product.name : '',
+                        product: product,
+                        productName: product.name,
+                        isStart: isFirstSegment,
+                        isEnd: false,
+                        isSingle: false
+                    });
+                    
+                    // 중간 줄들
+                    for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
+                        createTimelineBar(wrapper, {
+                            left: 2,
+                            top: weekRow * cellHeight + barOffset,
+                            width: 7 * cellWidth - 4,
+                            cellWidth: cellWidth,
+                            cellHeight: cellHeight,
+                            color: productColors[product.name],
+                            text: '',
+                            product: product,
+                            productName: product.name,
+                            isStart: false,
+                            isEnd: false,
+                            isSingle: false
+                        });
+                    }
+                    
+                    // 마지막 줄
+                    const lastWeekDays = endCol + 1;
+                    const isLastSegment = (endMonth === currentMonth);
+                    
+                    createTimelineBar(wrapper, {
+                        left: 2,
+                        top: endRow * cellHeight + barOffset,
+                        width: lastWeekDays * cellWidth - 4,
+                        cellWidth: cellWidth,
+                        cellHeight: cellHeight,
+                        color: productColors[product.name],
+                        text: '',
+                        product: product,
+                        productName: product.name,
+                        isStart: false,
+                        isEnd: isLastSegment,
+                        isSingle: false
+                    });
+                } else {
+                    // 한 줄에 있는 경우
+                    const isStartBar = (startMonth === currentMonth);
+                    const isEndBar = (endMonth === currentMonth);
+                    const showName = isStartBar || (!hasStartInMonth && displayStart === 1);
+                    
+                    createTimelineBar(wrapper, {
+                        left: col * cellWidth + 2,
+                        top: row * cellHeight + barOffset,
+                        width: duration * cellWidth - 4,
+                        cellWidth: cellWidth,
+                        cellHeight: cellHeight,
+                        color: productColors[product.name],
+                        text: showName ? product.name : '',
+                        product: product,
+                        productName: product.name,
+                        isStart: isStartBar,
+                        isEnd: isEndBar,
+                        isSingle: isStartBar && isEndBar
+                    });
+                }
             });
         }
-    });
-}
 
         // 년 보기 렌더링
         function renderYearView() {
@@ -1710,164 +1690,4 @@ function drawMonthTimelines() {
             const currentPrice = prices[prices.length - 1];
             const maxPrice = Math.max(...prices);
             const minPrice = Math.min(...prices);
-            const avgPrice = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
-            
-            const firstDate = new Date(data[0].날짜).toLocaleDateString('ko-KR');
-            const lastDate = new Date(data[data.length - 1].날짜).toLocaleDateString('ko-KR');
-            
-            const html = `
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <div style="font-size: 14px; color: var(--text-secondary);">${firstDate} ~ ${lastDate}</div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="priceChartCanvas"></canvas>
-                </div>
-                <div class="chart-stats">
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">현재 가격</div>
-                        <div class="chart-stat-value current">${currentPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">최고 가격</div>
-                        <div class="chart-stat-value increase">${maxPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">최저 가격</div>
-                        <div class="chart-stat-value decrease">${minPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">평균 가격</div>
-                        <div class="chart-stat-value">${avgPrice.toLocaleString()}원</div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('chartModalBody').innerHTML = html;
-            
-            const ctx = document.getElementById('priceChartCanvas').getContext('2d');
-            
-            if (priceChart) {
-                priceChart.destroy();
-            }
-            
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map(d => {
-                        const date = new Date(d.날짜);
-                        return `${date.getMonth() + 1}/${date.getDate()}`;
-                    }),
-                    datasets: [{
-                        label: '공급가',
-                        data: prices,
-                        borderColor: 'var(--primary-color)',
-                        backgroundColor: 'rgba(91, 33, 182, 0.1)',
-                        tension: 0.1,
-                        borderWidth: 2,
-                        pointRadius: 4,
-                        pointBackgroundColor: 'var(--primary-color)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 6,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return '공급가: ' + context.parsed.y.toLocaleString() + '원';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                borderDash: [3, 3]
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString() + '원';
-                                },
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // 차트 데이터 없음 표시
-        function showNoChartData() {
-            document.getElementById('chartModalBody').innerHTML = `
-                <div class="no-data-message">
-                    <div class="no-data-icon">📉</div>
-                    <div class="no-data-title">가격 변동 데이터가 없습니다</div>
-                    <div class="no-data-text">이 옵션의 가격 이력이 아직 기록되지 않았습니다.</div>
-                </div>
-            `;
-        }
-
-        // 차트 모달 닫기
-        function closeChartModal() {
-            document.getElementById('chartModal').classList.remove('show');
-            if (priceChart) {
-                priceChart.destroy();
-                priceChart = null;
-            }
-        }
-
-        // 이벤트 리스너 설정
-        function setupEventListeners() {
-            document.getElementById('optionsModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
-            
-            document.getElementById('chartModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeChartModal();
-                }
-            });
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (document.getElementById('chartModal').classList.contains('show')) {
-                        closeChartModal();
-                    } else if (document.getElementById('optionsModal').classList.contains('show')) {
-                        closeModal();
-                    }
-                }
-            });
-        }
-
-        // DOM 로드 완료 후 초기화
-        window.addEventListener('DOMContentLoaded', function() {
-            updatePeriodDisplay();
-            loadData();
-            setupEventListeners();
-        });
-    </script>
-</body>
-</html>
+            const avgPrice = Math.round(prices.reduce((a, b) => a + b, 0) / prices
