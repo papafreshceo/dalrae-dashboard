@@ -1280,7 +1280,7 @@
                     <span class="duration-label">1분</span>
                     <div class="duration-stepper">
                       <button onclick="adjustEditQuantity('full-1min', -1)">−</button>
-                      <input type="number" id="edit-full-1min" value="0" min="0" readonly>
+                      <input type="number" id="edit-full-1min" value="0" min="0" step="1" onchange="handleDirectInput('edit-full-1min')">
                       <button onclick="adjustEditQuantity('full-1min', 1)">+</button>
                     </div>
                   </div>
@@ -1288,7 +1288,7 @@
                     <span class="duration-label">2분</span>
                     <div class="duration-stepper">
                       <button onclick="adjustEditQuantity('full-2min', -1)">−</button>
-                      <input type="number" id="edit-full-2min" value="0" min="0" readonly>
+                      <input type="number" id="edit-full-2min" value="0" min="0" step="1" onchange="handleDirectInput('edit-full-2min')">
                       <button onclick="adjustEditQuantity('full-2min', 1)">+</button>
                     </div>
                   </div>
@@ -1296,7 +1296,7 @@
                     <span class="duration-label">3분</span>
                     <div class="duration-stepper">
                       <button onclick="adjustEditQuantity('full-3min', -1)">−</button>
-                      <input type="number" id="edit-full-3min" value="0" min="0" readonly>
+                      <input type="number" id="edit-full-3min" value="0" min="0" step="1" onchange="handleDirectInput('edit-full-3min')">
                       <button onclick="adjustEditQuantity('full-3min', 1)">+</button>
                     </div>
                   </div>
