@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <link rel="icon" type="image/png" href="/favicon.png" />
-  <title>촬영 서비스 & 견적</title>
+  <title>촬영 서비스 & 견적 - 뉴모피즘</title>
   <script src="header.js"></script>
   <style>
     * { 
@@ -16,9 +16,25 @@
     
     body { 
       font-family: 'Noto Sans KR', -apple-system, sans-serif; 
-      background: #fafbfc;
-      color: #1e293b;
+      background: #ecf0f3;
+      color: #4a5568;
       min-height: 100vh;
+    }
+
+    /* 뉴모피즘 기본 스타일 변수 */
+    :root {
+      --bg-color: #ecf0f3;
+      --text-color: #4a5568;
+      --text-dark: #2d3748;
+      --primary-color: #667eea;
+      --primary-light: #7c8ff3;
+      --primary-dark: #5a67d8;
+      --shadow-light: #ffffff;
+      --shadow-dark: #d1d5d8;
+      --inner-shadow: inset 2px 2px 5px #d1d5d8, inset -2px -2px 5px #ffffff;
+      --outer-shadow: 5px 5px 10px #d1d5d8, -5px -5px 10px #ffffff;
+      --outer-shadow-sm: 3px 3px 6px #d1d5d8, -3px -3px 6px #ffffff;
+      --outer-shadow-lg: 8px 8px 16px #d1d5d8, -8px -8px 16px #ffffff;
     }
 
     /* 메인 컨테이너 */
@@ -28,53 +44,33 @@
       padding: 30px;
     }
 
-    /* 히어로 섹션 */
+    /* 뉴모피즘 히어로 섹션 */
     .hero-section {
       text-align: center;
       margin-bottom: 50px;
       padding: 60px 20px;
-      background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-      border-radius: 24px;
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-section::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-      animation: float 20s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translate(0, 0) rotate(0deg); }
-      50% { transform: translate(-30px, 30px) rotate(180deg); }
+      background: var(--bg-color);
+      border-radius: 30px;
+      box-shadow: var(--outer-shadow-lg);
     }
 
     .hero-title {
       font-size: clamp(32px, 5vw, 48px);
       font-weight: 800;
       margin-bottom: 16px;
-      position: relative;
-      z-index: 1;
+      color: var(--text-dark);
+      text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
     }
 
     .hero-subtitle {
       font-size: clamp(16px, 2.5vw, 20px);
-      opacity: 0.95;
       max-width: 800px;
-      margin: 0 auto 8px;
-      position: relative;
-      z-index: 1;
+      margin: 0 auto;
+      color: var(--text-color);
       line-height: 1.5;
     }
 
-    /* 분할 히어로 섹션 */
+    /* 분할 히어로 섹션 - 뉴모피즘 */
     .split-hero-section {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -83,194 +79,76 @@
     }
 
     .hero-card {
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-      border-radius: 24px;
-      padding: 20px 30px;
+      background: var(--bg-color);
+      border-radius: 30px;
+      padding: 30px;
       text-align: center;
-      position: relative;
-      overflow: hidden;
-      min-height: 150px;
+      min-height: 200px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--outer-shadow);
+      position: relative;
+      transition: all 0.3s ease;
     }
 
-    .hero-card.white-theme {
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-      border: 2px solid #cbd5e1;
-    }
-
-    .hero-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.2), transparent 50%);
-      pointer-events: none;
-    }
-
-    .hero-card.white-theme::before {
-      background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.2), transparent 50%);
+    .hero-card:hover {
+      box-shadow: var(--outer-shadow-lg);
     }
 
     .hero-card-title {
       font-size: clamp(24px, 3vw, 36px);
       font-weight: 800;
       margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
-      color: white;
+      color: var(--text-dark);
     }
 
-    .hero-card.white-theme .hero-card-title {
-      color: #1e293b;
+    .hero-card-title .accent {
+      color: var(--primary-color);
     }
 
     .hero-card-text {
       font-size: 16px;
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--text-color);
       line-height: 1.6;
-      position: relative;
-      z-index: 1;
       max-width: 400px;
       margin: 0 auto;
     }
 
-    .hero-card.white-theme .hero-card-text {
-      color: #475569;
-    }
-
     .hero-card-note {
       font-size: 13px;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--text-color);
       margin-top: 16px;
       padding-top: 16px;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      position: relative;
-      z-index: 1;
+      border-top: 1px solid #d1d5d8;
+      opacity: 0.8;
     }
 
-    .hero-card.white-theme .hero-card-note {
-      color: #64748b;
-      border-top-color: #cbd5e1;
-    }
-
-    /* 글리치 효과 */
-    .glitch-text-slow {
-      font-weight: 900;
-      position: relative;
-      display: inline-block;
-      color: inherit;
-    }
-
-    .glitch-text-slow::before,
-    .glitch-text-slow::after {
-      content: attr(data-text);
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .glitch-text-slow::before {
-      animation: glitch-1 2s infinite;
-      color: #00ffff;
-      z-index: -1;
-    }
-
-    .glitch-text-slow::after {
-      animation: glitch-2 2s infinite;
-      color: #ff00ff;
-      z-index: -2;
-    }
-
-    @keyframes glitch-1 {
-      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-      20% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, 2px); }
-      40% { clip-path: inset(50% 0 20% 0); transform: translate(2px, -2px); }
-      60% { clip-path: inset(10% 0 60% 0); transform: translate(-2px, 1px); }
-      80% { clip-path: inset(70% 0 10% 0); transform: translate(1px, -1px); }
-    }
-
-    @keyframes glitch-2 {
-      0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-      20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
-      40% { clip-path: inset(20% 0 40% 0); transform: translate(-2px, 1px); }
-      60% { clip-path: inset(40% 0 30% 0); transform: translate(1px, 2px); }
-      80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, -2px); }
-    }
-
-    /* 네온 효과 */
-    .neon-text-purple {
-      font-weight: 700;
-      color: #a855f7;
-      text-shadow: 
-        0 0 10px #a855f7,
-        0 0 20px #a855f7,
-        0 0 30px #a855f7,
-        0 0 40px #8b5cf6,
-        0 0 70px #8b5cf6,
-        0 0 80px #8b5cf6,
-        0 0 100px #8b5cf6,
-        0 0 150px #8b5cf6;
-      animation: flicker-purple 2s infinite alternate;
-    }
-
-    @keyframes flicker-purple {
-      0%, 100% {
-        text-shadow: 
-          0 0 5px #a855f7,
-          0 0 10px #a855f7,
-          0 0 15px #a855f7,
-          0 0 20px #8b5cf6,
-          0 0 35px #8b5cf6,
-          0 0 40px #8b5cf6,
-          0 0 50px #8b5cf6,
-          0 0 75px #8b5cf6;
-      }
-      50% {
-        text-shadow: 
-          0 0 10px #a855f7,
-          0 0 20px #a855f7,
-          0 0 30px #a855f7,
-          0 0 40px #8b5cf6,
-          0 0 70px #8b5cf6,
-          0 0 80px #8b5cf6,
-          0 0 100px #8b5cf6,
-          0 0 150px #8b5cf6;
-      }
-    }
-
-    /* 서비스 탭 버튼 */
+    /* 뉴모피즘 서비스 탭 버튼 */
     .service-tab-btn {
       padding: 14px 28px;
-      background: white;
-      border: 2px solid #e2e8f0;
-      border-radius: 12px;
+      background: var(--bg-color);
+      border: none;
+      border-radius: 20px;
       font-size: 16px;
       font-weight: 600;
-      color: #64748b;
+      color: var(--text-color);
       cursor: pointer;
       transition: all 0.3s;
       display: flex;
       align-items: center;
       gap: 8px;
+      box-shadow: var(--outer-shadow-sm);
     }
 
     .service-tab-btn:hover {
-      border-color: #3b82f6;
-      background: #f0f9ff;
+      box-shadow: var(--outer-shadow);
     }
 
+    .service-tab-btn:active,
     .service-tab-btn.active {
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
-      color: white;
-      border-color: transparent;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+      box-shadow: var(--inner-shadow);
+      color: var(--primary-color);
     }
 
     /* 서비스 섹션 */
@@ -290,17 +168,28 @@
       align-items: start;
     }
 
-    /* 섹션 타이틀 */
+    /* 뉴모피즘 섹션 타이틀 */
     .section-title {
       font-size: 24px;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--text-dark);
       margin-bottom: 20px;
       padding-bottom: 12px;
-      border-bottom: 2px solid #e2e8f0;
+      position: relative;
     }
 
-    /* 로케이션 카드 */
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary-color), transparent);
+      border-radius: 2px;
+    }
+
+    /* 뉴모피즘 로케이션 카드 */
     .location-list {
       display: flex;
       flex-direction: column;
@@ -308,30 +197,35 @@
     }
 
     .location-card {
-      background: white;
-      border-radius: 16px;
-      border: 2px solid #e2e8f0;
+      background: var(--bg-color);
+      border-radius: 25px;
       overflow: hidden;
       transition: all 0.3s;
+      box-shadow: var(--outer-shadow);
     }
 
     .location-card.active {
-      border-color: #3b82f6;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+      box-shadow: var(--inner-shadow);
     }
 
     .location-header {
       padding: 20px;
-      background: #f8fafc;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
       transition: all 0.2s;
+      position: relative;
     }
 
-    .location-card.active .location-header {
-      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    .location-card.active .location-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 20px;
+      right: 20px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #d1d5d8, transparent);
     }
 
     .location-info {
@@ -340,49 +234,69 @@
       gap: 12px;
     }
 
+    /* 뉴모피즘 체크박스 */
     .location-checkbox {
+      appearance: none;
       width: 24px;
       height: 24px;
+      background: var(--bg-color);
+      border-radius: 8px;
       cursor: pointer;
+      box-shadow: var(--outer-shadow-sm);
+      position: relative;
+      transition: all 0.3s;
     }
 
-    .location-title-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .location-checkbox:checked {
+      box-shadow: var(--inner-shadow);
+    }
+
+    .location-checkbox:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--primary-color);
+      font-weight: bold;
+      font-size: 14px;
     }
 
     .location-title {
       font-size: 18px;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--text-dark);
     }
 
     .location-price {
       font-size: 16px;
       font-weight: 600;
-      color: #3b82f6;
+      color: var(--primary-color);
+      padding: 8px 16px;
+      background: var(--bg-color);
+      border-radius: 15px;
+      box-shadow: var(--inner-shadow);
     }
 
     .location-body {
       padding: 20px;
       display: none;
-      background: white;
-      border-top: 1px solid #e2e8f0;
+      background: var(--bg-color);
     }
 
     .location-card.active .location-body {
       display: block;
     }
 
-    /* 기본 제공 정보 */
+    /* 뉴모피즘 기본 제공 정보 */
     .default-info {
-      padding: 12px;
-      background: #f0f9ff;
-      border-radius: 8px;
+      padding: 15px;
+      background: var(--bg-color);
+      border-radius: 15px;
       margin-bottom: 20px;
       font-size: 14px;
-      color: #0369a1;
+      color: var(--primary-color);
+      box-shadow: var(--inner-shadow);
     }
 
     /* 옵션 그룹 */
@@ -393,12 +307,12 @@
     .option-label {
       font-size: 14px;
       font-weight: 600;
-      color: #475569;
+      color: var(--text-dark);
       margin-bottom: 10px;
       display: block;
     }
 
-    /* 수량 조절 */
+    /* 뉴모피즘 수량 조절 */
     .quantity-control {
       display: flex;
       align-items: center;
@@ -408,45 +322,54 @@
 
     .quantity-label {
       font-size: 14px;
-      color: #64748b;
+      color: var(--text-color);
       min-width: 80px;
     }
 
     .stepper {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      border-radius: 8px;
-      overflow: hidden;
+      background: var(--bg-color);
+      border-radius: 15px;
+      padding: 5px;
+      box-shadow: var(--outer-shadow-sm);
     }
 
     .stepper button {
-      width: 32px;
-      height: 32px;
+      width: 35px;
+      height: 35px;
       border: none;
-      background: transparent;
-      color: #64748b;
+      background: var(--bg-color);
+      color: var(--text-color);
       cursor: pointer;
       font-size: 18px;
-      transition: all 0.2s;
+      border-radius: 10px;
+      box-shadow: var(--outer-shadow-sm);
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .stepper button:hover {
-      background: #3b82f6;
-      color: white;
+      color: var(--primary-color);
+    }
+
+    .stepper button:active {
+      box-shadow: var(--inner-shadow);
     }
 
     .stepper input {
-      width: 60px;
+      width: 70px;
       border: none;
       background: transparent;
       text-align: center;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
-      color: #1e293b;
+      color: var(--text-dark);
       outline: none;
       -moz-appearance: textfield;
+      padding: 5px;
     }
 
     .stepper input::-webkit-outer-spin-button,
@@ -455,7 +378,7 @@
       margin: 0;
     }
 
-    /* 체크박스 옵션 */
+    /* 뉴모피즘 체크박스 옵션 */
     .checkbox-options {
       display: flex;
       gap: 16px;
@@ -466,26 +389,48 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 12px;
-      background: #f8fafc;
-      border-radius: 8px;
+      padding: 10px 15px;
+      background: var(--bg-color);
+      border-radius: 15px;
       cursor: pointer;
       transition: all 0.2s;
+      box-shadow: var(--outer-shadow-sm);
     }
 
     .checkbox-option:hover {
-      background: #f1f5f9;
+      box-shadow: var(--outer-shadow);
     }
 
     .checkbox-option input {
-      width: 18px;
-      height: 18px;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--bg-color);
+      border-radius: 6px;
       cursor: pointer;
+      box-shadow: var(--outer-shadow-sm);
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    .checkbox-option input:checked {
+      box-shadow: var(--inner-shadow);
+    }
+
+    .checkbox-option input:checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--primary-color);
+      font-weight: bold;
+      font-size: 12px;
     }
 
     .checkbox-option label {
       font-size: 14px;
-      color: #1e293b;
+      color: var(--text-dark);
       cursor: pointer;
     }
 
@@ -494,12 +439,7 @@
       cursor: not-allowed;
     }
 
-    .checkbox-option.disabled input,
-    .checkbox-option.disabled label {
-      cursor: not-allowed;
-    }
-
-    /* 편집 옵션 */
+    /* 뉴모피즘 편집 옵션 */
     .edit-options-grid {
       display: flex;
       flex-direction: column;
@@ -507,46 +447,47 @@
     }
 
     .edit-option-card {
-      padding: 16px;
-      background: #f8fafc;
-      border-radius: 12px;
-      border: 1px solid #e2e8f0;
+      padding: 20px;
+      background: var(--bg-color);
+      border-radius: 20px;
+      box-shadow: var(--outer-shadow);
     }
 
     .edit-option-header {
-      margin-bottom: 12px;
+      margin-bottom: 15px;
     }
 
     .edit-title {
       font-size: 15px;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--text-dark);
       margin-bottom: 4px;
     }
 
     .edit-description {
       font-size: 12px;
-      color: #64748b;
+      color: var(--text-color);
     }
 
     .duration-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 10px;
     }
 
     .duration-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px;
-      background: white;
-      border-radius: 6px;
+      padding: 10px;
+      background: var(--bg-color);
+      border-radius: 12px;
       font-size: 13px;
+      box-shadow: var(--inner-shadow);
     }
 
     .duration-label {
-      color: #475569;
+      color: var(--text-color);
       font-weight: 500;
     }
 
@@ -559,29 +500,42 @@
     .duration-stepper button {
       width: 24px;
       height: 24px;
-      border: 1px solid #cbd5e1;
-      background: white;
-      border-radius: 4px;
+      border: none;
+      background: var(--bg-color);
+      border-radius: 6px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s;
+      box-shadow: var(--outer-shadow-sm);
+      color: var(--text-color);
     }
 
     .duration-stepper button:hover {
-      background: #3b82f6;
-      color: white;
-      border-color: #3b82f6;
+      color: var(--primary-color);
+    }
+
+    .duration-stepper button:active {
+      box-shadow: var(--inner-shadow);
     }
 
     .duration-stepper input {
-      width: 40px;
+      width: 30px;
       text-align: center;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
+      border: none;
+      background: transparent;
       padding: 2px;
       font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+      outline: none;
+      -moz-appearance: textfield;
+    }
+
+    .duration-stepper input::-webkit-outer-spin-button,
+    .duration-stepper input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
     }
 
     /* 우측 패널 */
@@ -593,12 +547,12 @@
       gap: 24px;
     }
 
-    /* 통계 섹션 */
+    /* 뉴모피즘 통계 섹션 */
     .statistics-section {
-      background: white;
-      border-radius: 16px;
+      background: var(--bg-color);
+      border-radius: 25px;
       padding: 24px;
-      border: 1px solid #e2e8f0;
+      box-shadow: var(--outer-shadow);
     }
 
     .stats-grid {
@@ -610,14 +564,15 @@
 
     .stat-item {
       padding: 12px;
-      background: #f8fafc;
-      border-radius: 8px;
+      background: var(--bg-color);
+      border-radius: 12px;
+      box-shadow: var(--inner-shadow);
     }
 
     .stat-location {
       font-size: 14px;
       font-weight: 600;
-      color: #475569;
+      color: var(--text-dark);
       margin-bottom: 8px;
     }
 
@@ -625,25 +580,26 @@
       display: flex;
       justify-content: space-between;
       font-size: 13px;
-      color: #64748b;
+      color: var(--text-color);
       margin-bottom: 4px;
     }
 
     .stat-value {
       font-weight: 600;
-      color: #1e293b;
+      color: var(--primary-color);
     }
 
     .total-stats {
       padding: 16px;
-      background: linear-gradient(135deg, #eff6ff, #dbeafe);
-      border-radius: 8px;
+      background: var(--bg-color);
+      border-radius: 15px;
+      box-shadow: var(--outer-shadow-sm);
     }
 
     .total-title {
       font-size: 14px;
       font-weight: 700;
-      color: #1e293b;
+      color: var(--text-dark);
       margin-bottom: 8px;
     }
 
@@ -655,20 +611,20 @@
     }
 
     .total-label {
-      color: #475569;
+      color: var(--text-color);
     }
 
     .total-value {
       font-weight: 700;
-      color: #3b82f6;
+      color: var(--primary-color);
     }
 
-    /* 편집 섹션 */
+    /* 뉴모피즘 편집 섹션 */
     .edit-section {
-      background: white;
-      border-radius: 16px;
+      background: var(--bg-color);
+      border-radius: 25px;
       padding: 24px;
-      border: 1px solid #e2e8f0;
+      box-shadow: var(--outer-shadow);
     }
 
     .edit-section .section-title {
@@ -678,11 +634,12 @@
 
     .edit-stats {
       padding: 12px;
-      background: #fef3c7;
-      border-radius: 8px;
+      background: var(--bg-color);
+      border-radius: 12px;
       margin-top: 16px;
       font-size: 13px;
-      color: #92400e;
+      color: var(--text-color);
+      box-shadow: var(--inner-shadow);
     }
 
     .edit-stat-row {
@@ -691,12 +648,12 @@
       padding: 4px 0;
     }
 
-    /* 최종 견적 */
+    /* 뉴모피즘 최종 견적 */
     .final-quote {
-      background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-      border-radius: 16px;
+      background: var(--bg-color);
+      border-radius: 25px;
       padding: 24px;
-      border: 2px solid #e2e8f0;
+      box-shadow: var(--outer-shadow-lg);
     }
 
     .final-quote .section-title {
@@ -714,62 +671,74 @@
     .quote-item {
       display: flex;
       justify-content: space-between;
-      padding: 10px;
-      background: white;
-      border-radius: 8px;
+      padding: 12px;
+      background: var(--bg-color);
+      border-radius: 12px;
       font-size: 13px;
+      box-shadow: var(--inner-shadow);
     }
 
     .quote-label {
-      color: #64748b;
+      color: var(--text-color);
     }
 
     .quote-value {
       font-weight: 600;
-      color: #1e293b;
+      color: var(--text-dark);
     }
 
     .quote-total {
-      padding: 16px;
-      background: white;
-      border-radius: 12px;
-      border: 2px solid #3b82f6;
+      padding: 20px;
+      background: var(--bg-color);
+      border-radius: 20px;
       text-align: center;
+      box-shadow: var(--outer-shadow);
     }
 
     .quote-total-label {
       font-size: 13px;
-      color: #64748b;
-      margin-bottom: 6px;
+      color: var(--text-color);
+      margin-bottom: 8px;
     }
 
     .quote-total-amount {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 800;
-      color: #3b82f6;
+      color: var(--primary-color);
+      text-shadow: 2px 2px 4px rgba(102, 126, 234, 0.2);
     }
 
     .quote-vat {
       font-size: 12px;
-      color: #94a3b8;
-      margin-top: 6px;
+      color: var(--text-color);
+      margin-top: 8px;
+      opacity: 0.8;
     }
 
-    /* 농가 매칭 서비스 */
+    .quote-warning {
+      margin-top: 15px;
+      padding: 12px;
+      background: var(--bg-color);
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--text-color);
+      box-shadow: var(--inner-shadow);
+    }
+
+    /* 뉴모피즘 농가 매칭 서비스 */
     .farm-service-card {
-      background: white;
-      border-radius: 16px;
-      padding: 32px;
+      background: var(--bg-color);
+      border-radius: 30px;
+      padding: 40px;
       margin-bottom: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      border: 1px solid #e2e8f0;
+      box-shadow: var(--outer-shadow-lg);
     }
 
     .farm-service-title {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 16px;
+      color: var(--text-dark);
+      margin-bottom: 20px;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -777,59 +746,62 @@
 
     .farm-service-desc {
       font-size: 16px;
-      color: #64748b;
+      color: var(--text-color);
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 30px;
     }
 
     .service-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 15px;
     }
 
     .service-item {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      padding: 12px;
-      background: #f8fafc;
-      border-radius: 8px;
+      gap: 15px;
+      padding: 15px;
+      background: var(--bg-color);
+      border-radius: 15px;
+      box-shadow: var(--inner-shadow);
     }
 
     .service-icon {
-      width: 24px;
-      height: 24px;
-      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      width: 28px;
+      height: 28px;
+      background: var(--bg-color);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 12px;
+      color: var(--primary-color);
+      font-size: 14px;
       font-weight: bold;
       flex-shrink: 0;
+      box-shadow: var(--outer-shadow-sm);
     }
 
     .service-text {
       flex: 1;
       font-size: 14px;
-      color: #475569;
+      color: var(--text-color);
       line-height: 1.5;
     }
 
     .price-card {
-      background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-      border-radius: 12px;
-      padding: 24px;
-      margin-top: 24px;
+      background: var(--bg-color);
+      border-radius: 20px;
+      padding: 25px;
+      margin-top: 30px;
+      box-shadow: var(--outer-shadow);
     }
 
     .price-title {
       font-size: 18px;
       font-weight: 700;
-      color: #1e293b;
-      margin-bottom: 16px;
+      color: var(--text-dark);
+      margin-bottom: 20px;
     }
 
     .price-list {
@@ -841,49 +813,61 @@
     .price-item {
       display: flex;
       justify-content: space-between;
-      padding: 12px;
-      background: white;
-      border-radius: 8px;
+      padding: 15px;
+      background: var(--bg-color);
+      border-radius: 12px;
+      box-shadow: var(--inner-shadow);
     }
 
     .price-label {
       font-size: 14px;
-      color: #475569;
+      color: var(--text-color);
     }
 
     .price-amount {
       font-size: 16px;
       font-weight: 700;
-      color: #3b82f6;
+      color: var(--primary-color);
     }
 
-    /* API 상태 표시 */
+    .price-note {
+      margin-top: 20px;
+      padding: 15px;
+      background: var(--bg-color);
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--text-color);
+      box-shadow: var(--inner-shadow);
+    }
+
+    /* API 상태 표시 - 뉴모피즘 */
     .api-status {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      padding: 10px 20px;
-      background: #1e293b;
-      color: white;
-      border-radius: 8px;
+      padding: 12px 20px;
+      background: var(--bg-color);
+      color: var(--text-color);
+      border-radius: 20px;
       font-size: 12px;
       display: none;
       z-index: 1000;
+      box-shadow: var(--outer-shadow);
     }
 
     .api-status.loading {
       display: block;
-      background: #f59e0b;
+      color: #f59e0b;
     }
 
     .api-status.success {
       display: block;
-      background: #10b981;
+      color: #10b981;
     }
 
     .api-status.error {
       display: block;
-      background: #ef4444;
+      color: #ef4444;
     }
 
     /* 모바일 반응형 */
@@ -946,16 +930,16 @@
     <div class="split-hero-section">
       <div class="hero-card">
         <h2 class="hero-card-title">
-          UNIQUE <span style="color: rgba(255,255,255,0.95);">상품 사진</span>
+          UNIQUE <span class="accent">상품 사진</span>
         </h2>
         <p class="hero-card-text">
-          상품의 가치를 높이는 <span class="glitch-text-slow" data-text="중복 없이 고유한">중복 없이 고유한</span> 나만의 상품 사진으로 판매에 도전하세요
+          상품의 가치를 높이는 <strong>중복 없이 고유한</strong> 나만의 상품 사진으로 판매에 도전하세요
         </p>
       </div>
       
-      <div class="hero-card white-theme">
+      <div class="hero-card">
         <h2 class="hero-card-title">
-          <span class="neon-text-purple">농가 매칭 서비스</span>
+          <span class="accent">농가 매칭 서비스</span>
         </h2>
         <p class="hero-card-text">
           결론은 가격과 품질!! 농가 매칭 서비스로 산지가격으로 상품을 소싱 해드립니다.
@@ -989,9 +973,7 @@
               <div class="location-header" onclick="toggleLocation('indoor')">
                 <div class="location-info">
                   <input type="checkbox" class="location-checkbox" id="indoor-check" onclick="event.stopPropagation()">
-                  <div class="location-title-wrapper">
-                    <div class="location-title">일반 실내 촬영</div>
-                  </div>
+                  <div class="location-title">일반 실내 촬영</div>
                 </div>
                 <div class="location-price" id="indoor-base-price">30,000원</div>
               </div>
@@ -1008,7 +990,7 @@
                       <input type="number" id="indoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('indoor-photo')">
                       <button onclick="adjustQuantity('indoor-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;" id="indoor-photo-cost">매 (500원/매)</span>
+                    <span style="font-size: 12px; color: var(--text-color);" id="indoor-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1017,7 +999,7 @@
                       <input type="number" id="indoor-video" value="0" min="0" step="1" onchange="handleDirectInput('indoor-video')">
                       <button onclick="adjustQuantity('indoor-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;" id="indoor-video-cost">분 (2,000원/분)</span>
+                    <span style="font-size: 12px; color: var(--text-color);" id="indoor-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1041,9 +1023,7 @@
               <div class="location-header" onclick="toggleLocation('outdoor')">
                 <div class="location-info">
                   <input type="checkbox" class="location-checkbox" id="outdoor-check" onclick="event.stopPropagation()">
-                  <div class="location-title-wrapper">
-                    <div class="location-title">야외 촬영</div>
-                  </div>
+                  <div class="location-title">야외 촬영</div>
                 </div>
                 <div class="location-price" id="outdoor-base-price">50,000원</div>
               </div>
@@ -1060,7 +1040,7 @@
                       <input type="number" id="outdoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('outdoor-photo')">
                       <button onclick="adjustQuantity('outdoor-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;" id="outdoor-photo-cost">매 (500원/매)</span>
+                    <span style="font-size: 12px; color: var(--text-color);" id="outdoor-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1069,7 +1049,7 @@
                       <input type="number" id="outdoor-video" value="0" min="0" step="1" onchange="handleDirectInput('outdoor-video')">
                       <button onclick="adjustQuantity('outdoor-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;" id="outdoor-video-cost">분 (2,000원/분)</span>
+                    <span style="font-size: 12px; color: var(--text-color);" id="outdoor-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1093,9 +1073,7 @@
               <div class="location-header" onclick="toggleLocation('cooking')">
                 <div class="location-info">
                   <input type="checkbox" class="location-checkbox" id="cooking-check" onclick="event.stopPropagation()">
-                  <div class="location-title-wrapper">
-                    <div class="location-title">요리 촬영</div>
-                  </div>
+                  <div class="location-title">요리 촬영</div>
                 </div>
                 <div class="location-price" id="cooking-base-price">60,000원</div>
               </div>
@@ -1112,7 +1090,7 @@
                       <input type="number" id="cooking-menu" value="0" min="0" step="1" onchange="handleDirectInput('cooking-menu')">
                       <button onclick="adjustQuantity('cooking-menu', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;" id="cooking-menu-cost">개 (메뉴당 30,000원 추가)</span>
+                    <span style="font-size: 12px; color: var(--text-color);" id="cooking-menu-cost">개 (메뉴당 30,000원 추가)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1124,7 +1102,7 @@
                       <input type="number" id="cooking-photo" value="0" min="0" step="10" onchange="handleDirectInput('cooking-photo')">
                       <button onclick="adjustQuantity('cooking-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;" id="cooking-photo-cost">매 (500원/매)</span>
+                    <span style="font-size: 12px; color: var(--text-color);" id="cooking-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1133,7 +1111,7 @@
                       <input type="number" id="cooking-video" value="0" min="0" step="1" onchange="handleDirectInput('cooking-video')">
                       <button onclick="adjustQuantity('cooking-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;" id="cooking-video-cost">분 (2,000원/분)</span>
+                    <span style="font-size: 12px; color: var(--text-color);" id="cooking-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1157,9 +1135,7 @@
               <div class="location-header" onclick="toggleLocation('drone')">
                 <div class="location-info">
                   <input type="checkbox" class="location-checkbox" id="drone-check" onclick="event.stopPropagation()">
-                  <div class="location-title-wrapper">
-                    <div class="location-title">드론 촬영</div>
-                  </div>
+                  <div class="location-title">드론 촬영</div>
                 </div>
                 <div class="location-price" id="drone-base-price">90,000원</div>
               </div>
@@ -1176,7 +1152,7 @@
                       <input type="number" id="drone-photo" value="0" min="0" step="10" onchange="handleDirectInput('drone-photo')">
                       <button onclick="adjustQuantity('drone-photo', 10)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;" id="drone-photo-cost">매 (500원/매)</span>
+                    <span style="font-size: 12px; color: var(--text-color);" id="drone-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
@@ -1185,7 +1161,7 @@
                       <input type="number" id="drone-video" value="0" min="0" step="1" onchange="handleDirectInput('drone-video')">
                       <button onclick="adjustQuantity('drone-video', 1)">+</button>
                     </div>
-                    <span style="font-size: 12px; color: #94a3b8;" id="drone-video-cost">분 (2,000원/분)</span>
+                    <span style="font-size: 12px; color: var(--text-color);" id="drone-video-cost">분 (2,000원/분)</span>
                   </div>
                 </div>
                 <div class="option-group">
@@ -1210,7 +1186,7 @@
         <div class="right-panel">
           <!-- 통계 섹션 -->
           <div class="statistics-section">
-            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px;">📊 촬영 통계</h3>
+            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--text-dark);">📊 촬영 통계</h3>
             <div class="stats-grid" id="statsGrid">
               <!-- 동적으로 생성됨 -->
             </div>
@@ -1236,7 +1212,7 @@
               <div class="edit-option-card">
                 <div class="edit-option-header">
                   <div class="edit-title">일반 편집</div>
-                  <div class="edit-description">고객이 시나리오 제공 (<span id="basic-edit-price">30,000원</span>/분)</div>
+                  <div class="edit-description">고객이 시나리오 제공 (<span id="basic-edit-price" style="color: var(--primary-color);">30,000원</span>/분)</div>
                 </div>
                 <div class="duration-grid">
                   <div class="duration-item">
@@ -1271,7 +1247,7 @@
                 <div class="edit-option-header">
                   <div class="edit-title">풀 편집</div>
                   <div class="edit-description">썸네일, 시나리오, 자막 등 모든 작업 위임</div>
-                  <div class="edit-description" style="color: #3b82f6; margin-top: 4px;">
+                  <div class="edit-description" style="color: var(--primary-color); margin-top: 4px;">
                     1분: <span id="full-edit-base">70,000원</span> / 2분 이상: +<span id="full-edit-per">20,000원</span>/분
                   </div>
                 </div>
@@ -1307,7 +1283,7 @@
             <div class="edit-stats">
               <div class="edit-stat-row">
                 <span>📹 총 편집 영상 개수</span>
-                <span id="totalEditVideos" style="font-weight: 700;">0개</span>
+                <span id="totalEditVideos" style="font-weight: 700; color: var(--primary-color);">0개</span>
               </div>
             </div>
           </div>
@@ -1353,7 +1329,7 @@
               <div class="quote-total-label">예상 총 비용</div>
               <div class="quote-total-amount" id="totalAmount">0원</div>
               <div class="quote-vat">* 부가세 별도</div>
-              <div style="margin-top: 12px; padding: 10px; background: #fef3c7; border-radius: 6px; font-size: 12px; color: #92400e;">
+              <div class="quote-warning">
                 ⚠️ 본 견적은 예상 금액이며, 현장 상황에 따라 변동될 수 있습니다
               </div>
             </div>
@@ -1412,7 +1388,7 @@
               <span class="price-amount">200,000원</span>
             </div>
           </div>
-          <div style="margin-top: 16px; padding: 12px; background: #f0f9ff; border-radius: 8px; font-size: 13px; color: #0369a1;">
+          <div class="price-note">
             💡 매칭 후 달래마켓에서는 특별한 사정이 없는 한 관여하지 않습니다
           </div>
         </div>
