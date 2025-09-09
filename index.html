@@ -1,2772 +1,678 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <base target="_top">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <!-- PNG 파비콘 추가 -->
-    <link rel="icon" type="image/png" href="/favicon.png">
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WBYD1EM6GP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-WBYD1EM6GP');
-    </script>
+  <base target="_top">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
 
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WBYD1EM6GP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-WBYD1EM6GP');
+  </script>
 
-    
-    <title>달래마켓 대시보드</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-        }
-        
-        body { 
-            font-family: 'Noto Sans KR', -apple-system, sans-serif; 
-            background: #fafbfc;
-            min-height: 100vh;
-            -webkit-text-size-adjust: 100%;
-        }
-        
-        /* 헤더 */
-        .top-header {
-            background: white;
-            border-bottom: 1px solid #e8e9eb;
-            padding: 20px 0;
-            position: relative;
-            z-index: 100;
-        }
-        
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 30px;
-            display: grid;
-            grid-template-columns: 200px 1fr auto;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .logo-img { 
-            height: 36px;
-            object-fit: contain;
-        }
-        
-        /* 메뉴 고정용 컨테이너 */
-        .menu-container {
-            position: relative;
-            background: white;
-            transition: all 0.3s;
-        }
-        
-        .menu-container.sticky {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 200;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 10px 0;
-        }
-        
-        .menu-wrapper {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 30px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        
-        .center-button {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .nav-menu { 
-            display: flex; 
-            gap: 8px;
-        }
-        
-        .nav-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 16px;
-            background: white;
-            border: 1px solid #e1e3e5;
-            border-radius: 8px;
-            color: #5a5c60;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        
-        .nav-btn:hover {
-            background: #f5f6f7;
-            border-color: #667eea;
-            color: #667eea;
-        }
-        
-        .nav-btn.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
-        }
-        
-        /* 발주시스템 특별 스타일 */
-        .special-btn {
-            padding: 10px 24px;
-            background: linear-gradient(270deg, #ffffff, #ff9a9e, #fecfef, #a8e6cf, #ffffff);
-            background-size: 400% 100%;
-            color: #333;
-            border: none;
-            font-weight: 600;
-            animation: shine 3.75s ease-in-out infinite;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        @keyframes shine {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .special-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(255, 154, 158, 0.4);
-        }
-        
-        /* 펄스 애니메이션 */
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        .pulse-animation {
-            animation: pulse 0.3s ease-in-out;
-        }
-        
-        /* 공급중 상품 배경 애니메이션 */
-        @keyframes activeGradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .product-card.status-active {
-            background: linear-gradient(270deg, #ffffff, #f0f4ff, #e8efff, #f0f4ff, #ffffff);
-            background-size: 400% 100%;
-            animation: activeGradient 8s ease infinite;
-        }
+  <title>달래마켓 대시보드</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-/* 종료임박 상품 애니메이션 배경 - 연노랑색 */
-.product-card.status-ending {
-    background: linear-gradient(90deg, 
-        #ffffff 0%,
-        #ffffff 10%,
-        #fff9e6 25%,
-        #fff3cc 40%,
-        #ffeb99 50%,
-        #fff3cc 60%,
-        #fff9e6 75%,
-        #ffffff 90%,
-        #ffffff 100%
-    );
-    background-size: 300% 100%;
-    animation: activeGradient 8s linear infinite;
-    position: relative;
-    overflow: hidden;
-}
-
-.product-card.status-ending::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        105deg,
-        transparent 0%,
-        transparent 40%,
-        rgba(255, 255, 255, 0.3) 42%,
-        rgba(255, 255, 255, 0.5) 43%,
-        rgba(255, 255, 255, 0.3) 44%,
-        transparent 46%,
-        transparent 100%
-    );
-    animation: diagonalShine 4s ease-in-out infinite;
-    pointer-events: none;
-}
-        
-        /* 메인 컨텐츠 */
-        .main-content { 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            padding: 30px; 
-        }
-        
-        .dashboard-header {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        
-        .dashboard-header h1 { 
-            color: #3a3b3d; 
-            margin-bottom: 25px; 
-            font-size: 28px; 
-        }
-        
-        /* 통계 카드 - PC 1.5배 확대 */
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 15px;
-        }
-        
-        .stat-card {
-            background: #f9fafb;
-            border-radius: 10px;
-            padding: 15px 22px;
-            border: 1px solid #e8e9eb;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-            border-color: #667eea;
-        }
-        
-        .stat-card.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: transparent;
-        }
-        
-        .stat-card.active .stat-icon,
-        .stat-card.active .stat-value,
-        .stat-card.active .stat-label {
-            color: white !important;
-        }
-        
-        .stat-card.active .stat-sub {
-            background: rgba(255, 255, 255, 0.25);
-            color: white;
-        }
-        
-        .stat-icon { 
-            font-size: 28px; 
-            margin-bottom: 8px; 
-        }
-        
-        .stat-value { 
-            font-size: 28px; 
-            font-weight: 700; 
-            color: #3a3b3d; 
-            line-height: 1;
-            margin-bottom: 4px;
-        }
-        
-        .stat-label { 
-            font-size: 12px; 
-            color: #5a5c60; 
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-        
-        .stat-sub { 
-            font-size: 11px; 
-            color: #999;
-            background: #e8e9eb;
-            padding: 3px 10px;
-            border-radius: 12px;
-            display: inline-block;
-        }
-        
-        /* 상품 섹션 */
-        .products-section {
-            margin-top: 30px;
-        }
-        
-        /* 필터 섹션 개선 */
-        .filter-section {
-            background: #fafbfc;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 1px solid #e8e9eb;
-            position: relative;
-        }
-        
-        .filter-section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .filter-section-title {
-            font-size: 14px;
-            color: #5a5c60;
-            font-weight: 600;
-            margin-right: 10px;
-        }
-        
-        .toggle-button {
-            background: white;
-            border: 1px solid #e1e3e5;
-            border-radius: 6px;
-            padding: 4px 10px;
-            cursor: pointer;
-            font-size: 12px;
-            color: #5a5c60;
-            transition: all 0.2s;
-        }
-        
-        .toggle-button:hover {
-            background: #f5f6f7;
-            border-color: #667eea;
-        }
-        
-        .toggle-button.collapsed {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        /* 7:3 비율로 조정 */
-        .filter-content {
-            display: grid;
-            grid-template-columns: 70% 30%;
-            gap: 20px;
-            align-items: start;
-            transition: all 0.3s ease;
-        }
-        
-        .filter-content.collapsed {
-            display: none;
-        }
-        
-        /* 필터 태그 개선 */
-        .tag-filters {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        
-        .filter-row {
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-        
-        .tag-filter {
-            padding: 5px 11px;
-            border-radius: 15px;
-            background: white;
-            border: 1px solid #e1e3e5;
-            cursor: pointer;
-            font-size: 12px;
-            color: #5a5c60;
-            transition: all 0.2s;
-        }
-        
-        .tag-filter:hover {
-            background: #f5f6f7;
-        }
-        
-        .tag-filter.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
-        }
-        
-        /* 필터 통계 카드 개선 - 우측 정렬 */
-        /* 스코어보드 스타일 */
-.scoreboard-stats {
-    display: flex;
-    gap: 30px;
-    align-items: center;
-    justify-content: center;  /* 가운데 정렬 추가 */
-}
-
-.scoreboard-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-}
-
-.scoreboard-number {
-    display: flex;
-    gap: 3px;
-    perspective: 300px;
-}
-
-.scoreboard-number .digit {
-    display: inline-block;
-    background: #2c3e50;
-    color: #fff;
-    font-size: 32px;
-    font-weight: 700;
-    width: 36px;
-    height: 48px;
-    line-height: 48px;
-    text-align: center;
-    border-radius: 6px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    position: relative;
-    transform-style: preserve-3d;
-}
-
-/* 옵션용 작은 스코어보드 */
-.scoreboard-item.option .scoreboard-number .digit {
-    font-size: 16px;
-    width: 20px;
-    height: 28px;
-    line-height: 28px;
-    background: #e8e9eb;
-    color: #333;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.scoreboard-label {
-    font-size: 14px;
-    color: #666;
-    font-weight: 600;
-}
-
-/* 필터 통계 컨테이너 */
-.filter-stats-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;  /* 가운데 정렬 추가 */
-}
-
-/* 메시지 스타일 */
-.filter-message {
-    font-size: 13px;
-    color: #666;
-    font-weight: 500;
-    text-align: center;
-    padding: 8px 12px;
-    background: #f0f4ff;
-    border-radius: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-/* 타이핑 애니메이션 */
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-.typing-animation {
-    animation: typing 1.5s steps(30, end);
-    overflow: hidden;
-    white-space: nowrap;
-    display: inline-block;
-    width: 0;
-    animation-fill-mode: forwards;
-}
-        
-        
-
-/* 슬롯머신 회전 애니메이션 */
-@keyframes slotSpin {
-    0% {
-        transform: rotateX(0deg);
+  <style>
+    :root {
+      --bg: #fafbfc;
+      --card: #ffffff;
+      --muted: #7a7c80;
+      --text: #3a3b3d;
+      --border: #e8e9eb;
+      --primary: #667eea;
+      --primary-2: #764ba2;
+      --chip: #f5f6f7;
+      --ok-bg: #e8f5e9;
+      --ok: #2e7d32;
+      --warn-bg: #fff8e1;
+      --warn: #f57c00;
+      --stop-bg: #ffebee;
+      --stop: #c62828;
+      --prep-bg: #e3f2fd;
+      --prep: #1565c0;
+      --active-grad: linear-gradient(90deg,#ffffff 0%,#ffffff 10%,#e8efff 25%,#d4e3ff 40%,#b8d0ff 50%,#d4e3ff 60%,#e8efff 75%,#ffffff 90%,#ffffff 100%);
     }
-    100% {
-        transform: rotateX(360deg);
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+
+    /* 헤더 */
+    .top-header { background: var(--card); border-bottom: 1px solid var(--border); padding: 20px 0; position: relative; z-index: 100; }
+    .header-content { max-width: 1400px; margin: 0 auto; padding: 0 30px; display: grid; grid-template-columns: 200px 1fr auto; align-items: center; gap: 20px; }
+    .logo-img { height: 36px; object-fit: contain; }
+
+    /* 메뉴 고정용 */
+    .menu-container { position: relative; background: var(--card); transition: all .3s; }
+    .menu-container.sticky { position: fixed; inset: 0 0 auto 0; z-index: 200; box-shadow: 0 2px 8px rgba(0,0,0,.08); padding: 10px 0; }
+    .menu-wrapper { max-width: 1400px; margin: 0 auto; padding: 0 30px; display: flex; justify-content: center; gap: 12px; }
+
+    .nav-menu { display: flex; gap: 8px; }
+    .nav-btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; color: #5a5c60; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; white-space: nowrap; }
+    .nav-btn:hover { background: #f5f6f7; border-color: var(--primary); color: var(--primary); }
+    .nav-btn.active { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%); color: #fff; border-color: transparent; }
+
+    /* 특수 버튼(발주시스템) — 원본 의도 유지(샤인 애니메이션) */
+    .special-btn { padding: 10px 24px; border: none; font-weight: 700; color: #333; border-radius: 10px; background: linear-gradient(270deg,#ffffff,#ff9a9e,#fecfef,#a8e6cf,#ffffff); background-size: 400% 100%; animation: shine 3.75s ease-in-out infinite; transition: transform .2s, box-shadow .2s; }
+    @keyframes shine { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    .special-btn:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(255,154,158,.35); }
+
+    /* 메인 */
+    .main-content { max-width: 1400px; margin: 0 auto; padding: 30px; }
+    .dashboard-header { background: var(--card); border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.04); border: 1px solid var(--border); }
+    .dashboard-header h1 { font-size: 26px; font-weight: 800; letter-spacing: -.2px; margin-bottom: 18px; }
+
+    /* 통계 카드 */
+    .stats-cards { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+    .stat-card { background: #f9fafb; border-radius: 12px; padding: 16px 18px; border: 1px solid var(--border); cursor: pointer; transition: all .2s; text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.06); border-color: var(--primary); }
+    .stat-card.active { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%); border-color: transparent; }
+    .stat-icon { width: 26px; height: 26px; margin-bottom: 8px; opacity: .85; }
+    .stat-card.active .stat-icon path { fill: #fff; }
+    .stat-value { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1; margin-bottom: 4px; }
+    .stat-label { font-size: 12px; color: #5a5c60; font-weight: 700; letter-spacing: .2px; }
+    .stat-sub { margin-top: 6px; font-size: 11px; color: #6b7280; background: #eef0f3; padding: 4px 10px; border-radius: 999px; }
+    .stat-card.active .stat-value, .stat-card.active .stat-label, .stat-card.active .stat-sub { color: #fff; }
+    .stat-card.active .stat-sub { background: rgba(255,255,255,.25); }
+
+    /* 필터 */
+    .filter-section { background: #f8fafc; border-radius: 12px; padding: 18px; margin-bottom: 18px; border: 1px solid var(--border); }
+    .filter-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .filter-section-title { font-size: 14px; color: #4b5563; font-weight: 800; letter-spacing: .2px; }
+    .toggle-button { background: var(--card); border: 1px solid #e1e3e5; border-radius: 8px; padding: 6px 12px; cursor: pointer; font-size: 12px; color: #374151; font-weight: 700; transition: all .2s; }
+    .toggle-button:hover { background: #f3f4f6; border-color: var(--primary); color: var(--primary); }
+    .toggle-button.collapsed { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+    .filter-content { display: grid; grid-template-columns: 70% 30%; gap: 16px; align-items: start; transition: all .3s; }
+    .filter-content.collapsed { display: none; }
+
+    .tag-filters { display: flex; flex-direction: column; gap: 8px; }
+    .filter-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag-filter { padding: 6px 12px; border-radius: 999px; background: var(--card); border: 1px solid #e1e3e5; cursor: pointer; font-size: 12px; color: #374151; font-weight: 700; transition: all .2s; }
+    .tag-filter:hover { background: #f3f4f6; }
+    .tag-filter.active { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-2) 100%); color: #fff; border-color: transparent; }
+
+    /* 필터 우측 통계/메시지 */
+    .filter-stats-container { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+    .scoreboard-stats { display: flex; gap: 30px; align-items: center; justify-content: center; }
+    .scoreboard-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .scoreboard-label { font-size: 12px; color: #6b7280; font-weight: 800; }
+    .scoreboard-number { display: flex; gap: 3px; perspective: 300px; }
+    .digit { display: inline-block; background: #111827; color: #fff; font-size: 30px; font-weight: 800; width: 34px; height: 46px; line-height: 46px; text-align: center; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,.15); transition: transform .1s ease-out; }
+    .scoreboard-item.option .digit { font-size: 16px; width: 22px; height: 28px; line-height: 28px; background: #e5e7eb; color: #111827; box-shadow: 0 2px 4px rgba(0,0,0,.08); }
+    @keyframes slotSpin { 0%{transform:rotateX(0)} 100%{transform:rotateX(360deg)} }
+    .digit.spin { animation: slotSpin .12s linear infinite; }
+
+    .filter-message { font-size: 12px; color: #334155; font-weight: 700; text-align: center; padding: 8px 12px; background: #eef2ff; border-radius: 8px; }
+    @keyframes typing { from{width:0} to{width:100%} }
+    .typing-animation { animation: typing 1.4s steps(30,end); overflow: hidden; white-space: nowrap; display: inline-block; width: 0; animation-fill-mode: forwards; }
+
+    /* 그룹 타이틀 */
+    .group-divider { grid-column: 1/-1; height: 32px; }
+    .group-title-wrapper { grid-column: 1/-1; text-align: center; margin-bottom: 8px; }
+    .group-title { display: inline-block; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 18px; box-shadow: 0 2px 6px rgba(0,0,0,.06); font-size: 13px; font-weight: 800; color: var(--text); position: relative; }
+    @keyframes activeGradient { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    .group-title.status-active { background: var(--active-grad); background-size: 300% 100%; animation: activeGradient 8s linear infinite; overflow: hidden; }
+    .group-title.status-active::after { content:""; position:absolute; inset:0; left:-100%; background: linear-gradient(105deg,transparent 0%,transparent 40%,rgba(255,255,255,.18) 43%,rgba(255,255,255,.35) 44%,rgba(255,255,255,.18) 45%,transparent 55%,transparent 100%); animation: diagonalShine 4s ease-in-out infinite; pointer-events:none; }
+    @keyframes diagonalShine { 0%{left:-100%} 100%{left:200%} }
+
+    /* 상품 그리드 */
+    .products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .product-card { background: var(--card); border-radius: 14px; padding: 18px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,.06); cursor: pointer; transition: all .2s; position: relative; overflow: hidden; }
+    .product-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.08); }
+    .product-card.status-active { background: var(--active-grad); background-size: 300% 100%; animation: activeGradient 8s linear infinite; }
+    .product-card.status-active::after { content:""; position:absolute; inset:0; left:-100%; background: linear-gradient(105deg,transparent 0%,transparent 40%,rgba(255,255,255,.20) 43%,rgba(255,255,255,.38) 44%,rgba(255,255,255,.20) 45%,transparent 55%,transparent 100%); animation: diagonalShine 4s ease-in-out infinite; pointer-events:none; }
+    .product-card.status-ending { background: linear-gradient(90deg,#ffffff 0%,#ffffff 10%,#fff9e6 25%,#fff3cc 40%,#ffeb99 50%,#fff3cc 60%,#fff9e6 75%,#ffffff 90%,#ffffff 100%); background-size: 300% 100%; animation: activeGradient 8s linear infinite; }
+
+    .product-thumbnail { position: absolute; top: 18px; right: 18px; width: 80px; height: 80px; border-radius: 10px; object-fit: cover; background: linear-gradient(135deg,#f5f6f7,#e8e9eb); }
+    .product-content { padding-right: 100px; }
+    .product-row1 { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .product-title { font-size: 17px; font-weight: 800; letter-spacing: -.2px; }
+
+    .status-badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 800; border: 1px solid transparent; }
+    .status-active { background: var(--ok-bg); color: var(--ok); }
+    .status-preparing { background: var(--prep-bg); color: var(--prep); }
+    .status-paused { background: #fff3cd; color: #8a6d3b; }
+    .status-stopped { background: var(--stop-bg); color: var(--stop); }
+
+    .product-row2 { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+    .product-divider { border-top: 1px solid var(--border); margin: 12px 0; }
+
+    .product-footer { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+    .footer-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    .dot { display:inline-block; width:10px; height:10px; border-radius:50%; }
+    .dot.green { background:#34d399; }
+    .dot.yellow { background:#fbbf24; }
+    .dot.gray { background:#9ca3af; }
+    .season-text { color:#4b5563; font-size: 13px; font-weight: 700; }
+
+    .badge-free { background: var(--primary); color: #fff; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+    .badge-detail { background: #e3f2fd; color: #1565c0; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+    .badge-image { background: #f3e5f5; color: #7b1fa2; padding: 3px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+    .badge-chart { background: linear-gradient(135deg,#ff6b6b,#ff8e53); color:#fff; border:none; padding: 3px 10px; border-radius:999px; font-size:11px; font-weight:900; cursor:pointer; transition: transform .2s, box-shadow .2s; }
+    .badge-chart:hover { transform: translateY(-1px); box-shadow: 0 2px 6px rgba(255,107,107,.35); }
+
+    /* 하단 발주시스템 버튼 */
+    .bottom-order-section { max-width: 1400px; margin: 48px auto 0; padding: 0 30px; text-align: center; }
+    .large-order-btn { display: inline-flex; align-items: center; gap: 12px; padding: 18px 56px; background: linear-gradient(270deg,#ffffff,#ff9a9e,#fecfef,#a8e6cf,#ffffff); background-size: 400% 100%; color: #333; border: none; border-radius: 12px; font-size: 18px; font-weight: 900; cursor: pointer; animation: shine 3.75s ease-in-out infinite; transition: transform .2s, box-shadow .2s; box-shadow: 0 4px 12px rgba(255,154,158,.3); }
+    .large-order-btn:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(255,154,158,.4); }
+
+    /* 모달 */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+    .modal.show { display: flex; }
+    .modal-content { background: var(--card); border-radius: 14px; max-width: 1400px; width: 92%; max-height: 82vh; overflow-y: auto; padding: 26px; border: 1px solid var(--border); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .modal-header h2 { font-size: 18px; letter-spacing: -.2px; }
+    .modal-close { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; width: 34px; height: 34px; cursor: pointer; font-size: 14px; font-weight: 900; }
+
+    .option-card { display: flex; gap: 14px; padding: 12px; background: #f9fafb; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; align-items: center; }
+    .option-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #e5e7eb; flex-shrink: 0; }
+    .option-info { flex: 1; display: flex; align-items: center; gap: 10px; }
+    .option-col { display: inline-block; flex-shrink: 0; }
+
+    /* 차트 모달 */
+    .chart-modal-content { background: var(--card); border-radius: 14px; width: 92%; max-width: 1200px; max-height: 90vh; padding: 26px; overflow-y: auto; border: 1px solid var(--border); }
+    .chart-container { position: relative; height: 380px; margin: 18px 0; }
+    .chart-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
+    .chart-stat-box { background: #f9fafb; border-radius: 10px; padding: 12px; text-align: center; border: 1px solid var(--border); }
+    .chart-stat-label { font-size: 12px; color: #6b7280; margin-bottom: 4px; }
+    .chart-stat-value { font-size: 18px; font-weight: 900; color: var(--text); }
+    .chart-stat-value.current { color: var(--primary); }
+    .increase { color: #ef4444; } .decrease { color: #22c55e; }
+
+    .no-data-message { text-align: center; padding: 80px 20px; color: #9ca3af; }
+    .no-data-icon { width: 52px; height: 52px; margin: 0 auto 14px; background: #e5e7eb; border-radius: 12px; }
+    .no-data-title { font-size: 18px; color: #6b7280; margin-bottom: 6px; font-weight: 800; }
+    .no-data-text { font-size: 13px; color: #9ca3af; }
+
+    /* 푸터 */
+    .footer { background: var(--card); border-top: 1px solid var(--border); padding: 36px 0; margin-top: 48px; }
+    .footer-content { max-width: 1400px; margin: 0 auto; padding: 0 30px; text-align: center; color: #6b7280; font-size: 13px; }
+
+    /* 접근성 향상: 포커스 링 */
+    :is(button, .nav-btn, .tag-filter, .badge-chart, .large-order-btn, .special-btn):focus { outline: 3px solid rgba(102,126,234,.35); outline-offset: 2px; }
+
+    /* 모바일 */
+    @media (max-width: 768px) {
+      .logo-img { height: 22px; }
+      .dashboard-header { padding: 18px; }
+      .dashboard-header h1 { font-size: 20px; margin-bottom: 12px; }
+      .header-content { grid-template-columns: 1fr; gap: 12px; padding: 0 15px; }
+      .menu-container.sticky .menu-wrapper { padding: 0 10px; gap: 8px; }
+      .nav-menu { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; }
+      .nav-btn { padding: 8px 6px; font-size: 11px; }
+      .special-btn { width: 100%; padding: 8px 12px; }
+
+      .main-content { padding: 14px; }
+      .stats-cards { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 6px; }
+      .stat-card { min-width: 90px; padding: 12px 10px; }
+      .stat-icon { width: 20px; height: 20px; }
+      .stat-value { font-size: 20px; }
+      .stat-label { font-size: 10px; }
+      .stat-sub { font-size: 9px; padding: 3px 8px; }
+
+      .filter-section { padding: 12px; }
+      .filter-content { grid-template-columns: 1fr; gap: 12px; }
+      .tag-filter { padding: 4px 8px; font-size: 10px; }
+
+      .scoreboard-stats { gap: 16px; }
+      .digit { font-size: 24px; width: 28px; height: 36px; line-height: 36px; }
+      .scoreboard-item.option .digit { font-size: 14px; width: 18px; height: 24px; line-height: 24px; }
+      .filter-message { font-size: 11px; padding: 6px 10px; }
+
+      .group-divider { height: 24px; }
+      .group-title { font-size: 12px; padding: 6px 12px; }
+
+      .products-grid { grid-template-columns: 1fr; gap: 12px; }
+      .product-card { display: flex; flex-direction: row; padding: 12px; }
+      .product-card.status-active { background: linear-gradient(90deg,#ffffff 0%,#f0f4ff 50%,#ffffff 100%); background-size: 200% 100%; animation: activeGradient 6s linear infinite; }
+      .product-card.status-active::after { animation-duration: 3s; }
+      .product-thumbnail { position: static; width: 85px; height: 85px; margin: 0; order: 1; flex-shrink: 0; }
+      .product-content { padding-right: 0; margin-right: 12px; flex: 1; order: 0; position: relative; z-index: 1; }
+      .product-row1 { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 6px; }
+      .product-title { font-size: 15px; }
+      .product-status-options { display: flex; gap: 8px; align-items: center; }
+      .status-badge { font-size: 10px; padding: 3px 8px; }
+      .product-row2 { font-size: 11px; margin-bottom: 10px; }
+      .product-divider { margin: 10px 0; }
+      .badge-free, .badge-detail, .badge-image { font-size: 9px; padding: 2px 6px; }
+
+      .chart-modal-content { padding: 16px; width: 95%; }
+      .chart-container { height: 180px; margin: 4px 0; }
+      .chart-stats { grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; }
+      .chart-stat-box { padding: 6px 4px; border-radius: 6px; }
+      .chart-stat-label { font-size: 9px; margin-bottom: 2px; }
+      .chart-stat-value { font-size: 11px; }
+
+      .large-order-btn { padding: 14px 28px; font-size: 16px; }
     }
-}
-
-.digit.spin {
-    animation: slotSpin 0.1s linear infinite;
-}
-
-/* 숫자 변경 시 부드러운 전환 */
-.digit {
-    transition: transform 0.1s ease-out;
-}
-/* 타이핑 애니메이션 */
-@keyframes typing {
-    from { width: 0; }
-    to { width: 100%; }
-}
-
-.typing-animation {
-    animation: typing 1.5s steps(30, end);
-    overflow: hidden;
-    white-space: nowrap;
-    display: inline-block;
-    width: 0;
-    animation-fill-mode: forwards;
-}
-        
-        /* 그룹 제목 스타일 - 배경 흰색, 색상바 없음, 공급중만 애니메이션 */
-        .group-divider {
-            grid-column: 1/-1;
-            height: 40px;
-        }
-        
-        .group-title-wrapper {
-            grid-column: 1/-1;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        
-        .group-title {
-            display: inline-block;
-            background: white;
-            border: 1px solid #e8e9eb;
-            border-radius: 8px;
-            padding: 10px 24px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-            font-size: 15px;
-            font-weight: 600;
-            color: #3a3b3d;
-            position: relative;
-        }
-        
-        /* 공급중 그룹 타이틀만 애니메이션 */
-        .group-title.status-active {
-            background: linear-gradient(90deg, 
-                #ffffff 0%,
-                #ffffff 10%,
-                #e8efff 25%,
-                #d4e3ff 40%,
-                #b8d0ff 50%,
-                #d4e3ff 60%,
-                #e8efff 75%,
-                #ffffff 90%,
-                #ffffff 100%
-            );
-            background-size: 300% 100%;
-            animation: activeGradient 8s linear infinite;
-            overflow: hidden;
-        }
-        
-        .group-title.status-active::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                105deg,
-                transparent 0%,
-                transparent 40%,
-                rgba(255, 255, 255, 0.2) 42%,
-                rgba(255, 255, 255, 0.4) 43%,
-                rgba(255, 255, 255, 0.2) 44%,
-                transparent 46%,
-                transparent 100%
-            );
-            animation: diagonalShine 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-        
-        /* 상품 그리드 */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            border: 1px solid #e8e9eb;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        /* 공급중 상품만 애니메이션 배경 */
-        .product-card.status-active {
-            background: linear-gradient(90deg, 
-                #ffffff 0%,
-                #ffffff 10%,
-                #e8efff 25%,
-                #d4e3ff 40%,
-                #b8d0ff 50%,
-                #d4e3ff 60%,
-                #e8efff 75%,
-                #ffffff 90%,
-                #ffffff 100%
-            );
-            background-size: 300% 100%;
-            animation: activeGradient 8s linear infinite;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* 사선 빛 애니메이션 - 얇고 은은하게 */
-        .product-card.status-active::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                105deg,
-                transparent 0%,
-                transparent 40%,
-                rgba(255, 255, 255, 0.2) 42%,
-                rgba(255, 255, 255, 0.4) 43%,
-                rgba(255, 255, 255, 0.2) 44%,
-                transparent 46%,
-                transparent 100%
-            );
-            animation: diagonalShine 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-        
-        @keyframes diagonalShine {
-            0% {
-                left: -100%;
-            }
-            100% {
-                left: 200%;
-            }
-        }
-        
-        .product-thumbnail {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #f5f6f7, #e8e9eb);
-        }
-        
-        .product-content {
-            padding-right: 100px;
-        }
-        
-        .product-row1 {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
-        }
-        
-        .product-title {
-            font-size: 18px;
-            color: #3a3b3d;
-            font-weight: 600;
-        }
-        
-        .status-badge {
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        /* 준비중 상태 스타일 추가 */
-        .status-active {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-        
-        .status-preparing {
-            background: #e3f2fd;
-            color: #1565c0;
-        }
-        
-        .status-paused {
-            background: #fff8e1;
-            color: #f57c00;
-        }
-        
-        .status-stopped {
-            background: #ffebee;
-            color: #c62828;
-        }
-        
-        .product-row2 {
-            color: #7a7c80;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-        
-        .product-divider {
-            border-top: 1px solid #e8e9eb;
-            margin: 15px 0;
-        }
-        
-        .product-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .footer-left {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .season-icon {
-            font-size: 12px;
-        }
-        
-        .season-text {
-            color: #666;
-            font-size: 13px;
-        }
-        
-        .badge-free {
-            background: #667eea;
-            color: white;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 500;
-            margin-left: 6px;
-        }
-        
-        .badge-detail {
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-        }
-        
-        .badge-image {
-            background: #f3e5f5;
-            color: #7b1fa2;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-        }
-        
-        .badge-chart {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            color: white;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-block;
-            transition: all 0.2s;
-            border: none;
-        }
-        
-        .badge-chart:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 4px rgba(255, 107, 107, 0.3);
-        }
-        
-        /* 하단 발주시스템 버튼 */
-        .bottom-order-section {
-            max-width: 1400px;
-            margin: 60px auto 0;
-            padding: 0 30px;
-            text-align: center;
-        }
-        
-        .large-order-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            padding: 20px 60px;
-            background: linear-gradient(270deg, #ffffff, #ff9a9e, #fecfef, #a8e6cf, #ffffff);
-            background-size: 400% 100%;
-            color: #333;
-            border: none;
-            border-radius: 12px;
-            font-size: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            animation: shine 3.75s ease-in-out infinite;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 12px rgba(255, 154, 158, 0.3);
-        }
-        
-        .large-order-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(255, 154, 158, 0.4);
-        }
-        
-        .large-order-btn span:first-child {
-            font-size: 28px;
-        }
-        
-        /* 모달 */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal.show {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            max-width: 1400px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 30px;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-        
-        .modal-close {
-            background: #f5f6f7;
-            border: none;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-        
-        .option-card {
-            display: flex;
-            gap: 15px;
-            padding: 15px;
-            background: #f9fafb;
-            border-radius: 8px;
-            border: 1px solid #e8e9eb;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        
-        .option-thumb {
-            width: 50px;
-            height: 50px;
-            border-radius: 6px;
-            object-fit: cover;
-            background: #e8e9eb;
-            flex-shrink: 0;
-        }
-        
-        .option-info {
-            flex: 1;
-            display: flex;
-            align-items: center;
-        }
-        
-        .option-col {
-            display: inline-block;
-            flex-shrink: 0;
-        }
-        
-        /* 차트 모달 스타일 */
-        .chart-modal-content {
-            background: white;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 1200px;
-            max-height: 90vh;
-            padding: 30px;
-            overflow-y: auto;
-        }
-        
-        .chart-container {
-            position: relative;
-            height: 400px;
-            margin: 30px 0;
-        }
-        
-        .chart-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .chart-stat-box {
-            background: #f9fafb;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #e8e9eb;
-        }
-        
-        .chart-stat-label {
-            font-size: 12px;
-            color: #7a7c80;
-            margin-bottom: 5px;
-        }
-        
-        .chart-stat-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #3a3b3d;
-        }
-        
-        .chart-stat-value.current {
-            color: #667eea;
-        }
-        
-        .increase { color: #ff5252; }
-        .decrease { color: #4caf50; }
-        
-        .no-data-message {
-            text-align: center;
-            padding: 100px 20px;
-            color: #999;
-        }
-        
-        .no-data-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-        
-        .no-data-title {
-            font-size: 20px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-        
-        .no-data-text {
-            font-size: 14px;
-            color: #999;
-        }
-        
-        /* 푸터 */
-        .footer {
-            background: white;
-            border-top: 1px solid #e8e9eb;
-            padding: 40px 0;
-            margin-top: 60px;
-        }
-        
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 30px;
-            text-align: center;
-            color: #7a7c80;
-            font-size: 13px;
-        }
-        
-        /* 모바일 반응형 */
-        @media (max-width: 768px) {
-            .logo-img {
-                height: 22px;
-            }
-            
-            .dashboard-header h1 {
-                font-size: 20px;
-                margin-bottom: 15px;
-            }
-            
-            .dashboard-header {
-                padding: 20px;
-            }
-            
-            .header-content {
-                grid-template-columns: 1fr;
-                gap: 15px;
-                padding: 0 15px;
-            }
-            
-            .menu-container.sticky .menu-wrapper {
-                padding: 0 10px;
-                gap: 8px;
-            }
-            
-            .center-button {
-                order: -1;
-            }
-            
-            .nav-menu {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 4px;
-                width: 100%;
-            }
-            
-            .nav-btn {
-                padding: 6px 4px;
-                font-size: 11px;
-            }
-            
-            .nav-btn span {
-                display: inline-block;
-                white-space: nowrap;
-            }
-            
-            .special-btn {
-                width: 100%;
-                padding: 8px 12px;
-            }
-            
-            .main-content {
-                padding: 15px;
-            }
-            
-            .stats-cards {
-                display: flex;
-                overflow-x: auto;
-                gap: 8px;
-                padding-bottom: 8px;
-            }
-            
-            .stat-card {
-                min-width: 85px;
-                flex-shrink: 0;
-                padding: 10px 6px;
-            }
-            
-            .stat-icon {
-                font-size: 20px;
-                margin-bottom: 4px;
-            }
-            
-            .stat-value {
-                font-size: 20px;
-            }
-            
-            .stat-label {
-                font-size: 10px;
-            }
-            
-            .stat-sub {
-                font-size: 9px;
-                padding: 2px 6px;
-            }
-            
-            /* 모바일 필터 섹션 */
-            .filter-section {
-                padding: 12px;
-            }
-            
-            .filter-content {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            
-            .filter-row {
-                gap: 4px;
-            }
-            
-            .tag-filter {
-                padding: 3px 8px;
-                font-size: 10px;
-            }
-            
-            .scoreboard-stats {
-    gap: 20px;
-    justify-content: center;  /* 모바일에서도 가운데 정렬 */
-}
-
-.scoreboard-number .digit {
-    font-size: 24px;
-    width: 28px;
-    height: 36px;
-    line-height: 36px;
-}
-
-/* 모바일 옵션용 작은 스코어보드 */
-.scoreboard-item.option .scoreboard-number .digit {
-    font-size: 14px;
-    width: 18px;
-    height: 24px;
-    line-height: 24px;
-}
-.scoreboard-label {
-    font-size: 12px;
-}
-       .filter-stats-container {
-    gap: 10px;
-    align-items: center;  /* 모바일에서도 가운데 정렬 */
-}
-
-.filter-message {
-    font-size: 11px;
-    padding: 6px 10px;
-}
-            
-            /* 모바일 그룹 간격 */
-            .group-divider {
-                height: 30px;
-            }
-            
-            .group-title {
-                font-size: 13px;
-                padding: 8px 16px;
-            }
-            
-            /* 모바일 상품카드 재설계 - 좌측정보 우측썸네일 7:3 비율 */
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            
-            .product-card {
-                display: flex;
-                flex-direction: row;
-                padding: 12px;
-                position: relative;
-                overflow: hidden;
-            }
-            
-            .product-card.status-active {
-                background: linear-gradient(90deg, 
-                    #ffffff 0%,
-                    #f0f4ff 50%,
-                    #ffffff 100%
-                );
-                background-size: 200% 100%;
-                animation: activeGradient 6s linear infinite;
-            }
-            
-            /* 모바일에서도 사선 빛 애니메이션 적용 */
-            .product-card.status-active::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(
-                    105deg,
-                    transparent 0%,
-                    transparent 40%,
-                    rgba(255, 255, 255, 0.3) 42%,
-                    rgba(255, 255, 255, 0.5) 43%,
-                    rgba(255, 255, 255, 0.3) 44%,
-                    transparent 46%,
-                    transparent 100%
-                );
-                animation: diagonalShine 3s ease-in-out infinite;
-                pointer-events: none;
-            }
-            
-            .product-thumbnail {
-                position: static;
-                width: 85px;
-                height: 85px;
-                margin: 0;
-                order: 1;
-                flex-shrink: 0;
-            }
-            
-            .product-content {
-                padding-right: 0;
-                padding-left: 0;
-                margin-right: 12px;
-                flex: 1;
-                order: 0;
-                position: relative;
-                z-index: 1;
-            }
-            
-            .product-row1 {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 6px;
-                margin-bottom: 6px;
-            }
-            
-            .product-title {
-                font-size: 15px;
-                font-weight: 600;
-            }
-            
-            .product-status-options {
-                display: flex;
-                gap: 8px;
-                align-items: center;
-            }
-            
-            .status-badge {
-                font-size: 10px;
-                padding: 3px 8px;
-            }
-            
-            .product-row2 {
-                font-size: 11px;
-                margin-bottom: 10px;
-            }
-            
-            .product-divider {
-                margin: 10px 0;
-            }
-            
-            .product-footer {
-                flex-wrap: wrap;
-                gap: 4px;
-            }
-            
-            .footer-left {
-                width: 100%;
-                flex-wrap: wrap;
-            }
-            
-            .season-icon {
-                font-size: 10px;
-            }
-            
-            .season-text {
-                font-size: 11px;
-            }
-            
-            .badge-free,
-            .badge-detail,
-            .badge-image {
-                font-size: 9px;
-                padding: 2px 6px;
-            }
-            
-            /* 모바일 옵션카드 최적화 */
-            .option-card {
-                flex-direction: row;
-                align-items: flex-start;
-                padding: 10px;
-                gap: 10px;
-            }
-            
-            .option-thumb {
-                width: 40px;
-                height: 40px;
-            }
-            
-            .option-info {
-                flex-direction: column;
-                align-items: stretch;
-                width: 100%;
-                gap: 6px;
-            }
-            
-            .option-info-row1 {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 12px;
-            }
-            
-            .option-info-row2 {
-                font-size: 11px;
-                color: #999;
-            }
-            
-            .option-price-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 6px;
-                padding-top: 6px;
-                border-top: 1px solid #e8e9eb;
-            }
-            
-            .option-price {
-                font-size: 14px;
-                font-weight: 600;
-                color: #667eea;
-            }
-            
-            .option-badges {
-                display: flex;
-                gap: 4px;
-                margin-top: 6px;
-            }
-            
-            .badge-free,
-            .badge-chart {
-                padding: 2px 6px;
-                font-size: 10px;
-            }
-            
-            /* 모바일 차트 모달 스타일 - 60% 축소 */
-            .chart-modal-content {
-                padding: 18px;
-                width: 95%;
-            }
-            
-            .chart-modal-content .modal-header {
-                margin-bottom: 15px;
-            }
-            
-            .chart-modal-content .modal-header h2 {
-                font-size: 16px;
-            }
-            
-            .chart-modal-content .modal-close {
-                width: 24px;
-                height: 24px;
-                font-size: 14px;
-            }
-            
-            .chart-container {
-                height: 180px;
-                margin: 3px 0;
-            }
-            
-            .chart-stats {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 4px;
-                margin-top: 8px;
-            }
-            
-            .chart-stat-box {
-                padding: 5px 2px;
-                border-radius: 5px;
-            }
-            
-            .chart-stat-label {
-                font-size: 8px;
-                margin-bottom: 2px;
-            }
-            
-            .chart-stat-value {
-                font-size: 11px;
-            }
-            
-            .no-data-message {
-                padding: 40px 12px;
-            }
-            
-            .no-data-icon {
-                font-size: 38px;
-                margin-bottom: 12px;
-            }
-            
-            .no-data-title {
-                font-size: 14px;
-                margin-bottom: 6px;
-            }
-            
-            .no-data-text {
-                font-size: 11px;
-            }
-            
-            .large-order-btn {
-                padding: 14px 30px;
-                font-size: 16px;
-            }
-            
-            .large-order-btn span:first-child {
-                font-size: 20px;
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="common-styles.css">
+  </style>
+  <link rel="stylesheet" href="common-styles.css" />
 </head>
 <body>
-    <!-- 공통 헤더 -->
-<div id="header-container"></div>
+  <!-- 공통 헤더 -->
+  <div id="header-container"></div>
 
-    <!-- 메뉴 고정 컨테이너 -->
-    <div class="menu-container" id="menuContainer">
-        <div class="menu-wrapper" id="menuWrapper" style="display: none;">
-            <!-- 스크롤 시 여기에 메뉴 복사 -->
+  <!-- 메뉴 고정 컨테이너 -->
+  <div class="menu-container" id="menuContainer">
+    <div class="menu-wrapper" id="menuWrapper" style="display:none;"></div>
+  </div>
+
+  <!-- 메인 컨텐츠 -->
+  <div class="main-content">
+    <div class="dashboard-header">
+      <h1>대시보드</h1>
+      <div class="stats-cards" id="statsCards">
+        <div class="stat-card">
+          <svg class="stat-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#6b7280" d="M12 22a10 10 0 1 1 10-10 10.011 10.011 0 0 1-10 10Zm0-18a8 8 0 1 0 8 8 8.009 8.009 0 0 0-8-8Zm1 8.586V7h-2v7h6v-2Z"/></svg>
+          <div class="stat-value">-</div>
+          <div class="stat-label">데이터 로딩 중</div>
         </div>
+      </div>
     </div>
 
-    <!-- 메인 컨텐츠 -->
-    <div class="main-content">
-        <!-- 대시보드 헤더 -->
-        <div class="dashboard-header">
-            <h1>대시보드</h1>
-            
-            <!-- 통계 카드 -->
-            <div class="stats-cards" id="statsCards">
-                <div class="stat-card">
-                    <div class="stat-icon">⏳</div>
-                    <div class="stat-value">-</div>
-                    <div class="stat-label">데이터 로딩 중</div>
-                </div>
-            </div>
+    <div class="products-section">
+      <!-- 필터 섹션 -->
+      <div class="filter-section">
+        <div class="filter-section-header">
+          <div class="filter-section-title">검색 필터</div>
+          <button class="toggle-button collapsed" id="filterToggle" onclick="toggleFilter()">펼치기</button>
         </div>
-        
-        <!-- 상품 섹션 -->
-        <div class="products-section">
-            <!-- 필터 섹션 -->
-            <div class="filter-section">
-                <div class="filter-section-header">
-                    <div class="filter-section-title">🔍 검색 필터</div>
-                    <button class="toggle-button collapsed" id="filterToggle" onclick="toggleFilter()">펼치기</button>
-                </div>
-                <div class="filter-content collapsed" id="filterContent">
-                    <div class="tag-filters">
-                        <div class="filter-row">
-                            <div class="tag-filter active" data-category="type" data-filter="all">전체</div>
-                            <div class="tag-filter" data-category="type" data-filter="agricultural">농산물</div>
-                            <div class="tag-filter" data-category="type" data-filter="seafood">수산물</div>
-                            <div class="tag-filter" data-category="type" data-filter="livestock">축산물</div>
-                            <div class="tag-filter" data-category="type" data-filter="imported">농산물(수입)</div>
-                        </div>
-                        <div class="filter-row">
-                            <div class="tag-filter active" data-category="status" data-filter="all">전체</div>
-                            <div class="tag-filter" data-category="status" data-filter="active">공급중</div>
-                            <div class="tag-filter" data-category="status" data-filter="paused">시즌종료</div>
-                            <div class="tag-filter" data-category="status" data-filter="preparing">출하준비중</div>
-                            <div class="tag-filter" data-category="status" data-filter="ending">종료임박</div>
-                            <div class="tag-filter" data-category="status" data-filter="stopped">공급중지</div>
-                        </div>
-                        <div class="filter-row" id="productFilters">
-                            <div class="tag-filter active" data-category="product" data-filter="all">전체</div>
-                            <!-- 품목 필터가 여기에 동적으로 생성됨 -->
-                        </div>
-                    </div>
-                    <div id="filterStats" class="filter-stats-container">
-    <div class="scoreboard-stats">
-        <div class="scoreboard-item">
-            <div class="scoreboard-number" id="filterStatsProducts">
-                <span class="digit">0</span>
+        <div class="filter-content collapsed" id="filterContent">
+          <div class="tag-filters">
+            <div class="filter-row">
+              <div class="tag-filter active" data-category="type" data-filter="all">전체</div>
+              <div class="tag-filter" data-category="type" data-filter="agricultural">농산물</div>
+              <div class="tag-filter" data-category="type" data-filter="seafood">수산물</div>
+              <div class="tag-filter" data-category="type" data-filter="livestock">축산물</div>
+              <div class="tag-filter" data-category="type" data-filter="imported">농산물(수입)</div>
             </div>
-            <div class="scoreboard-label">상품</div>
-        </div>
-        <div class="scoreboard-item option">  <!-- 두 번째에 option 추가 -->
-            <div class="scoreboard-number" id="filterStatsOptions">
-                <span class="digit">0</span>
+            <div class="filter-row">
+              <div class="tag-filter active" data-category="status" data-filter="all">전체</div>
+              <div class="tag-filter" data-category="status" data-filter="active">공급중</div>
+              <div class="tag-filter" data-category="status" data-filter="paused">시즌종료</div>
+              <div class="tag-filter" data-category="status" data-filter="preparing">출하준비중</div>
+              <div class="tag-filter" data-category="status" data-filter="ending">종료임박</div>
+              <div class="tag-filter" data-category="status" data-filter="stopped">공급중지</div>
             </div>
-            <div class="scoreboard-label">옵션</div>
+            <div class="filter-row" id="productFilters">
+              <div class="tag-filter active" data-category="product" data-filter="all">전체</div>
+              <!-- 품목 필터 동적 생성 -->
+            </div>
+          </div>
+
+          <div id="filterStats" class="filter-stats-container">
+            <div class="scoreboard-stats">
+              <div class="scoreboard-item">
+                <div class="scoreboard-number" id="filterStatsProducts"><span class="digit">0</span></div>
+                <div class="scoreboard-label">상품</div>
+              </div>
+              <div class="scoreboard-item option">
+                <div class="scoreboard-number" id="filterStatsOptions"><span class="digit">0</span></div>
+                <div class="scoreboard-label">옵션</div>
+              </div>
+            </div>
+            <div class="filter-message" id="filterStatsMessage">달래마켓과 함께 성장하세요</div>
+          </div>
         </div>
+      </div>
+
+      <!-- 상품 그리드 -->
+      <div class="products-grid" id="productsGrid"></div>
     </div>
-    <div class="filter-message" id="filterStatsMessage">
-        달래마켓과 함께 성장하세요
+  </div>
+
+  <!-- 하단 발주시스템 버튼 -->
+  <div class="bottom-order-section">
+    <button class="large-order-btn" onclick="openOrderSystem()">
+      <span>발주시스템 바로가기</span>
+    </button>
+  </div>
+
+  <!-- 옵션 모달 -->
+  <div class="modal" id="optionsModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modalTitle">옵션 목록</h2>
+        <button class="modal-close" onclick="closeModal()">닫기</button>
+      </div>
+      <div id="modalBody"></div>
     </div>
-</div>
-                </div>
-            </div>
-            
-            <!-- 상품 그리드 -->
-            <div class="products-grid" id="productsGrid">
-                <!-- 상품 카드가 여기에 동적으로 생성됨 -->
-            </div>
-        </div>
+  </div>
+
+  <!-- 차트 모달 -->
+  <div class="modal" id="chartModal">
+    <div class="chart-modal-content">
+      <div class="modal-header">
+        <h2 id="chartModalTitle">가격 변동 차트</h2>
+        <button class="modal-close" onclick="closeChartModal()">닫기</button>
+      </div>
+      <div id="chartModalBody">
+        <div style="text-align:center; padding: 40px; color:#9ca3af;">데이터 로딩 중...</div>
+      </div>
     </div>
-    
-    <!-- 하단 발주시스템 버튼 -->
-    <div class="bottom-order-section">
-        <button class="large-order-btn" onclick="openOrderSystem()">
-            <span>🚜</span>
-            <span>발주시스템 바로가기</span>
-        </button>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p><strong>달래마켓</strong> | 대표: 남잠화 | 사업자등록번호: 107-30-96371</p>
+      <p>통신판매업신고: 2022-경북청도-0003 | 이메일: papa_fresh@naver.com</p>
+      <p>전화: 010-2688-1388 | 주소: 경북 청도군 청도읍 구미길 13</p>
+      <p style="margin-top: 18px;">© 2024 달래마켓. All rights reserved.</p>
     </div>
-    
-    <!-- 옵션 모달 -->
-    <div class="modal" id="optionsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">옵션 목록</h2>
-                <button class="modal-close" onclick="closeModal()">✕</button>
+  </footer>
+
+  <script>
+    // 전역 상태
+    let allProducts = []; let filteredProducts = [];
+    let activeTypeFilter = 'all', activeStatusFilter = 'all', activeProductFilter = 'all';
+    let priceChart = null; let priceDataCache = {}; let isPreloading = false;
+
+    // 날짜 파싱 (MM-DD 지원 + 미래 해 보정)
+    function parseDate(dateStr){ if(!dateStr) return null; if(dateStr.length===5 && dateStr.indexOf('-')===2){ const y=new Date().getFullYear(); const m=parseInt(dateStr.slice(0,2))-1; const d=parseInt(dateStr.slice(3,5)); let dt=new Date(y,m,d); if(dt<new Date()) dt=new Date(y+1,m,d); return dt;} return new Date(dateStr); }
+
+    window.onload = function(){
+      DalraeHeader.init({ containerId:'header-container', activePage:'dashboard', enableStickyMenu:true });
+      loadData(); setupEventListeners();
+    };
+
+    function toggleFilter(){ const c=document.getElementById('filterContent'); const b=document.getElementById('filterToggle'); const cl=c.classList.contains('collapsed'); c.classList.toggle('collapsed'); b.classList.toggle('collapsed', !cl); b.textContent = cl? '접기':'펼치기'; }
+
+    function openOrderSystem(){ window.open('https://papafarmers.com/orders/','_blank'); }
+
+    function loadData(){ fetch('/api/products').then(r=>r.json()).then(processData).catch(handleError); }
+
+    function processData(data){
+      allProducts = data.filter(p => (p['셀러공급Y/N']||'').toString().trim() !== '미공급상품');
+      filteredProducts = [...allProducts];
+      generateProductFilters();
+      updateDashboard();
+    }
+
+    function generateProductFilters(){
+      const set = new Set(); allProducts.forEach(p=>{ const item=p.품목||''; if(item) set.add(item); });
+      const row = document.getElementById('productFilters');
+      let html = '<div class="tag-filter active" data-category="product" data-filter="all">전체</div>';
+      Array.from(set).sort((a,b)=>a.localeCompare(b,'ko')).forEach(item=>{ html += `<div class="tag-filter" data-category="product" data-filter="${item}">${item}</div>`; });
+      row.innerHTML = html; row.querySelectorAll('.tag-filter').forEach(tag=>tag.addEventListener('click', function(){ handleFilterClick(this); }));
+    }
+
+    function handleError(err){ console.error('데이터 로드 에러:', err); alert('데이터를 불러올 수 없습니다.'); }
+
+    function updateDashboard(){ updateStats(); renderProductCards(); updateFilterStats(); }
+
+    function updateFilterStats(){
+      const unique = new Set(); let totalOptions=0; filteredProducts.forEach(p=>{ const v=p.품종||p.품목||''; if(v){ unique.add(v); totalOptions++; }});
+      updateScoreboard('filterStatsProducts', unique.size); updateScoreboard('filterStatsOptions', totalOptions);
+      let msg = '달래마켓과 함께 성장하세요';
+      if(activeStatusFilter==='active') msg='지금 바로 시작하세요';
+      else if(activeStatusFilter==='paused') msg='다음 시즌을 서둘러 준비하세요';
+      else if(activeStatusFilter==='preparing') msg='출하 준비 중 상품을 확인하세요';
+      else if(activeStatusFilter==='ending') msg='종료 임박 상품을 점검해 보세요';
+      else if(activeStatusFilter==='stopped') msg='재개 준비를 도와드릴게요';
+      const el=document.getElementById('filterStatsMessage'); if(el){ el.innerHTML = `<span class="typing-animation">${msg}</span>`; }
+    }
+
+    function updateScoreboard(id, newVal){ const c=document.getElementById(id); if(!c) return; const cur=parseInt(c.textContent)||0; if(cur===newVal) return; const dur=1200, fps=30, total=Math.round(dur/1000*fps), step=(newVal-cur)/total; let frame=0, val=cur; const timer=setInterval(()=>{ frame++; val+=step; if(frame===total){ val=newVal; clearInterval(timer);} const d=String(Math.round(val)).split(''); c.innerHTML=d.map(()=>`<span class="digit spin"></span>`).join(''); c.querySelectorAll('.digit').forEach((e,i)=>{ e.textContent=d[i]; if(frame===total) e.classList.remove('spin'); }); }, dur/total); }
+
+    function updateStats(){
+      const s = calculateStats();
+      const card = (type, label, value, sub, iconPath) => `
+        <div class="stat-card" data-stat-type="${type}">
+          <svg class="stat-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#6b7280" d="${iconPath}"/></svg>
+          <div class="stat-value">${value}</div>
+          <div class="stat-label">${label}</div>
+          <div class="stat-sub">${sub}</div>
+        </div>`;
+
+      document.getElementById('statsCards').innerHTML = [
+        card('all','전체 상품', s.total.products, `${s.total.options} 옵션`, 'M3 12a9 9 0 1 1 9 9 9 9 0 0 1-9-9Zm4 0h10v2H7Zm2-4h8v2H9Zm2 8h6v2h-6Z'),
+        card('active','공급중', s.active.products, `${s.active.options} 옵션`, 'M12 2a10 10 0 1 1-7.07 2.93A10 10 0 0 1 12 2Zm-1 14 6-6-1.41-1.42L11 13.17l-2.59-2.59L7 12l4 4Z'),
+        card('paused','시즌종료', s.paused.products, `${s.paused.options} 옵션`, 'M12 22A10 10 0 1 1 22 12 10.011 10.011 0 0 1 12 22Zm1-5h-2v2h2Zm0-12h-2v10h2Z'),
+        card('preparing','출하준비중', s.preparing.products, `${s.preparing.options} 옵션`, 'M3 13h2v-2H3V7l8-4 8 4v4h-2v2h2v4l-8 4-8-4Zm8 6 6-3v-1H5v1Z'),
+        card('ending','종료임박', s.ending.products, `${s.ending.options} 옵션`, 'M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4Zm0 17a2 2 0 1 1 2-2 2 2 0 0 1-2 2Zm1-4h-2V7h2Z'),
+        card('stopped','공급중지', s.stopped.products, `${s.stopped.options} 옵션`, 'M12 2a10 10 0 1 1-10 10A10.011 10.011 0 0 1 12 2Zm-5 9h10v2H7Z')
+      ].join('');
+
+      document.querySelectorAll('.stat-card').forEach(el=> el.addEventListener('click', function(){ handleStatCardClick(this.dataset.statType); }));
+      updateStatCardActive();
+    }
+
+    function handleStatCardClick(statType){ activeStatusFilter = statType; document.querySelectorAll('.tag-filter[data-category="status"]').forEach(t=>{ t.classList.toggle('active', t.dataset.filter===statType); }); applyFilters(); }
+
+    function handleFilterClick(el){ const cat=el.dataset.category, f=el.dataset.filter; document.querySelectorAll(`.tag-filter[data-category="${cat}"]`).forEach(t=>t.classList.remove('active')); el.classList.add('active'); if(cat==='type') activeTypeFilter=f; else if(cat==='status') activeStatusFilter=f; else if(cat==='product') activeProductFilter=f; applyFilters(); }
+
+    function updateStatCardActive(){ document.querySelectorAll('.stat-card').forEach(c=>c.classList.toggle('active', c.dataset.statType===activeStatusFilter)); }
+
+    function calculateStats(){
+      const s = { total:{products:0,options:0}, active:{products:0,options:0}, paused:{products:0,options:0}, preparing:{products:0,options:0}, ending:{products:0,options:0}, stopped:{products:0,options:0}, uniqueProducts:new Set() };
+      const sets = { total:new Set(), active:new Set(), paused:new Set(), preparing:new Set(), ending:new Set(), stopped:new Set() };
+      const today=new Date(), twenty=new Date(today.getTime()+20*24*60*60*1000);
+
+      allProducts.forEach(p=>{
+        const variety=p.품종||p.품목||''; if(!variety) return; sets.total.add(variety); s.total.options++;
+        if(p.공급상태==='공급중'){ sets.active.add(variety); s.active.options++; }
+        if(p.공급상태==='시즌종료'){ sets.paused.add(variety); s.paused.options++; }
+        if(p.공급상태==='공급중지'){ sets.stopped.add(variety); s.stopped.options++; }
+        if(p.시작일){ const st=parseDate(p.시작일); if(st>today && st<=twenty){ sets.preparing.add(variety); s.preparing.options++; }}
+        if(p.종료일){ const end=parseDate(p.종료일); if(end){ const d=Math.ceil((end-today)/(1000*60*60*24)); if(d>=0 && d<=7){ sets.ending.add(variety); s.ending.options++; }}}
+      });
+
+      filteredProducts.forEach(p=>{ const variety=p.품종||p.품목||''; if(variety) s.uniqueProducts.add(variety); });
+      Object.keys(sets).forEach(k=>{ s[k].products = sets[k].size; });
+      return s;
+    }
+
+    function renderProductCards(){
+      const grid=document.getElementById('productsGrid'); const groups={};
+      filteredProducts.forEach(p=>{ const key=p.품종||p.품목||'기타'; (groups[key]??(groups[key]=[])).push(p); });
+
+      const sorted = Object.entries(groups).sort((a,b)=>{ const pr=(ps)=>{ const f=ps[0]; const t=new Date(), tw=new Date(t.getTime()+20*24*60*60*1000); if(f.공급상태==='공급중') return 1; if(f.시작일){ const s=parseDate(f.시작일); if(s>t && s<=tw) return 2; } if(f.공급상태==='시즌종료') return 3; if(f.공급상태==='공급중지') return 4; return 5; }; const pa=pr(a[1]), pb=pr(b[1]); return pa===pb? a[0].localeCompare(b[0],'ko'): pa-pb; });
+
+      let html=''; let current='';
+      sorted.forEach(([variety, products])=>{
+        const f=products[0]; const t=new Date(); const tw=new Date(t.getTime()+20*24*60*60*1000);
+        let title='기타', cls='';
+        if(f.공급상태==='공급중'){ title='공급중'; cls='status-active'; }
+        else if(f.시작일){ const s=parseDate(f.시작일); if(s>t && s<=tw){ title='출하준비중'; cls='status-preparing'; }}
+        if(title==='기타' && f.공급상태==='시즌종료'){ title='시즌종료'; cls='status-paused'; }
+        else if(title==='기타' && f.공급상태==='공급중지'){ title='공급중지'; cls='status-stopped'; }
+        if(current!==title){ if(current!=='') html += '<div class="group-divider"></div>'; html += `<div class="group-title-wrapper"><div class="group-title ${cls==='status-active'?'status-active':''}">${title}</div></div>`; current=title; }
+        html += createProductCard(variety, products);
+      });
+
+      grid.innerHTML = html || '<div style="grid-column:1/-1;text-align:center;color:#9ca3af;padding:30px;">표시할 상품이 없습니다</div>';
+    }
+
+    function createProductCard(variety, products){
+      const f=products[0]; const isMobile=window.innerWidth<=768; const today=new Date();
+      let min=new Date('2099-12-31'), max=new Date('1900-01-01');
+      products.forEach(p=>{ if(p.시작일){ const d=parseDate(p.시작일); if(d && d<min) min=d; } if(p.종료일){ const d=parseDate(p.종료일); if(d && d>max) max=d; }});
+
+      let seasonClass='gray', seasonText='시즌종료';
+      if(max && max.getFullYear()!==1900){ const left=Math.ceil((max-today)/(1000*60*60*24)); if(left>=0 && left<=7){ seasonClass='yellow'; seasonText='종료임박'; } else if(today>=min && today<=max){ seasonClass='green'; seasonText='시즌중'; } else if(min>today && min<=new Date(today.getTime()+20*24*60*60*1000)){ seasonClass='yellow'; seasonText='출하준비'; } }
+
+      const hasDetail = products.some(p=>p.상세페이지제공 && p.상세페이지제공.trim()!=='');
+      const hasImage  = products.some(p=>p.이미지제공 && p.이미지제공.trim()!=='');
+      const name = (f.품목 && f.품목!==variety) ? `${f.품목}(${variety})` : variety;
+      const fmt = (d)=> `${String(d.getMonth()+1).padStart(2,'0')}월 ${String(d.getDate()).padStart(2,'0')}일`;
+
+      let statusClass=''; let badgeClass='';
+      if(f.공급상태==='공급중'){ statusClass='status-active'; badgeClass='status-active'; }
+      else if(f.공급상태==='시즌종료'){ badgeClass='status-paused'; }
+      else if(f.공급상태==='공급중지'){ badgeClass='status-stopped'; }
+      else if(f.공급상태==='준비중'){ badgeClass='status-preparing'; }
+      if(max && max.getFullYear()!==1900){ const left=Math.ceil((max-today)/(1000*60*60*24)); if(left>=0 && left<=7) statusClass='status-ending'; }
+
+      if(isMobile){
+        return `
+          <div class="product-card ${statusClass}" onclick="showModal('${variety}')">
+            <div class="product-content">
+              <div class="product-row1">
+                <span class="product-title">${name}</span>
+                <div class="product-status-options">
+                  <span class="status-badge ${badgeClass}">${f.공급상태||'미정'}</span>
+                  <span style="color:#6b7280;font-size:11px;font-weight:700;">옵션 ${products.length}개</span>
+                </div>
+              </div>
+              <div class="product-row2">기간 ${fmt(min)} ~ ${fmt(max)}</div>
+              <div class="product-divider"></div>
+              <div class="product-footer">
+                <div class="footer-left">
+                  <span class="dot ${seasonClass}"></span>
+                  <span class="season-text">${seasonText}</span>
+                  <span class="badge-free">무료배송</span>
+                  ${hasDetail?'<span class="badge-detail">상세페이지</span>':''}
+                  ${hasImage?'<span class="badge-image">이미지</span>':''}
+                </div>
+              </div>
             </div>
-            <div id="modalBody"></div>
-        </div>
-    </div>
-    
-    <!-- 차트 모달 -->
-    <div class="modal" id="chartModal">
-        <div class="chart-modal-content">
-            <div class="modal-header">
-                <h2 id="chartModalTitle">가격 변동 차트</h2>
-                <button class="modal-close" onclick="closeChartModal()">✕</button>
+            ${f.썸네일? `<img src="${f.썸네일}" class="product-thumbnail" alt="${name}">` : `<div class="product-thumbnail" aria-hidden="true"></div>`}
+          </div>`;
+      }
+
+      return `
+        <div class="product-card ${statusClass}" onclick="showModal('${variety}')">
+          ${f.썸네일? `<img src="${f.썸네일}" class="product-thumbnail" alt="${name}">` : `<div class="product-thumbnail" aria-hidden="true"></div>`}
+          <div class="product-content">
+            <div class="product-row1">
+              <span class="product-title">${name}</span>
+              <span class="status-badge ${badgeClass}">${f.공급상태||'미정'}</span>
+              <span style="color:#6b7280;font-size:13px;font-weight:700;">옵션 ${products.length}개</span>
             </div>
-            <div id="chartModalBody">
-                <div style="text-align: center; padding: 50px;">
-                    <div style="color: #999;">데이터 로딩 중...</div>
-                </div>
+            <div class="product-row2">기간 ${fmt(min)} ~ ${fmt(max)}</div>
+            <div class="product-divider"></div>
+            <div class="product-footer">
+              <div class="footer-left">
+                <span class="dot ${seasonClass}"></span>
+                <span class="season-text">${seasonText}</span>
+                <span class="badge-free">무료배송</span>
+                ${hasDetail?'<span class="badge-detail">상세페이지</span>':''}
+                ${hasImage?'<span class="badge-image">이미지</span>':''}
+              </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- 푸터 -->
-    <footer class="footer">
-        <div class="footer-content">
-            <p><strong>달래마켓</strong> | 대표: 남잠화 | 사업자등록번호: 107-30-96371</p>
-            <p>통신판매업신고: 2022-경북청도-0003 | 이메일: papa_fresh@naver.com</p>
-            <p>전화: 010-2688-1388 | 주소: 경북 청도군 청도읍 구미길 13</p>
-            <p style="margin-top: 20px;">© 2024 달래마켓. All rights reserved.</p>
-        </div>
-    </footer>
-    
-    <script>
-        // 전역 변수
-        let allProducts = [];
-        let filteredProducts = [];
-        let activeTypeFilter = 'all';
-        let activeStatusFilter = 'all';
-        let activeProductFilter = 'all';
-        let priceChart = null;
+          </div>
+        </div>`;
+    }
 
-        // 날짜 파싱 함수 추가
-function parseDate(dateStr) {
-    if (!dateStr) return null;
-    
-    if (dateStr.length === 5 && dateStr.indexOf('-') === 2) {
-        const currentYear = new Date().getFullYear();
-        const month = parseInt(dateStr.substring(0, 2)) - 1;
-        const day = parseInt(dateStr.substring(3, 5));
-        
-        let date = new Date(currentYear, month, day);
-        
-        if (date < new Date()) {
-            date = new Date(currentYear + 1, month, day);
-        }
-        
-        return date;
-    }
-    
-    return new Date(dateStr);
-}
-        
-        // 캐싱 시스템
-        let priceDataCache = {};
-        let isPreloading = false;
-        
-        // 페이지 로드 시 실행
-        window.onload = function() {
-    console.log('페이지 초기화');
-    
-    // 헤더 초기화 먼저
-    DalraeHeader.init({
-        containerId: 'header-container',
-        activePage: 'dashboard',
-        enableStickyMenu: true  // header.js의 스티키 메뉴 사용
-    });
-    
-    loadData();
-    setupEventListeners();
-    // setupStickyMenu(); // 이 줄 삭제 또는 주석처리
-};
-        
-        // 필터 토글
-        function toggleFilter() {
-            const content = document.getElementById('filterContent');
-            const button = document.getElementById('filterToggle');
-            
-            if (content.classList.contains('collapsed')) {
-                content.classList.remove('collapsed');
-                button.classList.remove('collapsed');
-                button.textContent = '접기';
-            } else {
-                content.classList.add('collapsed');
-                button.classList.add('collapsed');
-                button.textContent = '펼치기';
-            }
-        }
-        
-        // 숫자 카운터 애니메이션 (개선)
-        function animateValue(id, start, end, duration) {
-            const obj = document.getElementById(id);
-            if (!obj) return;
-            
-            const range = end - start;
-            const minTimer = 50;
-            let stepTime = Math.abs(Math.floor(duration / range));
-            stepTime = Math.max(stepTime, minTimer);
-            const startTime = new Date().getTime();
-            const endTime = startTime + duration;
-            let timer;
-            
-            function run() {
-                const now = new Date().getTime();
-                const remaining = Math.max((endTime - now) / duration, 0);
-                const value = Math.round(end - (remaining * range));
-                obj.textContent = value;
-                if (value == end) {
-                    clearInterval(timer);
-                }
-            }
-            
-            timer = setInterval(run, stepTime);
-            run();
-        }
-        
-        // 발주시스템 열기
-        function openOrderSystem() {
-            window.open('https://papafarmers.com/orders/', '_blank');
-        }
-        
-        // 스티키 메뉴 설정
-        function setupStickyMenu() {
-            const header = document.querySelector('.top-header');
-            const menuContainer = document.getElementById('menuContainer');
-            const menuWrapper = document.getElementById('menuWrapper');
-            const mainMenu = document.getElementById('mainMenu');
-            const centerButton = document.querySelector('.center-button');
-            
-            let headerHeight = header.offsetHeight;
-            let stickyOffset = header.offsetTop + headerHeight;
-            
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset > stickyOffset) {
-                    if (!menuContainer.classList.contains('sticky')) {
-                        menuContainer.classList.add('sticky');
-                        menuWrapper.style.display = 'flex';
-                        
-                        // 메뉴 복사
-                        menuWrapper.innerHTML = '';
-                        menuWrapper.appendChild(centerButton.cloneNode(true));
-                        menuWrapper.appendChild(mainMenu.cloneNode(true));
-                        
-                        // 이벤트 리스너 재설정
-                        menuWrapper.querySelector('.special-btn').onclick = openOrderSystem;
-                    }
-                } else {
-                    menuContainer.classList.remove('sticky');
-                    menuWrapper.style.display = 'none';
-                }
-            });
-        }
-        
-        // 데이터 로드
-        function loadData() {
-        // Vercel API 호출
-            fetch('/api/products')
-            .then(response => response.json())
-            .then(processData)
-            .catch(handleError);
-        }
-        
-        // 데이터 처리
-        function processData(data) {
-            console.log('데이터 수신:', data.length + '개');
-            
-            allProducts = data.filter(p => {
-                const supplyStatus = p['셀러공급Y/N'] || '';
-                return supplyStatus.toString().trim() !== '미공급상품';
-            });
-            
-            console.log('미공급상품 제외 후:', allProducts.length + '개');
-            filteredProducts = [...allProducts];
-            
-            // 품목 필터 생성 (품종 제외)
-            generateProductFilters();
-            
-            updateDashboard();
-        }
-        
-        // 품목 필터 생성 - 품목만 표시
-        function generateProductFilters() {
-            const itemSet = new Set();
-            
-            allProducts.forEach(p => {
-                const item = p.품목 || '';
-                if (item) {
-                    itemSet.add(item);
-                }
-            });
-            
-            const filterRow = document.getElementById('productFilters');
-            let html = '<div class="tag-filter active" data-category="product" data-filter="all">전체</div>';
-            
-            const sortedItems = Array.from(itemSet).sort((a, b) => a.localeCompare(b, 'ko'));
-            sortedItems.forEach(item => {
-                html += `<div class="tag-filter" data-category="product" data-filter="${item}">${item}</div>`;
-            });
-            
-            filterRow.innerHTML = html;
-            
-            // 이벤트 리스너 다시 설정
-            filterRow.querySelectorAll('.tag-filter').forEach(tag => {
-                tag.addEventListener('click', function() {
-                    handleFilterClick(this);
-                });
-            });
-        }
-        
-        // 에러 처리
-        function handleError(error) {
-            console.error('데이터 로드 에러:', error);
-            alert('데이터를 불러올 수 없습니다.');
-        }
-        
-        // 대시보드 업데이트
-        function updateDashboard() {
-            updateStats();
-            renderProductCards();
-            updateFilterStats();
-        }
-        
-        // 필터 통계 업데이트 (개선)
-function updateFilterStats() {
-    const uniqueProducts = new Set();
-    let totalOptions = 0;
-    
-    filteredProducts.forEach(p => {
-        const variety = p.품종 || p.품목 || '';
-        if (variety) {
-            uniqueProducts.add(variety);
-            totalOptions++;
-        }
-    });
-    
-    const newProducts = uniqueProducts.size;
-    const newOptions = totalOptions;
-    
-    // 스코어보드 플립 애니메이션
-    updateScoreboard('filterStatsProducts', newProducts);
-    updateScoreboard('filterStatsOptions', newOptions);
-    
-    // 메시지 업데이트
-    let message = "달래마켓과 함께 성장하세요";
-    
-    if (activeStatusFilter === 'active') {
-        message = "지금 바로 시작하세요";
-    } else if (activeStatusFilter === 'paused') {
-        message = "다음 시즌을 누구보다 빨리 준비해야죠";
-    } else if (activeStatusFilter === 'preparing') {
-        message = "지금 바로 준비하세요";
-    } else if (activeStatusFilter === 'ending') {
-        message = "첫술에 배 부른 법은 절대 없죠. 성과는 어땠나요?";
-    } else if (activeStatusFilter === 'stopped') {
-        message = "다시 준비하겠습니다";
-    }
-    
-    // 타이핑 애니메이션 적용
-    const messageElement = document.getElementById('filterStatsMessage');
-    if (messageElement) {
-        messageElement.innerHTML = `<span class="typing-animation">${message}</span>`;
-    }
-}
+    function preloadAllPriceData(codes){ if(isPreloading||!codes||!codes.length) return; const uncached=codes.filter(c=>!priceDataCache[c]); if(!uncached.length) return; isPreloading=true; /* 백그라운드 선로딩 비활성 유지 */ isPreloading=false; }
 
-function updateScoreboard(elementId, newValue) {
-    const container = document.getElementById(elementId);
-    if (!container) return;
-    
-    const currentValue = parseInt(container.textContent) || 0;
-    
-    if (currentValue !== newValue) {
-        // 롤링 카운터 효과
-        const duration = 1500; // 1.5초
-        const frameRate = 30; // 초당 프레임
-        const totalFrames = Math.round(duration / 1000 * frameRate);
-        const increment = (newValue - currentValue) / totalFrames;
-        
-        let frame = 0;
-        let currentNumber = currentValue;
-        
-        const counter = setInterval(() => {
-            frame++;
-            currentNumber += increment;
-            
-            // 마지막 프레임에서는 정확한 값으로
-            if (frame === totalFrames) {
-                currentNumber = newValue;
-                clearInterval(counter);
-            }
-            
-            // 숫자를 각 자리수로 분리
-            const displayNumber = Math.round(currentNumber);
-            const digits = displayNumber.toString().split('');
-            let html = '';
-            
-            digits.forEach((digit, index) => {
-                // 회전 효과와 함께
-                const isChanging = frame < totalFrames;
-                html += `<span class="digit ${isChanging ? 'spin' : ''}" 
-                         style="animation-duration: 0.1s;">${digit}</span>`;
-            });
-            
-            container.innerHTML = html;
-        }, duration / totalFrames);
+    function showModal(variety){
+      const modal=document.getElementById('optionsModal'); const list=allProducts.filter(p=>(p.품종||p.품목)===variety);
+      document.getElementById('modalTitle').textContent = `${variety} (${list.length}개)`;
+      const codes=list.map(p=>p.옵션코드).filter(Boolean); preloadAllPriceData(codes);
+      const isMobile=window.innerWidth<=768; let html='';
+      list.forEach(p=>{
+        const price=p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g,'')).toLocaleString(): '0';
+        let cls='status-active'; if(p.공급상태==='시즌종료') cls='status-paused'; if(p.공급상태==='공급중지') cls='status-stopped'; if(p.공급상태==='준비중') cls='status-preparing';
+        let specs=''; ['규격1','규격2','규격3'].forEach(k=>{ if(p[k]) specs += (specs? ' ':'') + p[k]; });
+        if(isMobile){ html += `
+          <div class="option-card">
+            ${p.썸네일? `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` : `<div class="option-thumb" aria-hidden="true"></div>`}
+            <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+                <strong style="color:var(--primary)">${p.옵션명||'옵션명 없음'}</strong>
+              </div>
+              <div style="font-size:11px; color:#9ca3af;">${p.발송지주소?`발송지: ${p.발송지주소}`:''}</div>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <span style="font-size:14px; font-weight:900; color:var(--primary);">${price}원</span>
+                <span class="status-badge ${cls}" style="font-size:10px;">${p.공급상태||'미정'}</span>
+              </div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <span class="badge-free">무료배송</span>
+                <button class="badge-chart" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}','${p.옵션명}')">가격차트</button>
+              </div>
+            </div>
+          </div>`; }
+        else { html += `
+          <div class="option-card">
+            ${p.썸네일? `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` : `<div class="option-thumb" aria-hidden="true"></div>`}
+            <div class="option-info">
+              <span class="option-col" style="width:64px;color:#6b7280;font-size:12px;font-weight:800;">옵션명</span>
+              <span class="option-col" style="width:220px;color:var(--primary);font-size:14px;font-weight:800;">${p.옵션명||'옵션명 없음'}</span>
+              <span class="option-col" style="width:160px;color:#6b7280;font-size:12px;">${specs}</span>
+              <span class="option-col" style="width:56px;color:#6b7280;font-size:12px;">${p.발송지주소?'발송지':''}</span>
+              <span class="option-col" style="width:180px;color:#9ca3af;font-size:12px;">${p.발송지주소||''}</span>
+              <span class="option-col" style="flex:1;text-align:right;">
+                <span style="color:var(--primary);font-size:16px;font-weight:900;margin-right:14px;">${price}원</span>
+                <span class="status-badge ${cls}" style="font-size:11px;">${p.공급상태||'미정'}</span>
+                <span class="badge-free" style="margin-left:8px;">무료배송</span>
+                <button class="badge-chart" style="margin-left:8px;" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}','${p.옵션명}')">가격차트</button>
+              </span>
+            </div>
+          </div>`; }
+      });
+      document.getElementById('modalBody').innerHTML = html; modal.classList.add('show');
     }
-}
-            
 
+    function closeModal(){ document.getElementById('optionsModal').classList.remove('show'); }
 
-// 필터 통계 업데이트
-function updateFilterStats() {
-    const uniqueProducts = new Set();
-    let totalOptions = 0;
-    
-    filteredProducts.forEach(p => {
-        const variety = p.품종 || p.품목 || '';
-        if (variety) {
-            uniqueProducts.add(variety);
-            totalOptions++;
-        }
-    });
-    
-    const newProducts = uniqueProducts.size;
-    const newOptions = totalOptions;
-    
-    // 스코어보드 플립 애니메이션
-    updateScoreboard('filterStatsProducts', newProducts);
-    updateScoreboard('filterStatsOptions', newOptions);
-    
-    // 메시지 업데이트
-    let message = "달래마켓과 함께 성장하세요";
-    
-    if (activeStatusFilter === 'active') {
-        message = "지금 바로 시작하세요";
-    } else if (activeStatusFilter === 'paused') {
-        message = "다음 시즌을 누구보다 빨리 준비해야죠";
-    } else if (activeStatusFilter === 'preparing') {
-        message = "지금 바로 준비하세요";
-    } else if (activeStatusFilter === 'ending') {
-        message = "첫술에 배 부른 법은 절대 없죠. 성과는 어땠나요?";
-    } else if (activeStatusFilter === 'stopped') {
-        message = "다시 준비하겠습니다";
+    function openPriceChart(optionCode, optionName){
+      closeModal(); const chartModal=document.getElementById('chartModal'); document.getElementById('chartModalTitle').textContent = optionName;
+      document.getElementById('chartModalBody').innerHTML = '<div style="text-align:center;padding:20px;color:#9ca3af;">데이터를 불러오는 중...</div>';
+      chartModal.classList.add('show');
+      if(priceDataCache[optionCode]){ setTimeout(()=>displayChart(priceDataCache[optionCode], optionName), 60); }
+      else { fetch(`/api/price-history?optionCode=${optionCode}`).then(r=>r.json()).then(d=>{ if(d&&d.length>0) priceDataCache[optionCode]=d; displayChart(d, optionName); }).catch(e=>{ console.error(e); showNoChartData(); }); }
     }
-    
-    // 타이핑 애니메이션 적용
-    const messageElement = document.getElementById('filterStatsMessage');
-    if (messageElement) {
-        messageElement.innerHTML = `<span class="typing-animation">${message}</span>`;
-    }
-}
 
-function updateFilterStats() {
-    const uniqueProducts = new Set();
-    let totalOptions = 0;
-    
-    filteredProducts.forEach(p => {
-        const variety = p.품종 || p.품목 || '';
-        if (variety) {
-            uniqueProducts.add(variety);
-            totalOptions++;
-        }
-    });
-    
-    const newProducts = uniqueProducts.size;
-    const newOptions = totalOptions;
-    
-    // 스코어보드 플립 애니메이션
-    updateScoreboard('filterStatsProducts', newProducts);
-    updateScoreboard('filterStatsOptions', newOptions);
-    
-    // 메시지 업데이트
-    let message = "달래마켓과 함께 성장하세요";
-    
-    if (activeStatusFilter === 'active') {
-        message = "지금 바로 시작하세요";
-    } else if (activeStatusFilter === 'paused') {
-        message = "다음 시즌을 누구보다 빨리 준비해야죠";
-    } else if (activeStatusFilter === 'preparing') {
-        message = "지금 바로 준비하세요";
-    } else if (activeStatusFilter === 'ending') {
-        message = "첫술에 배 부른 법은 절대 없죠. 성과는 어땠나요?";
-    } else if (activeStatusFilter === 'stopped') {
-        message = "다시 준비하겠습니다";
-    }
-    
-    // 타이핑 애니메이션 적용
-    const messageElement = document.getElementById('filterStatsMessage');
-    if (messageElement) {
-        messageElement.innerHTML = `<span class="typing-animation">${message}</span>`;
-    }
-}
-        
-        // 통계 업데이트
-        function updateStats() {
-            const stats = calculateStats();
-            
-            document.getElementById('statsCards').innerHTML = `
-                <div class="stat-card" data-stat-type="all">
-                    <div class="stat-icon">📦</div>
-                    <div class="stat-value">${stats.total.products}</div>
-                    <div class="stat-label">전체 상품</div>
-                    <div class="stat-sub">${stats.total.options} 옵션</div>
-                </div>
-                <div class="stat-card" data-stat-type="active">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-value">${stats.active.products}</div>
-                    <div class="stat-label">공급중</div>
-                    <div class="stat-sub">${stats.active.options} 옵션</div>
-                </div>
-                <div class="stat-card" data-stat-type="paused">
-                    <div class="stat-icon">⏸️</div>
-                    <div class="stat-value">${stats.paused.products}</div>
-                    <div class="stat-label">시즌종료</div>
-                    <div class="stat-sub">${stats.paused.options} 옵션</div>
-                </div>
-                <div class="stat-card" data-stat-type="preparing">
-                    <div class="stat-icon">🚀</div>
-                    <div class="stat-value">${stats.preparing.products}</div>
-                    <div class="stat-label">출하준비중</div>
-                    <div class="stat-sub">${stats.preparing.options} 옵션</div>
-                </div>
-                <div class="stat-card" data-stat-type="ending">
-                    <div class="stat-icon">⚠️</div>
-                    <div class="stat-value">${stats.ending.products}</div>
-                    <div class="stat-label">종료임박</div>
-                    <div class="stat-sub">${stats.ending.options} 옵션</div>
-                </div>
-                <div class="stat-card" data-stat-type="stopped">
-                    <div class="stat-icon">🛑</div>
-                    <div class="stat-value">${stats.stopped.products}</div>
-                    <div class="stat-label">공급중지</div>
-                    <div class="stat-sub">${stats.stopped.options} 옵션</div>
-                </div>
-            `;
-            
-            document.querySelectorAll('.stat-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    handleStatCardClick(this.dataset.statType);
-                });
-            });
-            
-            updateStatCardActive();
-        }
-        
-        // 통계 카드 클릭 처리
-        function handleStatCardClick(statType) {
-            activeStatusFilter = statType;
-            
-            document.querySelectorAll('.tag-filter[data-category="status"]').forEach(tag => {
-                tag.classList.remove('active');
-                if (tag.dataset.filter === statType) {
-                    tag.classList.add('active');
-                }
-            });
-            
-            applyFilters();
-        }
-        
-        // 필터 클릭 처리
-        function handleFilterClick(element) {
-            const category = element.dataset.category;
-            const filter = element.dataset.filter;
-            
-            document.querySelectorAll(`.tag-filter[data-category="${category}"]`).forEach(t => {
-                t.classList.remove('active');
-            });
-            
-            element.classList.add('active');
-            
-            if (category === 'type') {
-                activeTypeFilter = filter;
-            } else if (category === 'status') {
-                activeStatusFilter = filter;
-            } else if (category === 'product') {
-                activeProductFilter = filter;
-            }
-            
-            applyFilters();
-        }
-        
-        // 통계 카드 활성화 상태 업데이트
-        function updateStatCardActive() {
-            document.querySelectorAll('.stat-card').forEach(card => {
-                card.classList.remove('active');
-                if (card.dataset.statType === activeStatusFilter) {
-                    card.classList.add('active');
-                }
-            });
-        }
-        
-        // 통계 계산
-        function calculateStats() {
-            const stats = {
-                total: { products: 0, options: 0 },
-                active: { products: 0, options: 0 },
-                paused: { products: 0, options: 0 },
-                preparing: { products: 0, options: 0 },
-                ending: { products: 0, options: 0 },
-                stopped: { products: 0, options: 0 },
-                uniqueProducts: new Set()
-            };
-            
-            const productSets = {
-                total: new Set(),
-                active: new Set(),
-                paused: new Set(),
-                preparing: new Set(),
-                ending: new Set(),
-                stopped: new Set()
-            };
-            
-            const today = new Date();
-            const twentyDays = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-            const sevenDays = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-            
-            allProducts.forEach(p => {
-                const variety = p.품종 || p.품목 || '';
-                if (!variety) return;
-                
-                productSets.total.add(variety);
-                stats.total.options++;
-                
-                if (p.공급상태 === '공급중') {
-                    productSets.active.add(variety);
-                    stats.active.options++;
-                }
-                
-                if (p.공급상태 === '시즌종료') {
-                    productSets.paused.add(variety);
-                    stats.paused.options++;
-                }
-                
-                if (p.공급상태 === '공급중지') {
-                    productSets.stopped.add(variety);
-                    stats.stopped.options++;
-                }
-                
-if (p.시작일) {
-    const start = parseDate(p.시작일);  // new Date를 parseDate로 변경
-                    if (start > today && start <= twentyDays) {
-                        productSets.preparing.add(variety);
-                        stats.preparing.options++;
-                    }
-                }
-                
-if (p.종료일) {
-    const end = parseDate(p.종료일);
-    if (end) {
-        const daysUntilEnd = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
-        if (daysUntilEnd >= 0 && daysUntilEnd <= 7) {
-            productSets.ending.add(variety);
-            stats.ending.options++;
-        }
-    }
-}
-            });
-            
-            filteredProducts.forEach(p => {
-                const variety = p.품종 || p.품목 || '';
-                if (variety) stats.uniqueProducts.add(variety);
-            });
-            
-            Object.keys(productSets).forEach(key => {
-                stats[key].products = productSets[key].size;
-            });
-            
-            return stats;
-        }
-        
-        // 상품 카드 렌더링 (개선)
-        function renderProductCards() {
-            const grid = document.getElementById('productsGrid');
-            const groups = {};
-            
-            filteredProducts.forEach(p => {
-                const key = p.품종 || p.품목 || '기타';
-                if (!groups[key]) groups[key] = [];
-                groups[key].push(p);
-            });
-            
-            const sortedGroups = Object.entries(groups).sort((a, b) => {
-                const getStatusPriority = (products) => {
-                    const first = products[0];
-                    const today = new Date();
-                    const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-                    
-                    if (first.공급상태 === '공급중') return 1;
-                    
-                    if (first.시작일) {
-    const start = parseDate(first.시작일);  // new Date를 parseDate로 변경
-                        if (start > today && start <= twenty) return 2;
-                    }
-                    
-                    if (first.공급상태 === '시즌종료') return 3;
-                    if (first.공급상태 === '공급중지') return 4;
-                    
-                    return 5;
-                };
-                
-                const priorityA = getStatusPriority(a[1]);
-                const priorityB = getStatusPriority(b[1]);
-                
-                if (priorityA === priorityB) {
-                    return a[0].localeCompare(b[0], 'ko');
-                }
-                
-                return priorityA - priorityB;
-            });
-            
-            let html = '';
-            let currentStatus = '';
-            
-            sortedGroups.forEach(([variety, products]) => {
-                const first = products[0];
-                const today = new Date();
-                const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-                
-                let groupStatus = '';
-                let statusClass = '';
-                if (first.공급상태 === '공급중') {
-                    groupStatus = '공급중';
-                    statusClass = 'status-active';
-                } else if (first.시작일) {
-    const start = parseDate(first.시작일);  // new Date를 parseDate로 변경
-                    if (start > today && start <= twenty) {
-                        groupStatus = '출하준비중';
-                        statusClass = 'status-preparing';
-                    }
-                }
-                if (!groupStatus && first.공급상태 === '시즌종료') {
-                    groupStatus = '시즌종료';
-                    statusClass = 'status-paused';
-                } else if (!groupStatus && first.공급상태 === '공급중지') {
-                    groupStatus = '공급중지';
-                    statusClass = 'status-stopped';
-                } else if (!groupStatus) {
-                    groupStatus = '기타';
-                    statusClass = '';
-                }
-                
-                if (currentStatus !== groupStatus) {
-                    if (currentStatus !== '') {
-                        html += '<div class="group-divider"></div>';
-                    }
-                    html += `
-                        <div class="group-title-wrapper">
-                            <div class="group-title ${statusClass}">
-                                ${groupStatus}
-                            </div>
-                        </div>
-                    `;
-                    currentStatus = groupStatus;
-                }
-                
-                html += createProductCard(variety, products);
-            });
-            
-            grid.innerHTML = html || 
-                '<div style="grid-column:1/-1;text-align:center;color:#999;padding:30px;">표시할 상품이 없습니다</div>';
-        }
-        
-        // 상품 카드 생성
-        function createProductCard(variety, products) {
-            const first = products[0];
-            const today = new Date();
-            const isMobile = window.innerWidth <= 768;
-            
-            let minDate = new Date('2099-12-31');
-            let maxDate = new Date('1900-01-01');
-            
-            products.forEach(p => {
-    if (p.시작일) {
-        const d = parseDate(p.시작일);
-        if (d && d < minDate) minDate = d;
-    }
-    if (p.종료일) {
-        const d = parseDate(p.종료일);
-        if (d && d > maxDate) maxDate = d;
-    }
-});  // 여기서 forEach 끝
+    function displayChart(data, optionName){
+      if(!data || !data.length){ showNoChartData(); return; }
+      data.sort((a,b)=> new Date(a.날짜) - new Date(b.날짜));
+      const prices=data.map(d=> Number(String(d.셀러공급가).replace(/,/g,'')) );
+      const cur=prices.at(-1), max=Math.max(...prices), min=Math.min(...prices), avg=Math.round(prices.reduce((a,b)=>a+b,0)/prices.length);
+      const first=new Date(data[0].날짜).toLocaleDateString('ko-KR'), last=new Date(data.at(-1).날짜).toLocaleDateString('ko-KR');
+      const isMobile=window.innerWidth<=768;
+      const html = `
+        <div style="text-align:center;margin-bottom:${isMobile?'10px':'16px'};color:#6b7280;font-size:${isMobile?'10px':'13px'};">${first} ~ ${last}</div>
+        <div class="chart-container"><canvas id="priceChartCanvas"></canvas></div>
+        <div class="chart-stats">
+          <div class="chart-stat-box"><div class="chart-stat-label">현재 가격</div><div class="chart-stat-value current">${cur.toLocaleString()}원</div></div>
+          <div class="chart-stat-box"><div class="chart-stat-label">최고 가격</div><div class="chart-stat-value increase">${max.toLocaleString()}원</div></div>
+          <div class="chart-stat-box"><div class="chart-stat-label">최저 가격</div><div class="chart-stat-value decrease">${min.toLocaleString()}원</div></div>
+          <div class="chart-stat-box"><div class="chart-stat-label">평균 가격</div><div class="chart-stat-value">${avg.toLocaleString()}원</div></div>
+        </div>`;
+      document.getElementById('chartModalBody').innerHTML = html;
 
-let seasonIcon = '⚫';
-let seasonText = '시즌종료';
-
-const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-const seven = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-
-// maxDate가 유효한 날짜인지 먼저 확인
-if (maxDate && maxDate.getFullYear() !== 1900) {
-    const daysUntilEnd = Math.ceil((maxDate - today) / (1000 * 60 * 60 * 24));
-    
-    if (daysUntilEnd >= 0 && daysUntilEnd <= 7) {
-        seasonIcon = '🟡';
-        seasonText = '종료임박';
-    } else if (today >= minDate && today <= maxDate) {
-        seasonIcon = '🟢';
-        seasonText = '시즌중';
-    } else if (minDate > today && minDate <= twenty) {
-        seasonIcon = '🟡';
-        seasonText = '출하준비';
+      const ctx=document.getElementById('priceChartCanvas').getContext('2d'); if(priceChart) priceChart.destroy();
+      priceChart = new Chart(ctx, { type:'line', data:{ labels: data.map(d=>{ const dt=new Date(d.날짜); return `${dt.getMonth()+1}/${dt.getDate()}`; }), datasets:[{ label:'공급가', data:prices, borderColor:'rgb(102,126,234)', backgroundColor:'rgba(102,126,234,.12)', tension:.1, borderWidth:isMobile?1.5:2, pointRadius:isMobile?2:4, pointBackgroundColor:'rgb(102,126,234)', pointBorderColor:'#fff', pointBorderWidth:isMobile?1:2, pointHoverRadius:isMobile?3:6, fill:true }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(c)=> '공급가: '+ c.parsed.y.toLocaleString() +'원' }, titleFont:{ size:isMobile?10:12 }, bodyFont:{ size:isMobile?10:12 }, padding:isMobile?4:8 } }, scales:{ x:{ ticks:{ font:{ size:isMobile?9:12 }, maxRotation:isMobile?45:0, autoSkip:true, maxTicksLimit:isMobile?6:12 }, grid:{ display:!isMobile } }, y:{ beginAtZero:true, max: Math.ceil(max*1.2), ticks:{ callback:(v)=> v.toLocaleString()+'원', font:{ size:isMobile?9:12 }, maxTicksLimit:isMobile?5:8 }, grid:{ display:!isMobile } } }, layout:{ padding:{ left:isMobile?2:10, right:isMobile?2:10, top:isMobile?2:10, bottom:isMobile?2:10 } } } });
     }
-}
-            
-            const hasDetail = products.some(p => p.상세페이지제공 && p.상세페이지제공.trim() !== '');
-            const hasImage = products.some(p => p.이미지제공 && p.이미지제공.trim() !== '');
-            
-            const name = first.품목 && first.품목 !== variety ? 
-                `${first.품목}(${variety})` : variety;
-            
-            const formatDate = (d) => {
-                return `${String(d.getMonth()+1).padStart(2,'0')}월 ${String(d.getDate()).padStart(2,'0')}일`;
-            };
-            
-            let statusClass = '';
-let badgeClass = '';
-if (first.공급상태 === '공급중') {
-    statusClass = 'status-active';
-    badgeClass = 'status-active';
-} else if (first.공급상태 === '시즌종료') {
-    badgeClass = 'status-paused';
-} else if (first.공급상태 === '공급중지') {
-    badgeClass = 'status-stopped';
-} else if (first.공급상태 === '준비중') {
-    badgeClass = 'status-preparing';
-}
 
-// 종료임박 체크 추가
-if (maxDate && maxDate.getFullYear() !== 1900) {
-    const daysUntilEnd = Math.ceil((maxDate - today) / (1000 * 60 * 60 * 24));
-    if (daysUntilEnd >= 0 && daysUntilEnd <= 7) {
-        statusClass = 'status-ending';  // 종료임박 클래스 적용
+    function showNoChartData(){ document.getElementById('chartModalBody').innerHTML = `<div class="no-data-message"><div class="no-data-icon"></div><div class="no-data-title">가격 변동 데이터가 없습니다</div><div class="no-data-text">이 옵션의 가격 이력이 아직 기록되지 않았습니다.</div></div>`; }
+
+    function closeChartModal(){ document.getElementById('chartModal').classList.remove('show'); if(priceChart){ priceChart.destroy(); priceChart=null; } }
+
+    function applyFilters(){
+      filteredProducts=[...allProducts];
+      if(activeTypeFilter!=='all'){
+        const map={ agricultural:'농산물', seafood:'수산물', livestock:'축산물', imported:'농산물(수입)' };
+        filteredProducts = filteredProducts.filter(p=> p.대분류 === map[activeTypeFilter]);
+      }
+      if(activeStatusFilter!=='all'){
+        const today=new Date(), twenty=new Date(today.getTime()+20*24*60*60*1000);
+        switch(activeStatusFilter){
+          case 'active': filteredProducts=filteredProducts.filter(p=>p.공급상태==='공급중'); break;
+          case 'paused': filteredProducts=filteredProducts.filter(p=>p.공급상태==='시즌종료'); break;
+          case 'stopped': filteredProducts=filteredProducts.filter(p=>p.공급상태==='공급중지'); break;
+          case 'preparing': filteredProducts=filteredProducts.filter(p=> p.시작일 && (d=> d>today && d<=twenty)(parseDate(p.시작일))); break;
+          case 'ending': filteredProducts=filteredProducts.filter(p=>{ if(!p.종료일) return false; const end=parseDate(p.종료일); if(!end) return false; const days=Math.ceil((end-today)/(1000*60*60*24)); return days>=0 && days<=7; }); break;
+        }
+      }
+      if(activeProductFilter!=='all') filteredProducts = filteredProducts.filter(p=> (p.품목||'')===activeProductFilter);
+      updateDashboard();
     }
-}
-            
-            // 모바일용 HTML 구조
-            if (isMobile) {
-                return `
-                    <div class="product-card ${statusClass}" onclick="showModal('${variety}')">
-                        <div class="product-content">
-                            <div class="product-row1">
-                                <span class="product-title">${name}</span>
-                                <div class="product-status-options">
-                                    <span class="status-badge ${badgeClass}">${first.공급상태 || '미정'}</span>
-                                    <span style="color:#7a7c80;font-size:11px;">옵션 ${products.length}개</span>
-                                </div>
-                            </div>
-                            <div class="product-row2">
-                                📅 ${formatDate(minDate)} ~ ${formatDate(maxDate)}
-                            </div>
-                            <div class="product-divider"></div>
-                            <div class="product-footer">
-                                <div class="footer-left">
-                                    <span class="season-icon">${seasonIcon}</span>
-                                    <span class="season-text">${seasonText}</span>
-                                    <span class="badge-free">무료배송</span>
-                                    ${hasDetail ? '<span class="badge-detail">상세페이지</span>' : ''}
-                                    ${hasImage ? '<span class="badge-image">이미지</span>' : ''}
-                                </div>
-                            </div>
-                        </div>
-                        ${first.썸네일 ? 
-                            `<img src="${first.썸네일}" class="product-thumbnail" alt="${name}">` :
-                            `<div class="product-thumbnail"></div>`
-                        }
-                    </div>
-                `;
-            }
-            
-            // 데스크탑용 HTML (기존)
-            return `
-                <div class="product-card ${statusClass}" onclick="showModal('${variety}')">
-                    ${first.썸네일 ? 
-                        `<img src="${first.썸네일}" class="product-thumbnail" alt="${name}">` :
-                        `<div class="product-thumbnail"></div>`
-                    }
-                    <div class="product-content">
-                        <div class="product-row1">
-                            <span class="product-title">${name}</span>
-                            <span class="status-badge ${badgeClass}">${first.공급상태 || '미정'}</span>
-                            <span style="color:#7a7c80;font-size:14px;">옵션 ${products.length}개</span>
-                        </div>
-                        <div class="product-row2">
-                            📅 ${formatDate(minDate)} ~ ${formatDate(maxDate)}
-                        </div>
-                        <div class="product-divider"></div>
-                        <div class="product-footer">
-                            <div class="footer-left">
-                                <span class="season-icon">${seasonIcon}</span>
-                                <span class="season-text">${seasonText}</span>
-                                <span class="badge-free">무료배송</span>
-                                ${hasDetail ? '<span class="badge-detail">상세페이지</span>' : ''}
-                                ${hasImage ? '<span class="badge-image">이미지</span>' : ''}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-        
-        // 모든 옵션의 가격 데이터 선로딩
-        function preloadAllPriceData(optionCodes) {
-            if (isPreloading || !optionCodes || optionCodes.length === 0) return;
-            
-            // 캐시에 없는 것만 필터링
-            const uncachedCodes = optionCodes.filter(code => !priceDataCache[code]);
-            
-            if (uncachedCodes.length === 0) return;
-            
-            isPreloading = true;
-            console.log('백그라운드 선로딩 시작:', uncachedCodes.length + '개 옵션');
-            
-            /* 일단 선로딩 기능 비활성화
-            if (typeof google !== 'undefined' && google.script && google.script.run) {
-            google.script.run
-                .withSuccessHandler(function(data) {
-            // 캐시에 저장
-            Object.keys(data).forEach(code => {
-                if (data[code] && data[code].length > 0) {
-                    priceDataCache[code] = data[code];
-                }
-            });
-            isPreloading = false;
-            console.log('선로딩 완료, 캐시 크기:', Object.keys(priceDataCache).length);
-        })
-        .withFailureHandler(function(error) {
-            console.error('선로딩 실패:', error);
-            isPreloading = false;
-        })
-        .getAllPriceHistory(uncachedCodes);
-        }
-            */
-        }
-        
-        // 모달 표시
-        function showModal(variety) {
-            const modal = document.getElementById('optionsModal');
-            const products = allProducts.filter(p => (p.품종 || p.품목) === variety);
-            
-            document.getElementById('modalTitle').textContent = `${variety} (${products.length}개)`;
-            
-            // 백그라운드에서 가격 데이터 선로딩
-            const optionCodes = products.map(p => p.옵션코드).filter(code => code);
-            preloadAllPriceData(optionCodes);
-            
-            let html = '';
-            const isMobile = window.innerWidth <= 768;
-            
-            products.forEach(p => {
-                const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
-                
-                let statusClass = 'status-active';
-                if (p.공급상태 === '시즌종료') statusClass = 'status-paused';
-                if (p.공급상태 === '공급중지') statusClass = 'status-stopped';
-                if (p.공급상태 === '준비중') statusClass = 'status-preparing';
-                
-                let specs = '';
-                if (p.규격1) specs += p.규격1;
-                if (p.규격2) specs += (specs ? ' ' : '') + p.규격2;
-                if (p.규격3) specs += (specs ? ' ' : '') + p.규격3;
-                
-                if (isMobile) {
-                    // 모바일 레이아웃
-                    html += `
-                        <div class="option-card">
-                            ${p.썸네일 ? 
-                                `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` :
-                                `<div class="option-thumb"></div>`
-                            }
-                            <div class="option-info">
-                                <div class="option-info-row1">
-                                    <div style="flex: 1;">
-                                        <strong style="color: #667eea;">${p.옵션명 || '옵션명 없음'}</strong>
-                                    </div>
-                                </div>
-                                <div class="option-info-row2">
-                                    ${p.발송지주소 ? `발송지: ${p.발송지주소}` : ''}
-                                </div>
-                                <div class="option-price-row">
-                                    <span class="option-price">${price}원</span>
-                                    <span class="status-badge ${statusClass}" style="font-size:10px;">
-                                        ${p.공급상태 || '미정'}
-                                    </span>
-                                </div>
-                                <div class="option-badges">
-                                    <span class="badge-free">무료배송</span>
-                                    <button class="badge-chart" 
-                                            onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
-                                        📊 가격차트
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    // 데스크탑 레이아웃
-                    html += `
-                        <div class="option-card">
-                            ${p.썸네일 ? 
-                                `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` :
-                                `<div class="option-thumb"></div>`
-                            }
-                            <div class="option-info">
-                                <span class="option-col" style="width: 60px; color: #666; font-size: 13px; font-weight: 600;">옵션명</span>
-                                <span class="option-col" style="width: 200px; color: #667eea; font-size: 14px; font-weight: 500;">${p.옵션명 || '옵션명 없음'}</span>
-                                <span class="option-col" style="width: 150px; color: #7a7c80; font-size: 13px;">${specs}</span>
-                                <span class="option-col" style="width: 50px; color: #666; font-size: 12px;">${p.발송지주소 ? '발송지' : ''}</span>
-                                <span class="option-col" style="width: 120px; color: #999; font-size: 12px;">${p.발송지주소 || ''}</span>
-                                <span class="option-col" style="flex: 1; text-align: right;">
-                                    <span style="color: #667eea; font-size: 16px; font-weight: 600; margin-right: 15px;">${price}원</span>
-                                    <span class="status-badge ${statusClass}" style="font-size:11px;">
-                                        ${p.공급상태 || '미정'}
-                                    </span>
-                                    <span class="badge-free" style="margin-left: 8px;">무료배송</span>
-                                    <button class="badge-chart" style="margin-left: 8px;" 
-                                            onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
-                                        📊 가격차트
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            
-            document.getElementById('modalBody').innerHTML = html;
-            modal.classList.add('show');
-        }
-        
-        // 모달 닫기
-        function closeModal() {
-            document.getElementById('optionsModal').classList.remove('show');
-        }
-        
-        // 가격 차트 열기
-        function openPriceChart(optionCode, optionName) {
-            console.log('차트 열기:', optionCode, optionName);
-            
-            // 옵션 모달 닫기
-            closeModal();
-            
-            // 차트 모달 열기
-            const chartModal = document.getElementById('chartModal');
-            document.getElementById('chartModalTitle').textContent = optionName;
-            
-            // 차트 컨텐츠 초기화
-            document.getElementById('chartModalBody').innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <div style="color: #999;">📊 데이터를 불러오는 중...</div>
-                </div>
-            `;
-            
-            chartModal.classList.add('show');
-            
-            // 캐시 확인
-            if (priceDataCache[optionCode]) {
-                console.log('캐시 적중:', optionCode);
-                setTimeout(() => displayChart(priceDataCache[optionCode], optionName), 100);
-            } else {
-                // 캐시 미스 - 개별 로드
-                console.log('캐시 미스, 개별 로드:', optionCode);
-                
-                fetch(`/api/price-history?optionCode=${optionCode}`)
-            .then(response => response.json())
-            .then(function(data) {
-                console.log('개별 로드 완료:', data);
-                if (data && data.length > 0) {
-                    priceDataCache[optionCode] = data;
-        }
-        displayChart(data, optionName);
-    })
-    .catch(function(error) {
-        console.error('차트 데이터 로드 실패:', error);
-        showNoChartData();
-    });
-            }
-        }
-        
-        // 차트 표시
-        function displayChart(data, optionName) {
-            if (!data || data.length === 0) {
-                showNoChartData();
-                return;
-            }
-            
-            // 날짜순 정렬
-            data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
-            
-            // 통계 계산
-            const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
-            const currentPrice = prices[prices.length - 1];
-            const maxPrice = Math.max(...prices);
-            const minPrice = Math.min(...prices);
-            const avgPrice = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
-            
-            // 날짜 포맷
-            const firstDate = new Date(data[0].날짜).toLocaleDateString('ko-KR');
-            const lastDate = new Date(data[data.length - 1].날짜).toLocaleDateString('ko-KR');
-            
-            // 모바일 여부 확인
-            const isMobile = window.innerWidth <= 768;
-            
-            // HTML 생성
-            const html = `
-                <div style="text-align: center; margin-bottom: ${isMobile ? '12px' : '20px'};">
-                    <div style="font-size: ${isMobile ? '10px' : '14px'}; color: #7a7c80;">${firstDate} ~ ${lastDate}</div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="priceChartCanvas"></canvas>
-                </div>
-                <div class="chart-stats">
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">현재 가격</div>
-                        <div class="chart-stat-value current">${currentPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">최고 가격</div>
-                        <div class="chart-stat-value increase">${maxPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">최저 가격</div>
-                        <div class="chart-stat-value decrease">${minPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">평균 가격</div>
-                        <div class="chart-stat-value">${avgPrice.toLocaleString()}원</div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('chartModalBody').innerHTML = html;
-            
-            // 차트 그리기
-            const ctx = document.getElementById('priceChartCanvas').getContext('2d');
-            
-            if (priceChart) {
-                priceChart.destroy();
-            }
-            
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map(d => {
-                        const date = new Date(d.날짜);
-                        return `${date.getMonth() + 1}/${date.getDate()}`;
-                    }),
-                    datasets: [{
-                        label: '공급가',
-                        data: prices,
-                        borderColor: 'rgb(102, 126, 234)',
-                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                        tension: 0.1,
-                        borderWidth: isMobile ? 1 : 2,
-                        pointRadius: isMobile ? 2 : 4,
-                        pointBackgroundColor: 'rgb(102, 126, 234)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: isMobile ? 1 : 2,
-                        pointHoverRadius: isMobile ? 3 : 6,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return '공급가: ' + context.parsed.y.toLocaleString() + '원';
-                                }
-                            },
-                            titleFont: {
-                                size: isMobile ? 10 : 12
-                            },
-                            bodyFont: {
-                                size: isMobile ? 10 : 12
-                            },
-                            padding: isMobile ? 4 : 8
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                font: {
-                                    size: isMobile ? 8 : 12
-                                },
-                                maxRotation: isMobile ? 45 : 0,
-                                autoSkip: true,
-                                maxTicksLimit: isMobile ? 6 : 12
-                            },
-                            grid: {
-                                display: !isMobile
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            max: Math.ceil(maxPrice * 1.2),
-                            ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString() + '원';
-                                },
-                                font: {
-                                    size: isMobile ? 8 : 12
-                                },
-                                maxTicksLimit: isMobile ? 5 : 8
-                            },
-                            grid: {
-                                display: !isMobile
-                            }
-                        }
-                    },
-                    layout: {
-                        padding: {
-                            left: isMobile ? 2 : 10,
-                            right: isMobile ? 2 : 10,
-                            top: isMobile ? 2 : 10,
-                            bottom: isMobile ? 2 : 10
-                        }
-                    }
-                }
-            });
-        }
-        
-        // 차트 데이터 없음 표시
-        function showNoChartData() {
-            document.getElementById('chartModalBody').innerHTML = `
-                <div class="no-data-message">
-                    <div class="no-data-icon">📉</div>
-                    <div class="no-data-title">가격 변동 데이터가 없습니다</div>
-                    <div class="no-data-text">이 옵션의 가격 이력이 아직 기록되지 않았습니다.</div>
-                </div>
-            `;
-        }
-        
-        // 차트 모달 닫기
-        function closeChartModal() {
-            document.getElementById('chartModal').classList.remove('show');
-            if (priceChart) {
-                priceChart.destroy();
-                priceChart = null;
-            }
-        }
-        
-        // 필터 적용 - 품목 필터로 변경
-        function applyFilters() {
-            filteredProducts = [...allProducts];
-            
-            // 대분류 필터
-            if (activeTypeFilter !== 'all') {
-                const typeMap = {
-                    'agricultural': '농산물',
-                    'seafood': '수산물', 
-                    'livestock': '축산물',
-                    'imported': '농산물(수입)'
-                };
-                filteredProducts = filteredProducts.filter(p => 
-                    p.대분류 === typeMap[activeTypeFilter]
-                );
-            }
-            
-            // 상태 필터
-            if (activeStatusFilter !== 'all') {
-                const today = new Date();
-                const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
-                const seven = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
-                
-                switch(activeStatusFilter) {
-                    case 'active':
-                        filteredProducts = filteredProducts.filter(p => p.공급상태 === '공급중');
-                        break;
-                    case 'paused':
-                        filteredProducts = filteredProducts.filter(p => p.공급상태 === '시즌종료');
-                        break;
-                    case 'stopped':
-                        filteredProducts = filteredProducts.filter(p => p.공급상태 === '공급중지');
-                        break;
-case 'preparing':
-    filteredProducts = filteredProducts.filter(p => {
-        if (!p.시작일) return false;
-        const start = parseDate(p.시작일);  // new Date를 parseDate로 변경
-        return start && start > today && start <= twenty;
-    });
-    break;
-                   case 'ending':
-    filteredProducts = filteredProducts.filter(p => {
-        if (!p.종료일) return false;
-        const end = parseDate(p.종료일);
-        if (!end) return false;
-        const daysUntilEnd = Math.ceil((end - today) / (1000 * 60 * 60 * 24));
-        return daysUntilEnd >= 0 && daysUntilEnd <= 7;
-    });
-    break;
-                }
-            }
-            
-            // 품목 필터 (품종 제외)
-            if (activeProductFilter !== 'all') {
-                filteredProducts = filteredProducts.filter(p => {
-                    const item = p.품목 || '';
-                    return item === activeProductFilter;
-                });
-            }
-            
-            updateDashboard();
-        }
-        
-        // 이벤트 리스너 설정
-        function setupEventListeners() {
-            // 필터 클릭 이벤트
-            document.querySelectorAll('.tag-filter').forEach(tag => {
-                tag.addEventListener('click', function() {
-                    handleFilterClick(this);
-                });
-            });
-            
-            // 모달 외부 클릭 시 닫기
-            document.getElementById('optionsModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
-            
-            document.getElementById('chartModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeChartModal();
-                }
-            });
-            
-            // ESC 키로 모달 닫기
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (document.getElementById('chartModal').classList.contains('show')) {
-                        closeChartModal();
-                    } else if (document.getElementById('optionsModal').classList.contains('show')) {
-                        closeModal();
-                    }
-                }
-            });
-        }
-    </script>
-    <script src="header.js"></script>
+
+    function setupEventListeners(){
+      document.querySelectorAll('.tag-filter').forEach(tag=> tag.addEventListener('click', function(){ handleFilterClick(this); }));
+      document.getElementById('optionsModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeModal(); });
+      document.getElementById('chartModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeChartModal(); });
+      document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ if(document.getElementById('chartModal').classList.contains('show')) closeChartModal(); else if(document.getElementById('optionsModal').classList.contains('show')) closeModal(); }});
+    }
+  </script>
+  <script src="header.js"></script>
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
