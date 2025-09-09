@@ -1961,135 +1961,121 @@ farmService: {
 
     // API 데이터 파싱 (SERVICES 시트 구조)
     function parseServicePrices(data) {
-      console.log('파싱 시작:', data);
+  console.log('파싱 시작:', data);
+  
+  if (Array.isArray(data)) {
+    data.forEach(row => {
+      const itemName = row['구분'] || row[0];
       
-      // 데이터가 배열 형태로 오는 경우
-      if (Array.isArray(data)) {
-        data.forEach(row => {
-          const itemName = row['구분'] || row[0];
+      switch(itemName) {
+        case '기본요금':
+          if (row['실내촬영']) PRICE_CONFIG.locations.indoor.basePrice = parseInt(String(row['실내촬영']).replace(/,/g, ''));
+          if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.basePrice = parseInt(String(row['야외촬영']).replace(/,/g, ''));
+          if (row['요리촬영']) PRICE_CONFIG.locations.cooking.basePrice = parseInt(String(row['요리촬영']).replace(/,/g, ''));
+          if (row['드론촬영']) PRICE_CONFIG.locations.drone.basePrice = parseInt(String(row['드론촬영']).replace(/,/g, ''));
+          if (row['일반편집']) PRICE_CONFIG.editing.basic.basePrice = parseInt(String(row['일반편집']).replace(/,/g, ''));
+          if (row['풀편집']) PRICE_CONFIG.editing.full.basePrice = parseInt(String(row['풀편집']).replace(/,/g, ''));
+          if (row['방문견학동행']) PRICE_CONFIG.farmService.visit.price = parseInt(String(row['방문견학동행']).replace(/,/g, ''));
+          if (row['농가매칭']) PRICE_CONFIG.farmService.matching.price = parseInt(String(row['농가매칭']).replace(/,/g, ''));
+          if (row['풀서비스']) PRICE_CONFIG.farmService.full.price = parseInt(String(row['풀서비스']).replace(/,/g, ''));
+          break;
           
-          switch(itemName) {
-            case '기본요금':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.basePrice = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.basePrice = parseInt(String(row['야외촬영']).replace(/,/g, ''));
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.basePrice = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.basePrice = parseInt(String(row['드론촬영']).replace(/,/g, ''));
-              if (row['일반편집']) PRICE_CONFIG.editing.basic.basePrice = parseInt(String(row['일반편집']).replace(/,/g, ''));
-              if (row['풀편집']) PRICE_CONFIG.editing.full.basePrice = parseInt(String(row['풀편집']).replace(/,/g, ''));
-              break;
-              
-            case '기본제공 사진(매)':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.basePhoto = parseInt(row['실내촬영']);
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.basePhoto = parseInt(row['야외촬영']);
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.basePhoto = parseInt(row['요리촬영']);
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.basePhoto = parseInt(row['드론촬영']);
-              break;
-              
-            case '기본제공 영상(분)':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.baseVideo = parseInt(row['실내촬영']);
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.baseVideo = parseInt(row['야외촬영']);
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.baseVideo = parseInt(row['요리촬영']);
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.baseVideo = parseInt(row['드론촬영']);
-              break;
-              
-            case '추가비용 사진(매)':
-              const photoAddCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (photoAddCost) {
-                PRICE_CONFIG.locations.indoor.photoAddCost = photoAddCost;
-                PRICE_CONFIG.locations.outdoor.photoAddCost = photoAddCost;
-                PRICE_CONFIG.locations.cooking.photoAddCost = photoAddCost;
-                PRICE_CONFIG.locations.drone.photoAddCost = photoAddCost;
-              }
-              break;
-              
-            case '추가비용 영상(분)':
-              const videoAddCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (videoAddCost) {
-                PRICE_CONFIG.locations.indoor.videoAddCost = videoAddCost;
-                PRICE_CONFIG.locations.outdoor.videoAddCost = videoAddCost;
-                PRICE_CONFIG.locations.cooking.videoAddCost = videoAddCost;
-                PRICE_CONFIG.locations.drone.videoAddCost = videoAddCost;
-              }
-              break;
-              
-            case '씬추가비용':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.sceneAddCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.sceneAddCost = parseInt(String(row['야외촬영']).replace(/,/g, ''));
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.sceneAddCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.sceneAddCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
-              break;
-              
-            case '요리메뉴당비용':
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.menuCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              break;
-              
-            case '기본로케이션비용':
-              if (row['실내촬영']) PRICE_CONFIG.baseLocationCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              break;
-              
-            case '편집영상 1분당 추가비용':
-              if (row['일반편집']) PRICE_CONFIG.editing.basic.perMinute = parseInt(String(row['일반편집']).replace(/,/g, ''));
-              if (row['풀편집']) PRICE_CONFIG.editing.full.perMinute = parseInt(String(row['풀편집']).replace(/,/g, ''));
-              break;
-              
-            case '핸드컷비용':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.handCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.handCost = parseInt(String(row['야외촬영']).replace(/,/g, ''));
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.handCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.handCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
-              break;
-              
-            case '모델컷비용':
-              if (row['실내촬영']) PRICE_CONFIG.locations.indoor.modelCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
-              if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.modelCost = parseInt(String(row['야외촬영']).replace(/,/g, ''));
-              if (row['요리촬영']) PRICE_CONFIG.locations.cooking.modelCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
-              if (row['드론촬영']) PRICE_CONFIG.locations.drone.modelCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
-              break;
-
-              case '방문견학동행':
-              if (row['방문견학동행']) {
-                PRICE_CONFIG.farmService.visit.price = parseInt(String(row['방문견학동행']).replace(/,/g, ''));
-              }
-              break;
-              
-            case '농가매칭':
-              if (row['농가매칭']) {
-                PRICE_CONFIG.farmService.matching.price = parseInt(String(row['농가매칭']).replace(/,/g, ''));
-              }
-              break;
-              
-            case '풀서비스':
-              if (row['풀서비스']) {
-                PRICE_CONFIG.farmService.full.price = parseInt(String(row['풀서비스']).replace(/,/g, ''));
-              }
-              break;
-              
-            case '제목':
-              if (row['제목']) {
-                // 아코디언 제목 처리
-                PRICE_CONFIG.farmService.accordionTitles = PRICE_CONFIG.farmService.accordionTitles || [];
-                PRICE_CONFIG.farmService.accordionTitles.push(row['제목']);
-              }
-              break;
-              
-            case '설명내용':
-              if (row['설명내용']) {
-                // 아코디언 설명 처리
-                PRICE_CONFIG.farmService.accordionContents = PRICE_CONFIG.farmService.accordionContents || [];
-                PRICE_CONFIG.farmService.accordionContents.push(row['설명내용']);
-              }
-              break;
+        case '기본제공 사진(매)':
+          if (row['실내촬영']) PRICE_CONFIG.locations.indoor.basePhoto = parseInt(row['실내촬영']);
+          if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.basePhoto = parseInt(row['야외촬영']);
+          if (row['요리촬영']) PRICE_CONFIG.locations.cooking.basePhoto = parseInt(row['요리촬영']);
+          if (row['드론촬영']) PRICE_CONFIG.locations.drone.basePhoto = parseInt(row['드론촬영']);
+          break;
+          
+        case '기본제공 영상(분)':
+          if (row['실내촬영']) PRICE_CONFIG.locations.indoor.baseVideo = parseInt(row['실내촬영']);
+          if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.baseVideo = parseInt(row['야외촬영']);
+          if (row['요리촬영']) PRICE_CONFIG.locations.cooking.baseVideo = parseInt(row['요리촬영']);
+          if (row['드론촬영']) PRICE_CONFIG.locations.drone.baseVideo = parseInt(row['드론촬영']);
+          break;
+          
+        case '추가비용 사진(매)':
+          const photoAddCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
+          if (photoAddCost) {
+            PRICE_CONFIG.locations.indoor.photoAddCost = photoAddCost;
+            PRICE_CONFIG.locations.outdoor.photoAddCost = photoAddCost;
+            PRICE_CONFIG.locations.cooking.photoAddCost = photoAddCost;
+            PRICE_CONFIG.locations.drone.photoAddCost = photoAddCost;
           }
-        });
-        
-        console.log('파싱 완료, 업데이트된 가격:', PRICE_CONFIG);
-        updateAllPrices();
-        
-        // localStorage에 백업 저장
-        localStorage.setItem('dalraeServicePrices', JSON.stringify(PRICE_CONFIG));
+          break;
+          
+        case '추가비용 영상(분)':
+          const videoAddCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
+          if (videoAddCost) {
+            PRICE_CONFIG.locations.indoor.videoAddCost = videoAddCost;
+            PRICE_CONFIG.locations.outdoor.videoAddCost = videoAddCost;
+            PRICE_CONFIG.locations.cooking.videoAddCost = videoAddCost;
+            PRICE_CONFIG.locations.drone.videoAddCost = videoAddCost;
+          }
+          break;
+          
+        case '씬추가비용':
+          if (row['실내촬영']) PRICE_CONFIG.locations.indoor.sceneAddCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
+          if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.sceneAddCost = parseInt(String(row['야외촬영']).replace(/,/g, ''));
+          if (row['요리촬영']) PRICE_CONFIG.locations.cooking.sceneAddCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
+          if (row['드론촬영']) PRICE_CONFIG.locations.drone.sceneAddCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
+          break;
+          
+        case '요리메뉴당비용':
+          if (row['요리촬영']) PRICE_CONFIG.locations.cooking.menuCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
+          break;
+          
+        case '기본로케이션비용':
+          if (row['실내촬영']) PRICE_CONFIG.baseLocationCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
+          break;
+          
+        case '편집영상 1분당 추가비용':
+          if (row['일반편집']) PRICE_CONFIG.editing.basic.perMinute = parseInt(String(row['일반편집']).replace(/,/g, ''));
+          if (row['풀편집']) PRICE_CONFIG.editing.full.perMinute = parseInt(String(row['풀편집']).replace(/,/g, ''));
+          break;
+          
+        case '핸드컷비용':
+          if (row['실내촬영']) PRICE_CONFIG.locations.indoor.handCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
+          if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.handCost = parseInt(String(row['야외촬영']).replace(/,/g, ''));
+          if (row['요리촬영']) PRICE_CONFIG.locations.cooking.handCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
+          if (row['드론촬영']) PRICE_CONFIG.locations.drone.handCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
+          break;
+          
+        case '모델컷비용':
+          if (row['실내촬영']) PRICE_CONFIG.locations.indoor.modelCost = parseInt(String(row['실내촬영']).replace(/,/g, ''));
+          if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.modelCost = parseInt(String(row['야외촬영']).replace(/,/g, ''));
+          if (row['요리촬영']) PRICE_CONFIG.locations.cooking.modelCost = parseInt(String(row['요리촬영']).replace(/,/g, ''));
+          if (row['드론촬영']) PRICE_CONFIG.locations.drone.modelCost = parseInt(String(row['드론촬영']).replace(/,/g, ''));
+          break;
+          
+        default:
+          // 농가 매칭 features 데이터 (구분이 다른 값일 때)
+          if (row['방문견학동행'] && row['방문견학동행'] !== '') {
+            PRICE_CONFIG.farmService.visit.features.push(row['방문견학동행']);
+          }
+          if (row['농가매칭'] && row['농가매칭'] !== '') {
+            PRICE_CONFIG.farmService.matching.features.push(row['농가매칭']);
+          }
+          if (row['풀서비스'] && row['풀서비스'] !== '') {
+            PRICE_CONFIG.farmService.full.features.push(row['풀서비스']);
+          }
+          break;
       }
-    }
-
+      
+      // 아코디언 데이터 (제목과 설명내용 컬럼)
+      if (row['제목'] && row['설명내용']) {
+        PRICE_CONFIG.farmService.accordion.push({
+          title: row['제목'],
+          content: row['설명내용']
+        });
+      }
+    });
+    
+    console.log('파싱 완료, 농가 서비스:', PRICE_CONFIG.farmService);
+    updateAllPrices();
+    localStorage.setItem('dalraeServicePrices', JSON.stringify(PRICE_CONFIG));
+  }
+}
     // 모든 가격 표시 업데이트
     function updateAllPrices() {
       // 기본 가격 업데이트
