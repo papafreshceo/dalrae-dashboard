@@ -276,14 +276,10 @@
         /* 타임라인 마커 스타일 */
         .timeline-marker {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 15;
-            font-size: 12px;
             font-weight: bold;
             pointer-events: none;
         }
@@ -292,9 +288,26 @@
             border: 2px solid;
             background: white;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 3px;
+            padding: 2px 4px;
+            height: 20px;
+            min-width: 20px;
+            max-width: 80px;
+            overflow: hidden;
+        }
+        
+        .timeline-marker.start .variety-text {
+            font-size: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1;
         }
 
         .timeline-marker.end {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
             color: white;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
@@ -929,7 +942,7 @@
             },
             {
                 품목: '토마토',
-                품종: '완숙토마토',
+                품종: '완숙',
                 옵션명: '완숙토마토 2kg',
                 시작일: '03-01',
                 종료일: '06-30',
@@ -1110,6 +1123,7 @@
                 if (!productMap[item]) {
                     productMap[item] = {
                         name: item,
+                        variety: p.품종 || item,  // 품종 정보 추가
                         type: getProductType(p.대분류),
                         startDate: startDate,
                         endDate: endDate,
@@ -1157,8 +1171,9 @@
                 renderMonthView();
             } else {
                 renderYearView();
+                updateLegend(); // 년 보기일 때만 여기서 호출
             }
-            updateLegend();
+            // 월 보기의 범례는 drawMonthTimelines에서 처리
         }
 
         // 월 보기 렌더링
@@ -1217,17 +1232,39 @@
             const cellCenterY = options.cellHeight / 2;
             const cellCenterX = options.cellWidth / 2;
             
-            // 시작 마커
+            // 시작 마커 - 사각형에 품종명 표시
             if (options.isStart || options.isSingle) {
                 const startMarker = document.createElement('div');
                 startMarker.className = 'timeline-marker start';
-                startMarker.style.left = `${options.left + cellCenterX - 10}px`;
+                
+                // 품종명 텍스트 추가
+                const varietyText = document.createElement('span');
+                varietyText.className = 'variety-text';
+                varietyText.textContent = options.product.variety || options.product.name;
+                varietyText.style.color = options.color;
+                startMarker.appendChild(varietyText);
+                
+                // 텍스트 길이에 따라 마커 크기 조정
+                const textLength = varietyText.textContent.length;
+                let fontSize = 10;
+                let markerWidth = Math.min(Math.max(textLength * 7, 20), 80);
+                
+                if (textLength > 5) {
+                    fontSize = 9;
+                } else if (textLength > 7) {
+                    fontSize = 8;
+                }
+                
+                varietyText.style.fontSize = fontSize + 'px';
+                startMarker.style.width = markerWidth + 'px';
+                startMarker.style.left = `${options.left + cellCenterX - markerWidth/2}px`;
                 startMarker.style.top = `${options.top + cellCenterY - 10}px`;
                 startMarker.style.borderColor = options.color;
+                
                 container.appendChild(startMarker);
             }
             
-            // 종료 마커
+            // 종료 마커 - 원형 유지
             if (options.isEnd || options.isSingle) {
                 const endX = options.isSingle ? 
                     options.left + options.width - cellCenterX : 
@@ -1268,14 +1305,7 @@
             bar.style.backgroundColor = options.color;
             bar.dataset.productName = options.productName;
             
-            // 텍스트 라벨
-            if (options.text && (options.isStart || options.isSingle)) {
-                const textLabel = document.createElement('div');
-                textLabel.className = 'timeline-text';
-                textLabel.textContent = options.text;
-                textLabel.style.backgroundColor = options.color;
-                bar.appendChild(textLabel);
-            }
+            // 텍스트 라벨은 더 이상 타임라인 바에 추가하지 않음
             
             // 이벤트 핸들러
             bar.onclick = (e) => {
@@ -1315,6 +1345,9 @@
                     return currentMonth >= startMonth || currentMonth <= endMonth;
                 }
             });
+            
+            // 범례 즉시 업데이트
+            updateLegend();
             
             const wrapper = document.getElementById('monthTimelineWrapper');
             if (!wrapper) return;
@@ -1387,7 +1420,6 @@
                     // 여러 줄에 걸친 경우
                     const firstWeekDays = 7 - col;
                     const isFirstSegment = hasStartInMonth;
-                    const showName = isFirstSegment || (!hasStartInMonth && displayStart === 1);
                     
                     // 첫 번째 줄
                     createTimelineBar(wrapper, {
@@ -1397,7 +1429,6 @@
                         cellWidth: cellWidth,
                         cellHeight: cellHeight,
                         color: productColors[product.name],
-                        text: showName ? product.name : '',
                         product: product,
                         productName: product.name,
                         isStart: isFirstSegment,
@@ -1414,7 +1445,6 @@
                             cellWidth: cellWidth,
                             cellHeight: cellHeight,
                             color: productColors[product.name],
-                            text: '',
                             product: product,
                             productName: product.name,
                             isStart: false,
@@ -1434,7 +1464,6 @@
                         cellWidth: cellWidth,
                         cellHeight: cellHeight,
                         color: productColors[product.name],
-                        text: '',
                         product: product,
                         productName: product.name,
                         isStart: false,
@@ -1445,7 +1474,6 @@
                     // 한 줄에 있는 경우
                     const isStartBar = (startMonth === currentMonth);
                     const isEndBar = (endMonth === currentMonth);
-                    const showName = isStartBar || (!hasStartInMonth && displayStart === 1);
                     
                     createTimelineBar(wrapper, {
                         left: col * cellWidth + 2,
@@ -1454,7 +1482,6 @@
                         cellWidth: cellWidth,
                         cellHeight: cellHeight,
                         color: productColors[product.name],
-                        text: showName ? product.name : '',
                         product: product,
                         productName: product.name,
                         isStart: isStartBar,
@@ -1676,230 +1703,4 @@
                             <span class="option-col" style="flex: 1; font-weight: 500;">${p.옵션명 || '옵션명 없음'}</span>
                             <span class="option-col" style="width: 150px; color: var(--text-secondary); font-size: 13px;">${specs}</span>
                             <span class="option-col" style="width: 150px; color: var(--text-muted); font-size: 12px;">${p.발송지주소 || ''}</span>
-                            <span class="option-col" style="text-align: right;">
-                                <span style="color: var(--primary-color); font-size: 16px; font-weight: 500; margin-right: 15px;">${price}원</span>
-                                <span class="status-badge ${statusClass}">
-                                    ${p.공급상태 || '미정'}
-                                </span>
-                                <span class="badge-free">무료배송</span>
-                                <button class="badge-chart" 
-                                        onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
-                                    차트
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            document.getElementById('modalBody').innerHTML = html;
-            modal.classList.add('show');
-        }
-
-        function closeModal() {
-            document.getElementById('optionsModal').classList.remove('show');
-        }
-
-        function openPriceChart(optionCode, optionName) {
-            console.log('차트 열기:', optionCode, optionName);
-            closeModal();
-            
-            const chartModal = document.getElementById('chartModal');
-            document.getElementById('chartModalTitle').textContent = optionName;
-            
-            document.getElementById('chartModalBody').innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <div style="color: #999;">데이터를 불러오는 중...</div>
-                </div>
-            `;
-            
-            chartModal.classList.add('show');
-            
-            if (priceDataCache[optionCode]) {
-                setTimeout(() => displayChart(priceDataCache[optionCode], optionName), 100);
-            } else {
-                fetch(`/api/price-history?optionCode=${optionCode}`)
-                .then(response => response.json())
-                .then(function(data) {
-                    if (data && data.length > 0) {
-                        priceDataCache[optionCode] = data;
-                    }
-                    displayChart(data, optionName);
-                })
-                .catch(function(error) {
-                    console.error('차트 데이터 로드 실패:', error);
-                    showNoChartData();
-                });
-            }
-        }
-
-        function displayChart(data, optionName) {
-            if (!data || data.length === 0) {
-                showNoChartData();
-                return;
-            }
-            
-            data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
-            
-            const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
-            const currentPrice = prices[prices.length - 1];
-            const maxPrice = Math.max(...prices);
-            const minPrice = Math.min(...prices);
-            const avgPrice = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
-            
-            const firstDate = new Date(data[0].날짜).toLocaleDateString('ko-KR');
-            const lastDate = new Date(data[data.length - 1].날짜).toLocaleDateString('ko-KR');
-            
-            const html = `
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <div style="font-size: 14px; color: var(--text-secondary);">${firstDate} ~ ${lastDate}</div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="priceChartCanvas"></canvas>
-                </div>
-                <div class="chart-stats">
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">현재 가격</div>
-                        <div class="chart-stat-value current">${currentPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">최고 가격</div>
-                        <div class="chart-stat-value increase">${maxPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">최저 가격</div>
-                        <div class="chart-stat-value decrease">${minPrice.toLocaleString()}원</div>
-                    </div>
-                    <div class="chart-stat-box">
-                        <div class="chart-stat-label">평균 가격</div>
-                        <div class="chart-stat-value">${avgPrice.toLocaleString()}원</div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('chartModalBody').innerHTML = html;
-            
-            const ctx = document.getElementById('priceChartCanvas').getContext('2d');
-            
-            if (priceChart) {
-                priceChart.destroy();
-            }
-            
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map(d => {
-                        const date = new Date(d.날짜);
-                        return `${date.getMonth() + 1}/${date.getDate()}`;
-                    }),
-                    datasets: [{
-                        label: '공급가',
-                        data: prices,
-                        borderColor: 'var(--primary-color)',
-                        backgroundColor: 'rgba(91, 33, 182, 0.1)',
-                        tension: 0.1,
-                        borderWidth: 2,
-                        pointRadius: 4,
-                        pointBackgroundColor: 'var(--primary-color)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointHoverRadius: 6,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return '공급가: ' + context.parsed.y.toLocaleString() + '원';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                borderDash: [3, 3]
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString() + '원';
-                                },
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function showNoChartData() {
-            document.getElementById('chartModalBody').innerHTML = `
-                <div class="no-data-message">
-                    <div class="no-data-icon">📉</div>
-                    <div class="no-data-title">가격 변동 데이터가 없습니다</div>
-                    <div class="no-data-text">이 옵션의 가격 이력이 아직 기록되지 않았습니다.</div>
-                </div>
-            `;
-        }
-
-        function closeChartModal() {
-            document.getElementById('chartModal').classList.remove('show');
-            if (priceChart) {
-                priceChart.destroy();
-                priceChart = null;
-            }
-        }
-
-        function setupEventListeners() {
-            document.getElementById('optionsModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
-            
-            document.getElementById('chartModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeChartModal();
-                }
-            });
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (document.getElementById('chartModal').classList.contains('show')) {
-                        closeChartModal();
-                    } else if (document.getElementById('optionsModal').classList.contains('show')) {
-                        closeModal();
-                    }
-                }
-            });
-        }
-
-        // 초기화
-        window.addEventListener('DOMContentLoaded', function() {
-            updatePeriodDisplay();
-            loadData();
-            setupEventListeners();
-        });
-    </script>
-</body>
-</html>
+                            <span class="option-col" style
