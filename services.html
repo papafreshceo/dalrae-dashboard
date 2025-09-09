@@ -21,7 +21,7 @@
       min-height: 100vh;
     }
 
-    /* 메인 컨테이너 - 대시보드와 동일한 너비 */
+    /* 메인 컨테이너 */
     .main-container {
       max-width: 1400px;
       margin: 0 auto;
@@ -74,7 +74,7 @@
       line-height: 1.5;
     }
 
-    /* 새로운 분할 히어로 섹션 */
+    /* 분할 히어로 섹션 */
     .split-hero-section {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -158,7 +158,7 @@
       border-top-color: #cbd5e1;
     }
 
-    /* 글리치 효과 스타일 - 천천히 */
+    /* 글리치 효과 */
     .glitch-text-slow {
       font-weight: 900;
       position: relative;
@@ -204,7 +204,7 @@
       80% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, -2px); }
     }
 
-    /* 네온사인 효과 스타일 - 보라색 버전 */
+    /* 네온 효과 */
     .neon-text-purple {
       font-weight: 700;
       color: #a855f7;
@@ -300,14 +300,13 @@
       border-bottom: 2px solid #e2e8f0;
     }
 
-    /* 로케이션 카드 (세로 배치) */
+    /* 로케이션 카드 */
     .location-list {
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
 
-    /* 로케이션 카드 */
     .location-card {
       background: white;
       border-radius: 16px;
@@ -357,12 +356,6 @@
       font-size: 18px;
       font-weight: 700;
       color: #1e293b;
-    }
-
-    .location-subtitle {
-      font-size: 12px;
-      color: #64748b;
-      font-style: italic;
     }
 
     .location-price {
@@ -453,6 +446,13 @@
       font-weight: 600;
       color: #1e293b;
       outline: none;
+      -moz-appearance: textfield;
+    }
+
+    .stepper input::-webkit-outer-spin-button,
+    .stepper input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     /* 체크박스 옵션 */
@@ -499,7 +499,7 @@
       cursor: not-allowed;
     }
 
-    /* 영상 편집 옵션 스타일 */
+    /* 편집 옵션 */
     .edit-options-grid {
       display: flex;
       flex-direction: column;
@@ -663,7 +663,7 @@
       color: #3b82f6;
     }
 
-    /* 편집 옵션 섹션 */
+    /* 편집 섹션 */
     .edit-section {
       background: white;
       border-radius: 16px;
@@ -691,7 +691,7 @@
       padding: 4px 0;
     }
 
-    /* 최종 견적 섹션 */
+    /* 최종 견적 */
     .final-quote {
       background: linear-gradient(135deg, #f8fafc, #f1f5f9);
       border-radius: 16px;
@@ -755,7 +755,7 @@
       margin-top: 6px;
     }
 
-    /* 농가 매칭 서비스 스타일 */
+    /* 농가 매칭 서비스 */
     .farm-service-card {
       background: white;
       border-radius: 16px;
@@ -857,7 +857,7 @@
       color: #3b82f6;
     }
 
-    /* API 로딩 상태 표시 */
+    /* API 상태 표시 */
     .api-status {
       position: fixed;
       bottom: 20px;
@@ -936,13 +936,13 @@
   <div id="apiStatus" class="api-status"></div>
 
   <div class="main-container">
-    <!-- 기존 히어로 섹션 - 배경 애니메이션 복원 -->
+    <!-- 히어로 섹션 -->
     <div class="hero-section">
       <h1 class="hero-title">달래마켓만의 특별한 서비스</h1>
       <p class="hero-subtitle">달래마켓은 지속적인 파트너십을 위해 언제나 최선을 다하고 있습니다</p>
     </div>
 
-    <!-- 새로운 분할 히어로 섹션 -->
+    <!-- 분할 히어로 섹션 -->
     <div class="split-hero-section">
       <div class="hero-card">
         <h2 class="hero-card-title">
@@ -1005,7 +1005,7 @@
                     <span class="quantity-label">추가 사진</span>
                     <div class="stepper">
                       <button onclick="adjustQuantity('indoor-photo', -10)">−</button>
-                      <input type="number" id="indoor-photo" value="0" min="0" readonly>
+                      <input type="number" id="indoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('indoor-photo')">
                       <button onclick="adjustQuantity('indoor-photo', 10)">+</button>
                     </div>
                     <span style="font-size: 12px; color: #94a3b8;" id="indoor-photo-cost">매 (500원/매)</span>
@@ -1014,7 +1014,7 @@
                     <span class="quantity-label">추가 영상</span>
                     <div class="stepper">
                       <button onclick="adjustQuantity('indoor-video', -1)">−</button>
-                      <input type="number" id="indoor-video" value="0" min="0" readonly>
+                      <input type="number" id="indoor-video" value="0" min="0" step="1" onchange="handleDirectInput('indoor-video')">
                       <button onclick="adjustQuantity('indoor-video', 1)">+</button>
                     </div>
                     <span style="font-size: 12px; color: #94a3b8;" id="indoor-video-cost">분 (2,000원/분)</span>
@@ -1057,7 +1057,7 @@
                     <span class="quantity-label">추가 사진</span>
                     <div class="stepper">
                       <button onclick="adjustQuantity('outdoor-photo', -10)">−</button>
-                      <input type="number" id="outdoor-photo" value="0" min="0" readonly>
+                      <input type="number" id="outdoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('outdoor-photo')">
                       <button onclick="adjustQuantity('outdoor-photo', 10)">+</button>
                     </div>
                     <span style="font-size: 12px; color: #94a3b8;" id="outdoor-photo-cost">매 (500원/매)</span>
@@ -1066,7 +1066,7 @@
                     <span class="quantity-label">추가 영상</span>
                     <div class="stepper">
                       <button onclick="adjustQuantity('outdoor-video', -1)">−</button>
-                      <input type="number" id="outdoor-video" value="0" min="0" readonly>
+                      <input type="number" id="outdoor-video" value="0" min="0" step="1" onchange="handleDirectInput('outdoor-video')">
                       <button onclick="adjustQuantity('outdoor-video', 1)">+</button>
                     </div>
                     <span style="font-size: 12px; color: #94a3b8;" id="outdoor-video-cost">분 (2,000원/분)</span>
@@ -1109,7 +1109,7 @@
                     <span class="quantity-label">추가 메뉴</span>
                     <div class="stepper">
                       <button onclick="adjustQuantity('cooking-menu', -1)">−</button>
-                      <input type="number" id="cooking-menu" value="0" min="0" readonly>
+                      <input type="number" id="cooking-menu" value="0" min="0" step="1" onchange="handleDirectInput('cooking-menu')">
                       <button onclick="adjustQuantity('cooking-menu', 1)">+</button>
                     </div>
                     <span style="font-size: 12px; color: #94a3b8;" id="cooking-menu-cost">개 (메뉴당 30,000원 추가)</span>
@@ -1121,7 +1121,7 @@
                     <span class="quantity-label">추가 사진</span>
                     <div class="stepper">
                       <button onclick="adjustQuantity('cooking-photo', -10)">−</button>
-                      <input type="number" id="cooking-photo" value="0" min="0" readonly>
+                      <input type="number" id="cooking-photo" value="0" min="0" step="10" onchange="handleDirectInput('cooking-photo')">
                       <button onclick="adjustQuantity('cooking-photo', 10)">+</button>
                     </div>
                     <span style="font-size: 12px; color: #94a3b8;" id="cooking-photo-cost">매 (500원/매)</span>
@@ -1130,7 +1130,7 @@
                     <span class="quantity-label">추가 영상</span>
                     <div class="stepper">
                       <button onclick="adjustQuantity('cooking-video', -1)">−</button>
-                      <input type="number" id="cooking-video" value="0" min="0" readonly>
+                      <input type="number" id="cooking-video" value="0" min="0" step="1" onchange="handleDirectInput('cooking-video')">
                       <button onclick="adjustQuantity('cooking-video', 1)">+</button>
                     </div>
                     <span style="font-size: 12px; color: #94a3b8;" id="cooking-video-cost">분 (2,000원/분)</span>
@@ -1173,7 +1173,7 @@
                     <span class="quantity-label">추가 사진</span>
                     <div class="stepper">
                       <button onclick="adjustQuantity('drone-photo', -10)">−</button>
-                      <input type="number" id="drone-photo" value="0" min="0" readonly>
+                      <input type="number" id="drone-photo" value="0" min="0" step="10" onchange="handleDirectInput('drone-photo')">
                       <button onclick="adjustQuantity('drone-photo', 10)">+</button>
                     </div>
                     <span style="font-size: 12px; color: #94a3b8;" id="drone-photo-cost">매 (500원/매)</span>
@@ -1182,7 +1182,7 @@
                     <span class="quantity-label">추가 영상</span>
                     <div class="stepper">
                       <button onclick="adjustQuantity('drone-video', -1)">−</button>
-                      <input type="number" id="drone-video" value="0" min="0" readonly>
+                      <input type="number" id="drone-video" value="0" min="0" step="1" onchange="handleDirectInput('drone-video')">
                       <button onclick="adjustQuantity('drone-video', 1)">+</button>
                     </div>
                     <span style="font-size: 12px; color: #94a3b8;" id="drone-video-cost">분 (2,000원/분)</span>
@@ -1243,7 +1243,7 @@
                     <span class="duration-label">1분</span>
                     <div class="duration-stepper">
                       <button onclick="adjustEditQuantity('basic-1min', -1)">−</button>
-                      <input type="number" id="edit-basic-1min" value="0" min="0" readonly>
+                      <input type="number" id="edit-basic-1min" value="0" min="0" step="1" onchange="handleDirectInput('edit-basic-1min')">
                       <button onclick="adjustEditQuantity('basic-1min', 1)">+</button>
                     </div>
                   </div>
@@ -1251,7 +1251,7 @@
                     <span class="duration-label">2분</span>
                     <div class="duration-stepper">
                       <button onclick="adjustEditQuantity('basic-2min', -1)">−</button>
-                      <input type="number" id="edit-basic-2min" value="0" min="0" readonly>
+                      <input type="number" id="edit-basic-2min" value="0" min="0" step="1" onchange="handleDirectInput('edit-basic-2min')">
                       <button onclick="adjustEditQuantity('basic-2min', 1)">+</button>
                     </div>
                   </div>
@@ -1259,7 +1259,7 @@
                     <span class="duration-label">3분</span>
                     <div class="duration-stepper">
                       <button onclick="adjustEditQuantity('basic-3min', -1)">−</button>
-                      <input type="number" id="edit-basic-3min" value="0" min="0" readonly>
+                      <input type="number" id="edit-basic-3min" value="0" min="0" step="1" onchange="handleDirectInput('edit-basic-3min')">
                       <button onclick="adjustEditQuantity('basic-3min', 1)">+</button>
                     </div>
                   </div>
@@ -1492,17 +1492,14 @@
       }
     }
 
-    // Google Apps Script API에서 가격 데이터 로드
+    // API에서 가격 데이터 로드 (Vercel 서버리스 함수 사용)
     async function loadPricesFromSheet() {
       try {
         console.log('서비스 가격 데이터 로딩 중...');
         showApiStatus('가격 데이터 로딩 중...', 'loading');
         
-        // Google Apps Script Web App URL
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwYz9IFfERm7nzrnPF-YCqCsNteOzx8llMHtZCD7w5Em4wJv_oArTi8u-j2F5VizQ2k/exec';
-        
-        // SERVICES 시트 데이터 가져오기
-        const response = await fetch(SCRIPT_URL + '?sheet=SERVICES');
+        // Vercel 서버리스 함수 호출
+        const response = await fetch('/api/services');
         
         if (response.ok) {
           const data = await response.json();
@@ -1513,14 +1510,14 @@
             parseServicePrices(data);
           } else {
             console.log('시트 응답이 비어있습니다. 기본 가격 사용');
-            showApiStatus('기본 가격 데이터 사용', 'error');
+            showApiStatus('시트 데이터 없음 - 기본 가격 사용', 'error');
           }
         } else {
-          throw new Error(`Google Sheets 응답 실패: ${response.status}`);
+          throw new Error(`API 응답 실패: ${response.status}`);
         }
       } catch (error) {
-        console.error('Google Sheets 로드 실패:', error);
-        showApiStatus('Google Sheets 연결 실패 - 기본 가격 사용', 'error');
+        console.error('API 로드 실패:', error);
+        showApiStatus('API 연결 실패 - 기본 가격 사용', 'error');
         
         // localStorage 백업 확인
         const savedPrices = localStorage.getItem('dalraeServicePrices');
@@ -1725,19 +1722,27 @@
       calculateQuote();
     }
 
-    // 수량 조절
+    // 수량 조절 (키보드 입력 지원)
     function adjustQuantity(id, delta) {
       const input = document.getElementById(id);
-      const newValue = Math.max(0, parseInt(input.value) + delta);
+      const newValue = Math.max(0, parseInt(input.value || 0) + delta);
       input.value = newValue;
       calculateQuote();
     }
 
-    // 편집 수량 조절
+    // 편집 수량 조절 (키보드 입력 지원)
     function adjustEditQuantity(type, delta) {
       const input = document.getElementById(`edit-${type}`);
-      const newValue = Math.max(0, parseInt(input.value) + delta);
+      const newValue = Math.max(0, parseInt(input.value || 0) + delta);
       input.value = newValue;
+      calculateQuote();
+    }
+
+    // 직접 입력 처리
+    function handleDirectInput(id) {
+      const input = document.getElementById(id);
+      const value = parseInt(input.value) || 0;
+      input.value = Math.max(0, value);
       calculateQuote();
     }
 
