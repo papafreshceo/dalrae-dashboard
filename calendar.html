@@ -237,6 +237,7 @@
             position: relative;
             border-right: 1px solid var(--border-light);
             border-bottom: 1px solid var(--border-light);
+            overflow: hidden; /* 추가: 넘치는 내용 숨김 */
         }
         
         .day-cell:nth-child(7n) {
@@ -1237,154 +1238,186 @@
         }
 
         // 월 타임라인 그리기
-        function drawMonthTimelines() {
-            monthProductTimelines = productTimelines.filter(product => {
-                const startMonth = product.startDate.getMonth();
-                const endMonth = product.endDate.getMonth();
-                const startYear = product.startDate.getFullYear();
-                const endYear = product.endDate.getFullYear();
-                
-                if (startYear === endYear) {
-                    return currentMonth >= startMonth && currentMonth <= endMonth;
-                } else {
-                    return currentMonth >= startMonth || currentMonth <= endMonth;
-                }
+function drawMonthTimelines() {
+    monthProductTimelines = productTimelines.filter(product => {
+        const startMonth = product.startDate.getMonth();
+        const endMonth = product.endDate.getMonth();
+        const startYear = product.startDate.getFullYear();
+        const endYear = product.endDate.getFullYear();
+        
+        if (startYear === endYear) {
+            return currentMonth >= startMonth && currentMonth <= endMonth;
+        } else {
+            return currentMonth >= startMonth || currentMonth <= endMonth;
+        }
+    });
+    
+    const wrapper = document.getElementById('monthTimelineWrapper');
+    if (!wrapper) return;
+    
+    wrapper.innerHTML = '';
+    
+    const grid = document.getElementById('daysGrid');
+    const cells = grid.querySelectorAll('.day-cell');
+    
+    // 각 행별로 타임라인 개수 추적
+    const rowTimelines = {};
+    
+    monthProductTimelines.forEach((product, productIndex) => {
+        const startMonth = product.startDate.getMonth();
+        const startDay = product.startDate.getDate();
+        const endMonth = product.endDate.getMonth();
+        const endDay = product.endDate.getDate();
+        
+        let displayStart, displayEnd;
+        const lastDayOfMonth = new Date(2025, currentMonth + 1, 0).getDate();
+        
+        const hasStartInMonth = (startMonth === currentMonth);
+        
+        if (startMonth === currentMonth) {
+            displayStart = startDay;
+        } else if (startMonth < currentMonth || (startMonth > currentMonth && startMonth > endMonth)) {
+            displayStart = 1;
+        } else {
+            return;
+        }
+        
+        if (endMonth === currentMonth) {
+            displayEnd = endDay;
+        } else if (endMonth > currentMonth || (endMonth < currentMonth && startMonth > endMonth)) {
+            displayEnd = lastDayOfMonth;
+        } else {
+            return;
+        }
+        
+        let startCellIndex = -1;
+        cells.forEach((cell, idx) => {
+            if (!cell.classList.contains('other-month') && 
+                cell.dataset.day === String(displayStart)) {
+                startCellIndex = idx;
+            }
+        });
+        
+        if (startCellIndex === -1) return;
+        
+        const startCell = cells[startCellIndex];
+        const cellWidth = startCell.offsetWidth;
+        const cellHeight = startCell.offsetHeight;
+        
+        const col = startCellIndex % 7;
+        const row = Math.floor(startCellIndex / 7);
+        
+        // 해당 행의 타임라인 인덱스 계산
+        const rowKey = `${row}`;
+        if (!rowTimelines[rowKey]) {
+            rowTimelines[rowKey] = 0;
+        }
+        const barIndex = rowTimelines[rowKey];
+        rowTimelines[rowKey]++;
+        
+        // 수정된 barOffset - 각 행 내에서만 계산
+        const barOffset = Math.min(barIndex * 18 + 30, cellHeight - 30);
+        
+        const duration = displayEnd - displayStart + 1;
+        const endCol = (col + duration - 1) % 7;
+        const endRow = row + Math.floor((col + duration - 1) / 7);
+        
+        if (endRow > row) {
+            // 여러 줄에 걸친 경우 - 각 줄별로 인덱스 관리
+            const firstWeekDays = 7 - col;
+            const isFirstSegment = hasStartInMonth;
+            const showName = isFirstSegment || (!hasStartInMonth && displayStart === 1);
+            
+            createTimelineBar(wrapper, {
+                left: col * cellWidth + 2,
+                top: row * cellHeight + barOffset,
+                width: firstWeekDays * cellWidth - 4,
+                cellWidth: cellWidth,
+                cellHeight: cellHeight,
+                color: productColors[product.name],
+                text: showName ? product.name : '',
+                product: product,
+                productName: product.name,
+                isStart: isFirstSegment,
+                isEnd: false,
+                isSingle: false
             });
             
-            const wrapper = document.getElementById('monthTimelineWrapper');
-            if (!wrapper) return;
-            
-            wrapper.innerHTML = '';
-            
-            const grid = document.getElementById('daysGrid');
-            const cells = grid.querySelectorAll('.day-cell');
-            
-            monthProductTimelines.forEach((product, productIndex) => {
-                const startMonth = product.startDate.getMonth();
-                const startDay = product.startDate.getDate();
-                const endMonth = product.endDate.getMonth();
-                const endDay = product.endDate.getDate();
-                
-                let displayStart, displayEnd;
-                const lastDayOfMonth = new Date(2025, currentMonth + 1, 0).getDate();
-                
-                const hasStartInMonth = (startMonth === currentMonth);
-                
-                if (startMonth === currentMonth) {
-                    displayStart = startDay;
-                } else if (startMonth < currentMonth || (startMonth > currentMonth && startMonth > endMonth)) {
-                    displayStart = 1;
-                } else {
-                    return;
+            // 중간 줄들
+            for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
+                const weekRowKey = `${weekRow}`;
+                if (!rowTimelines[weekRowKey]) {
+                    rowTimelines[weekRowKey] = 0;
                 }
+                const weekBarIndex = rowTimelines[weekRowKey];
+                rowTimelines[weekRowKey]++;
+                const weekBarOffset = Math.min(weekBarIndex * 18 + 30, cellHeight - 30);
                 
-                if (endMonth === currentMonth) {
-                    displayEnd = endDay;
-                } else if (endMonth > currentMonth || (endMonth < currentMonth && startMonth > endMonth)) {
-                    displayEnd = lastDayOfMonth;
-                } else {
-                    return;
-                }
-                
-                let startCellIndex = -1;
-                cells.forEach((cell, idx) => {
-                    if (!cell.classList.contains('other-month') && 
-                        cell.dataset.day === String(displayStart)) {
-                        startCellIndex = idx;
-                    }
+                createTimelineBar(wrapper, {
+                    left: 2,
+                    top: weekRow * cellHeight + weekBarOffset,
+                    width: 7 * cellWidth - 4,
+                    cellWidth: cellWidth,
+                    cellHeight: cellHeight,
+                    color: productColors[product.name],
+                    text: '',
+                    product: product,
+                    productName: product.name,
+                    isStart: false,
+                    isEnd: false,
+                    isSingle: false
                 });
-                
-                if (startCellIndex === -1) return;
-                
-                const startCell = cells[startCellIndex];
-                const cellWidth = startCell.offsetWidth;
-                const cellHeight = startCell.offsetHeight;
-                
-                const col = startCellIndex % 7;
-                const row = Math.floor(startCellIndex / 7);
-                
-                const duration = displayEnd - displayStart + 1;
-                const endCol = (col + duration - 1) % 7;
-                const endRow = row + Math.floor((col + duration - 1) / 7);
-                
-                const barOffset = (productIndex % 5) * 16 + 20;
-                
-                if (endRow > row) {
-                    const firstWeekDays = 7 - col;
-                    const isFirstSegment = hasStartInMonth;
-                    const showName = isFirstSegment || (!hasStartInMonth && displayStart === 1);
-                    
-                    createTimelineBar(wrapper, {
-                        left: col * cellWidth + 2,
-                        top: row * cellHeight + barOffset,
-                        width: firstWeekDays * cellWidth - 4,
-                        cellWidth: cellWidth,
-                        cellHeight: cellHeight,
-                        color: productColors[product.name],
-                        text: showName ? product.name : '',
-                        product: product,
-                        productName: product.name,
-                        isStart: isFirstSegment,
-                        isEnd: false,
-                        isSingle: false
-                    });
-                    
-                    for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
-                        createTimelineBar(wrapper, {
-                            left: 2,
-                            top: weekRow * cellHeight + barOffset,
-                            width: 7 * cellWidth - 4,
-                            cellWidth: cellWidth,
-                            cellHeight: cellHeight,
-                            color: productColors[product.name],
-                            text: '',
-                            product: product,
-                            productName: product.name,
-                            isStart: false,
-                            isEnd: false,
-                            isSingle: false
-                        });
-                    }
-                    
-                    const lastWeekDays = endCol + 1;
-                    const isLastSegment = (endMonth === currentMonth);
-                    
-                    createTimelineBar(wrapper, {
-                        left: 2,
-                        top: endRow * cellHeight + barOffset,
-                        width: lastWeekDays * cellWidth - 4,
-                        cellWidth: cellWidth,
-                        cellHeight: cellHeight,
-                        color: productColors[product.name],
-                        text: '',
-                        product: product,
-                        productName: product.name,
-                        isStart: false,
-                        isEnd: isLastSegment,
-                        isSingle: false
-                    });
-                } else {
-                    const isStartBar = (startMonth === currentMonth);
-                    const isEndBar = (endMonth === currentMonth);
-                    const showName = isStartBar || (!hasStartInMonth && displayStart === 1);
-                    
-                    createTimelineBar(wrapper, {
-                        left: col * cellWidth + 2,
-                        top: row * cellHeight + barOffset,
-                        width: duration * cellWidth - 4,
-                        cellWidth: cellWidth,
-                        cellHeight: cellHeight,
-                        color: productColors[product.name],
-                        text: showName ? product.name : '',
-                        product: product,
-                        productName: product.name,
-                        isStart: isStartBar,
-                        isEnd: isEndBar,
-                        isSingle: isStartBar && isEndBar
-                    });
-                }
+            }
+            
+            // 마지막 줄
+            const lastRowKey = `${endRow}`;
+            if (!rowTimelines[lastRowKey]) {
+                rowTimelines[lastRowKey] = 0;
+            }
+            const lastBarIndex = rowTimelines[lastRowKey];
+            rowTimelines[lastRowKey]++;
+            const lastBarOffset = Math.min(lastBarIndex * 18 + 30, cellHeight - 30);
+            
+            const lastWeekDays = endCol + 1;
+            const isLastSegment = (endMonth === currentMonth);
+            
+            createTimelineBar(wrapper, {
+                left: 2,
+                top: endRow * cellHeight + lastBarOffset,
+                width: lastWeekDays * cellWidth - 4,
+                cellWidth: cellWidth,
+                cellHeight: cellHeight,
+                color: productColors[product.name],
+                text: '',
+                product: product,
+                productName: product.name,
+                isStart: false,
+                isEnd: isLastSegment,
+                isSingle: false
+            });
+        } else {
+            // 한 줄에 있는 경우
+            const isStartBar = (startMonth === currentMonth);
+            const isEndBar = (endMonth === currentMonth);
+            const showName = isStartBar || (!hasStartInMonth && displayStart === 1);
+            
+            createTimelineBar(wrapper, {
+                left: col * cellWidth + 2,
+                top: row * cellHeight + barOffset,
+                width: duration * cellWidth - 4,
+                cellWidth: cellWidth,
+                cellHeight: cellHeight,
+                color: productColors[product.name],
+                text: showName ? product.name : '',
+                product: product,
+                productName: product.name,
+                isStart: isStartBar,
+                isEnd: isEndBar,
+                isSingle: isStartBar && isEndBar
             });
         }
+    });
+}
 
         // 년 보기 렌더링
         function renderYearView() {
