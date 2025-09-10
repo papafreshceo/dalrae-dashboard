@@ -1,4 +1,4 @@
-// header.js - 달래마켓 공통 헤더
+// header.js - 달래마켓 공통 헤더 (단순화 버전)
 (function() {
     // 페이지 전환 전 상태 저장
     function saveHeaderState() {
@@ -36,13 +36,6 @@
                 left: 0;
                 right: 0;
                 z-index: 1000;
-                transition: all 0.3s ease;
-            }
-            
-            /* 스크롤 시 헤더 스타일 */
-            .top-header.scrolled {
-                padding: 8px 0;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             }
 
             /* 헤더 스페이서 - 고정 헤더 공간 확보 */
@@ -94,7 +87,7 @@
                     font-size: 15px;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: all 0.3s ease;
+                    transition: color 0.3s ease;
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
                     position: relative;
@@ -108,135 +101,43 @@
                     color: #667eea;
                 }
 
-                /* PC 활성 메뉴 밑줄 - 수정됨 */
+                /* PC 활성 메뉴 밑줄 */
                 .nav-btn.active::after {
                     content: '';
                     position: absolute;
-                    bottom: -8px;
+                    bottom: -5px;
                     left: 10%;
                     width: 80%;
                     height: 3px;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     border-radius: 2px;
-                    opacity: 0;
-                    animation: underlineShow 0.3s ease-out forwards;
                 }
                 
-                @keyframes underlineShow {
-                    to { 
-                        opacity: 1;
-                        bottom: -5px;
-                    }
+                /* 발주시스템 특별 색상 (애니메이션 제거) */
+                .special-btn {
+                    color: #ff6b6b;
+                    font-weight: 700;
                 }
-            }
+                
+                .special-btn:hover {
+                    color: #ff5252;
+                }
 
-            /* 발주시스템 특별 애니메이션 */
-            .special-btn {
-                background: linear-gradient(270deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24, #f0932b, #eb4d4b, #6ab04c, #667eea, #ff6b6b);
-                background-size: 600% 100%;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                animation: textGradient 3s ease infinite;
-                font-weight: 700;
-            }
-            
-            @keyframes textGradient {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-            }
-            
-            .special-btn:hover {
-                transform: scale(1.05);
-            }
+                /* 서비스&프로그램 특별 색상 (애니메이션 제거) */
+                .legendary-btn {
+                    color: #8a2be2;
+                    font-weight: 700;
+                }
 
-            /* 서비스&프로그램 전설 아우라 효과 - z-index 수정 */
-            .legendary-btn {
-                position: relative;
-                font-weight: 700;
-                color: #fff;
-                z-index: 1; /* 글자를 위로 */
-                text-shadow: 0 0 5px rgba(138, 43, 226, 0.4),
-                            0 0 10px rgba(138, 43, 226, 0.3),
-                            0 0 15px rgba(138, 43, 226, 0.2);
-                background: linear-gradient(45deg, #8a2be2, #ff1493, #00bfff, #ffd700, #8a2be2);
-                background-size: 400% 400%;
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                animation: legendaryGlow 4s ease infinite, legendaryShift 8s ease infinite;
-            }
-
-            /* 전설 아우라 배경 효과 - z-index 수정 */
-            .legendary-btn::before {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 110%;
-                height: 150%;
-                background: radial-gradient(ellipse at center, 
-                    rgba(138, 43, 226, 0.15) 0%,
-                    rgba(255, 20, 147, 0.1) 25%,
-                    rgba(0, 191, 255, 0.05) 50%,
-                    transparent 70%);
-                filter: blur(8px);
-                animation: legendaryPulse 3s ease-in-out infinite;
-                pointer-events: none;
-                z-index: -2; /* 글자 뒤로 */
-            }
-
-            /* 전설 파티클 효과 */
-            .legendary-btn::after {
-                content: '✦';
-                position: absolute;
-                top: -3px;
-                right: -8px;
-                font-size: 8px;
-                color: #ffd700;
-                animation: sparkle 2s ease-in-out infinite;
-                pointer-events: none;
-                opacity: 0.7;
-                z-index: 2; /* 글자 위로 */
-            }
-
-            @keyframes legendaryGlow {
-                0%, 100% { filter: brightness(1) contrast(1); }
-                50% { filter: brightness(1.1) contrast(1.05); }
-            }
-
-            @keyframes legendaryShift {
-                0%, 100% { background-position: 0% 50%; }
-                25% { background-position: 100% 50%; }
-                50% { background-position: 100% 100%; }
-                75% { background-position: 0% 100%; }
-            }
-
-            @keyframes legendaryPulse {
-                0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-                50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.05); }
-            }
-
-            @keyframes sparkle {
-                0%, 100% { opacity: 0; transform: translateY(0) rotate(0deg); }
-                50% { opacity: 0.7; transform: translateY(-2px) rotate(180deg); }
-            }
-
-            .legendary-btn:hover {
-                transform: scale(1.05);
-                filter: brightness(1.15);
+                .legendary-btn:hover {
+                    color: #7b1fa2;
+                }
             }
 
             /* 모바일 스타일 - 2행 레이아웃 */
             @media (max-width: 768px) {
                 .top-header {
                     padding: 5px 0;
-                }
-                
-                .top-header.scrolled {
-                    padding: 3px 0;
                 }
 
                 .header-spacer {
@@ -263,14 +164,11 @@
                     position: relative;
                     padding: 3px 0;
                     margin: 0 -15px;
-                    padding-left: 15px;
-                    padding-right: 15px;
                     overflow-x: auto;
                     overflow-y: hidden;
                     -webkit-overflow-scrolling: touch;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
-                    scroll-behavior: smooth; /* 부드러운 스크롤 */
                 }
 
                 .nav-menu-container::-webkit-scrollbar {
@@ -303,7 +201,7 @@
                     display: flex;
                     gap: 10px;
                     justify-content: flex-start;
-                    padding: 0 5px;
+                    padding: 0 15px; /* 좌우 패딩 추가로 맨 좌측에서 시작 */
                     min-width: fit-content;
                 }
                 
@@ -317,7 +215,7 @@
                     color: #5a5c60;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: all 0.3s ease;
+                    transition: color 0.3s ease;
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
                     position: relative;
@@ -331,7 +229,7 @@
                     color: #667eea;
                 }
 
-                /* 모바일 활성 메뉴 밑줄 - 수정됨 */
+                /* 모바일 활성 메뉴 밑줄 */
                 .nav-btn.active::after {
                     content: '';
                     position: absolute;
@@ -341,29 +239,18 @@
                     height: 2px;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     border-radius: 1px;
-                    opacity: 0;
-                    animation: underlineShow 0.3s ease-out forwards;
                 }
 
-                /* 모바일 전설 아우라 조정 */
+                /* 발주시스템 특별 색상 (애니메이션 제거) */
+                .special-btn {
+                    color: #ff6b6b;
+                    font-weight: 700;
+                }
+
+                /* 서비스&프로그램 특별 색상 (애니메이션 제거) */
                 .legendary-btn {
-                    text-shadow: 0 0 4px rgba(138, 43, 226, 0.4),
-                                0 0 8px rgba(138, 43, 226, 0.3);
-                    z-index: 1;
-                }
-
-                .legendary-btn::before {
-                    width: 105%;
-                    height: 140%;
-                    filter: blur(6px);
-                    z-index: -2;
-                }
-
-                .legendary-btn::after {
-                    font-size: 6px;
-                    top: -2px;
-                    right: -6px;
-                    z-index: 2;
+                    color: #8a2be2;
+                    font-weight: 700;
                 }
             }
         `;
@@ -493,36 +380,6 @@
         
         // 상태 저장
         saveHeaderState();
-        
-        // 모바일에서 활성 메뉴를 중앙으로 스크롤
-        scrollToActiveMenu();
-    }
-
-    // 모바일에서 활성 메뉴를 중앙으로 스크롤하는 함수
-    function scrollToActiveMenu() {
-        if (window.innerWidth <= 768) {
-            setTimeout(() => {
-                const activeBtn = document.querySelector('.nav-btn.active');
-                const container = document.querySelector('.nav-menu-container');
-                
-                if (activeBtn && container) {
-                    // 활성 버튼의 위치와 크기 계산
-                    const btnRect = activeBtn.getBoundingClientRect();
-                    const containerRect = container.getBoundingClientRect();
-                    const btnCenter = activeBtn.offsetLeft + (activeBtn.offsetWidth / 2);
-                    const containerCenter = container.offsetWidth / 2;
-                    
-                    // 버튼을 컨테이너 중앙에 위치시키기 위한 스크롤 위치 계산
-                    const scrollLeft = btnCenter - containerCenter;
-                    
-                    // 부드럽게 스크롤
-                    container.scrollTo({
-                        left: scrollLeft,
-                        behavior: 'smooth'
-                    });
-                }
-            }, 100);
-        }
     }
 
     // 부드러운 페이지 이동
@@ -592,21 +449,6 @@
             const pageName = currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
             setActivePage(pageName);
         }
-
-        // 스크롤 이벤트 - 헤더 스타일 변경
-        let lastScrollTop = 0;
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('.top-header');
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-            
-            lastScrollTop = scrollTop;
-        });
 
         // 화면 크기 변경 시 헤더 재생성
         let resizeTimer;
