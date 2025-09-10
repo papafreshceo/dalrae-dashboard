@@ -66,8 +66,8 @@
     .toggle-button:hover { background: #f3f4f6; border-color: var(--primary); color: var(--primary); }
     .toggle-button.collapsed { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    .filter-content { display: grid; grid-template-columns: 70% 30%; gap: 16px; align-items: start; transition: all .3s; }
-    .filter-content.collapsed { display: none; }
+    .filter-content { display: grid; grid-template-columns: 70% 30%; gap: 16px; align-items: start; transition: all .3s; overflow: hidden; max-height: 500px; }
+    .filter-content.collapsed { max-height: 0; margin-bottom: 0; }
 
     .tag-filters { display: flex; flex-direction: column; gap: 8px; }
     .filter-row { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -152,8 +152,18 @@
 
     .option-card { display: flex; gap: 14px; padding: 12px; background: #f9fafb; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; align-items: center; }
     .option-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #e5e7eb; flex-shrink: 0; }
-    .option-info { flex: 1; display: flex; align-items: center; gap: 10px; }
+    .option-info { flex: 1; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .option-col { display: inline-block; flex-shrink: 0; }
+
+    /* PC용 옵션 카드 크기 */
+    @media (min-width: 769px) {
+      .option-col-label { width: 64px; color: #6b7280; font-size: 12px; font-weight: 800; }
+      .option-col-name { flex: 0 0 220px; color: var(--primary); font-size: 14px; font-weight: 800; }
+      .option-col-spec { flex: 0 0 160px; color: #6b7280; font-size: 12px; }
+      .option-col-ship-label { width: 56px; color: #6b7280; font-size: 12px; }
+      .option-col-ship { flex: 0 0 180px; color: #9ca3af; font-size: 12px; }
+      .option-col-right { flex: 1; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+    }
 
     /* 차트 모달 */
     .chart-modal-content { background: var(--card); border-radius: 14px; width: 92%; max-width: 1200px; max-height: 90vh; padding: 26px; overflow-y: auto; border: 1px solid var(--border); }
@@ -189,6 +199,7 @@
 
       .filter-section { padding: 12px; }
       .filter-content { grid-template-columns: 1fr; gap: 12px; }
+      .filter-content.collapsed { max-height: 0; }
       .tag-filter { padding: 4px 8px; font-size: 10px; }
 
       .scoreboard-stats { gap: 16px; }
@@ -213,7 +224,17 @@
       .product-divider { margin: 10px 0; }
       .badge-free, .badge-detail, .badge-image { font-size: 9px; padding: 2px 6px; }
 
-      .chart-modal-content { padding: 16px; width: 95%; }
+      /* 모바일 모달 최적화 */
+      .modal { padding: 10px; }
+      .modal-content { width: 98%; padding: 16px; }
+      .modal-header h2 { font-size: 16px; }
+      
+      /* 모바일 옵션 카드 반응형 */
+      .option-card { padding: 10px; gap: 10px; }
+      .option-thumb { width: 45px; height: 45px; }
+      .option-info { gap: 6px; }
+      
+      .chart-modal-content { padding: 16px; width: 98%; }
       .chart-container { height: 180px; margin: 4px 0; }
       .chart-stats { grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 8px; }
       .chart-stat-box { padding: 6px 4px; border-radius: 6px; }
@@ -340,7 +361,6 @@
     let activeTypeFilter = 'all', activeStatusFilter = 'all', activeProductFilter = 'all';
     let priceChart = null; 
     let priceDataCache = {}; 
-    let isPreloading = false;
 
     // 날짜 파싱
     function parseDate(dateStr){ 
@@ -354,6 +374,11 @@
         return dt;
       } 
       return new Date(dateStr); 
+    }
+
+    // 공급상태 가져오기 (원물공급상태 우선)
+    function getSupplyStatus(product) {
+      return product.원물공급상태 || product.공급상태 || '';
     }
 
     window.onload = function(){
@@ -544,15 +569,17 @@
         if(!variety) return; 
         sets.total.add(variety); 
         s.total.options++;
-        if(p.공급상태==='공급중'){ 
+        
+        const status = getSupplyStatus(p);
+        if(status==='공급중'){ 
           sets.active.add(variety); 
           s.active.options++; 
         }
-        if(p.공급상태==='시즌종료'){ 
+        if(status==='시즌종료'){ 
           sets.paused.add(variety); 
           s.paused.options++; 
         }
-        if(p.공급상태==='공급중지'){ 
+        if(status==='공급중지'){ 
           sets.stopped.add(variety); 
           s.stopped.options++; 
         }
@@ -593,53 +620,66 @@
         (groups[key]??(groups[key]=[])).push(p); 
       });
 
+      // 그룹 정렬 및 분류
       const sorted = Object.entries(groups).sort((a,b)=>{ 
-        const pr=(ps)=>{ 
-          const f=ps[0]; 
+        const getGroupPriority=(products)=>{ 
+          const f=products[0]; 
+          const status = getSupplyStatus(f);
           const t=new Date(), tw=new Date(t.getTime()+20*24*60*60*1000); 
-          if(f.공급상태==='공급중') return 1; 
+          
+          // 1. 공급중
+          if(status==='공급중') return 1;
+          // 2. 출하준비중 
           if(f.시작일){ 
             const s=parseDate(f.시작일); 
             if(s>t && s<=tw) return 2; 
-          } 
-          if(f.공급상태==='시즌종료') return 3; 
-          if(f.공급상태==='공급중지') return 4; 
+          }
+          // 3. 시즌종료
+          if(status==='시즌종료') return 3;
+          // 4. 공급중지
+          if(status==='공급중지') return 4;
+          // 5. 기타
           return 5; 
         }; 
-        const pa=pr(a[1]), pb=pr(b[1]); 
+        const pa=getGroupPriority(a[1]), pb=getGroupPriority(b[1]); 
         return pa===pb? a[0].localeCompare(b[0],'ko'): pa-pb; 
       });
 
       let html=''; 
-      let current='';
+      let currentGroup='';
       sorted.forEach(([variety, products])=>{
         const f=products[0]; 
+        const status = getSupplyStatus(f);
         const t=new Date(); 
         const tw=new Date(t.getTime()+20*24*60*60*1000);
-        let title='기타', cls='';
-        if(f.공급상태==='공급중'){ 
-          title='공급중'; 
+        
+        let groupTitle='기타', cls='';
+        // 그룹 결정 (5가지)
+        if(status==='공급중'){ 
+          groupTitle='공급중'; 
           cls='status-active'; 
         }
         else if(f.시작일){ 
           const s=parseDate(f.시작일); 
           if(s>t && s<=tw){ 
-            title='출하준비중'; 
+            groupTitle='출하준비중'; 
             cls='status-preparing'; 
           }
         }
-        if(title==='기타' && f.공급상태==='시즌종료'){ 
-          title='시즌종료'; 
+        if(groupTitle==='기타' && status==='시즌종료'){ 
+          groupTitle='시즌종료'; 
           cls='status-paused'; 
         }
-        else if(title==='기타' && f.공급상태==='공급중지'){ 
-          title='공급중지'; 
+        else if(groupTitle==='기타' && status==='공급중지'){ 
+          groupTitle='공급중지'; 
           cls='status-stopped'; 
         }
-        if(current!==title){ 
-          if(current!=='') html += '<div class="group-divider"></div>'; 
-          html += `<div class="group-title-wrapper"><div class="group-title ${cls==='status-active'?'status-active':''}">${title}</div></div>`; 
-          current=title; 
+        
+        // 그룹 타이틀 렌더링
+        if(currentGroup!==groupTitle){ 
+          if(currentGroup!=='') html += '<div class="group-divider"></div>'; 
+          html += `<div class="group-title-wrapper"><div class="group-title ${cls==='status-active'?'status-active':''}">${groupTitle}</div></div>`; 
+          currentGroup=groupTitle; 
         }
         html += createProductCard(variety, products);
       });
@@ -649,6 +689,7 @@
 
     function createProductCard(variety, products){
       const f=products[0]; 
+      const status = getSupplyStatus(f);
       const isMobile=window.innerWidth<=768; 
       const today=new Date();
       let min=new Date('2099-12-31'), max=new Date('1900-01-01');
@@ -685,17 +726,17 @@
 
       let statusClass=''; 
       let badgeClass='';
-      if(f.공급상태==='공급중'){ 
+      if(status==='공급중'){ 
         statusClass='status-active'; 
         badgeClass='status-active'; 
       }
-      else if(f.공급상태==='시즌종료'){ 
+      else if(status==='시즌종료'){ 
         badgeClass='status-paused'; 
       }
-      else if(f.공급상태==='공급중지'){ 
+      else if(status==='공급중지'){ 
         badgeClass='status-stopped'; 
       }
-      else if(f.공급상태==='준비중'){ 
+      else if(status==='준비중'){ 
         badgeClass='status-preparing'; 
       }
       if(max && max.getFullYear()!==1900){ 
@@ -710,7 +751,7 @@
               <div class="product-row1">
                 <span class="product-title">${name}</span>
                 <div class="product-status-options">
-                  <span class="status-badge ${badgeClass}">${f.공급상태||'미정'}</span>
+                  <span class="status-badge ${badgeClass}">${status||'미정'}</span>
                   <span style="color:#6b7280;font-size:11px;font-weight:700;">옵션 ${products.length}개</span>
                 </div>
               </div>
@@ -736,7 +777,7 @@
           <div class="product-content">
             <div class="product-row1">
               <span class="product-title">${name}</span>
-              <span class="status-badge ${badgeClass}">${f.공급상태||'미정'}</span>
+              <span class="status-badge ${badgeClass}">${status||'미정'}</span>
               <span style="color:#6b7280;font-size:13px;font-weight:700;">옵션 ${products.length}개</span>
             </div>
             <div class="product-row2">기간 ${fmt(min)} ~ ${fmt(max)}</div>
@@ -761,11 +802,12 @@
       const isMobile=window.innerWidth<=768; 
       let html='';
       list.forEach(p=>{
+        const status = getSupplyStatus(p);
         const price=p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g,'')).toLocaleString(): '0';
         let cls='status-active'; 
-        if(p.공급상태==='시즌종료') cls='status-paused'; 
-        if(p.공급상태==='공급중지') cls='status-stopped'; 
-        if(p.공급상태==='준비중') cls='status-preparing';
+        if(status==='시즌종료') cls='status-paused'; 
+        if(status==='공급중지') cls='status-stopped'; 
+        if(status==='준비중') cls='status-preparing';
         let specs=''; 
         ['규격1','규격2','규격3'].forEach(k=>{ 
           if(p[k]) specs += (specs? ' ':'') + p[k]; 
@@ -776,16 +818,16 @@
             ${p.썸네일? `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` : `<div class="option-thumb" aria-hidden="true"></div>`}
             <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
               <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px;">
-                <strong style="color:var(--primary)">${p.옵션명||'옵션명 없음'}</strong>
+                <strong style="color:var(--primary); font-size:0.9em;">${p.옵션명||'옵션명 없음'}</strong>
               </div>
-              <div style="font-size:11px; color:#9ca3af;">${p.발송지주소?`발송지: ${p.발송지주소}`:''}</div>
+              <div style="font-size:0.75em; color:#9ca3af;">${p.발송지주소?`발송지: ${p.발송지주소}`:''}</div>
               <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
-                <span style="font-size:14px; font-weight:900; color:var(--primary);">${price}원</span>
-                <span class="status-badge ${cls}" style="font-size:10px;">${p.공급상태||'미정'}</span>
+                <span style="font-size:1em; font-weight:900; color:var(--primary);">${price}원</span>
+                <span class="status-badge ${cls}" style="font-size:0.7em;">${status||'미정'}</span>
               </div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <span class="badge-free">무료배송</span>
-                <button class="badge-chart" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}','${p.옵션명}')">가격차트</button>
+                <span class="badge-free" style="font-size:0.7em;">무료배송</span>
+                <button class="badge-chart" style="font-size:0.7em;" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}','${p.옵션명}')">가격차트</button>
               </div>
             </div>
           </div>`; 
@@ -795,16 +837,16 @@
           <div class="option-card">
             ${p.썸네일? `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` : `<div class="option-thumb" aria-hidden="true"></div>`}
             <div class="option-info">
-              <span class="option-col" style="width:64px;color:#6b7280;font-size:12px;font-weight:800;">옵션명</span>
-              <span class="option-col" style="width:220px;color:var(--primary);font-size:14px;font-weight:800;">${p.옵션명||'옵션명 없음'}</span>
-              <span class="option-col" style="width:160px;color:#6b7280;font-size:12px;">${specs}</span>
-              <span class="option-col" style="width:56px;color:#6b7280;font-size:12px;">${p.발송지주소?'발송지':''}</span>
-              <span class="option-col" style="width:180px;color:#9ca3af;font-size:12px;">${p.발송지주소||''}</span>
-              <span class="option-col" style="flex:1;text-align:right;">
-                <span style="color:var(--primary);font-size:16px;font-weight:900;margin-right:14px;">${price}원</span>
-                <span class="status-badge ${cls}" style="font-size:11px;">${p.공급상태||'미정'}</span>
-                <span class="badge-free" style="margin-left:8px;">무료배송</span>
-                <button class="badge-chart" style="margin-left:8px;" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}','${p.옵션명}')">가격차트</button>
+              <span class="option-col option-col-label">옵션명</span>
+              <span class="option-col option-col-name">${p.옵션명||'옵션명 없음'}</span>
+              <span class="option-col option-col-spec">${specs}</span>
+              <span class="option-col option-col-ship-label">${p.발송지주소?'발송지':''}</span>
+              <span class="option-col option-col-ship">${p.발송지주소||''}</span>
+              <span class="option-col option-col-right">
+                <span style="color:var(--primary);font-size:16px;font-weight:900;">${price}원</span>
+                <span class="status-badge ${cls}" style="font-size:11px;">${status||'미정'}</span>
+                <span class="badge-free">무료배송</span>
+                <button class="badge-chart" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}','${p.옵션명}')">가격차트</button>
               </span>
             </div>
           </div>`; 
@@ -960,13 +1002,13 @@
         const today=new Date(), twenty=new Date(today.getTime()+20*24*60*60*1000);
         switch(activeStatusFilter){
           case 'active': 
-            filteredProducts=filteredProducts.filter(p=>p.공급상태==='공급중'); 
+            filteredProducts=filteredProducts.filter(p=>getSupplyStatus(p)==='공급중'); 
             break;
           case 'paused': 
-            filteredProducts=filteredProducts.filter(p=>p.공급상태==='시즌종료'); 
+            filteredProducts=filteredProducts.filter(p=>getSupplyStatus(p)==='시즌종료'); 
             break;
           case 'stopped': 
-            filteredProducts=filteredProducts.filter(p=>p.공급상태==='공급중지'); 
+            filteredProducts=filteredProducts.filter(p=>getSupplyStatus(p)==='공급중지'); 
             break;
           case 'preparing': 
             filteredProducts=filteredProducts.filter(p=> p.시작일 && (d=> d>today && d<=twenty)(parseDate(p.시작일))); 
