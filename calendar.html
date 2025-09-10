@@ -7,24 +7,115 @@
     <link rel="icon" type="image/png" href="/favicon.png">
     <title>달래마켓 상품캘린더</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="header.js"></script>
-    <link rel="stylesheet" href="styles.css">
     <style>
-        /* 캘린더 페이지 스타일 */
-        .calendar-header {
-            background: white;
-            padding: 24px;
-            margin-bottom: 24px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        body { 
+            font-family: 'Noto Sans KR', -apple-system, sans-serif; 
+            background: #f8f9fa; 
+            color: #212529; 
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero {
+            min-height: calc(100vh - 200px);
+            padding: 40px 20px; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
         
+        .card { 
+            max-width: 1400px; 
+            margin: 0 auto;
+            background: white; 
+            border-radius: 16px; 
+            padding: 40px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        }
+        
+        /* 헤더 섹션 */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        
+        .title-group {
+            flex: 1;
+        }
+        
+        .eyebrow { 
+            font-size: 14px; 
+            font-weight: 700; 
+            letter-spacing: .06em; 
+            color: #6c757d; 
+            text-transform: uppercase; 
+            margin-bottom: 12px; 
+        }
+        
+        .title { 
+            font-size: 36px; 
+            line-height: 1.25; 
+            font-weight: 800; 
+            color: #212529; 
+            margin-bottom: 16px; 
+        }
+        
+        .subtitle { 
+            font-size: 16px; 
+            color: #495057; 
+            line-height: 1.6;
+            margin-bottom: 0; 
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: 1px solid #2563eb;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+            color: #2563eb;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .action-btn:hover {
+            background: #2563eb;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+        }
+
+        .action-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #dee2e6;
+            margin: 0 0 40px 0;
+        }
+
+        /* 캘린더 컨트롤 */
         .calendar-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
         }
         
         .nav-controls {
@@ -36,37 +127,38 @@
         .month-year-display {
             font-size: 20px;
             font-weight: 600;
-            color: #333;
+            color: #212529;
             min-width: 120px;
             text-align: center;
         }
         
         .calendar-nav-btn {
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 32px;
-            height: 32px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             transition: all 0.2s;
-            font-size: 16px;
-            color: #666;
+            font-size: 18px;
+            color: #495057;
         }
         
         .calendar-nav-btn:hover {
-            background: #f0f0f0;
-            border-color: #999;
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
         }
         
         .today-btn {
-            padding: 6px 16px;
+            padding: 8px 16px;
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            color: #666;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            color: #495057;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
@@ -74,77 +166,18 @@
         }
         
         .today-btn:hover {
-            background: #f0f0f0;
-            border-color: #999;
-        }
-        
-        .view-toggle {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .toggle-btn {
-            padding: 6px 16px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            color: #666;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .toggle-btn.active {
-            background: #333;
+            background: #2563eb;
             color: white;
-            border-color: #333;
+            border-color: #2563eb;
         }
-        
-        .toggle-btn:hover:not(.active) {
-            background: #f0f0f0;
-        }
-        
-        /* 캘린더 컨테이너 */
-        .calendar-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-        
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 16px;
-        }
-        
-        /* 월 보기 */
-        .month-view {
+
+        /* 월/년 보기 */
+        .month-view, .year-view {
             background: white;
+            border: 1px solid #dee2e6;
             border-radius: 8px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-        
-        .month-scroll-wrapper {
+            padding: 20px;
             overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .month-scroll-wrapper::-webkit-scrollbar {
-            height: 8px;
-        }
-        
-        .month-scroll-wrapper::-webkit-scrollbar-track {
-            background: #f5f5f5;
-            border-radius: 4px;
-        }
-        
-        .month-scroll-wrapper::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 4px;
         }
         
         .month-calendar-content {
@@ -156,41 +189,41 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 1px;
-            background: #e0e0e0;
-            border: 1px solid #e0e0e0;
+            background: #dee2e6;
+            border: 1px solid #dee2e6;
             margin-bottom: 1px;
         }
         
         .weekday {
-            background: #f5f5f5;
+            background: #f8f9fa;
             padding: 12px;
             text-align: center;
             font-weight: 600;
             font-size: 13px;
-            color: #666;
+            color: #495057;
         }
         
         .weekday.sunday {
-            color: #d32f2f;
+            color: #dc3545;
         }
         
         .weekday.saturday {
-            color: #1976d2;
+            color: #0066cc;
         }
         
         .days-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 1px;
-            background: #e0e0e0;
-            border: 1px solid #e0e0e0;
+            background: #dee2e6;
+            border: 1px solid #dee2e6;
             border-top: none;
             position: relative;
         }
         
         .day-cell {
             background: white;
-            min-height: 120px;
+            min-height: 100px;
             padding: 8px;
             position: relative;
         }
@@ -198,34 +231,34 @@
         .day-number {
             font-size: 14px;
             font-weight: 500;
-            color: #333;
+            color: #212529;
             margin-bottom: 4px;
             position: relative;
             z-index: 2;
         }
         
         .day-cell.other-month .day-number {
-            color: #ccc;
+            color: #ced4da;
         }
         
         .day-cell.today {
-            background: #fff8e1;
+            background: #e7f3ff;
         }
         
         .day-cell.today .day-number {
-            color: #f57c00;
+            color: #2563eb;
             font-weight: 700;
         }
         
         .day-cell.sunday .day-number {
-            color: #d32f2f;
+            color: #dc3545;
         }
         
         .day-cell.saturday .day-number {
-            color: #1976d2;
+            color: #0066cc;
         }
         
-        /* 월 타임라인 바 */
+        /* 타임라인 바 */
         .month-timeline-wrapper {
             position: absolute;
             top: 0;
@@ -247,58 +280,20 @@
             overflow: hidden;
             text-overflow: ellipsis;
             cursor: pointer;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             z-index: 10;
             pointer-events: auto;
             transition: all 0.2s;
-        }
-        
-        .month-timeline-bar.bar-start {
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
-        }
-        
-        .month-timeline-bar.bar-end {
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
-        }
-        
-        .month-timeline-bar.bar-single {
             border-radius: 4px;
         }
         
-        .month-timeline-bar:hover,
-        .month-timeline-bar.hover-active {
+        .month-timeline-bar:hover {
             transform: scale(1.1) translateY(-2px);
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         
         /* 년 보기 */
-        .year-view {
-            background: white;
-            border-radius: 8px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        .year-view::-webkit-scrollbar {
-            height: 8px;
-        }
-        
-        .year-view::-webkit-scrollbar-track {
-            background: #f5f5f5;
-            border-radius: 4px;
-        }
-        
-        .year-view::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 4px;
-        }
-        
         .year-calendar-content {
             min-width: 1200px;
         }
@@ -306,18 +301,18 @@
         .year-months-header {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
-            border: 1px solid #e0e0e0;
+            border: 1px solid #dee2e6;
             margin-bottom: 0;
         }
         
         .year-month-label {
-            background: #f5f5f5;
+            background: #f8f9fa;
             padding: 10px;
             text-align: center;
             font-weight: 600;
             font-size: 13px;
-            color: #666;
-            border-right: 1px solid #e0e0e0;
+            color: #495057;
+            border-right: 1px solid #dee2e6;
         }
         
         .year-month-label:last-child {
@@ -327,6 +322,7 @@
         .year-timeline-container {
             position: relative;
             min-height: 400px;
+            padding: 20px 0;
         }
         
         .year-timeline-row {
@@ -339,11 +335,7 @@
         
         .year-month-cell {
             position: relative;
-            border-left: 1px solid #f0f0f0;
-        }
-        
-        .year-month-cell:last-child {
-            border-right: 1px solid #f0f0f0;
+            border-left: 1px solid #f1f3f5;
         }
         
         .year-timeline-bar {
@@ -361,76 +353,60 @@
             cursor: pointer;
             transition: all 0.2s;
             z-index: 10;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        .year-timeline-bar.bar-start {
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
-        }
-        
-        .year-timeline-bar.bar-end {
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
-        }
-        
-        .year-timeline-bar.bar-single {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             border-radius: 4px;
         }
         
-        .year-timeline-bar:hover,
-        .year-timeline-bar.hover-active {
+        .year-timeline-bar:hover {
             transform: scale(1.05) translateY(-2px);
             z-index: 100;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         
-        /* 오늘 날짜 세로선 */
         .year-today-line {
             position: absolute;
             top: 0;
             bottom: 0;
             width: 2px;
-            background: #ff9800;
+            background: #2563eb;
             z-index: 999;
             opacity: 0.8;
         }
         
         /* 범례 */
         .legend {
-            background: white;
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 24px;
             display: flex;
-            gap: 16px;
+            gap: 20px;
             flex-wrap: wrap;
             justify-content: center;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
         }
         
         .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 13px;
-            color: #666;
+            font-size: 14px;
+            color: #495057;
         }
         
         .legend-color {
-            width: 20px;
-            height: 12px;
-            border-radius: 2px;
+            width: 24px;
+            height: 14px;
+            border-radius: 4px;
         }
         
         /* 툴팁 */
         .tooltip {
             position: fixed;
             background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
             padding: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             z-index: 1000;
             min-width: 200px;
             display: none;
@@ -443,17 +419,17 @@
         .tooltip-title {
             font-size: 14px;
             font-weight: 600;
-            color: #333;
+            color: #212529;
             margin-bottom: 6px;
         }
         
         .tooltip-info {
             font-size: 12px;
-            color: #666;
+            color: #6c757d;
             line-height: 1.4;
         }
         
-        /* 모달 스타일 */
+        /* 모달 */
         .modal {
             display: none;
             position: fixed;
@@ -461,7 +437,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -473,69 +449,93 @@
         
         .modal-content {
             background: white;
-            border-radius: 8px;
-            max-width: 1400px;
+            border-radius: 12px;
             width: 90%;
+            max-width: 1200px;
             max-height: 80vh;
             overflow-y: auto;
-            padding: 32px;
+            padding: 30px;
         }
         
         .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #e0e0e0;
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
         }
         
-        .modal-header h2 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #333;
-            margin: 0;
-        }
-        
-        .modal-close {
-            background: transparent;
-            border: none;
+        .modal-title {
             font-size: 24px;
-            cursor: pointer;
-            color: #999;
-            padding: 0;
-            width: 32px;
-            height: 32px;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+        
+        .modal-subtitle {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .modal-footer {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
         }
         
-        .modal-close:hover {
-            color: #333;
+        .modal-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         
+        .modal-btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+        
+        .modal-btn-secondary:hover {
+            background: #e9ecef;
+        }
+        
+        .modal-btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .modal-btn-primary:hover {
+            background: #1d4ed8;
+        }
+        
+        /* 옵션 카드 */
         .option-card {
             display: flex;
-            gap: 16px;
-            padding: 16px;
-            background: #fafafa;
-            border-radius: 4px;
-            border: 1px solid #e0e0e0;
-            margin-bottom: 12px;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 10px;
             align-items: center;
+            transition: all 0.2s;
         }
         
         .option-card:hover {
-            background: #f5f5f5;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
         .option-thumb {
             width: 50px;
             height: 50px;
-            border-radius: 4px;
+            border-radius: 6px;
             object-fit: cover;
-            background: #e0e0e0;
+            background: #dee2e6;
             flex-shrink: 0;
         }
         
@@ -543,7 +543,7 @@
             flex: 1;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 15px;
         }
         
         .option-col {
@@ -551,56 +551,11 @@
             flex-shrink: 0;
         }
         
-        /* 차트 모달 스타일 */
-        .chart-modal-content {
-            background: white;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 1200px;
-            max-height: 90vh;
-            padding: 32px;
-            overflow-y: auto;
+        .price-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: #212529;
         }
-        
-        .chart-container {
-            position: relative;
-            height: 400px;
-            margin: 32px 0;
-        }
-        
-        .chart-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-top: 32px;
-        }
-        
-        .chart-stat-box {
-            background: #fafafa;
-            border-radius: 4px;
-            padding: 16px;
-            text-align: center;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .chart-stat-label {
-            font-size: 12px;
-            color: #999;
-            margin-bottom: 8px;
-        }
-        
-        .chart-stat-value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-        
-        .chart-stat-value.current {
-            color: #1976d2;
-        }
-        
-        .increase { color: #d32f2f; }
-        .decrease { color: #388e3c; }
         
         .status-badge {
             padding: 4px 10px;
@@ -610,23 +565,23 @@
         }
         
         .status-active {
-            background: #e8f5e9;
-            color: #2e7d32;
+            background: #d4edda;
+            color: #155724;
         }
         
         .status-paused {
-            background: #fff3e0;
-            color: #f57c00;
+            background: #fff3cd;
+            color: #856404;
         }
         
         .status-stopped {
-            background: #ffebee;
-            color: #c62828;
+            background: #f8d7da;
+            color: #721c24;
         }
         
         .badge-free {
-            background: #e3f2fd;
-            color: #1976d2;
+            background: #e7f3ff;
+            color: #004085;
             padding: 3px 10px;
             border-radius: 4px;
             font-size: 11px;
@@ -635,9 +590,9 @@
         }
         
         .badge-chart {
-            background: #fff3e0;
-            color: #f57c00;
-            padding: 3px 10px;
+            background: #2563eb;
+            color: white;
+            padding: 4px 12px;
             border-radius: 4px;
             font-size: 11px;
             font-weight: 500;
@@ -649,140 +604,169 @@
         }
         
         .badge-chart:hover {
-            background: #ffe0b2;
+            background: #1d4ed8;
+            transform: translateY(-1px);
         }
+        
+        /* 차트 컨테이너 */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 30px 0;
+        }
+        
+        .chart-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .chart-stat-box {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .chart-stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+        
+        .chart-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #212529;
+        }
+        
+        .chart-stat-value.current {
+            color: #2563eb;
+        }
+        
+        .increase { color: #dc3545; }
+        .decrease { color: #28a745; }
         
         .no-data-message {
             text-align: center;
             padding: 80px 20px;
-            color: #999;
+            color: #6c757d;
         }
         
         .no-data-icon {
             font-size: 48px;
             margin-bottom: 16px;
-            color: #ddd;
+            color: #dee2e6;
         }
         
         .no-data-title {
             font-size: 18px;
-            color: #666;
+            color: #495057;
             margin-bottom: 8px;
         }
         
         .no-data-text {
             font-size: 14px;
-            color: #999;
+            color: #6c757d;
         }
         
         /* 모바일 반응형 */
-        @media (max-width: 768px) {
-            .calendar-header {
-                padding: 16px;
+        @media (max-width: 1024px) {
+            .hero {
+                padding: 20px 15px;
             }
             
-            .calendar-controls {
-                gap: 12px;
+            .card {
+                padding: 25px 20px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .header-section {
+                flex-direction: column;
             }
             
-            .month-year-display {
-                font-size: 16px;
-                min-width: auto;
+            .title {
+                font-size: 28px;
             }
             
-            .calendar-nav-btn {
-                width: 28px;
-                height: 28px;
+            .subtitle {
                 font-size: 14px;
             }
             
-            .today-btn,
-            .toggle-btn {
-                padding: 4px 12px;
-                font-size: 12px;
-            }
-            
-            .calendar-container {
-                padding: 0 16px;
-            }
-            
-            .month-view,
-            .year-view {
-                padding: 16px;
-            }
-            
-            .day-cell {
-                min-height: 80px;
-                padding: 6px;
-            }
-            
-            .option-info {
+            .calendar-controls {
                 flex-direction: column;
-                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .nav-controls {
+                justify-content: center;
                 width: 100%;
-                gap: 8px;
-            }
-            
-            .chart-modal-content {
-                padding: 24px;
-                width: 95%;
-            }
-            
-            .chart-container {
-                height: 250px;
             }
             
             .chart-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- 공통 헤더 -->
+    <!-- 공통 헤더 컨테이너 -->
     <div id="header-container"></div>
 
-    <!-- 메인 컨텐츠 -->
-    <div class="main-content">
-        <!-- 캘린더 헤더 -->
-        <div class="calendar-header">
+    <!-- 본문 -->
+    <main class="hero">
+        <section class="card">
+            <div class="header-section">
+                <div class="title-group">
+                    <div class="eyebrow">Product Calendar</div>
+                    <h1 class="title">상품 <strong style="color:#2563eb">캘린더</strong></h1>
+                    <p class="subtitle">
+                        연중 상품 공급 일정을 한눈에 확인하세요.<br>
+                        시즌별 상품 계획 수립에 활용하실 수 있습니다.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 액션 버튼들 -->
+            <div class="action-buttons">
+                <button class="action-btn active" data-view="month" onclick="setView('month')">월별 보기</button>
+                <button class="action-btn" data-view="year" onclick="setView('year')">연간 보기</button>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- 캘린더 컨트롤 -->
             <div class="calendar-controls">
                 <div class="nav-controls" id="navControls">
                     <button class="calendar-nav-btn" onclick="previousPeriod()" id="prevBtn">‹</button>
                     <div class="month-year-display" id="periodDisplay">1월</div>
                     <button class="calendar-nav-btn" onclick="nextPeriod()" id="nextBtn">›</button>
-                    <button class="today-btn" onclick="goToToday()" id="todayBtn">오늘</button>
                 </div>
-                <div class="view-toggle">
-                    <button class="toggle-btn active" data-view="month" onclick="setView('month')">월</button>
-                    <button class="toggle-btn" data-view="year" onclick="setView('year')">년</button>
-                </div>
+                <button class="today-btn" onclick="goToToday()" id="todayBtn">오늘</button>
             </div>
-        </div>
 
-        <!-- 상품 캘린더 섹션 -->
-        <div class="calendar-container">
-            <h2 class="section-title">상품캘린더</h2>
-        </div>
-
-        <!-- 캘린더 컨테이너 -->
-        <div class="calendar-container">
             <!-- 월 보기 -->
             <div id="monthView" class="month-view">
-                <div class="month-scroll-wrapper">
-                    <div class="month-calendar-content">
-                        <div class="weekdays">
-                            <div class="weekday sunday">일</div>
-                            <div class="weekday">월</div>
-                            <div class="weekday">화</div>
-                            <div class="weekday">수</div>
-                            <div class="weekday">목</div>
-                            <div class="weekday">금</div>
-                            <div class="weekday saturday">토</div>
-                        </div>
-                        <div class="days-grid" id="daysGrid">
-                            <!-- 동적 생성 -->
-                        </div>
+                <div class="month-calendar-content">
+                    <div class="weekdays">
+                        <div class="weekday sunday">일</div>
+                        <div class="weekday">월</div>
+                        <div class="weekday">화</div>
+                        <div class="weekday">수</div>
+                        <div class="weekday">목</div>
+                        <div class="weekday">금</div>
+                        <div class="weekday saturday">토</div>
+                    </div>
+                    <div class="days-grid" id="daysGrid">
+                        <!-- 동적 생성 -->
                     </div>
                 </div>
             </div>
@@ -814,10 +798,10 @@
             <div class="legend" id="legend">
                 <!-- 동적 생성 -->
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
-    <!-- 공통 푸터 -->
+    <!-- 공통 푸터 컨테이너 -->
     <div id="footer-container"></div>
 
     <!-- 툴팁 -->
@@ -830,29 +814,38 @@
     <div class="modal" id="optionsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">옵션 목록</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
+                <h2 class="modal-title" id="modalTitle">옵션 목록</h2>
+                <p class="modal-subtitle">상품 옵션을 확인하세요</p>
             </div>
             <div id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeModal()">닫기</button>
+            </div>
         </div>
     </div>
     
     <!-- 차트 모달 -->
     <div class="modal" id="chartModal">
-        <div class="chart-modal-content">
+        <div class="modal-content">
             <div class="modal-header">
-                <h2 id="chartModalTitle">가격 변동 차트</h2>
-                <button class="modal-close" onclick="closeChartModal()">×</button>
+                <h2 class="modal-title" id="chartModalTitle">가격 변동 차트</h2>
+                <p class="modal-subtitle">가격 추이를 확인하세요</p>
             </div>
             <div id="chartModalBody">
                 <div style="text-align: center; padding: 50px;">
-                    <div style="color: #999;">데이터 로딩 중...</div>
+                    <div style="color: #6c757d;">데이터 로딩 중...</div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closeChartModal()">닫기</button>
             </div>
         </div>
     </div>
 
+    <!-- 외부 스크립트 로드 -->
+    <script src="header.js"></script>
     <script src="footer.js"></script>
+
     <script>
         // 전역 변수
         let currentView = 'month';
@@ -867,14 +860,36 @@
 
         // 색상 팔레트
         const colorPalette = [
-            '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
-            '#DDA0DD', '#FF9FF3', '#48C9B0', '#F39C12', '#E74C3C',
-            '#9B59B6', '#3498DB', '#1ABC9C', '#F39C12', '#E67E22',
-            '#D35400', '#C0392B', '#8E44AD', '#2980B9', '#27AE60',
-            '#16A085', '#F1C40F', '#E74C3C', '#95A5A6', '#34495E',
-            '#FF6348', '#FFA502', '#FF4757', '#5F27CD', '#00D2D3',
-            '#54A0FF', '#48DBFB', '#0ABDE3', '#C8D6E5', '#576574'
+            '#2563eb', '#dc3545', '#28a745', '#ffc107', '#17a2b8',
+            '#6610f2', '#e83e8c', '#fd7e14', '#20c997', '#6c757d',
+            '#007bff', '#6f42c1', '#d6336c', '#ae3ec9', '#7048e8',
+            '#4c6ef5', '#228be6', '#1098ad', '#0ca678', '#37b24d',
+            '#82c91e', '#fab005', '#fd7e14', '#fa5252', '#e64980',
+            '#be4bdb', '#7950f2', '#4c6ef5', '#339af0', '#22b8cf',
+            '#20c997', '#51cf66', '#94d82d', '#fcc419', '#ff922b'
         ];
+
+        // 페이지 로드 시 초기화
+        window.addEventListener('DOMContentLoaded', function() {
+            // 헤더 초기화
+            if (window.DalraeHeader) {
+                DalraeHeader.init({
+                    containerId: 'header-container',
+                    activePage: 'calendar'
+                });
+            }
+            
+            // 푸터 초기화
+            if (window.DalraeFooter) {
+                DalraeFooter.init({
+                    containerId: 'footer-container'
+                });
+            }
+
+            updatePeriodDisplay();
+            loadData();
+            setupEventListeners();
+        });
 
         // 테스트용 샘플 데이터
         function getSampleData() {
@@ -894,7 +909,7 @@
         function setView(view) {
             currentView = view;
             
-            document.querySelectorAll('.toggle-btn').forEach(btn => {
+            document.querySelectorAll('.action-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.dataset.view === view) {
                     btn.classList.add('active');
@@ -1199,8 +1214,7 @@
                 
                 if (endRow > row) {
                     const firstWeekDays = 7 - col;
-                    const isFirstSegment = hasStartInMonth;
-                    const showName = isFirstSegment || (!hasStartInMonth && displayStart === 1);
+                    const showName = hasStartInMonth || (!hasStartInMonth && displayStart === 1);
                     
                     createTimelineBar(wrapper, {
                         left: col * cellWidth + 2,
@@ -1209,10 +1223,7 @@
                         color: productColors[product.name],
                         text: showName ? product.name : '',
                         product: product,
-                        productName: product.name,
-                        isStart: isFirstSegment,
-                        isEnd: false,
-                        isSingle: false
+                        productName: product.name
                     });
                     
                     for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
@@ -1223,15 +1234,11 @@
                             color: productColors[product.name],
                             text: '',
                             product: product,
-                            productName: product.name,
-                            isStart: false,
-                            isEnd: false,
-                            isSingle: false
+                            productName: product.name
                         });
                     }
                     
                     const lastWeekDays = endCol + 1;
-                    const isLastSegment = (endMonth === currentMonth);
                     
                     createTimelineBar(wrapper, {
                         left: 2,
@@ -1240,15 +1247,10 @@
                         color: productColors[product.name],
                         text: '',
                         product: product,
-                        productName: product.name,
-                        isStart: false,
-                        isEnd: isLastSegment,
-                        isSingle: false
+                        productName: product.name
                     });
                 } else {
-                    const isStartBar = (startMonth === currentMonth);
-                    const isEndBar = (endMonth === currentMonth);
-                    const showName = isStartBar || (!hasStartInMonth && displayStart === 1);
+                    const showName = hasStartInMonth || (!hasStartInMonth && displayStart === 1);
                     
                     createTimelineBar(wrapper, {
                         left: col * cellWidth + 2,
@@ -1257,10 +1259,7 @@
                         color: productColors[product.name],
                         text: showName ? product.name : '',
                         product: product,
-                        productName: product.name,
-                        isStart: isStartBar,
-                        isEnd: isEndBar,
-                        isSingle: isStartBar && isEndBar
+                        productName: product.name
                     });
                 }
             });
@@ -1270,14 +1269,6 @@
         function createTimelineBar(container, options) {
             const bar = document.createElement('div');
             bar.className = 'month-timeline-bar';
-            
-            if (options.isSingle) {
-                bar.classList.add('bar-single');
-            } else if (options.isStart) {
-                bar.classList.add('bar-start');
-            } else if (options.isEnd) {
-                bar.classList.add('bar-end');
-            }
             
             bar.style.left = `${options.left}px`;
             bar.style.top = `${options.top}px`;
@@ -1292,16 +1283,10 @@
             };
             
             bar.onmouseover = (e) => {
-                document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
-                    b.classList.add('hover-active');
-                });
                 showTooltip(e, options.product);
             };
             
             bar.onmouseout = () => {
-                document.querySelectorAll(`.month-timeline-bar[data-product-name="${options.productName}"]`).forEach(b => {
-                    b.classList.remove('hover-active');
-                });
                 hideTooltip();
             };
             
@@ -1340,7 +1325,7 @@
                     const width = endOffset - startOffset;
                     
                     html += `
-                        <div class="year-timeline-bar bar-single"
+                        <div class="year-timeline-bar"
                              data-product-name="${product.name}"
                              data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
                              style="left: ${startOffset}%; width: ${width}%; background: ${productColors[product.name]};">
@@ -1352,7 +1337,7 @@
                     const firstWidth = 100 - firstStart;
                     
                     html += `
-                        <div class="year-timeline-bar bar-start"
+                        <div class="year-timeline-bar"
                              data-product-name="${product.name}"
                              data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
                              style="left: ${firstStart}%; width: ${firstWidth}%; background: ${productColors[product.name]};">
@@ -1363,7 +1348,7 @@
                     const secondWidth = (100 / 12) * (endMonth + endDay / monthDays[endMonth]);
                     
                     html += `
-                        <div class="year-timeline-bar bar-end"
+                        <div class="year-timeline-bar"
                              data-product-name="${product.name}"
                              data-product='${JSON.stringify(product).replace(/'/g, '&apos;')}'
                              style="left: 0; width: ${secondWidth}%; background: ${productColors[product.name]};">
@@ -1378,10 +1363,10 @@
                 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 const todayPosition = (100 / 12) * (currentMonthNow + currentDayNow / monthDays[currentMonthNow]);
                 
-                html += `<div class="year-today-line" style="left: ${todayPosition}%; z-index: 999;"></div>`;
+                html += `<div class="year-today-line" style="left: ${todayPosition}%;"></div>`;
                 html += `
                     <div style="position: absolute; left: ${todayPosition}%; top: -20px; transform: translateX(-50%); z-index: 20;">
-                        <div style="background: #ff9800; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
+                        <div style="background: #2563eb; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">
                             오늘
                         </div>
                     </div>
@@ -1398,18 +1383,12 @@
                     bar.onclick = () => showModalForProduct(productName);
                     
                     bar.onmouseover = (e) => {
-                        document.querySelectorAll(`.year-timeline-bar[data-product-name="${productName}"]`).forEach(b => {
-                            b.classList.add('hover-active');
-                        });
                         if (productData) {
                             showTooltip(e, productData);
                         }
                     };
                     
                     bar.onmouseout = () => {
-                        document.querySelectorAll(`.year-timeline-bar[data-product-name="${productName}"]`).forEach(b => {
-                            b.classList.remove('hover-active');
-                        });
                         hideTooltip();
                     };
                 });
@@ -1488,11 +1467,7 @@
             });
             
             const varieties = Object.keys(varietyGroups);
-            if (varieties.length === 1) {
-                showModal(varieties[0]);
-            } else {
-                showModal(varieties[0]);
-            }
+            showModal(varieties[0]);
         }
 
         // 모달 표시
@@ -1500,10 +1475,9 @@
             const modal = document.getElementById('optionsModal');
             const products = allProducts.filter(p => (p.품종 || p.품목) === variety);
             
-            document.getElementById('modalTitle').textContent = `${variety} (${products.length}개)`;
+            document.getElementById('modalTitle').innerHTML = `${variety} <span style="color: #6c757d; font-size: 18px;">(${products.length}개)</span>`;
             
             let html = '';
-            const isMobile = window.innerWidth <= 768;
             
             products.forEach(p => {
                 const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
@@ -1524,18 +1498,19 @@
                             `<div class="option-thumb"></div>`
                         }
                         <div class="option-info">
-                            <span class="option-col" style="width: 60px; color: #666; font-size: 13px; font-weight: 600;">옵션명</span>
-                            <span class="option-col" style="width: 200px; color: #1976d2; font-size: 14px; font-weight: 500;">${p.옵션명 || '옵션명 없음'}</span>
-                            <span class="option-col" style="width: 150px; color: #999; font-size: 13px;">${specs}</span>
-                            <span class="option-col" style="width: 50px; color: #666; font-size: 12px;">${p.발송지주소 ? '발송지' : ''}</span>
-                            <span class="option-col" style="width: 120px; color: #999; font-size: 12px;">${p.발송지주소 || ''}</span>
+                            <span class="option-col" style="min-width: 200px;">
+                                <strong style="color: #212529;">${p.옵션명 || '옵션명 없음'}</strong>
+                            </span>
+                            <span class="option-col" style="min-width: 120px; color: #6c757d; font-size: 13px;">
+                                ${specs}
+                            </span>
                             <span class="option-col" style="flex: 1; text-align: right;">
-                                <span style="color: #333; font-size: 16px; font-weight: 600; margin-right: 15px;">${price}원</span>
-                                <span class="status-badge ${statusClass}" style="font-size:11px;">
+                                <span class="price-amount" style="margin-right: 15px;">${price}원</span>
+                                <span class="status-badge ${statusClass}">
                                     ${p.공급상태 || '미정'}
                                 </span>
-                                <span class="badge-free" style="margin-left: 8px;">무료배송</span>
-                                <button class="badge-chart" style="margin-left: 8px;" 
+                                <span class="badge-free">무료배송</span>
+                                <button class="badge-chart" 
                                         onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
                                     가격차트
                                 </button>
@@ -1556,7 +1531,6 @@
 
         // 가격 차트 열기
         function openPriceChart(optionCode, optionName) {
-            console.log('차트 열기:', optionCode, optionName);
             closeModal();
             
             const chartModal = document.getElementById('chartModal');
@@ -1564,7 +1538,7 @@
             
             document.getElementById('chartModalBody').innerHTML = `
                 <div style="text-align: center; padding: 20px;">
-                    <div style="color: #999;">데이터를 불러오는 중...</div>
+                    <div style="color: #6c757d;">데이터를 불러오는 중...</div>
                 </div>
             `;
             
@@ -1609,8 +1583,8 @@
             const isMobile = window.innerWidth <= 768;
             
             const html = `
-                <div style="text-align: center; margin-bottom: ${isMobile ? '12px' : '20px'};">
-                    <div style="font-size: ${isMobile ? '10px' : '14px'}; color: #999;">${firstDate} ~ ${lastDate}</div>
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 14px; color: #6c757d;">${firstDate} ~ ${lastDate}</div>
                 </div>
                 <div class="chart-container">
                     <canvas id="priceChartCanvas"></canvas>
@@ -1628,7 +1602,6 @@
                         <div class="chart-stat-label">최저 가격</div>
                         <div class="chart-stat-value decrease">${minPrice.toLocaleString()}원</div>
                     </div>
-                    <div class="chart-stat
                     <div class="chart-stat-box">
                         <div class="chart-stat-label">평균 가격</div>
                         <div class="chart-stat-value">${avgPrice.toLocaleString()}원</div>
@@ -1654,15 +1627,15 @@
                     datasets: [{
                         label: '공급가',
                         data: prices,
-                        borderColor: '#1976d2',
-                        backgroundColor: 'rgba(25, 118, 210, 0.1)',
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
                         tension: 0.1,
-                        borderWidth: isMobile ? 1 : 2,
-                        pointRadius: isMobile ? 2 : 4,
-                        pointBackgroundColor: '#1976d2',
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#2563eb',
                         pointBorderColor: '#fff',
-                        pointBorderWidth: isMobile ? 1 : 2,
-                        pointHoverRadius: isMobile ? 3 : 6,
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 6,
                         fill: true
                     }]
                 },
@@ -1678,28 +1651,18 @@
                                 label: function(context) {
                                     return '공급가: ' + context.parsed.y.toLocaleString() + '원';
                                 }
-                            },
-                            titleFont: {
-                                size: isMobile ? 10 : 12
-                            },
-                            bodyFont: {
-                                size: isMobile ? 10 : 12
-                            },
-                            padding: isMobile ? 4 : 8
+                            }
                         }
                     },
                     scales: {
                         x: {
                             ticks: {
                                 font: {
-                                    size: isMobile ? 8 : 12
+                                    size: 12
                                 },
-                                maxRotation: isMobile ? 45 : 0,
+                                maxRotation: 0,
                                 autoSkip: true,
                                 maxTicksLimit: isMobile ? 6 : 12
-                            },
-                            grid: {
-                                display: !isMobile
                             }
                         },
                         y: {
@@ -1710,21 +1673,18 @@
                                     return value.toLocaleString() + '원';
                                 },
                                 font: {
-                                    size: isMobile ? 8 : 12
+                                    size: 12
                                 },
-                                maxTicksLimit: isMobile ? 5 : 8
-                            },
-                            grid: {
-                                display: !isMobile
+                                maxTicksLimit: 8
                             }
                         }
                     },
                     layout: {
                         padding: {
-                            left: isMobile ? 2 : 10,
-                            right: isMobile ? 2 : 10,
-                            top: isMobile ? 2 : 10,
-                            bottom: isMobile ? 2 : 10
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                            bottom: 10
                         }
                     }
                 }
@@ -1753,6 +1713,7 @@
 
         // 이벤트 리스너 설정
         function setupEventListeners() {
+            // 모달 외부 클릭 시 닫기
             document.getElementById('optionsModal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeModal();
@@ -1765,6 +1726,7 @@
                 }
             });
             
+            // ESC 키로 모달 닫기
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     if (document.getElementById('chartModal').classList.contains('show')) {
@@ -1775,13 +1737,6 @@
                 }
             });
         }
-
-        // DOM 로드 완료 후 초기화
-        window.addEventListener('DOMContentLoaded', function() {
-            updatePeriodDisplay();
-            loadData();
-            setupEventListeners();
-        });
     </script>
 </body>
 </html>
