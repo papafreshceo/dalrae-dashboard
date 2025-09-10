@@ -299,7 +299,7 @@
 
                     <!-- 3열: 협업/광고 문의 -->
                     <div class="footer-inquiry">
-                        <h3 class="footer-title">문의</h3>
+ 
                         <a class="inquiry-link" href="mailto:papa_fresh@naver.com?subject=협업 문의">
                             협업 문의
                         </a>
