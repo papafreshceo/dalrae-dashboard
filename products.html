@@ -135,7 +135,7 @@
             border-color: #667eea;
         }
         
-        /* 상품 테이블 */
+        /* 상품 테이블 - 고정 헤더와 열 구현 */
         .product-table {
             max-width: 1400px;
             margin: 0 auto;
@@ -145,17 +145,28 @@
         .table-container {
             background: white;
             border-radius: 12px;
-            overflow-x: auto;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .table-wrapper {
+            position: relative;
+            max-height: 600px;
+            overflow: auto;
         }
         
         table {
             width: 100%;
-            border-collapse: collapse;
-            min-width: 1200px;
+            border-collapse: separate;
+            border-spacing: 0;
+            min-width: 1400px;
         }
         
         thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
             background: #f5f6f7;
         }
         
@@ -166,24 +177,89 @@
             font-weight: 600;
             color: #5a5c60;
             border-bottom: 2px solid #e8e9eb;
+            background: #f5f6f7;
             white-space: nowrap;
+            position: sticky;
+            top: 0;
         }
         
+        /* 고정 열 스타일 */
+        th:nth-child(1),
+        th:nth-child(2),
+        th:nth-child(3),
+        th:nth-child(4) {
+            position: sticky;
+            left: 0;
+            z-index: 11;
+            background: #f5f6f7;
+        }
+        
+        th:nth-child(1) { left: 0; min-width: 50px; }
+        th:nth-child(2) { left: 50px; min-width: 70px; }
+        th:nth-child(3) { left: 120px; min-width: 120px; }
+        th:nth-child(4) { left: 240px; min-width: 150px; }
+        
         td {
-            padding: 15px 10px;
+            padding: 12px 10px;
             border-bottom: 1px solid #f0f1f3;
             font-size: 14px;
             color: #3a3b3d;
             text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+        
+        /* 고정 열 데이터 셀 */
+        td:nth-child(1),
+        td:nth-child(2),
+        td:nth-child(3),
+        td:nth-child(4) {
+            position: sticky;
+            background: white;
+            z-index: 1;
+        }
+        
+        td:nth-child(1) { left: 0; }
+        td:nth-child(2) { left: 50px; }
+        td:nth-child(3) { left: 120px; }
+        td:nth-child(4) { left: 240px; }
+        
+        /* 고정 열 hover 효과 */
+        tbody tr:hover td {
+            background: #f9fafb;
+        }
+        
+        tbody tr:hover td:nth-child(1),
+        tbody tr:hover td:nth-child(2),
+        tbody tr:hover td:nth-child(3),
+        tbody tr:hover td:nth-child(4) {
+            background: #f9fafb;
+        }
+        
+        /* 고정 열 그림자 효과 */
+        th:nth-child(4)::after,
+        td:nth-child(4)::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: linear-gradient(to right, rgba(0,0,0,0.08), transparent);
+            pointer-events: none;
+        }
+        
+        /* 줄바꿈 방지 설정 */
+        td.no-wrap {
+            white-space: nowrap !important;
         }
         
         td.price-cell {
             text-align: right;
             padding-right: 15px;
-        }
-        
-        tbody tr:hover {
-            background: #f9fafb;
+            white-space: nowrap !important;
         }
         
         .product-thumb {
@@ -199,6 +275,7 @@
             font-weight: 600;
             color: #667eea;
             cursor: pointer;
+            white-space: nowrap !important;
         }
         
         .product-name:hover {
@@ -211,6 +288,7 @@
             font-size: 12px;
             font-weight: 500;
             display: inline-block;
+            white-space: nowrap !important;
         }
         
         .status-active {
@@ -236,6 +314,7 @@
         .price {
             font-weight: 600;
             color: #667eea;
+            white-space: nowrap !important;
         }
         
         .badge-chart {
@@ -249,6 +328,7 @@
             display: inline-block;
             transition: all 0.2s;
             border: none;
+            white-space: nowrap !important;
         }
         
         .badge-chart:hover {
@@ -260,6 +340,7 @@
             display: flex;
             gap: 4px;
             justify-content: center;
+            white-space: nowrap !important;
         }
         
         .badge-detail {
@@ -268,6 +349,7 @@
             padding: 3px 8px;
             border-radius: 12px;
             font-size: 11px;
+            white-space: nowrap !important;
         }
         
         .badge-image {
@@ -276,6 +358,7 @@
             padding: 3px 8px;
             border-radius: 12px;
             font-size: 11px;
+            white-space: nowrap !important;
         }
         
         /* 그리드 뷰 */
@@ -431,17 +514,59 @@
                 padding: 0 15px;
             }
             
+            .table-wrapper {
+                max-height: 500px;
+            }
+            
             table {
-                min-width: auto;
+                min-width: 900px;
             }
             
             th, td {
                 padding: 8px 5px;
                 font-size: 11px;
             }
+            
+            /* 모바일에서도 줄바꿈 방지 */
+            td {
+                white-space: nowrap !important;
+                max-width: 150px;
+            }
+            
+            /* 모바일 고정 열 조정 */
+            th:nth-child(1), td:nth-child(1) { 
+                left: 0; 
+                min-width: 40px;
+            }
+            th:nth-child(2), td:nth-child(2) { 
+                left: 40px; 
+                min-width: 50px;
+            }
+            th:nth-child(3), td:nth-child(3) { 
+                left: 90px; 
+                min-width: 100px;
+            }
+            th:nth-child(4), td:nth-child(4) { 
+                left: 190px; 
+                min-width: 120px;
+            }
+            
+            .product-thumb {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .badge-chart {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            
+            .badge-detail, .badge-image {
+                font-size: 10px;
+                padding: 2px 6px;
+            }
         }
     </style>
-    <link rel="stylesheet" href="common-styles.css">
 </head>
 <body>
     <!-- 공통 헤더 -->
@@ -482,27 +607,30 @@
     <!-- 상품 테이블 -->
     <div class="product-table" id="tableView">
         <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>이미지</th>
-                        <th>상품명</th>
-                        <th>옵션명</th>
-                        <th>규격</th>
-                        <th>발송지</th>
-                        <th>발송기한</th>
-                        <th>공급상태</th>
-                        <th>공급가</th>
-                        <th>그래프</th>
-                        <th>시작일(예정)</th>
-                        <th>종료일(예정)</th>
-                        <th>제공</th>
-                    </tr>
-                </thead>
-                <tbody id="productTableBody">
-                    <!-- 동적으로 생성 -->
-                </tbody>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>이미지</th>
+                            <th>상품명</th>
+                            <th>옵션명</th>
+                            <th>규격</th>
+                            <th>발송지</th>
+                            <th>발송기한</th>
+                            <th>공급상태</th>
+                            <th>공급가</th>
+                            <th>그래프</th>
+                            <th>시작일</th>
+                            <th>종료일</th>
+                            <th>제공</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        <!-- 동적으로 생성 -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -531,14 +659,30 @@
         </div>
     </div>
 
+    <!-- 공통 푸터 -->
+    <div id="footer-container"></div>
+
+    <!-- 외부 스크립트 로드 -->
     <script src="header.js"></script>
+    <script src="footer.js"></script>
+    
     <script>
-        // 헤더 초기화
+        // 초기화
         window.addEventListener('DOMContentLoaded', function() {
-            DalraeHeader.init({
-                containerId: 'header-container',
-                activePage: 'products'
-            });
+            // 헤더 초기화
+            if (window.DalraeHeader) {
+                DalraeHeader.init({
+                    containerId: 'header-container',
+                    activePage: 'products'
+                });
+            }
+            
+            // 푸터 초기화
+            if (window.DalraeFooter) {
+                DalraeFooter.init({
+                    containerId: 'footer-container'
+                });
+            }
         });
 
         // 전역 변수
@@ -690,7 +834,7 @@
             document.getElementById('resultCount').textContent = filteredProducts.length;
             
             if (currentView === 'table') {
-                renderTable(pageProducts);
+                renderTable(pageProducts, startIndex);
             } else {
                 renderGrid(pageProducts);
             }
@@ -698,18 +842,19 @@
             renderPagination();
         }
         
-        // 테이블 렌더링
-        function renderTable(products) {
+        // 테이블 렌더링 - 연번 추가
+        function renderTable(products, startIndex) {
             const tbody = document.getElementById('productTableBody');
             const today = new Date();
             const twenty = new Date(today.getTime() + 20 * 24 * 60 * 60 * 1000);
             
             if (products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="12" style="text-align:center;padding:40px;">검색된 옵션상품이 없습니다.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;padding:40px;">검색된 옵션상품이 없습니다.</td></tr>';
                 return;
             }
             
-            tbody.innerHTML = products.map(p => {
+            tbody.innerHTML = products.map((p, index) => {
+                const rowNumber = startIndex + index + 1; // 연번 계산
                 const name = p.품종 || p.품목 || '-';
                 const specs = [p.규격1, p.규격2, p.규격3].filter(s => s).join(' ');
                 const price = p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g, '')).toLocaleString() : '0';
@@ -746,6 +891,7 @@
                 
                 return `
                     <tr>
+                        <td class="no-wrap">${rowNumber}</td>
                         <td>
                             ${p.썸네일 ? 
                                 `<img src="${p.썸네일}" class="product-thumb" alt="${name}">` :
@@ -753,20 +899,20 @@
                             }
                         </td>
                         <td><span class="product-name">${name}</span></td>
-                        <td>${p.옵션명 || '-'}</td>
-                        <td>${specs || '-'}</td>
+                        <td class="no-wrap">${p.옵션명 || '-'}</td>
+                        <td class="no-wrap">${specs || '-'}</td>
                         <td>${p.발송지주소 || '-'}</td>
-                        <td>${p.발송기한 || '-'}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td class="no-wrap">${p.발송기한 || '-'}</td>
+                        <td class="no-wrap"><span class="status-badge ${statusClass}">${statusText}</span></td>
                         <td class="price-cell"><span class="price">${price}원</span></td>
-                        <td>
+                        <td class="no-wrap">
                             <button class="badge-chart" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${safeOptionName}');">
-                                가격차트
+                                차트
                             </button>
                         </td>
-                        <td>${startDate}</td>
-                        <td>${endDate}</td>
-                        <td>
+                        <td class="no-wrap">${startDate}</td>
+                        <td class="no-wrap">${endDate}</td>
+                        <td class="no-wrap">
                             <div class="badge-provide">
                                 ${hasDetail ? '<span class="badge-detail">상세</span>' : ''}
                                 ${hasImage ? '<span class="badge-image">이미지</span>' : ''}
