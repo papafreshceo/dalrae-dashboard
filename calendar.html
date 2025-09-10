@@ -109,14 +109,16 @@
 
         /* 캘린더 컨트롤 */
         .calendar-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 16px 20px;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
         
         .nav-controls {
             display: flex;
@@ -171,37 +173,39 @@
             border-color: #2563eb;
         }
 
-        /* 월/년 보기 */
-        .month-view, .year-view {
-            background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            overflow-x: auto;
-        }
+       .month-view, .year-view {
+    background: white;
+    border: none;
+    border-radius: 12px;
+    padding: 24px;
+    overflow-x: auto;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
         
         .month-calendar-content {
             min-width: 700px;
             position: relative;
         }
         
-        .weekdays {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background: #dee2e6;
-            border: 1px solid #dee2e6;
-            margin-bottom: 1px;
-        }
-        
-        .weekday {
-            background: #f8f9fa;
-            padding: 12px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 13px;
-            color: #495057;
-        }
+       .weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    background: transparent;
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 0;
+}
+
+.weekday {
+    background: transparent;
+    padding: 14px 8px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #6c757d;
+}
         
         .weekday.sunday {
             color: #dc3545;
@@ -212,21 +216,32 @@
         }
         
         .days-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background: #dee2e6;
-            border: 1px solid #dee2e6;
-            border-top: none;
-            position: relative;
-        }
-        
-        .day-cell {
-            background: white;
-            min-height: 100px;
-            padding: 8px;
-            position: relative;
-        }
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    background: transparent;
+    border: none;
+    position: relative;
+}
+
+.day-cell {
+    background: white;
+    min-height: 100px;
+    padding: 10px;
+    position: relative;
+    border-right: 1px solid #f1f3f5;
+    border-bottom: 1px solid #f1f3f5;
+    transition: all 0.2s;
+}
+
+.day-cell:nth-child(7n) {
+    border-right: none;
+}
+
+.day-cell:hover:not(.other-month) {
+    background: #f8f9fa;
+    box-shadow: inset 0 0 0 1px #e9ecef;
+}
         
         .day-number {
             font-size: 14px;
@@ -242,21 +257,42 @@
         }
         
         .day-cell.today {
-            background: #e7f3ff;
-        }
-        
-        .day-cell.today .day-number {
-            color: #2563eb;
-            font-weight: 700;
-        }
-        
-        .day-cell.sunday .day-number {
-            color: #dc3545;
-        }
-        
-        .day-cell.saturday .day-number {
-            color: #0066cc;
-        }
+    background: linear-gradient(135deg, #e7f3ff 0%, #f0f7ff 100%);
+    position: relative;
+}
+
+.day-cell.today::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid #2563eb;
+    border-radius: 4px;
+    pointer-events: none;
+}
+
+.day-cell.today .day-number {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.weekday.sunday {
+    color: #ef4444;
+}
+
+.weekday.saturday {
+    color: #2563eb;
+}
+
+.day-cell.sunday .day-number {
+    color: #ef4444;
+}
+
+.day-cell.saturday .day-number {
+    color: #2563eb;
+}
         
         /* 타임라인 바 */
         .month-timeline-wrapper {
