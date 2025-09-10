@@ -178,14 +178,27 @@
     border: none;
     border-radius: 12px;
     padding: 24px;
-    overflow-x: auto;
+    overflow-x: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+@media (max-width: 768px) {
+    .month-view, .year-view {
+        overflow-x: auto;
+        padding: 15px;
+    }
 }
         
         .month-calendar-content {
-            min-width: 700px;
-            position: relative;
-        }
+    width: 100%;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .month-calendar-content {
+        min-width: 600px;
+    }
+}
         
        .weekdays {
     display: grid;
@@ -331,8 +344,15 @@
         
         /* 년 보기 */
         .year-calendar-content {
-            min-width: 1200px;
-        }
+    width: 100%;
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    .year-calendar-content {
+        min-width: 900px;
+    }
+}
         
         .year-months-header {
             display: grid;
@@ -717,6 +737,42 @@
         }
         
         /* 모바일 반응형 */
+        /* 여기에 추가 ↓ */
+@media (max-width: 1400px) and (min-width: 769px) {
+    .day-cell {
+        min-height: 90px;
+        padding: 8px;
+    }
+    
+    .month-timeline-bar {
+        height: 12px;
+        font-size: 9px;
+    }
+    
+    .year-timeline-row {
+        height: 30px;
+    }
+    
+    .year-timeline-bar {
+        height: 20px;
+        font-size: 10px;
+    }
+}
+
+/* 모바일 반응형 (기존 코드) */
+@media (max-width: 1024px) {
+    .hero {
+        padding: 20px 15px;
+    }
+    
+    .card {
+        padding: 25px 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    /* 기존 모바일 코드들... */
+}
         @media (max-width: 1024px) {
             .hero {
                 padding: 20px 15px;
