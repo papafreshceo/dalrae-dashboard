@@ -248,8 +248,8 @@
                 /* 3행: 3개 칼럼 */
                 .footer-mobile-columns {
                     display: grid;
-                    grid-template-columns: 1fr 1fr 1fr;
-                    gap: 15px;
+                    grid-template-columns: 0.8fr 0.7fr 1.5fr;
+                    gap: 10px;
                     margin-bottom: 20px;
                 }
 
