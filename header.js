@@ -139,6 +139,10 @@
 
                 .nav-menu-container {
                     position: relative;
+                    width: 100%;  /* 전체 너비 사용 */
+                    margin-left: -15px;  /* 패딩 무시하고 전체 너비 */
+                    margin-right: -15px;
+                    padding: 0 15px;
                 }
 
                 /* 좌우 그라데이션 효과 (스크롤 힌트) */
@@ -148,7 +152,7 @@
                     position: absolute;
                     top: 0;
                     bottom: 0;
-                    width: 20px;
+                    width: 15px;
                     z-index: 1;
                     pointer-events: none;
                 }
@@ -164,41 +168,60 @@
                 }
                 
                 .nav-menu {
-                    padding: 5px 5px 5px 0;
+                    padding: 8px 5px;
+                    gap: 20px;  /* 메뉴 간격 증가 */
                 }
                 
                 .nav-btn {
                     display: inline-block;
-                    padding: 8px 16px;
-                    background: white;
-                    border: 1px solid #e1e3e5;
-                    border-radius: 20px;
+                    padding: 0;
+                    background: none;
+                    border: none;
+                    border-radius: 0;
                     color: #5a5c60;
-                    font-size: 13px;
+                    font-size: 14px;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: all 0.2s;
+                    transition: color 0.2s;
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
                     flex-shrink: 0;
                 }
 
                 .nav-btn:hover {
-                    background: #f5f6f7;
-                    border-color: #667eea;
                     color: #667eea;
                 }
 
                 .nav-btn.active {
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    border-color: transparent;
+                    color: #667eea;
+                    font-weight: 700;
                 }
                 
+                /* 발주시스템 특별 애니메이션 */
                 .special-btn {
-                    padding: 8px 18px;
-                    font-size: 13px;
-                    margin-right: 10px;
+                    padding: 0;
+                    font-size: 14px;
+                    font-weight: 700;
+                    margin-right: 0;
+                    background: linear-gradient(270deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24, #f0932b, #eb4d4b, #6ab04c, #667eea, #ff6b6b);
+                    background-size: 600% 100%;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    animation: textGradient 3s ease infinite;
+                    border: none;
+                    border-radius: 0;
+                }
+                
+                @keyframes textGradient {
+                    0% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                    100% { background-position: 0% 50%; }
+                }
+                
+                .special-btn:hover {
+                    transform: scale(1.1);
+                    box-shadow: none;
                 }
             }
         `;
