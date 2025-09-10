@@ -23,95 +23,54 @@
                 max-width: 1400px;
                 margin: 0 auto;
                 padding: 0 30px;
-                display: grid;
-                grid-template-columns: 200px 1fr auto;
+                display: flex;
                 align-items: center;
-                gap: 20px;
+                gap: 30px;
             }
 
             .logo-img { 
                 height: 36px;
                 object-fit: contain;
                 cursor: pointer;
+                flex-shrink: 0;
             }
 
-            /* 메뉴 고정용 컨테이너 */
-            .menu-container {
-                position: relative;
-                background: white;
-                transition: all 0.3s;
+            /* 메뉴 컨테이너 - 스크롤 가능 */
+            .nav-menu-container {
+                flex: 1;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
             }
 
-            .menu-container.sticky {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 200;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                padding: 10px 0;
-            }
-
-            .menu-wrapper {
-                max-width: 1400px;
-                margin: 0 auto;
-                padding: 0 30px;
-                display: flex;
-                justify-content: center;
-                gap: 20px;
-            }
-
-            .center-button {
-                display: flex;
-                justify-content: center;
-                align-items: center;
+            .nav-menu-container::-webkit-scrollbar {
+                display: none;
             }
 
             .nav-menu { 
                 display: flex; 
-                gap: 8px;
+                gap: 10px;
+                padding: 2px 0;
             }
 
-            .nav-btn {
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                padding: 10px 16px;
-                background: white;
-                border: 1px solid #e1e3e5;
-                border-radius: 8px;
-                color: #5a5c60;
-                font-size: 14px;
-                font-weight: 500;
-                cursor: pointer;
-                transition: all 0.2s;
-                white-space: nowrap;
-                font-family: 'Noto Sans KR', -apple-system, sans-serif;
-            }
-
-            .nav-btn:hover {
-                background: #f5f6f7;
-                border-color: #667eea;
-                color: #667eea;
-            }
-
-            .nav-btn.active {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                border-color: transparent;
-            }
-
-            /* 발주시스템 특별 스타일 */
+            /* 발주시스템 버튼 */
             .special-btn {
                 padding: 10px 24px;
                 background: linear-gradient(270deg, #ffffff, #ff9a9e, #fecfef, #a8e6cf, #ffffff);
                 background-size: 400% 100%;
                 color: #333;
                 border: none;
-                font-weight: 600;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 700;
+                cursor: pointer;
+                white-space: nowrap;
                 animation: shine 3.75s ease-in-out infinite;
-                position: relative;
-                overflow: hidden;
+                transition: transform 0.2s, box-shadow 0.2s;
+                font-family: 'Noto Sans KR', -apple-system, sans-serif;
+                flex-shrink: 0;
             }
 
             @keyframes shine {
@@ -125,51 +84,121 @@
                 box-shadow: 0 4px 12px rgba(255, 154, 158, 0.4);
             }
 
-            /* 모바일 반응형 */
+            /* PC 스타일 - 심플한 텍스트 버튼 */
+            @media (min-width: 769px) {
+                .nav-btn {
+                    display: inline-block;
+                    padding: 8px 16px;
+                    background: none;
+                    border: none;
+                    color: #5a5c60;
+                    font-size: 15px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: color 0.2s;
+                    white-space: nowrap;
+                    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+                    position: relative;
+                }
+
+                .nav-btn:hover {
+                    color: #667eea;
+                }
+
+                .nav-btn.active {
+                    color: #667eea;
+                }
+
+                .nav-btn.active::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -2px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 80%;
+                    height: 3px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 2px;
+                }
+            }
+
+            /* 모바일 스타일 - 태그 형태 */
             @media (max-width: 768px) {
                 .top-header {
                     padding: 15px 0;
                 }
                 
                 .logo-img {
-                    height: 22px;
+                    height: 28px;
                 }
                 
                 .header-content {
-                    grid-template-columns: 1fr;
-                    gap: 15px;
                     padding: 0 15px;
+                    gap: 15px;
                 }
-                
-                .menu-container.sticky .menu-wrapper {
-                    padding: 0 10px;
-                    gap: 8px;
+
+                .nav-menu-container {
+                    position: relative;
                 }
-                
-                .center-button {
-                    order: -1;
+
+                /* 좌우 그라데이션 효과 (스크롤 힌트) */
+                .nav-menu-container::before,
+                .nav-menu-container::after {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    width: 20px;
+                    z-index: 1;
+                    pointer-events: none;
+                }
+
+                .nav-menu-container::before {
+                    left: 0;
+                    background: linear-gradient(to right, white, transparent);
+                }
+
+                .nav-menu-container::after {
+                    right: 0;
+                    background: linear-gradient(to left, white, transparent);
                 }
                 
                 .nav-menu {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 4px;
-                    width: 100%;
+                    padding: 5px 5px 5px 0;
                 }
                 
                 .nav-btn {
-                    padding: 6px 4px;
-                    font-size: 11px;
-                }
-                
-                .nav-btn span {
                     display: inline-block;
+                    padding: 8px 16px;
+                    background: white;
+                    border: 1px solid #e1e3e5;
+                    border-radius: 20px;
+                    color: #5a5c60;
+                    font-size: 13px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
                     white-space: nowrap;
+                    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+                    flex-shrink: 0;
+                }
+
+                .nav-btn:hover {
+                    background: #f5f6f7;
+                    border-color: #667eea;
+                    color: #667eea;
+                }
+
+                .nav-btn.active {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border-color: transparent;
                 }
                 
                 .special-btn {
-                    width: 100%;
-                    padding: 8px 12px;
+                    padding: 8px 18px;
+                    font-size: 13px;
+                    margin-right: 10px;
                 }
             }
         `;
@@ -188,52 +217,39 @@
                 <div class="header-content">
                     <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
                          alt="달래마켓" 
-                         class="logo-img">
-                    <div class="center-button">
-                        <button class="nav-btn special-btn" onclick="openOrderSystem()">
-                            <span>🚜</span>
-                            <span>발주시스템</span>
-                        </button>
+                         class="logo-img"
+                         onclick="window.location.href='index.html'">
+                    
+                    <div class="nav-menu-container">
+                        <nav class="nav-menu" id="mainMenu">
+                            <button class="nav-btn special-btn" onclick="openOrderSystem()">
+                                발주시스템
+                            </button>
+                            <button class="nav-btn" data-page="dashboard">
+                                대시보드
+                            </button>
+                            <button class="nav-btn" data-page="products">
+                                상품리스트
+                            </button>
+                            <button class="nav-btn" data-page="calendar">
+                                상품캘린더
+                            </button>
+                            <button class="nav-btn" data-page="delivery">
+                                배송캘린더
+                            </button>
+                            <button class="nav-btn" data-page="orders">
+                                주문관리
+                            </button>
+                            <button class="nav-btn" data-page="services">
+                                서비스&프로그램
+                            </button>
+                            <button class="nav-btn" data-page="notice">
+                                공지사항
+                            </button>
+                        </nav>
                     </div>
-                    <nav class="nav-menu" id="mainMenu">
-                        <button class="nav-btn" data-page="dashboard">
-                            <span>📊</span>
-                            <span>대시보드</span>
-                        </button>
-                        <button class="nav-btn" data-page="products">
-                            <span>📦</span>
-                            <span>상품리스트</span>
-                        </button>
-                        <button class="nav-btn" data-page="calendar">
-                            <span>📅</span>
-                            <span>상품캘린더</span>
-                        </button>
-                        <button class="nav-btn" data-page="delivery">
-                            <span>🚚</span>
-                            <span>배송캘린더</span>
-                        </button>
-                        <button class="nav-btn" data-page="orders">
-                            <span>📋</span>
-                            <span>주문관리</span>
-                        </button>
-                        <button class="nav-btn" data-page="services">
-                            <span>🎯</span>
-                            <span>서비스&프로그램</span>
-                        </button>
-                        <button class="nav-btn" data-page="notice">
-                            <span>📢</span>
-                            <span>공지사항</span>
-                        </button>
-                    </nav>
                 </div>
             </header>
-
-            <!-- 메뉴 고정 컨테이너 (스크롤 시 스티키) -->
-            <div class="menu-container" id="menuContainer">
-                <div class="menu-wrapper" id="menuWrapper" style="display: none;">
-                    <!-- 스크롤 시 여기에 메뉴 복사 -->
-                </div>
-            </div>
         `;
         
         return headerHTML;
@@ -256,73 +272,6 @@
     window.openOrderSystem = function() {
         window.open('https://papafarmers.com/orders/', '_blank');
     };
-
-    // 스티키 메뉴 설정
-    function setupStickyMenu() {
-        // DOM이 완전히 로드된 후 실행
-        setTimeout(() => {
-            const header = document.querySelector('.top-header');
-            const menuContainer = document.getElementById('menuContainer');
-            const menuWrapper = document.getElementById('menuWrapper');
-            const mainMenu = document.getElementById('mainMenu');
-            const centerButton = document.querySelector('.center-button');
-            
-            if (!header || !menuContainer || !menuWrapper || !mainMenu || !centerButton) {
-                console.warn('헤더 요소를 찾을 수 없습니다 - 스티키 메뉴 비활성화');
-                return;
-            }
-            
-            let headerHeight = header.offsetHeight;
-            let stickyOffset = header.offsetTop + headerHeight;
-            
-            // 기존 스크롤 이벤트 리스너 제거 (중복 방지)
-            window.removeEventListener('scroll', window.dalraeStickyHandler);
-            
-            // 새 스크롤 핸들러 정의
-            window.dalraeStickyHandler = function() {
-                if (window.pageYOffset > stickyOffset) {
-                    if (!menuContainer.classList.contains('sticky')) {
-                        menuContainer.classList.add('sticky');
-                        menuWrapper.style.display = 'flex';
-                        
-                        // 메뉴 복사
-                        menuWrapper.innerHTML = '';
-                        
-                        // 중앙 버튼 복사
-                        const centerButtonClone = centerButton.cloneNode(true);
-                        menuWrapper.appendChild(centerButtonClone);
-                        
-                        // 메인 메뉴 복사
-                        const mainMenuClone = mainMenu.cloneNode(true);
-                        menuWrapper.appendChild(mainMenuClone);
-                        
-                        // 이벤트 리스너 재설정
-                        centerButtonClone.querySelector('.special-btn').onclick = openOrderSystem;
-                        
-                        // 메뉴 클릭 이벤트 재설정
-                        mainMenuClone.querySelectorAll('.nav-btn').forEach(btn => {
-                            btn.addEventListener('click', handleMenuClick);
-                        });
-                        
-                        // 현재 페이지 활성화 상태 유지
-                        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-                        const pageName = currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
-                        mainMenuClone.querySelectorAll('.nav-btn').forEach(btn => {
-                            if (btn.dataset.page === pageName) {
-                                btn.classList.add('active');
-                            }
-                        });
-                    }
-                } else {
-                    menuContainer.classList.remove('sticky');
-                    menuWrapper.style.display = 'none';
-                }
-            };
-            
-            // 스크롤 이벤트 리스너 추가
-            window.addEventListener('scroll', window.dalraeStickyHandler);
-        }, 100);
-    }
 
     // 메뉴 클릭 처리
     function handleMenuClick(e) {
@@ -362,8 +311,7 @@
         // 옵션 설정
         const { 
             containerId = 'header-container',
-            activePage = null,
-            enableStickyMenu = true  // 스티키 메뉴 활성화 옵션
+            activePage = null
         } = options;
         
         // 헤더 컨테이너 찾기
@@ -390,10 +338,23 @@
         document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
             btn.addEventListener('click', handleMenuClick);
         });
-        
-        // 스티키 메뉴 설정 (옵션에 따라)
-        if (enableStickyMenu) {
-            setupStickyMenu();
+
+        // 모바일에서 현재 활성 메뉴를 볼 수 있도록 스크롤
+        if (window.innerWidth <= 768) {
+            const activeBtn = document.querySelector('.nav-btn.active');
+            if (activeBtn) {
+                const container = document.querySelector('.nav-menu-container');
+                if (container) {
+                    // 활성 버튼이 중앙에 오도록 스크롤
+                    setTimeout(() => {
+                        const btnLeft = activeBtn.offsetLeft;
+                        const btnWidth = activeBtn.offsetWidth;
+                        const containerWidth = container.offsetWidth;
+                        const scrollLeft = btnLeft - (containerWidth / 2) + (btnWidth / 2);
+                        container.scrollLeft = scrollLeft;
+                    }, 100);
+                }
+            }
         }
     }
 
