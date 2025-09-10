@@ -8,7 +8,6 @@
                 background: #ffffff;
                 border-top: 1px solid #e8e9eb;
                 padding: 40px 0;
-                margin-top: 60px;
             }
 
             .footer-content {
@@ -16,7 +15,7 @@
                 margin: 0 auto;
                 padding: 0 30px;
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-columns: 1.2fr 1fr 1fr 1fr;
                 gap: 40px;
             }
 
@@ -31,7 +30,8 @@
                 height: 28px;
                 object-fit: contain;
                 margin-bottom: 8px;
-                opacity: 0.8;
+                filter: grayscale(100%) brightness(0.4);
+                opacity: 0.7;
             }
 
             .footer-info {
@@ -49,7 +49,7 @@
             .footer-links {
                 display: flex;
                 flex-direction: column;
-                gap: 12px;
+                gap: 8px;
             }
 
             .footer-title {
@@ -79,6 +79,28 @@
                 color: #667eea;
             }
 
+            /* 문의 섹션 */
+            .footer-inquiry {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .inquiry-link {
+                font-size: 13px;
+                color: #6b7280;
+                text-decoration: none;
+                transition: color 0.2s ease;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .inquiry-link:hover {
+                color: #667eea;
+            }
+
             /* 연락처 섹션 */
             .footer-contact {
                 display: flex;
@@ -92,6 +114,16 @@
                 gap: 8px;
                 font-size: 13px;
                 color: #6b7280;
+            }
+
+            .contact-item a {
+                color: #6b7280;
+                text-decoration: none;
+                transition: color 0.2s ease;
+            }
+
+            .contact-item a:hover {
+                color: #667eea;
             }
 
             .contact-icon {
@@ -137,20 +169,20 @@
             }
 
             /* 카카오톡 버튼 특별 스타일 */
-.social-link.kakao {
-    background: #FEE500;  /* 카카오 노란색 배경 */
-}
+            .social-link.kakao {
+                background: #FEE500;
+            }
 
-.social-link.kakao:hover {
-    background: #FDD835;  /* 호버 시 조금 더 진한 노란색 */
-    transform: translateY(-2px);
-}
+            .social-link.kakao:hover {
+                background: #FDD835;
+                transform: translateY(-2px);
+            }
 
-.social-link.kakao img {
-    width: 20px !important;
-    height: 20px !important;
-    filter: none !important;  /* SVG fill 효과 제거 */
-}
+            .social-link.kakao img {
+                width: 20px !important;
+                height: 20px !important;
+                filter: none !important;
+            }
 
             /* 하단 카피라이트 */
             .footer-bottom {
@@ -173,17 +205,20 @@
                 color: #667eea;
             }
 
-            /* 모바일 반응형 */
+            /* 모바일 반응형 - 2열 레이아웃 */
             @media (max-width: 768px) {
                 .footer {
                     padding: 30px 0;
-                    margin-top: 40px;
                 }
 
                 .footer-content {
-                    grid-template-columns: 1fr;
-                    gap: 30px;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 25px;
                     padding: 0 15px;
+                }
+
+                .footer-company {
+                    grid-column: span 2;
                 }
 
                 .footer-logo {
@@ -198,7 +233,8 @@
                     font-size: 13px;
                 }
 
-                .footer-link {
+                .footer-link,
+                .inquiry-link {
                     font-size: 12px;
                 }
 
@@ -235,13 +271,12 @@
         const footerHTML = `
             <footer class="footer">
                 <div class="footer-content">
-                    <!-- 회사 정보 -->
+                    <!-- 1열: 회사 정보 -->
                     <div class="footer-company">
                         <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
                              alt="달래마켓" 
                              class="footer-logo">
                         <div class="footer-info">
-
                             <p>대표: 남잠화</p>
                             <p>사업자등록번호: 107-30-96371</p>
                             <p>통신판매업신고: 2022-경북청도-0003</p>
@@ -249,9 +284,8 @@
                         </div>
                     </div>
 
-                    <!-- 빠른 링크 -->
+                    <!-- 2열: 빠른 링크 -->
                     <div class="footer-links">
-                        <h3 class="footer-title">빠른 메뉴</h3>
                         <div class="footer-link-list">
                             <a class="footer-link" onclick="navigateToFooterPage('dashboard')">대시보드</a>
                             <a class="footer-link" onclick="navigateToFooterPage('products')">상품리스트</a>
@@ -263,9 +297,19 @@
                         </div>
                     </div>
 
-                    <!-- 연락처 & SNS -->
+                    <!-- 3열: 협업/광고 문의 -->
+                    <div class="footer-inquiry">
+                        <h3 class="footer-title">문의</h3>
+                        <a class="inquiry-link" href="mailto:papa_fresh@naver.com?subject=협업 문의">
+                            협업 문의
+                        </a>
+                        <a class="inquiry-link" href="mailto:papa_fresh@naver.com?subject=광고 문의">
+                            광고 문의
+                        </a>
+                    </div>
+
+                    <!-- 4열: 연락처 & SNS -->
                     <div class="footer-contact">
-                        <h3 class="footer-title">연락처</h3>
                         <div class="contact-item">
                             <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C19.5304 19 20.0391 18.7893 20.4142 18.4142C20.7893 18.0391 21 17.5304 21 17V7C21 6.46957 20.7893 5.96086 20.4142 5.58579C20.0391 5.21071 19.5304 5 19 5H5C4.46957 5 3.96086 5.21071 3.58579 5.58579C3.21071 5.96086 3 6.46957 3 7V17C3 17.5304 3.21071 18.0391 3.58579 18.4142C3.96086 18.7893 4.46957 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -276,13 +320,7 @@
                             <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5 4H9L11 9L8.5 10.5C9.57096 12.6715 11.3285 14.429 13.5 15.5L15 13L20 15V19C20 19.5304 19.7893 20.0391 19.4142 20.4142C19.0391 20.7893 18.5304 21 18 21C14.0993 20.763 10.4202 19.1065 7.65683 16.3432C4.8935 13.5798 3.23705 9.90074 3 6C3 5.46957 3.21071 4.96086 3.58579 4.58579C3.96086 4.21071 4.46957 4 5 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <span>010-2688-1388</span>
-                        </div>
-                        <div class="contact-item">
-                            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 2C8.13401 2 5 5.13401 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13401 15.866 2 12 2ZM12 11.5C10.6193 11.5 9.5 10.3807 9.5 9C9.5 7.61929 10.6193 6.5 12 6.5C13.3807 6.5 14.5 7.61929 14.5 9C14.5 10.3807 13.3807 11.5 12 11.5Z" fill="currentColor"/>
-                            </svg>
-
+                            <a href="tel:01026881388">010-2688-1388</a>
                         </div>
 
                         <!-- SNS 링크 -->
@@ -302,12 +340,11 @@
                                     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.405a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/>
                                 </svg>
                             </a>
-                            <!-- 카카오톡 추가 -->
                             <a class="social-link kakao" href="https://open.kakao.com/o/gXyZdXYg" target="_blank" title="카카오톡 오픈채팅">
-    <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1757496850/kakaotalk_sharing_btn_small_wozpwf.png" 
-         alt="카카오톡" 
-         style="width: 20px; height: 20px;">
-</a>
+                                <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1757496850/kakaotalk_sharing_btn_small_wozpwf.png" 
+                                     alt="카카오톡" 
+                                     style="width: 20px; height: 20px;">
+                            </a>
                         </div>
                     </div>
                 </div>
