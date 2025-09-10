@@ -402,7 +402,8 @@
               <div class="search-input-wrapper">
                 <input type="text" class="product-search" id="productSearch" 
                        placeholder="상품명, 품종, 옵션명으로 검색..." 
-                       oninput="searchProducts(this.value)">
+                       oninput="searchProducts(this.value)"
+                       onfocus="if(this.value.length >= 2) searchProducts(this.value)">
                 <div class="search-results" id="searchResults"></div>
               </div>
             </div>
