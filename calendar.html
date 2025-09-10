@@ -1062,21 +1062,28 @@
             }
         }
 
-        // 오늘로 이동 - 개선된 버전
-        function goToToday() {
-            const today = new Date();
-            
-            if (currentView === 'month') {
-                currentMonth = today.getMonth();
-                currentYear = today.getFullYear();
-                updatePeriodDisplay();
-                renderCalendar();
-            } else {
-                // 년 보기에서 오늘 강조 및 스크롤
-                highlightTodayInYearView();
+       // goToToday 함수도 약간 수정
+function goToToday() {
+    const today = new Date();
+    
+    if (currentView === 'month') {
+        currentMonth = today.getMonth();
+        currentYear = today.getFullYear();
+        updatePeriodDisplay();
+        renderCalendar();
+    } else {
+        // 년 보기에서 오늘 강조 및 스크롤
+        highlightTodayInYearView();
+        
+        // 모바일 확인 후 스크롤
+        if (window.innerWidth <= 768) {
+            // 렌더링 완료 후 스크롤 실행
+            setTimeout(() => {
                 scrollToTodayInYearView();
-            }
+            }, 100);
         }
+    }
+}
 
         // 년 보기에서 오늘 날짜 강조
         function highlightTodayInYearView() {
@@ -1098,30 +1105,57 @@
             }
         }
 
-        // 모바일에서 오늘 날짜로 스크롤
-        function scrollToTodayInYearView() {
-            if (window.innerWidth <= 768) {
-                const yearView = document.getElementById('yearView');
-                const today = new Date();
-                const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-                const currentMonthNow = today.getMonth();
-                const currentDayNow = today.getDate();
-                
-                // 오늘 위치 계산 (%)
-                const todayPosition = (100 / 12) * (currentMonthNow + currentDayNow / monthDays[currentMonthNow]);
-                
-                // 스크롤 가능한 전체 너비
-                const scrollWidth = yearView.scrollWidth - yearView.clientWidth;
-                
-                // 오늘 위치로 스크롤 (중앙에 오도록)
-                const scrollTarget = (scrollWidth * todayPosition / 100) - (yearView.clientWidth / 2);
-                
-                yearView.scrollTo({
-                    left: Math.max(0, scrollTarget),
-                    behavior: 'smooth'
+// 모바일에서 오늘 날짜로 스크롤 - 수정된 버전
+function scrollToTodayInYearView() {
+    const yearView = document.getElementById('yearView');
+    const yearCalendarContent = yearView.querySelector('.year-calendar-content');
+    
+    if (!yearCalendarContent) return;
+    
+    const today = new Date();
+    const currentMonthNow = today.getMonth();
+    const currentDayNow = today.getDate();
+    
+    // 월별 일수
+    const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    
+    // 전체 너비의 백분율로 오늘 위치 계산
+    const todayPositionPercent = (currentMonthNow + currentDayNow / monthDays[currentMonthNow]) / 12;
+    
+    // 모바일에서만 작동
+    if (window.innerWidth <= 768) {
+        // year-calendar-content의 실제 너비
+        const contentWidth = yearCalendarContent.scrollWidth;
+        
+        // 뷰포트 너비
+        const viewportWidth = yearView.clientWidth;
+        
+        // 오늘이 있는 월의 중앙 위치 계산
+        const monthWidth = contentWidth / 12;
+        const targetMonthCenter = (currentMonthNow + 0.5) * monthWidth;
+        
+        // 스크롤 위치 (월의 중앙이 화면 중앙에 오도록)
+        const scrollPosition = targetMonthCenter - (viewportWidth / 2);
+        
+        // 스크롤 실행
+        yearView.scrollTo({
+            left: Math.max(0, Math.min(scrollPosition, contentWidth - viewportWidth)),
+            behavior: 'smooth'
+        });
+        
+        // 오늘 선 강조 효과도 추가
+        setTimeout(() => {
+            const todayLine = document.querySelector('.year-today-line');
+            if (todayLine) {
+                todayLine.scrollIntoView({
+                    behavior: 'smooth',
+                    inline: 'center',
+                    block: 'nearest'
                 });
             }
-        }
+        }, 300);
+    }
+}
 
         function updatePeriodDisplay() {
             const display = document.getElementById('periodDisplay');
