@@ -388,12 +388,18 @@
 }
         
         .year-timeline-row {
-            position: relative;
-            height: 35px;
-            margin-bottom: 5px;
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-        }
+    position: relative;
+    height: 35px;
+    margin-bottom: 5px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-bottom: 1px solid #f8f9fa;
+    transition: background 0.2s;
+}
+
+.year-timeline-row:hover {
+    background: #fafbfc;
+}
         
         .year-month-cell {
     position: relative;
@@ -760,17 +766,8 @@
     }
     
     .year-timeline-row {
-    position: relative;
-    height: 35px;
-    margin-bottom: 5px;
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    border-bottom: 1px solid #f8f9fa;
-    transition: background 0.2s;
-}
-
-.year-timeline-row:hover {
-    background: #fafbfc;
+    height: 30px;  /* 반응형에서는 높이만 조정 */
+    margin-bottom: 3px;
 }
     
     .year-timeline-bar {
@@ -789,51 +786,104 @@
         padding: 25px 20px;
     }
 }
-
-@media (max-width: 640px) {
-    /* 기존 모바일 코드들... */
+      @media (max-width: 768px) {
+    .year-timeline-bar {
+        height: 20px;
+        font-size: 10px;
+    }
 }
-        @media (max-width: 1024px) {
-            .hero {
-                padding: 20px 15px;
-            }
-            
-            .card {
-                padding: 25px 20px;
-            }
-        }
         
         @media (max-width: 640px) {
-            .header-section {
-                flex-direction: column;
-            }
-            
-            .title {
-                font-size: 28px;
-            }
-            
-            .subtitle {
-                font-size: 14px;
-            }
-            
-            .calendar-controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .nav-controls {
-                justify-content: center;
-                width: 100%;
-            }
-            
-            .chart-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .modal-content {
-                width: 95%;
-                padding: 20px;
-            }
+    .header-section {
+        flex-direction: column;
+    }
+    
+    .title {
+        font-size: 28px;
+    }
+    
+    .subtitle {
+        font-size: 14px;
+    }
+    
+    .calendar-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .nav-controls {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .chart-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    /* 년 보기 모바일 추가 */
+    .year-view {
+        padding: 12px;
+    }
+    
+    .year-timeline-bar {
+        height: 18px;
+        font-size: 9px;
+    }
+}
+            /* 년 보기 모바일 최적화 */
+.year-view {
+    padding: 12px;
+    overflow-x: auto;
+}
+
+.year-calendar-content {
+    min-width: 800px;
+}
+
+.year-months-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 50;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.year-month-label {
+    font-size: 10px;
+    padding: 10px 4px;
+    letter-spacing: 0;
+}
+
+.year-timeline-container {
+    min-height: 300px;
+}
+
+.year-timeline-row {
+    height: 28px;
+    margin-bottom: 3px;
+}
+
+.year-timeline-bar {
+    height: 18px;
+    font-size: 9px;
+    padding: 0 6px;
+}
+
+/* 모바일에서 날짜 셀 더 작게 */
+.day-cell {
+    min-height: 80px;
+    padding: 6px;
+}
+
+.month-timeline-bar {
+    height: 11px;
+    font-size: 8px;
+}
         }
     </style>
 </head>
