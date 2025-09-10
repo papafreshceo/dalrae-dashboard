@@ -1,8 +1,24 @@
 // header.js - 달래마켓 공통 헤더
 (function() {
+    // 페이지 전환 전 상태 저장
+    function saveHeaderState() {
+        const activePage = document.querySelector('.nav-btn.active')?.dataset.page || 'dashboard';
+        localStorage.setItem('dalrae_active_page', activePage);
+    }
+
     // 헤더 스타일 생성
     function createHeaderStyles() {
         const styles = `
+            /* 페이지 전환 부드럽게 */
+            body {
+                opacity: 0;
+                animation: fadeIn 0.3s ease-out forwards;
+            }
+            
+            @keyframes fadeIn {
+                to { opacity: 1; }
+            }
+
             /* 공통 헤더 스타일 */
             * { 
                 margin: 0; 
@@ -47,11 +63,11 @@
 
                 .logo-container {
                     flex-shrink: 0;
-                    margin-right: 50px; /* 로고와 메뉴 사이 간격 */
+                    margin-right: 50px;
                 }
 
                 .logo-img { 
-                    height: 32px;  /* 1.6배 크기 */
+                    height: 32px;
                     object-fit: contain;
                     cursor: pointer;
                 }
@@ -63,7 +79,7 @@
 
                 .nav-menu { 
                     display: flex; 
-                    gap: 25px;
+                    gap: 12px; /* 간격 절반으로 축소 */
                     align-items: center;
                     padding: 0;
                 }
@@ -78,7 +94,7 @@
                     font-size: 15px;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: color 0.2s;
+                    transition: all 0.3s ease; /* 부드러운 전환 */
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
                     position: relative;
@@ -98,10 +114,15 @@
                     bottom: -2px;
                     left: 50%;
                     transform: translateX(-50%);
-                    width: 80%;
+                    width: 0%;
                     height: 3px;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     border-radius: 2px;
+                    animation: underlineSlide 0.3s ease-out forwards;
+                }
+                
+                @keyframes underlineSlide {
+                    to { width: 80%; }
                 }
             }
 
@@ -123,17 +144,17 @@
             }
             
             .special-btn:hover {
-                transform: scale(1.1);
+                transform: scale(1.05);
             }
 
-            /* 서비스&프로그램 전설 아우라 효과 */
+            /* 서비스&프로그램 전설 아우라 효과 (50% 감소) */
             .legendary-btn {
                 position: relative;
                 font-weight: 700;
                 color: #fff;
-                text-shadow: 0 0 10px rgba(138, 43, 226, 0.8),
-                            0 0 20px rgba(138, 43, 226, 0.6),
-                            0 0 30px rgba(138, 43, 226, 0.4);
+                text-shadow: 0 0 5px rgba(138, 43, 226, 0.4),  /* 절반으로 감소 */
+                            0 0 10px rgba(138, 43, 226, 0.3),
+                            0 0 15px rgba(138, 43, 226, 0.2);
                 background: linear-gradient(45deg, #8a2be2, #ff1493, #00bfff, #ffd700, #8a2be2);
                 background-size: 400% 400%;
                 -webkit-background-clip: text;
@@ -142,41 +163,42 @@
                 animation: legendaryGlow 4s ease infinite, legendaryShift 8s ease infinite;
             }
 
-            /* 전설 아우라 배경 효과 */
+            /* 전설 아우라 배경 효과 (50% 감소) */
             .legendary-btn::before {
                 content: '';
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                width: 120%;
-                height: 200%;
+                width: 110%;
+                height: 150%;
                 background: radial-gradient(ellipse at center, 
-                    rgba(138, 43, 226, 0.3) 0%,
-                    rgba(255, 20, 147, 0.2) 25%,
-                    rgba(0, 191, 255, 0.1) 50%,
+                    rgba(138, 43, 226, 0.15) 0%,  /* 투명도 증가 */
+                    rgba(255, 20, 147, 0.1) 25%,
+                    rgba(0, 191, 255, 0.05) 50%,
                     transparent 70%);
-                filter: blur(10px);
-                animation: legendaryPulse 2s ease-in-out infinite;
+                filter: blur(8px);
+                animation: legendaryPulse 3s ease-in-out infinite;
                 pointer-events: none;
                 z-index: -1;
             }
 
-            /* 전설 파티클 효과 */
+            /* 전설 파티클 효과 (크기 감소) */
             .legendary-btn::after {
                 content: '✦';
                 position: absolute;
-                top: -5px;
-                right: -10px;
-                font-size: 10px;
+                top: -3px;
+                right: -8px;
+                font-size: 8px;
                 color: #ffd700;
-                animation: sparkle 1.5s ease-in-out infinite;
+                animation: sparkle 2s ease-in-out infinite;
                 pointer-events: none;
+                opacity: 0.7;
             }
 
             @keyframes legendaryGlow {
                 0%, 100% { filter: brightness(1) contrast(1); }
-                50% { filter: brightness(1.2) contrast(1.1); }
+                50% { filter: brightness(1.1) contrast(1.05); }
             }
 
             @keyframes legendaryShift {
@@ -187,22 +209,18 @@
             }
 
             @keyframes legendaryPulse {
-                0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
-                50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.1); }
+                0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+                50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.05); }
             }
 
             @keyframes sparkle {
                 0%, 100% { opacity: 0; transform: translateY(0) rotate(0deg); }
-                50% { opacity: 1; transform: translateY(-3px) rotate(180deg); }
+                50% { opacity: 0.7; transform: translateY(-2px) rotate(180deg); }
             }
 
             .legendary-btn:hover {
-                transform: scale(1.1);
-                filter: brightness(1.3);
-            }
-
-            .legendary-btn:hover::before {
-                animation-duration: 0.5s;
+                transform: scale(1.05);
+                filter: brightness(1.15);
             }
 
             /* 모바일 스타일 - 2행 레이아웃 */
@@ -223,9 +241,9 @@
                     padding: 0 15px;
                 }
                 
-                /* 모바일 로고 영역 (1행) */
+                /* 모바일 로고 영역 - 좌측 정렬 */
                 .logo-container {
-                    text-align: center;
+                    text-align: left;  /* 좌측 정렬 */
                     padding: 2px 0;
                     margin-right: 0;
                 }
@@ -276,39 +294,66 @@
                 
                 .nav-menu {
                     display: flex;
-                    gap: 20px;
+                    gap: 10px; /* 간격 절반으로 축소 */
                     justify-content: flex-start;
                     padding: 0 5px;
                     min-width: fit-content;
                 }
                 
+                /* 모바일 메뉴 - 텍스트만 표시 */
                 .nav-btn {
                     font-size: 14px;
-                    padding: 3px 8px;
+                    padding: 5px 8px;
                     flex-shrink: 0;
+                    background: none;
+                    border: none;
+                    color: #5a5c60;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    white-space: nowrap;
+                    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+                    position: relative;
                 }
 
+                .nav-btn:hover {
+                    color: #667eea;
+                }
+
+                .nav-btn.active {
+                    color: #667eea;
+                }
+
+                /* 모바일 활성 메뉴 밑줄 */
                 .nav-btn.active::after {
+                    content: '';
+                    position: absolute;
+                    bottom: -2px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 0%;
                     height: 2px;
-                    bottom: -1px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 1px;
+                    animation: underlineSlide 0.3s ease-out forwards;
                 }
 
                 /* 모바일 전설 아우라 조정 */
                 .legendary-btn {
-                    text-shadow: 0 0 8px rgba(138, 43, 226, 0.8),
-                                0 0 15px rgba(138, 43, 226, 0.6);
+                    text-shadow: 0 0 4px rgba(138, 43, 226, 0.4),
+                                0 0 8px rgba(138, 43, 226, 0.3);
                 }
 
                 .legendary-btn::before {
-                    width: 110%;
-                    height: 180%;
-                    filter: blur(8px);
+                    width: 105%;
+                    height: 140%;
+                    filter: blur(6px);
                 }
 
                 .legendary-btn::after {
-                    font-size: 8px;
-                    top: -3px;
-                    right: -8px;
+                    font-size: 6px;
+                    top: -2px;
+                    right: -6px;
                 }
             }
         `;
@@ -337,7 +382,7 @@
                             <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
                                  alt="달래마켓" 
                                  class="logo-img"
-                                 onclick="window.location.href='index.html'">
+                                 onclick="navigateTo('index.html')">
                         </div>
                         
                         <!-- 메뉴 영역 (2행) -->
@@ -346,25 +391,25 @@
                                 <button class="nav-btn special-btn" onclick="openOrderSystem()">
                                     발주시스템
                                 </button>
-                                <button class="nav-btn" data-page="dashboard">
+                                <button class="nav-btn" data-page="dashboard" onclick="navigateToPage('dashboard')">
                                     대시보드
                                 </button>
-                                <button class="nav-btn" data-page="products">
+                                <button class="nav-btn" data-page="products" onclick="navigateToPage('products')">
                                     상품리스트
                                 </button>
-                                <button class="nav-btn" data-page="calendar">
+                                <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
                                     상품캘린더
                                 </button>
-                                <button class="nav-btn" data-page="delivery">
+                                <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
                                     배송캘린더
                                 </button>
-                                <button class="nav-btn" data-page="orders">
+                                <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
                                 </button>
-                                <button class="nav-btn legendary-btn" data-page="services">
+                                <button class="nav-btn legendary-btn" data-page="services" onclick="navigateToPage('services')">
                                     서비스&프로그램
                                 </button>
-                                <button class="nav-btn" data-page="notice">
+                                <button class="nav-btn" data-page="notice" onclick="navigateToPage('notice')">
                                     공지사항
                                 </button>
                             </nav>
@@ -386,7 +431,7 @@
                             <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
                                  alt="달래마켓" 
                                  class="logo-img"
-                                 onclick="window.location.href='index.html'">
+                                 onclick="navigateTo('index.html')">
                         </div>
                         
                         <!-- 메뉴 영역 -->
@@ -395,25 +440,25 @@
                                 <button class="nav-btn special-btn" onclick="openOrderSystem()">
                                     발주시스템
                                 </button>
-                                <button class="nav-btn" data-page="dashboard">
+                                <button class="nav-btn" data-page="dashboard" onclick="navigateToPage('dashboard')">
                                     대시보드
                                 </button>
-                                <button class="nav-btn" data-page="products">
+                                <button class="nav-btn" data-page="products" onclick="navigateToPage('products')">
                                     상품리스트
                                 </button>
-                                <button class="nav-btn" data-page="calendar">
+                                <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
                                     상품캘린더
                                 </button>
-                                <button class="nav-btn" data-page="delivery">
+                                <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
                                     배송캘린더
                                 </button>
-                                <button class="nav-btn" data-page="orders">
+                                <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
                                 </button>
-                                <button class="nav-btn legendary-btn" data-page="services">
+                                <button class="nav-btn legendary-btn" data-page="services" onclick="navigateToPage('services')">
                                     서비스&프로그램
                                 </button>
-                                <button class="nav-btn" data-page="notice">
+                                <button class="nav-btn" data-page="notice" onclick="navigateToPage('notice')">
                                     공지사항
                                 </button>
                             </nav>
@@ -435,42 +480,44 @@
         document.querySelectorAll(`.nav-btn[data-page="${pageName}"]`).forEach(btn => {
             btn.classList.add('active');
         });
+        
+        // 상태 저장
+        saveHeaderState();
     }
+
+    // 부드러운 페이지 이동
+    window.navigateTo = function(url) {
+        saveHeaderState();
+        document.body.style.opacity = '0';
+        setTimeout(() => {
+            window.location.href = url;
+        }, 150);
+    };
+
+    window.navigateToPage = function(page) {
+        const pageUrls = {
+            'dashboard': 'index.html',
+            'products': 'products.html',
+            'calendar': 'calendar.html',
+            'delivery': 'delivery.html',
+            'orders': 'orders.html',
+            'services': 'services.html',
+            'notice': 'notice.html'
+        };
+        
+        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+        const currentPage = currentFile.replace('.html', '');
+        const currentPageName = currentPage === 'index' ? 'dashboard' : currentPage;
+        
+        if (currentPageName !== page) {
+            navigateTo(pageUrls[page]);
+        }
+    };
 
     // 발주시스템 열기
     window.openOrderSystem = function() {
         window.open('https://papafarmers.com/orders/', '_blank');
     };
-
-    // 메뉴 클릭 처리
-    function handleMenuClick(e) {
-        const btn = e.currentTarget;
-        const page = btn.dataset.page;
-        
-        if (page) {
-            // 페이지 매핑 - dashboard는 index.html로
-            const pageUrls = {
-                'dashboard': 'index.html',
-                'products': 'products.html',
-                'calendar': 'calendar.html',
-                'delivery': 'delivery.html',
-                'orders': 'orders.html',
-                'services': 'services.html',
-                'notice': 'notice.html'
-            };
-            
-            if (pageUrls[page]) {
-                // 현재 페이지 확인
-                const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-                const currentPage = currentFile.replace('.html', '');
-                const currentPageName = currentPage === 'index' ? 'dashboard' : currentPage;
-                
-                if (currentPageName !== page) {
-                    window.location.href = pageUrls[page];
-                }
-            }
-        }
-    }
 
     // 헤더 초기화
     function initHeader(options = {}) {
@@ -493,20 +540,18 @@
         // 헤더 HTML 삽입
         container.innerHTML = createHeader();
         
-        // 현재 페이지 활성화
+        // 저장된 상태 복원 또는 현재 페이지 활성화
+        const savedPage = localStorage.getItem('dalrae_active_page');
         if (activePage) {
             setActivePage(activePage);
+        } else if (savedPage) {
+            setActivePage(savedPage);
         } else {
             // URL에서 현재 페이지 추출
             const currentFile = window.location.pathname.split('/').pop() || 'index.html';
             const pageName = currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
             setActivePage(pageName);
         }
-        
-        // 메뉴 클릭 이벤트 설정
-        document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
-            btn.addEventListener('click', handleMenuClick);
-        });
 
         // 스크롤 이벤트 - 헤더 스타일 변경
         let lastScrollTop = 0;
@@ -535,7 +580,10 @@
                         const btnWidth = activeBtn.offsetWidth;
                         const containerWidth = container.offsetWidth;
                         const scrollLeft = btnLeft - (containerWidth / 2) + (btnWidth / 2);
-                        container.scrollLeft = scrollLeft;
+                        container.scrollTo({
+                            left: scrollLeft,
+                            behavior: 'smooth'
+                        });
                     }, 100);
                 }
             }
@@ -548,17 +596,13 @@
             resizeTimer = setTimeout(function() {
                 const currentWidth = window.innerWidth;
                 const isMobile = currentWidth <= 768;
-                const headerIsMobile = document.querySelector('.logo-container').style.textAlign === 'center';
+                const headerIsMobile = document.querySelector('.logo-container').style.textAlign === 'left';
                 
                 // 모바일/PC 전환 시에만 재생성
                 if ((isMobile && !headerIsMobile) || (!isMobile && headerIsMobile)) {
                     container.innerHTML = createHeader();
-                    setActivePage(activePage || getCurrentPageName());
-                    
-                    // 이벤트 리스너 재설정
-                    document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
-                        btn.addEventListener('click', handleMenuClick);
-                    });
+                    const currentPage = getCurrentPageName();
+                    setActivePage(currentPage);
                 }
             }, 250);
         });
