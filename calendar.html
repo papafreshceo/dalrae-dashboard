@@ -819,47 +819,77 @@
             }
         }
         
-        @media (max-width: 640px) {
-            .header-section {
-                flex-direction: column;
-            }
-            
-            .title {
-                font-size: 28px;
-            }
-            
-            .subtitle {
-                font-size: 14px;
-            }
-            
-            .calendar-controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .nav-controls {
-                justify-content: center;
-                width: 100%;
-            }
-            
-            .chart-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .modal-content {
-                width: 95%;
-                padding: 20px;
-            }
-            
-            .year-view {
-                padding: 12px;
-            }
-            
-            .year-timeline-bar {
-                height: 18px;
-                font-size: 9px;
-            }
-        }
+@media (max-width: 640px) {
+    .header-section {
+        flex-direction: column;
+    }
+    
+    .title {
+        font-size: 28px;
+    }
+    
+    .subtitle {
+        font-size: 14px;
+    }
+    
+    /* 캘린더 컨트롤 한 줄로 유지 */
+    .calendar-controls {
+        flex-direction: row;
+        gap: 8px;
+        padding: 12px 10px;
+    }
+    
+    .nav-controls {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        justify-content: flex-start;
+    }
+    
+    /* 네비게이션 버튼 축소 */
+    .calendar-nav-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+        min-width: 32px;
+    }
+    
+    /* 년월 표시 글자 크기 축소 */
+    .month-year-display {
+        font-size: 15px;
+        min-width: auto;
+        flex: 1;
+        text-align: center;
+        white-space: nowrap;
+    }
+    
+    /* 오늘 버튼 축소 */
+    .today-btn {
+        padding: 7px 14px;
+        font-size: 13px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    .chart-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .year-view {
+        padding: 12px;
+    }
+    
+    .year-timeline-bar {
+        height: 18px;
+        font-size: 9px;
+    }
+}
     </style>
 </head>
 <body>
