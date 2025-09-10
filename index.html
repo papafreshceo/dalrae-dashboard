@@ -38,10 +38,10 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+    body { font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-text-size-adjust: 100%; }
 
     /* 메인 */
-    .main-content { max-width: 1400px; margin: 0 auto; padding: 30px; }
+    .main-content { max-width: 1400px; margin: 0 auto; padding: 15px 30px 30px; }
     .dashboard-header { background: var(--card); border-radius: 14px; padding: 28px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,.04); border: 1px solid var(--border); }
     .dashboard-header h1 { font-size: 26px; font-weight: 800; letter-spacing: -.2px; margin-bottom: 18px; }
 
@@ -174,16 +174,12 @@
     .footer { background: var(--card); border-top: 1px solid var(--border); padding: 36px 0; margin-top: 48px; }
     .footer-content { max-width: 1400px; margin: 0 auto; padding: 0 30px; text-align: center; color: #6b7280; font-size: 13px; }
 
-    /* 접근성 향상: 포커스 링 */
-    :is(button, .nav-btn, .tag-filter, .badge-chart, .large-order-btn, .special-btn):focus { outline: 3px solid rgba(102,126,234,.35); outline-offset: 2px; }
-
     /* 모바일 */
     @media (max-width: 768px) {
       .main-content { padding: 10px 14px 14px; }
       .dashboard-header { padding: 18px; }
       .dashboard-header h1 { font-size: 20px; margin-bottom: 12px; }
 
-      .main-content { padding: 14px; }
       .stats-cards { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 6px; }
       .stat-card { min-width: 90px; padding: 12px 10px; }
       .stat-icon { width: 20px; height: 20px; }
@@ -227,7 +223,6 @@
       .large-order-btn { padding: 14px 28px; font-size: 16px; }
     }
   </style>
-  <link rel="stylesheet" href="common-styles.css" />
 </head>
 <body>
   <!-- 공통 헤더 -->
@@ -272,7 +267,6 @@
             </div>
             <div class="filter-row" id="productFilters">
               <div class="tag-filter active" data-category="product" data-filter="all">전체</div>
-              <!-- 품목 필터 동적 생성 -->
             </div>
           </div>
 
@@ -338,27 +332,61 @@
     </div>
   </footer>
 
+  <script src="header.js"></script>
   <script>
     // 전역 상태
-    let allProducts = []; let filteredProducts = [];
+    let allProducts = []; 
+    let filteredProducts = [];
     let activeTypeFilter = 'all', activeStatusFilter = 'all', activeProductFilter = 'all';
-    let priceChart = null; let priceDataCache = {}; let isPreloading = false;
+    let priceChart = null; 
+    let priceDataCache = {}; 
+    let isPreloading = false;
 
-    // 날짜 파싱 (MM-DD 지원 + 미래 해 보정)
-    function parseDate(dateStr){ if(!dateStr) return null; if(dateStr.length===5 && dateStr.indexOf('-')===2){ const y=new Date().getFullYear(); const m=parseInt(dateStr.slice(0,2))-1; const d=parseInt(dateStr.slice(3,5)); let dt=new Date(y,m,d); if(dt<new Date()) dt=new Date(y+1,m,d); return dt;} return new Date(dateStr); }
+    // 날짜 파싱
+    function parseDate(dateStr){ 
+      if(!dateStr) return null; 
+      if(dateStr.length===5 && dateStr.indexOf('-')===2){ 
+        const y=new Date().getFullYear(); 
+        const m=parseInt(dateStr.slice(0,2))-1; 
+        const d=parseInt(dateStr.slice(3,5)); 
+        let dt=new Date(y,m,d); 
+        if(dt<new Date()) dt=new Date(y+1,m,d); 
+        return dt;
+      } 
+      return new Date(dateStr); 
+    }
 
     window.onload = function(){
       // header.js 사용
-      DalraeHeader.init({ containerId:'header-container', activePage:'dashboard' });
+      if(window.DalraeHeader) {
+        DalraeHeader.init({ 
+          containerId:'header-container', 
+          activePage:'dashboard' 
+        });
+      }
       loadData(); 
       setupEventListeners();
     };
 
-    function toggleFilter(){ const c=document.getElementById('filterContent'); const b=document.getElementById('filterToggle'); const cl=c.classList.contains('collapsed'); c.classList.toggle('collapsed'); b.classList.toggle('collapsed', !cl); b.textContent = cl? '접기':'펼치기'; }
+    function toggleFilter(){ 
+      const c=document.getElementById('filterContent'); 
+      const b=document.getElementById('filterToggle'); 
+      const cl=c.classList.contains('collapsed'); 
+      c.classList.toggle('collapsed'); 
+      b.classList.toggle('collapsed', !cl); 
+      b.textContent = cl? '접기':'펼치기'; 
+    }
 
-    function openOrderSystem(){ window.open('https://papafarmers.com/orders/','_blank'); }
+    function openOrderSystem(){ 
+      window.open('https://papafarmers.com/orders/','_blank'); 
+    }
 
-    function loadData(){ fetch('/api/products').then(r=>r.json()).then(processData).catch(handleError); }
+    function loadData(){ 
+      fetch('/api/products')
+        .then(r=>r.json())
+        .then(processData)
+        .catch(handleError); 
+    }
 
     function processData(data){
       allProducts = data.filter(p => (p['셀러공급Y/N']||'').toString().trim() !== '미공급상품');
@@ -368,36 +396,87 @@
     }
 
     function generateProductFilters(){
-      const set = new Set(); allProducts.forEach(p=>{ const item=p.품목||''; if(item) set.add(item); });
+      const set = new Set(); 
+      allProducts.forEach(p=>{ 
+        const item=p.품목||''; 
+        if(item) set.add(item); 
+      });
       const row = document.getElementById('productFilters');
       let html = '<div class="tag-filter active" data-category="product" data-filter="all">전체</div>';
-      Array.from(set).sort((a,b)=>a.localeCompare(b,'ko')).forEach(item=>{ html += `<div class="tag-filter" data-category="product" data-filter="${item}">${item}</div>`; });
-      row.innerHTML = html; row.querySelectorAll('.tag-filter').forEach(tag=>tag.addEventListener('click', function(){ handleFilterClick(this); }));
+      Array.from(set).sort((a,b)=>a.localeCompare(b,'ko')).forEach(item=>{ 
+        html += `<div class="tag-filter" data-category="product" data-filter="${item}">${item}</div>`; 
+      });
+      row.innerHTML = html; 
+      row.querySelectorAll('.tag-filter').forEach(tag=>tag.addEventListener('click', function(){ 
+        handleFilterClick(this); 
+      }));
     }
 
-    function handleError(err){ console.error('데이터 로드 에러:', err); alert('데이터를 불러올 수 없습니다.'); }
+    function handleError(err){ 
+      console.error('데이터 로드 에러:', err); 
+      alert('데이터를 불러올 수 없습니다.'); 
+    }
 
-    function updateDashboard(){ updateStats(); renderProductCards(); updateFilterStats(); }
+    function updateDashboard(){ 
+      updateStats(); 
+      renderProductCards(); 
+      updateFilterStats(); 
+    }
 
     function updateFilterStats(){
-      const unique = new Set(); let totalOptions=0; filteredProducts.forEach(p=>{ const v=p.품종||p.품목||''; if(v){ unique.add(v); totalOptions++; }});
-      updateScoreboard('filterStatsProducts', unique.size); updateScoreboard('filterStatsOptions', totalOptions);
+      const unique = new Set(); 
+      let totalOptions=0; 
+      filteredProducts.forEach(p=>{ 
+        const v=p.품종||p.품목||''; 
+        if(v){ 
+          unique.add(v); 
+          totalOptions++; 
+        }
+      });
+      updateScoreboard('filterStatsProducts', unique.size); 
+      updateScoreboard('filterStatsOptions', totalOptions);
       let msg = '달래마켓과 함께 성장하세요';
       if(activeStatusFilter==='active') msg='지금 바로 시작하세요';
       else if(activeStatusFilter==='paused') msg='다음 시즌을 서둘러 준비하세요';
       else if(activeStatusFilter==='preparing') msg='출하 준비 중 상품을 확인하세요';
       else if(activeStatusFilter==='ending') msg='종료 임박 상품을 점검해 보세요';
       else if(activeStatusFilter==='stopped') msg='재개 준비를 도와드릴게요';
-      const el=document.getElementById('filterStatsMessage'); if(el){ el.innerHTML = `<span class="typing-animation">${msg}</span>`; }
+      const el=document.getElementById('filterStatsMessage'); 
+      if(el){ 
+        el.innerHTML = `<span class="typing-animation">${msg}</span>`; 
+      }
     }
 
-    function updateScoreboard(id, newVal){ const c=document.getElementById(id); if(!c) return; const cur=parseInt(c.textContent)||0; if(cur===newVal) return; const dur=1200, fps=30, total=Math.round(dur/1000*fps), step=(newVal-cur)/total; let frame=0, val=cur; const timer=setInterval(()=>{ frame++; val+=step; if(frame===total){ val=newVal; clearInterval(timer);} const d=String(Math.round(val)).split(''); c.innerHTML=d.map(()=>`<span class="digit spin"></span>`).join(''); c.querySelectorAll('.digit').forEach((e,i)=>{ e.textContent=d[i]; if(frame===total) e.classList.remove('spin'); }); }, dur/total); }
+    function updateScoreboard(id, newVal){ 
+      const c=document.getElementById(id); 
+      if(!c) return; 
+      const cur=parseInt(c.textContent)||0; 
+      if(cur===newVal) return; 
+      const dur=1200, fps=30, total=Math.round(dur/1000*fps), step=(newVal-cur)/total; 
+      let frame=0, val=cur; 
+      const timer=setInterval(()=>{ 
+        frame++; 
+        val+=step; 
+        if(frame===total){ 
+          val=newVal; 
+          clearInterval(timer);
+        } 
+        const d=String(Math.round(val)).split(''); 
+        c.innerHTML=d.map(()=>`<span class="digit spin"></span>`).join(''); 
+        c.querySelectorAll('.digit').forEach((e,i)=>{ 
+          e.textContent=d[i]; 
+          if(frame===total) e.classList.remove('spin'); 
+        }); 
+      }, dur/total); 
+    }
 
     function updateStats(){
       const s = calculateStats();
       const card = (type, label, value, sub, iconPath) => `
         <div class="stat-card" data-stat-type="${type}">
-          <svg class="stat-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#6b7280" d="${iconPath}"/></svg>
+          <svg class="stat-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#6b7280" d="${iconPath}"/>
+          </svg>
           <div class="stat-value">${value}</div>
           <div class="stat-label">${label}</div>
           <div class="stat-sub">${sub}</div>
@@ -412,50 +491,156 @@
         card('stopped','공급중지', s.stopped.products, `${s.stopped.options} 옵션`, 'M12 2a10 10 0 1 1-10 10A10.011 10.011 0 0 1 12 2Zm-5 9h10v2H7Z')
       ].join('');
 
-      document.querySelectorAll('.stat-card').forEach(el=> el.addEventListener('click', function(){ handleStatCardClick(this.dataset.statType); }));
+      document.querySelectorAll('.stat-card').forEach(el=> el.addEventListener('click', function(){ 
+        handleStatCardClick(this.dataset.statType); 
+      }));
       updateStatCardActive();
     }
 
-    function handleStatCardClick(statType){ activeStatusFilter = statType; document.querySelectorAll('.tag-filter[data-category="status"]').forEach(t=>{ t.classList.toggle('active', t.dataset.filter===statType); }); applyFilters(); }
+    function handleStatCardClick(statType){ 
+      activeStatusFilter = statType; 
+      document.querySelectorAll('.tag-filter[data-category="status"]').forEach(t=>{ 
+        t.classList.toggle('active', t.dataset.filter===statType); 
+      }); 
+      applyFilters(); 
+    }
 
-    function handleFilterClick(el){ const cat=el.dataset.category, f=el.dataset.filter; document.querySelectorAll(`.tag-filter[data-category="${cat}"]`).forEach(t=>t.classList.remove('active')); el.classList.add('active'); if(cat==='type') activeTypeFilter=f; else if(cat==='status') activeStatusFilter=f; else if(cat==='product') activeProductFilter=f; applyFilters(); }
+    function handleFilterClick(el){ 
+      const cat=el.dataset.category, f=el.dataset.filter; 
+      document.querySelectorAll(`.tag-filter[data-category="${cat}"]`).forEach(t=>t.classList.remove('active')); 
+      el.classList.add('active'); 
+      if(cat==='type') activeTypeFilter=f; 
+      else if(cat==='status') activeStatusFilter=f; 
+      else if(cat==='product') activeProductFilter=f; 
+      applyFilters(); 
+    }
 
-    function updateStatCardActive(){ document.querySelectorAll('.stat-card').forEach(c=>c.classList.toggle('active', c.dataset.statType===activeStatusFilter)); }
+    function updateStatCardActive(){ 
+      document.querySelectorAll('.stat-card').forEach(c=>c.classList.toggle('active', c.dataset.statType===activeStatusFilter)); 
+    }
 
     function calculateStats(){
-      const s = { total:{products:0,options:0}, active:{products:0,options:0}, paused:{products:0,options:0}, preparing:{products:0,options:0}, ending:{products:0,options:0}, stopped:{products:0,options:0}, uniqueProducts:new Set() };
-      const sets = { total:new Set(), active:new Set(), paused:new Set(), preparing:new Set(), ending:new Set(), stopped:new Set() };
+      const s = { 
+        total:{products:0,options:0}, 
+        active:{products:0,options:0}, 
+        paused:{products:0,options:0}, 
+        preparing:{products:0,options:0}, 
+        ending:{products:0,options:0}, 
+        stopped:{products:0,options:0}, 
+        uniqueProducts:new Set() 
+      };
+      const sets = { 
+        total:new Set(), 
+        active:new Set(), 
+        paused:new Set(), 
+        preparing:new Set(), 
+        ending:new Set(), 
+        stopped:new Set() 
+      };
       const today=new Date(), twenty=new Date(today.getTime()+20*24*60*60*1000);
 
       allProducts.forEach(p=>{
-        const variety=p.품종||p.품목||''; if(!variety) return; sets.total.add(variety); s.total.options++;
-        if(p.공급상태==='공급중'){ sets.active.add(variety); s.active.options++; }
-        if(p.공급상태==='시즌종료'){ sets.paused.add(variety); s.paused.options++; }
-        if(p.공급상태==='공급중지'){ sets.stopped.add(variety); s.stopped.options++; }
-        if(p.시작일){ const st=parseDate(p.시작일); if(st>today && st<=twenty){ sets.preparing.add(variety); s.preparing.options++; }}
-        if(p.종료일){ const end=parseDate(p.종료일); if(end){ const d=Math.ceil((end-today)/(1000*60*60*24)); if(d>=0 && d<=7){ sets.ending.add(variety); s.ending.options++; }}}
+        const variety=p.품종||p.품목||''; 
+        if(!variety) return; 
+        sets.total.add(variety); 
+        s.total.options++;
+        if(p.공급상태==='공급중'){ 
+          sets.active.add(variety); 
+          s.active.options++; 
+        }
+        if(p.공급상태==='시즌종료'){ 
+          sets.paused.add(variety); 
+          s.paused.options++; 
+        }
+        if(p.공급상태==='공급중지'){ 
+          sets.stopped.add(variety); 
+          s.stopped.options++; 
+        }
+        if(p.시작일){ 
+          const st=parseDate(p.시작일); 
+          if(st>today && st<=twenty){ 
+            sets.preparing.add(variety); 
+            s.preparing.options++; 
+          }
+        }
+        if(p.종료일){ 
+          const end=parseDate(p.종료일); 
+          if(end){ 
+            const d=Math.ceil((end-today)/(1000*60*60*24)); 
+            if(d>=0 && d<=7){ 
+              sets.ending.add(variety); 
+              s.ending.options++; 
+            }
+          }
+        }
       });
 
-      filteredProducts.forEach(p=>{ const variety=p.품종||p.품목||''; if(variety) s.uniqueProducts.add(variety); });
-      Object.keys(sets).forEach(k=>{ s[k].products = sets[k].size; });
+      filteredProducts.forEach(p=>{ 
+        const variety=p.품종||p.품목||''; 
+        if(variety) s.uniqueProducts.add(variety); 
+      });
+      Object.keys(sets).forEach(k=>{ 
+        s[k].products = sets[k].size; 
+      });
       return s;
     }
 
     function renderProductCards(){
-      const grid=document.getElementById('productsGrid'); const groups={};
-      filteredProducts.forEach(p=>{ const key=p.품종||p.품목||'기타'; (groups[key]??(groups[key]=[])).push(p); });
+      const grid=document.getElementById('productsGrid'); 
+      const groups={};
+      filteredProducts.forEach(p=>{ 
+        const key=p.품종||p.품목||'기타'; 
+        (groups[key]??(groups[key]=[])).push(p); 
+      });
 
-      const sorted = Object.entries(groups).sort((a,b)=>{ const pr=(ps)=>{ const f=ps[0]; const t=new Date(), tw=new Date(t.getTime()+20*24*60*60*1000); if(f.공급상태==='공급중') return 1; if(f.시작일){ const s=parseDate(f.시작일); if(s>t && s<=tw) return 2; } if(f.공급상태==='시즌종료') return 3; if(f.공급상태==='공급중지') return 4; return 5; }; const pa=pr(a[1]), pb=pr(b[1]); return pa===pb? a[0].localeCompare(b[0],'ko'): pa-pb; });
+      const sorted = Object.entries(groups).sort((a,b)=>{ 
+        const pr=(ps)=>{ 
+          const f=ps[0]; 
+          const t=new Date(), tw=new Date(t.getTime()+20*24*60*60*1000); 
+          if(f.공급상태==='공급중') return 1; 
+          if(f.시작일){ 
+            const s=parseDate(f.시작일); 
+            if(s>t && s<=tw) return 2; 
+          } 
+          if(f.공급상태==='시즌종료') return 3; 
+          if(f.공급상태==='공급중지') return 4; 
+          return 5; 
+        }; 
+        const pa=pr(a[1]), pb=pr(b[1]); 
+        return pa===pb? a[0].localeCompare(b[0],'ko'): pa-pb; 
+      });
 
-      let html=''; let current='';
+      let html=''; 
+      let current='';
       sorted.forEach(([variety, products])=>{
-        const f=products[0]; const t=new Date(); const tw=new Date(t.getTime()+20*24*60*60*1000);
+        const f=products[0]; 
+        const t=new Date(); 
+        const tw=new Date(t.getTime()+20*24*60*60*1000);
         let title='기타', cls='';
-        if(f.공급상태==='공급중'){ title='공급중'; cls='status-active'; }
-        else if(f.시작일){ const s=parseDate(f.시작일); if(s>t && s<=tw){ title='출하준비중'; cls='status-preparing'; }}
-        if(title==='기타' && f.공급상태==='시즌종료'){ title='시즌종료'; cls='status-paused'; }
-        else if(title==='기타' && f.공급상태==='공급중지'){ title='공급중지'; cls='status-stopped'; }
-        if(current!==title){ if(current!=='') html += '<div class="group-divider"></div>'; html += `<div class="group-title-wrapper"><div class="group-title ${cls==='status-active'?'status-active':''}">${title}</div></div>`; current=title; }
+        if(f.공급상태==='공급중'){ 
+          title='공급중'; 
+          cls='status-active'; 
+        }
+        else if(f.시작일){ 
+          const s=parseDate(f.시작일); 
+          if(s>t && s<=tw){ 
+            title='출하준비중'; 
+            cls='status-preparing'; 
+          }
+        }
+        if(title==='기타' && f.공급상태==='시즌종료'){ 
+          title='시즌종료'; 
+          cls='status-paused'; 
+        }
+        else if(title==='기타' && f.공급상태==='공급중지'){ 
+          title='공급중지'; 
+          cls='status-stopped'; 
+        }
+        if(current!==title){ 
+          if(current!=='') html += '<div class="group-divider"></div>'; 
+          html += `<div class="group-title-wrapper"><div class="group-title ${cls==='status-active'?'status-active':''}">${title}</div></div>`; 
+          current=title; 
+        }
         html += createProductCard(variety, products);
       });
 
@@ -463,24 +648,60 @@
     }
 
     function createProductCard(variety, products){
-      const f=products[0]; const isMobile=window.innerWidth<=768; const today=new Date();
+      const f=products[0]; 
+      const isMobile=window.innerWidth<=768; 
+      const today=new Date();
       let min=new Date('2099-12-31'), max=new Date('1900-01-01');
-      products.forEach(p=>{ if(p.시작일){ const d=parseDate(p.시작일); if(d && d<min) min=d; } if(p.종료일){ const d=parseDate(p.종료일); if(d && d>max) max=d; }});
+      products.forEach(p=>{ 
+        if(p.시작일){ 
+          const d=parseDate(p.시작일); 
+          if(d && d<min) min=d; 
+        } 
+        if(p.종료일){ 
+          const d=parseDate(p.종료일); 
+          if(d && d>max) max=d; 
+        }
+      });
 
       let seasonClass='gray', seasonText='시즌종료';
-      if(max && max.getFullYear()!==1900){ const left=Math.ceil((max-today)/(1000*60*60*24)); if(left>=0 && left<=7){ seasonClass='yellow'; seasonText='종료임박'; } else if(today>=min && today<=max){ seasonClass='green'; seasonText='시즌중'; } else if(min>today && min<=new Date(today.getTime()+20*24*60*60*1000)){ seasonClass='yellow'; seasonText='출하준비'; } }
+      if(max && max.getFullYear()!==1900){ 
+        const left=Math.ceil((max-today)/(1000*60*60*24)); 
+        if(left>=0 && left<=7){ 
+          seasonClass='yellow'; 
+          seasonText='종료임박'; 
+        } else if(today>=min && today<=max){ 
+          seasonClass='green'; 
+          seasonText='시즌중'; 
+        } else if(min>today && min<=new Date(today.getTime()+20*24*60*60*1000)){ 
+          seasonClass='yellow'; 
+          seasonText='출하준비'; 
+        } 
+      }
 
       const hasDetail = products.some(p=>p.상세페이지제공 && p.상세페이지제공.trim()!=='');
       const hasImage  = products.some(p=>p.이미지제공 && p.이미지제공.trim()!=='');
       const name = (f.품목 && f.품목!==variety) ? `${f.품목}(${variety})` : variety;
       const fmt = (d)=> `${String(d.getMonth()+1).padStart(2,'0')}월 ${String(d.getDate()).padStart(2,'0')}일`;
 
-      let statusClass=''; let badgeClass='';
-      if(f.공급상태==='공급중'){ statusClass='status-active'; badgeClass='status-active'; }
-      else if(f.공급상태==='시즌종료'){ badgeClass='status-paused'; }
-      else if(f.공급상태==='공급중지'){ badgeClass='status-stopped'; }
-      else if(f.공급상태==='준비중'){ badgeClass='status-preparing'; }
-      if(max && max.getFullYear()!==1900){ const left=Math.ceil((max-today)/(1000*60*60*24)); if(left>=0 && left<=7) statusClass='status-ending'; }
+      let statusClass=''; 
+      let badgeClass='';
+      if(f.공급상태==='공급중'){ 
+        statusClass='status-active'; 
+        badgeClass='status-active'; 
+      }
+      else if(f.공급상태==='시즌종료'){ 
+        badgeClass='status-paused'; 
+      }
+      else if(f.공급상태==='공급중지'){ 
+        badgeClass='status-stopped'; 
+      }
+      else if(f.공급상태==='준비중'){ 
+        badgeClass='status-preparing'; 
+      }
+      if(max && max.getFullYear()!==1900){ 
+        const left=Math.ceil((max-today)/(1000*60*60*24)); 
+        if(left>=0 && left<=7) statusClass='status-ending'; 
+      }
 
       if(isMobile){
         return `
@@ -533,18 +754,24 @@
         </div>`;
     }
 
-    function preloadAllPriceData(codes){ if(isPreloading||!codes||!codes.length) return; const uncached=codes.filter(c=>!priceDataCache[c]); if(!uncached.length) return; isPreloading=true; /* 백그라운드 선로딩 비활성 유지 */ isPreloading=false; }
-
     function showModal(variety){
-      const modal=document.getElementById('optionsModal'); const list=allProducts.filter(p=>(p.품종||p.품목)===variety);
+      const modal=document.getElementById('optionsModal'); 
+      const list=allProducts.filter(p=>(p.품종||p.품목)===variety);
       document.getElementById('modalTitle').textContent = `${variety} (${list.length}개)`;
-      const codes=list.map(p=>p.옵션코드).filter(Boolean); preloadAllPriceData(codes);
-      const isMobile=window.innerWidth<=768; let html='';
+      const isMobile=window.innerWidth<=768; 
+      let html='';
       list.forEach(p=>{
         const price=p.셀러공급가 ? Number(p.셀러공급가.replace(/,/g,'')).toLocaleString(): '0';
-        let cls='status-active'; if(p.공급상태==='시즌종료') cls='status-paused'; if(p.공급상태==='공급중지') cls='status-stopped'; if(p.공급상태==='준비중') cls='status-preparing';
-        let specs=''; ['규격1','규격2','규격3'].forEach(k=>{ if(p[k]) specs += (specs? ' ':'') + p[k]; });
-        if(isMobile){ html += `
+        let cls='status-active'; 
+        if(p.공급상태==='시즌종료') cls='status-paused'; 
+        if(p.공급상태==='공급중지') cls='status-stopped'; 
+        if(p.공급상태==='준비중') cls='status-preparing';
+        let specs=''; 
+        ['규격1','규격2','규격3'].forEach(k=>{ 
+          if(p[k]) specs += (specs? ' ':'') + p[k]; 
+        });
+        if(isMobile){ 
+          html += `
           <div class="option-card">
             ${p.썸네일? `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` : `<div class="option-thumb" aria-hidden="true"></div>`}
             <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
@@ -561,8 +788,10 @@
                 <button class="badge-chart" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}','${p.옵션명}')">가격차트</button>
               </div>
             </div>
-          </div>`; }
-        else { html += `
+          </div>`; 
+        }
+        else { 
+          html += `
           <div class="option-card">
             ${p.썸네일? `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` : `<div class="option-thumb" aria-hidden="true"></div>`}
             <div class="option-info">
@@ -578,23 +807,45 @@
                 <button class="badge-chart" style="margin-left:8px;" onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}','${p.옵션명}')">가격차트</button>
               </span>
             </div>
-          </div>`; }
+          </div>`; 
+        }
       });
-      document.getElementById('modalBody').innerHTML = html; modal.classList.add('show');
+      document.getElementById('modalBody').innerHTML = html; 
+      modal.classList.add('show');
     }
 
-    function closeModal(){ document.getElementById('optionsModal').classList.remove('show'); }
+    function closeModal(){ 
+      document.getElementById('optionsModal').classList.remove('show'); 
+    }
 
     function openPriceChart(optionCode, optionName){
-      closeModal(); const chartModal=document.getElementById('chartModal'); document.getElementById('chartModalTitle').textContent = optionName;
+      closeModal(); 
+      const chartModal=document.getElementById('chartModal'); 
+      document.getElementById('chartModalTitle').textContent = optionName;
       document.getElementById('chartModalBody').innerHTML = '<div style="text-align:center;padding:20px;color:#9ca3af;">데이터를 불러오는 중...</div>';
       chartModal.classList.add('show');
-      if(priceDataCache[optionCode]){ setTimeout(()=>displayChart(priceDataCache[optionCode], optionName), 60); }
-      else { fetch(`/api/price-history?optionCode=${optionCode}`).then(r=>r.json()).then(d=>{ if(d&&d.length>0) priceDataCache[optionCode]=d; displayChart(d, optionName); }).catch(e=>{ console.error(e); showNoChartData(); }); }
+      if(priceDataCache[optionCode]){ 
+        setTimeout(()=>displayChart(priceDataCache[optionCode], optionName), 60); 
+      }
+      else { 
+        fetch(`/api/price-history?optionCode=${optionCode}`)
+          .then(r=>r.json())
+          .then(d=>{ 
+            if(d&&d.length>0) priceDataCache[optionCode]=d; 
+            displayChart(d, optionName); 
+          })
+          .catch(e=>{ 
+            console.error(e); 
+            showNoChartData(); 
+          }); 
+      }
     }
 
     function displayChart(data, optionName){
-      if(!data || !data.length){ showNoChartData(); return; }
+      if(!data || !data.length){ 
+        showNoChartData(); 
+        return; 
+      }
       data.sort((a,b)=> new Date(a.날짜) - new Date(b.날짜));
       const prices=data.map(d=> Number(String(d.셀러공급가).replace(/,/g,'')) );
       const cur=prices.at(-1), max=Math.max(...prices), min=Math.min(...prices), avg=Math.round(prices.reduce((a,b)=>a+b,0)/prices.length);
@@ -611,41 +862,149 @@
         </div>`;
       document.getElementById('chartModalBody').innerHTML = html;
 
-      const ctx=document.getElementById('priceChartCanvas').getContext('2d'); if(priceChart) priceChart.destroy();
-      priceChart = new Chart(ctx, { type:'line', data:{ labels: data.map(d=>{ const dt=new Date(d.날짜); return `${dt.getMonth()+1}/${dt.getDate()}`; }), datasets:[{ label:'공급가', data:prices, borderColor:'rgb(102,126,234)', backgroundColor:'rgba(102,126,234,.12)', tension:.1, borderWidth:isMobile?1.5:2, pointRadius:isMobile?2:4, pointBackgroundColor:'rgb(102,126,234)', pointBorderColor:'#fff', pointBorderWidth:isMobile?1:2, pointHoverRadius:isMobile?3:6, fill:true }] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:(c)=> '공급가: '+ c.parsed.y.toLocaleString() +'원' }, titleFont:{ size:isMobile?10:12 }, bodyFont:{ size:isMobile?10:12 }, padding:isMobile?4:8 } }, scales:{ x:{ ticks:{ font:{ size:isMobile?9:12 }, maxRotation:isMobile?45:0, autoSkip:true, maxTicksLimit:isMobile?6:12 }, grid:{ display:!isMobile } }, y:{ beginAtZero:true, max: Math.ceil(max*1.2), ticks:{ callback:(v)=> v.toLocaleString()+'원', font:{ size:isMobile?9:12 }, maxTicksLimit:isMobile?5:8 }, grid:{ display:!isMobile } } }, layout:{ padding:{ left:isMobile?2:10, right:isMobile?2:10, top:isMobile?2:10, bottom:isMobile?2:10 } } } });
+      const ctx=document.getElementById('priceChartCanvas').getContext('2d'); 
+      if(priceChart) priceChart.destroy();
+      priceChart = new Chart(ctx, { 
+        type:'line', 
+        data:{ 
+          labels: data.map(d=>{ 
+            const dt=new Date(d.날짜); 
+            return `${dt.getMonth()+1}/${dt.getDate()}`; 
+          }), 
+          datasets:[{ 
+            label:'공급가', 
+            data:prices, 
+            borderColor:'rgb(102,126,234)', 
+            backgroundColor:'rgba(102,126,234,.12)', 
+            tension:.1, 
+            borderWidth:isMobile?1.5:2, 
+            pointRadius:isMobile?2:4, 
+            pointBackgroundColor:'rgb(102,126,234)', 
+            pointBorderColor:'#fff', 
+            pointBorderWidth:isMobile?1:2, 
+            pointHoverRadius:isMobile?3:6, 
+            fill:true 
+          }] 
+        }, 
+        options:{ 
+          responsive:true, 
+          maintainAspectRatio:false, 
+          plugins:{ 
+            legend:{ display:false }, 
+            tooltip:{ 
+              callbacks:{ 
+                label:(c)=> '공급가: '+ c.parsed.y.toLocaleString() +'원' 
+              }, 
+              titleFont:{ size:isMobile?10:12 }, 
+              bodyFont:{ size:isMobile?10:12 }, 
+              padding:isMobile?4:8 
+            } 
+          }, 
+          scales:{ 
+            x:{ 
+              ticks:{ 
+                font:{ size:isMobile?9:12 }, 
+                maxRotation:isMobile?45:0, 
+                autoSkip:true, 
+                maxTicksLimit:isMobile?6:12 
+              }, 
+              grid:{ display:!isMobile } 
+            }, 
+            y:{ 
+              beginAtZero:true, 
+              max: Math.ceil(max*1.2), 
+              ticks:{ 
+                callback:(v)=> v.toLocaleString()+'원', 
+                font:{ size:isMobile?9:12 }, 
+                maxTicksLimit:isMobile?5:8 
+              }, 
+              grid:{ display:!isMobile } 
+            } 
+          }, 
+          layout:{ 
+            padding:{ 
+              left:isMobile?2:10, 
+              right:isMobile?2:10, 
+              top:isMobile?2:10, 
+              bottom:isMobile?2:10 
+            } 
+          } 
+        } 
+      });
     }
 
-    function showNoChartData(){ document.getElementById('chartModalBody').innerHTML = `<div class="no-data-message"><div class="no-data-icon"></div><div class="no-data-title">가격 변동 데이터가 없습니다</div><div class="no-data-text">이 옵션의 가격 이력이 아직 기록되지 않았습니다.</div></div>`; }
+    function showNoChartData(){ 
+      document.getElementById('chartModalBody').innerHTML = `<div class="no-data-message"><div class="no-data-icon"></div><div class="no-data-title">가격 변동 데이터가 없습니다</div><div class="no-data-text">이 옵션의 가격 이력이 아직 기록되지 않았습니다.</div></div>`; 
+    }
 
-    function closeChartModal(){ document.getElementById('chartModal').classList.remove('show'); if(priceChart){ priceChart.destroy(); priceChart=null; } }
+    function closeChartModal(){ 
+      document.getElementById('chartModal').classList.remove('show'); 
+      if(priceChart){ 
+        priceChart.destroy(); 
+        priceChart=null; 
+      } 
+    }
 
     function applyFilters(){
       filteredProducts=[...allProducts];
       if(activeTypeFilter!=='all'){
-        const map={ agricultural:'농산물', seafood:'수산물', livestock:'축산물', imported:'농산물(수입)' };
+        const map={ 
+          agricultural:'농산물', 
+          seafood:'수산물', 
+          livestock:'축산물', 
+          imported:'농산물(수입)' 
+        };
         filteredProducts = filteredProducts.filter(p=> p.대분류 === map[activeTypeFilter]);
       }
       if(activeStatusFilter!=='all'){
         const today=new Date(), twenty=new Date(today.getTime()+20*24*60*60*1000);
         switch(activeStatusFilter){
-          case 'active': filteredProducts=filteredProducts.filter(p=>p.공급상태==='공급중'); break;
-          case 'paused': filteredProducts=filteredProducts.filter(p=>p.공급상태==='시즌종료'); break;
-          case 'stopped': filteredProducts=filteredProducts.filter(p=>p.공급상태==='공급중지'); break;
-          case 'preparing': filteredProducts=filteredProducts.filter(p=> p.시작일 && (d=> d>today && d<=twenty)(parseDate(p.시작일))); break;
-          case 'ending': filteredProducts=filteredProducts.filter(p=>{ if(!p.종료일) return false; const end=parseDate(p.종료일); if(!end) return false; const days=Math.ceil((end-today)/(1000*60*60*24)); return days>=0 && days<=7; }); break;
+          case 'active': 
+            filteredProducts=filteredProducts.filter(p=>p.공급상태==='공급중'); 
+            break;
+          case 'paused': 
+            filteredProducts=filteredProducts.filter(p=>p.공급상태==='시즌종료'); 
+            break;
+          case 'stopped': 
+            filteredProducts=filteredProducts.filter(p=>p.공급상태==='공급중지'); 
+            break;
+          case 'preparing': 
+            filteredProducts=filteredProducts.filter(p=> p.시작일 && (d=> d>today && d<=twenty)(parseDate(p.시작일))); 
+            break;
+          case 'ending': 
+            filteredProducts=filteredProducts.filter(p=>{ 
+              if(!p.종료일) return false; 
+              const end=parseDate(p.종료일); 
+              if(!end) return false; 
+              const days=Math.ceil((end-today)/(1000*60*60*24)); 
+              return days>=0 && days<=7; 
+            }); 
+            break;
         }
       }
-      if(activeProductFilter!=='all') filteredProducts = filteredProducts.filter(p=> (p.품목||'')===activeProductFilter);
+      if(activeProductFilter!=='all') {
+        filteredProducts = filteredProducts.filter(p=> (p.품목||'')===activeProductFilter);
+      }
       updateDashboard();
     }
 
     function setupEventListeners(){
-      document.querySelectorAll('.tag-filter').forEach(tag=> tag.addEventListener('click', function(){ handleFilterClick(this); }));
-      document.getElementById('optionsModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeModal(); });
-      document.getElementById('chartModal').addEventListener('click', e=>{ if(e.target===e.currentTarget) closeChartModal(); });
-      document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ if(document.getElementById('chartModal').classList.contains('show')) closeChartModal(); else if(document.getElementById('optionsModal').classList.contains('show')) closeModal(); }});
+      document.querySelectorAll('.tag-filter').forEach(tag=> tag.addEventListener('click', function(){ 
+        handleFilterClick(this); 
+      }));
+      document.getElementById('optionsModal').addEventListener('click', e=>{ 
+        if(e.target===e.currentTarget) closeModal(); 
+      });
+      document.getElementById('chartModal').addEventListener('click', e=>{ 
+        if(e.target===e.currentTarget) closeChartModal(); 
+      });
+      document.addEventListener('keydown', e=>{ 
+        if(e.key==='Escape'){ 
+          if(document.getElementById('chartModal').classList.contains('show')) closeChartModal(); 
+          else if(document.getElementById('optionsModal').classList.contains('show')) closeModal(); 
+        }
+      });
     }
   </script>
-  <script src="header.js"></script>
 </body>
 </html>
