@@ -362,6 +362,21 @@
             btn.addEventListener('click', handleMenuClick);
         });
 
+        // 스크롤 이벤트 - 헤더 스타일 변경
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.top-header');
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+
         // 모바일에서 현재 활성 메뉴를 볼 수 있도록 스크롤
         if (window.innerWidth <= 768) {
             const activeBtn = document.querySelector('.nav-btn.active');
