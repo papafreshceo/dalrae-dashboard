@@ -27,11 +27,12 @@
             }
 
             .footer-logo {
-                height: 28px;
+                height: 17px; /* 60% 크기로 축소 (28px * 0.6) */
                 object-fit: contain;
                 margin-bottom: 8px;
                 filter: grayscale(100%) brightness(0.4);
                 opacity: 0.7;
+                margin-right: auto; /* 왼쪽 정렬 */
             }
 
             .footer-info {
@@ -205,51 +206,98 @@
                 color: #667eea;
             }
 
-            /* 모바일 반응형 - 2열 레이아웃 */
+            /* 모바일 반응형 */
             @media (max-width: 768px) {
                 .footer {
                     padding: 30px 0;
                 }
 
                 .footer-content {
-                    grid-template-columns: 1fr 1fr;
-                    gap: 25px;
+                    display: block;
                     padding: 0 15px;
                 }
 
+                /* 1행: 로고 */
                 .footer-company {
-                    grid-column: span 2;
+                    margin-bottom: 20px;
+                    text-align: center;
                 }
 
                 .footer-logo {
-                    height: 24px;
+                    height: 14px; /* 50% 크기로 축소 (28px * 0.5) */
+                    margin: 0 auto 12px; /* 가운데 정렬 */
                 }
 
+                /* 2행: 회사 정보 */
                 .footer-info {
                     font-size: 12px;
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+
+                .footer-info p {
+                    display: inline;
+                    margin: 0;
+                }
+
+                .footer-info p:not(:last-child)::after {
+                    content: "   "; /* 공백 3칸 */
+                    white-space: pre;
+                }
+
+                /* 3행: 3개 칼럼 */
+                .footer-mobile-columns {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr;
+                    gap: 15px;
+                    margin-bottom: 20px;
+                }
+
+                .footer-links,
+                .footer-inquiry,
+                .footer-contact {
+                    margin: 0;
                 }
 
                 .footer-title {
-                    font-size: 13px;
+                    font-size: 12px;
+                    margin-bottom: 6px;
                 }
 
                 .footer-link,
-                .inquiry-link {
-                    font-size: 12px;
+                .inquiry-link,
+                .contact-item {
+                    font-size: 11px;
                 }
 
-                .contact-item {
-                    font-size: 12px;
+                .footer-link-list {
+                    gap: 6px;
+                }
+
+                .contact-icon {
+                    width: 14px;
+                    height: 14px;
                 }
 
                 .social-link {
-                    width: 32px;
-                    height: 32px;
+                    width: 28px;
+                    height: 28px;
                 }
 
                 .social-link svg {
-                    width: 16px;
-                    height: 16px;
+                    width: 14px;
+                    height: 14px;
+                }
+
+                .social-link.kakao img {
+                    width: 16px !important;
+                    height: 16px !important;
+                }
+
+                .footer-social {
+                    gap: 8px;
+                    margin-top: 10px;
+                    justify-content: center;
                 }
 
                 .footer-bottom {
@@ -271,20 +319,84 @@
         const footerHTML = `
             <footer class="footer">
                 <div class="footer-content">
-                    <!-- 1열: 회사 정보 -->
+                    <!-- 회사 정보 -->
                     <div class="footer-company">
                         <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
                              alt="달래마켓" 
                              class="footer-logo">
-                        <div class="footer-info">
+                        <div class="footer-info footer-info-desktop">
+                            <p>대표: 남잠화</p>
+                            <p>사업자등록번호: 107-30-96371</p>
+                            <p>통신판매업신고: 2022-경북청도-0003</p>
+                        </div>
+                        <div class="footer-info footer-info-mobile" style="display: none;">
                             <p>대표: 남잠화</p>
                             <p>사업자등록번호: 107-30-96371</p>
                             <p>통신판매업신고: 2022-경북청도-0003</p>
                         </div>
                     </div>
 
-                    <!-- 2열: 빠른 링크 -->
-                    <div class="footer-links">
+                    <!-- 모바일용 3칼럼 컨테이너 -->
+                    <div class="footer-mobile-columns" style="display: none;">
+                        <!-- 1칼럼: 메뉴 -->
+                        <div class="footer-links">
+                            <div class="footer-title">메뉴</div>
+                            <div class="footer-link-list">
+                                <a class="footer-link" onclick="navigateToFooterPage('dashboard')">대시보드</a>
+                                <a class="footer-link" onclick="navigateToFooterPage('products')">상품리스트</a>
+                                <a class="footer-link" onclick="navigateToFooterPage('calendar')">상품캘린더</a>
+                                <a class="footer-link" onclick="navigateToFooterPage('delivery')">배송캘린더</a>
+                                <a class="footer-link" onclick="navigateToFooterPage('orders')">주문관리</a>
+                                <a class="footer-link" onclick="navigateToFooterPage('services')">서비스</a>
+                                <a class="footer-link" onclick="navigateToFooterPage('notice')">공지사항</a>
+                            </div>
+                        </div>
+
+                        <!-- 2칼럼: 문의 -->
+                        <div class="footer-inquiry">
+                            <div class="footer-title">문의</div>
+                            <a class="inquiry-link" href="mailto:papa_fresh@naver.com?subject=협업 문의">
+                                협업 문의
+                            </a>
+                            <a class="inquiry-link" href="mailto:papa_fresh@naver.com?subject=광고 문의">
+                                광고 문의
+                            </a>
+                        </div>
+
+                        <!-- 3칼럼: 연락처 & SNS -->
+                        <div class="footer-contact">
+                            <div class="footer-title">연락처</div>
+                            <div class="contact-item">
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C19.5304 19 20.0391 18.7893 20.4142 18.4142C20.7893 18.0391 21 17.5304 21 17V7C21 6.46957 20.7893 5.96086 20.4142 5.58579C20.0391 5.21071 19.5304 5 19 5H5C4.46957 5 3.96086 5.21071 3.58579 5.58579C3.21071 5.96086 3 6.46957 3 7V17C3 17.5304 3.21071 18.0391 3.58579 18.4142C3.96086 18.7893 4.46957 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <span>이메일</span>
+                            </div>
+                            <div class="contact-item">
+                                <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 4H9L11 9L8.5 10.5C9.57096 12.6715 11.3285 14.429 13.5 15.5L15 13L20 15V19C20 19.5304 19.7893 20.0391 19.4142 20.4142C19.0391 20.7893 18.5304 21 18 21C14.0993 20.763 10.4202 19.1065 7.65683 16.3432C4.8935 13.5798 3.23705 9.90074 3 6C3 5.46957 3.21071 4.96086 3.58579 4.58579C3.96086 4.21071 4.46957 4 5 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                <a href="tel:01026881388">전화</a>
+                            </div>
+
+                            <!-- SNS 링크 -->
+                            <div class="footer-social">
+                                <a class="social-link" href="https://papafarmers.com/orders/" target="_blank" title="발주시스템">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                                    </svg>
+                                </a>
+                                <a class="social-link kakao" href="https://open.kakao.com/o/gXyZdXYg" target="_blank" title="카카오톡">
+                                    <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1757496850/kakaotalk_sharing_btn_small_wozpwf.png" 
+                                         alt="카카오톡" 
+                                         style="width: 16px; height: 16px;">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 데스크탑용 컬럼들 -->
+                    <div class="footer-links footer-desktop" style="display: block;">
                         <div class="footer-link-list">
                             <a class="footer-link" onclick="navigateToFooterPage('dashboard')">대시보드</a>
                             <a class="footer-link" onclick="navigateToFooterPage('products')">상품리스트</a>
@@ -296,9 +408,7 @@
                         </div>
                     </div>
 
-                    <!-- 3열: 협업/광고 문의 -->
-                    <div class="footer-inquiry">
- 
+                    <div class="footer-inquiry footer-desktop" style="display: flex;">
                         <a class="inquiry-link" href="mailto:papa_fresh@naver.com?subject=협업 문의">
                             협업 문의
                         </a>
@@ -307,8 +417,7 @@
                         </a>
                     </div>
 
-                    <!-- 4열: 연락처 & SNS -->
-                    <div class="footer-contact">
+                    <div class="footer-contact footer-desktop" style="display: flex;">
                         <div class="contact-item">
                             <svg class="contact-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C19.5304 19 20.0391 18.7893 20.4142 18.4142C20.7893 18.0391 21 17.5304 21 17V7C21 6.46957 20.7893 5.96086 20.4142 5.58579C20.0391 5.21071 19.5304 5 19 5H5C4.46957 5 3.96086 5.21071 3.58579 5.58579C3.21071 5.96086 3 6.46957 3 7V17C3 17.5304 3.21071 18.0391 3.58579 18.4142C3.96086 18.7893 4.46957 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -361,6 +470,34 @@
         `;
         
         return footerHTML;
+    }
+
+    // 반응형 처리를 위한 JavaScript
+    function handleResponsive() {
+        const isMobile = window.innerWidth <= 768;
+        
+        // 회사 정보 영역
+        const desktopInfo = document.querySelector('.footer-info-desktop');
+        const mobileInfo = document.querySelector('.footer-info-mobile');
+        
+        // 데스크탑/모바일 컬럼들
+        const desktopColumns = document.querySelectorAll('.footer-desktop');
+        const mobileColumns = document.querySelector('.footer-mobile-columns');
+        
+        if (isMobile) {
+            if (desktopInfo) desktopInfo.style.display = 'none';
+            if (mobileInfo) mobileInfo.style.display = 'block';
+            desktopColumns.forEach(col => col.style.display = 'none');
+            if (mobileColumns) mobileColumns.style.display = 'grid';
+        } else {
+            if (desktopInfo) desktopInfo.style.display = 'block';
+            if (mobileInfo) mobileInfo.style.display = 'none';
+            desktopColumns.forEach((col, index) => {
+                if (index === 0) col.style.display = 'block';
+                else col.style.display = 'flex';
+            });
+            if (mobileColumns) mobileColumns.style.display = 'none';
+        }
     }
 
     // 푸터 페이지 이동
@@ -416,6 +553,10 @@
         
         // 푸터 HTML 삽입
         container.innerHTML = createFooter();
+        
+        // 반응형 처리
+        handleResponsive();
+        window.addEventListener('resize', handleResponsive);
     }
 
     // DOM이 로드되면 자동 초기화
