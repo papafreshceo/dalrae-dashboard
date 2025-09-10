@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/png" href="/favicon.png">
     <title>달래마켓 상품리스트</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">    </script>
-</body>
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
         /* 기존 스타일 그대로 유지 (주문 모달 스타일만 제거) */
         * { 
@@ -642,131 +640,11 @@
             margin: 30px 0;
         }
         
-        /* 간편주문 모달 스타일 */
-        .quick-order-modal-content {
-            background: white;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 30px;
-        }
-        
-        .form-section {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .form-section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #212529;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .form-row:last-child {
-            margin-bottom: 0;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        
-        .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        .form-label {
-            font-size: 13px;
-            color: #495057;
-            font-weight: 600;
-        }
-        
-        .form-label .required {
-            color: #dc3545;
-        }
-        
-        .form-input {
-            padding: 10px 14px;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .form-input:disabled {
-            background: #f8f9fa;
-            color: #6c757d;
-        }
-        
-        .price-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .price-total {
-            font-size: 20px;
-            font-weight: 700;
-        }
-        
-        .modal-footer {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .btn {
-            flex: 1;
-            padding: 12px 24px;
+        /* 간편주문서 스타일 추가 */
+        .quick-order-modal iframe {
+            width: 100%;
+            height: 100%;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .btn-cancel {
-            background: #f5f6f7;
-            color: #5a5c60;
-        }
-        
-        .btn-cancel:hover {
-            background: #e8e9eb;
-        }
-        
-        .btn-order {
-            background: #667eea;
-            color: white;
-        }
-        
-        .btn-order:hover {
-            background: #5a6fd8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
         
         /* 모바일 반응형 */
@@ -855,6 +733,128 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* 간편주문 모달 스타일 */
+.quick-order-modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+}
+
+.form-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.form-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-row:last-child {
+    margin-bottom: 0;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    font-size: 13px;
+    color: #495057;
+    font-weight: 600;
+}
+
+.form-label .required {
+    color: #dc3545;
+}
+
+.form-input {
+    padding: 10px 14px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-input:disabled {
+    background: #f8f9fa;
+    color: #6c757d;
+}
+
+.price-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.price-total {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.btn {
+    flex: 1;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-cancel {
+    background: #f5f6f7;
+    color: #5a5c60;
+}
+
+.btn-cancel:hover {
+    background: #e8e9eb;
+}
+
+.btn-order {
+    background: #667eea;
+    color: white;
+}
+
+.btn-order:hover {
+    background: #5a6fd8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
     </style>
 </head>
 <body>
@@ -946,10 +946,10 @@
             </div>
             
             <div class="option-buttons">
-                <button class="option-btn option-btn-order" id="modalOrderBtn">
+                <button class="option-btn option-btn-order" onclick="openQuickOrder()">
                     🛒 주문하기
                 </button>
-                <button class="option-btn option-btn-chart" id="modalChartBtn">
+                <button class="option-btn option-btn-chart" onclick="openChartFromOption()">
                     📊 가격차트
                 </button>
             </div>
@@ -970,122 +970,6 @@
                     <canvas id="priceChartCanvas"></canvas>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- 간편주문 모달 -->
-    <div class="modal" id="quickOrderModal">
-        <div class="quick-order-modal-content">
-            <div class="modal-header">
-                <h2>간편 주문서</h2>
-                <button class="modal-close" onclick="closeQuickOrderModal()">✕</button>
-            </div>
-            
-            <form class="order-form" id="modalQuickOrderForm">
-                <!-- 상품 정보 섹션 -->
-                <div class="form-section">
-                    <div class="form-section-title">상품 정보</div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">상품명</label>
-                            <input type="text" class="form-input" id="modalProductSearch" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">옵션명</label>
-                            <input type="text" class="form-input" id="modalOptionName" readonly>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">규격</label>
-                            <input type="text" class="form-input" id="modalProductSpec" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">단가</label>
-                            <input type="text" class="form-input" id="modalUnitPrice" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">수량 <span class="required">*</span></label>
-                            <input type="number" class="form-input" id="modalQuantity" min="1" value="1" required onchange="calculateModalTotal()">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 판매자 정보 -->
-                <div class="form-section">
-                    <div class="form-section-title">판매자 정보</div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">이름 <span class="required">*</span></label>
-                            <input type="text" class="form-input" id="modalSellerName" placeholder="판매자명" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">전화번호 <span class="required">*</span></label>
-                            <input type="tel" class="form-input" id="modalSellerPhone" placeholder="010-0000-0000" required>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 주문자 정보 -->
-                <div class="form-section">
-                    <div class="form-section-title">주문자 정보</div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">이름 <span class="required">*</span></label>
-                            <input type="text" class="form-input" id="modalOrderName" placeholder="주문자명" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">전화번호 <span class="required">*</span></label>
-                            <input type="tel" class="form-input" id="modalOrderPhone" placeholder="010-0000-0000" required>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 수령인 정보 -->
-                <div class="form-section">
-                    <div class="form-section-title">수령인 정보</div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">이름 <span class="required">*</span></label>
-                            <input type="text" class="form-input" id="modalReceiverName" placeholder="수령인명" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">전화번호 <span class="required">*</span></label>
-                            <input type="tel" class="form-input" id="modalReceiverPhone" placeholder="010-0000-0000" required>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 배송 정보 -->
-                <div class="form-section">
-                    <div class="form-section-title">배송 정보</div>
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label class="form-label">배송 주소 <span class="required">*</span></label>
-                            <input type="text" class="form-input" id="modalAddress" placeholder="배송받을 주소" required>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label class="form-label">배송 요청사항</label>
-                            <textarea class="form-input" id="modalDeliveryRequest" placeholder="배송 시 요청사항" rows="3"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 총 주문금액 -->
-                <div class="price-section">
-                    <div class="price-total">
-                        총 주문금액: <span id="modalTotalPrice">0원</span>
-                    </div>
-                </div>
-
-                <!-- 버튼 -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel" onclick="closeQuickOrderModal()">취소</button>
-                    <button type="submit" class="btn btn-order">주문 제출</button>
-                </div>
-            </form>
         </div>
     </div>
 
@@ -1445,21 +1329,6 @@
             `;
             
             document.getElementById('productInfoDisplay').innerHTML = productInfoHTML;
-            
-            // 버튼 이벤트 핸들러 설정
-            setTimeout(() => {
-                const orderBtn = document.getElementById('modalOrderBtn');
-                const chartBtn = document.getElementById('modalChartBtn');
-                
-                // 기존 이벤트 리스너 제거
-                orderBtn.replaceWith(orderBtn.cloneNode(true));
-                chartBtn.replaceWith(chartBtn.cloneNode(true));
-                
-                // 새로운 이벤트 리스너 추가
-                document.getElementById('modalOrderBtn').addEventListener('click', openQuickOrder);
-                document.getElementById('modalChartBtn').addEventListener('click', openChartFromOption);
-            }, 0);
-            
             document.getElementById('optionModal').classList.add('show');
         }
         
@@ -1469,113 +1338,245 @@
             selectedProduct = null;
         }
         
-        // 간편주문서 열기
-        function openQuickOrder() {
-            if (!selectedProduct) return;
+        // 간편주문서 열기 (모달로 변경)
+function openQuickOrder() {
+    if (!selectedProduct) return;
+    
+    closeOptionModal();
+    
+    // 간편주문 모달 생성 및 표시
+    showQuickOrderModal(selectedProduct);
+}
+
+// 간편주문 모달 표시 함수 추가
+function showQuickOrderModal(product) {
+    // 모달이 없으면 생성
+    if (!document.getElementById('quickOrderModal')) {
+        createQuickOrderModal();
+    }
+    
+    // 선택된 상품 정보 설정
+    const modal = document.getElementById('quickOrderModal');
+    
+    // 상품 정보 자동 입력
+    document.getElementById('modalProductSearch').value = product.옵션명 || '';
+    document.getElementById('modalOptionName').value = product.옵션명 || '';
+    
+    const specs = [product.규격1, product.규격2, product.규격3].filter(s => s).join(' ');
+    document.getElementById('modalProductSpec').value = specs;
+    
+    const price = product.셀러공급가 ? 
+        Number(product.셀러공급가.toString().replace(/,/g, '')) : 0;
+    document.getElementById('modalUnitPrice').value = price.toLocaleString() + '원';
+    
+    document.getElementById('modalQuantity').value = '1';
+    
+    // 총액 계산
+    calculateModalTotal();
+    
+    // 모달 표시
+    modal.classList.add('show');
+}
+
+// 간편주문 모달 생성 함수
+function createQuickOrderModal() {
+    const modalHTML = `
+    <div class="modal" id="quickOrderModal">
+        <div class="quick-order-modal-content">
+            <div class="modal-header">
+                <h2>간편 주문서</h2>
+                <button class="modal-close" onclick="closeQuickOrderModal()">✕</button>
+            </div>
             
-            closeOptionModal();
-            showQuickOrderModal(selectedProduct);
+            <form class="order-form" id="modalQuickOrderForm">
+                <!-- 상품 정보 섹션 -->
+                <div class="form-section">
+                    <div class="form-section-title">상품 정보</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">상품명</label>
+                            <input type="text" class="form-input" id="modalProductSearch" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">옵션명</label>
+                            <input type="text" class="form-input" id="modalOptionName" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">규격</label>
+                            <input type="text" class="form-input" id="modalProductSpec" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">단가</label>
+                            <input type="text" class="form-input" id="modalUnitPrice" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">수량 <span class="required">*</span></label>
+                            <input type="number" class="form-input" id="modalQuantity" min="1" value="1" required onchange="calculateModalTotal()">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 판매자 정보 -->
+                <div class="form-section">
+                    <div class="form-section-title">판매자 정보</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">이름 <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="modalSellerName" placeholder="판매자명" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">전화번호 <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="modalSellerPhone" placeholder="010-0000-0000" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 주문자 정보 -->
+                <div class="form-section">
+                    <div class="form-section-title">주문자 정보</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">이름 <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="modalOrderName" placeholder="주문자명" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">전화번호 <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="modalOrderPhone" placeholder="010-0000-0000" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 수령인 정보 -->
+                <div class="form-section">
+                    <div class="form-section-title">수령인 정보</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">이름 <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="modalReceiverName" placeholder="수령인명" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">전화번호 <span class="required">*</span></label>
+                            <input type="tel" class="form-input" id="modalReceiverPhone" placeholder="010-0000-0000" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 배송 정보 -->
+                <div class="form-section">
+                    <div class="form-section-title">배송 정보</div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label class="form-label">배송 주소 <span class="required">*</span></label>
+                            <input type="text" class="form-input" id="modalAddress" placeholder="배송받을 주소" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label class="form-label">배송 요청사항</label>
+                            <textarea class="form-input" id="modalDeliveryRequest" placeholder="배송 시 요청사항"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 총 주문금액 -->
+                <div class="price-section">
+                    <div class="price-total">
+                        총 주문금액: <span id="modalTotalPrice">0원</span>
+                    </div>
+                </div>
+
+                <!-- 버튼 -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-cancel" onclick="closeQuickOrderModal()">취소</button>
+                    <button type="submit" class="btn btn-order">주문 제출</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // 폼 제출 이벤트 추가
+    document.getElementById('modalQuickOrderForm').addEventListener('submit', submitModalOrder);
+}
+
+// 모달 총액 계산
+function calculateModalTotal() {
+    const quantity = Number(document.getElementById('modalQuantity').value) || 0;
+    const unitPriceStr = document.getElementById('modalUnitPrice').value;
+    const unitPrice = Number(unitPriceStr.replace(/[^0-9]/g, '')) || 0;
+    const total = quantity * unitPrice;
+    
+    document.getElementById('modalTotalPrice').textContent = total.toLocaleString() + '원';
+}
+
+// 간편주문 모달 닫기
+function closeQuickOrderModal() {
+    const modal = document.getElementById('quickOrderModal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+// 모달 주문 제출
+function submitModalOrder(e) {
+    e.preventDefault();
+    
+    // 유효성 검사
+    const requiredFields = [
+        { id: 'modalSellerName', label: '판매자 이름' },
+        { id: 'modalSellerPhone', label: '판매자 전화번호' },
+        { id: 'modalOrderName', label: '주문자 이름' },
+        { id: 'modalOrderPhone', label: '주문자 전화번호' },
+        { id: 'modalReceiverName', label: '수령인 이름' },
+        { id: 'modalReceiverPhone', label: '수령인 전화번호' },
+        { id: 'modalAddress', label: '배송 주소' }
+    ];
+    
+    for (let field of requiredFields) {
+        const value = document.getElementById(field.id).value.trim();
+        if (!value) {
+            alert(`${field.label}을(를) 입력해주세요.`);
+            document.getElementById(field.id).focus();
+            return;
         }
-        
-        // 간편주문 모달 표시
-        function showQuickOrderModal(product) {
-            const modal = document.getElementById('quickOrderModal');
-            
-            // 상품 정보 자동 입력
-            const name = product.품종 || product.품목 || '-';
-            document.getElementById('modalProductSearch').value = name;
-            document.getElementById('modalOptionName').value = product.옵션명 || '';
-            
-            const specs = [product.규격1, product.규격2, product.규격3].filter(s => s).join(' ');
-            document.getElementById('modalProductSpec').value = specs;
-            
-            const price = product.셀러공급가 ? 
-                Number(product.셀러공급가.toString().replace(/,/g, '')) : 0;
-            document.getElementById('modalUnitPrice').value = price.toLocaleString() + '원';
-            
-            document.getElementById('modalQuantity').value = '1';
-            
-            // 총액 계산
-            calculateModalTotal();
-            
-            // 모달 표시
-            modal.classList.add('show');
+    }
+    
+    // 주문 데이터 수집
+    const orderData = {
+        product: {
+            name: document.getElementById('modalProductSearch').value,
+            option: document.getElementById('modalOptionName').value,
+            spec: document.getElementById('modalProductSpec').value,
+            unitPrice: document.getElementById('modalUnitPrice').value,
+            quantity: document.getElementById('modalQuantity').value,
+            totalPrice: document.getElementById('modalTotalPrice').textContent
+        },
+        seller: {
+            name: document.getElementById('modalSellerName').value,
+            phone: document.getElementById('modalSellerPhone').value
+        },
+        orderer: {
+            name: document.getElementById('modalOrderName').value,
+            phone: document.getElementById('modalOrderPhone').value
+        },
+        receiver: {
+            name: document.getElementById('modalReceiverName').value,
+            phone: document.getElementById('modalReceiverPhone').value,
+            address: document.getElementById('modalAddress').value,
+            request: document.getElementById('modalDeliveryRequest').value
         }
-        
-        // 모달 총액 계산
-        function calculateModalTotal() {
-            const quantity = Number(document.getElementById('modalQuantity').value) || 0;
-            const unitPriceStr = document.getElementById('modalUnitPrice').value;
-            const unitPrice = Number(unitPriceStr.replace(/[^0-9]/g, '')) || 0;
-            const total = quantity * unitPrice;
-            
-            document.getElementById('modalTotalPrice').textContent = total.toLocaleString() + '원';
-        }
-        
-        // 간편주문 모달 닫기
-        function closeQuickOrderModal() {
-            const modal = document.getElementById('quickOrderModal');
-            if (modal) {
-                modal.classList.remove('show');
-            }
-        }
-        
-        // 모달 주문 제출
-        function submitModalOrder(e) {
-            e.preventDefault();
-            
-            // 유효성 검사
-            const requiredFields = [
-                { id: 'modalSellerName', label: '판매자 이름' },
-                { id: 'modalSellerPhone', label: '판매자 전화번호' },
-                { id: 'modalOrderName', label: '주문자 이름' },
-                { id: 'modalOrderPhone', label: '주문자 전화번호' },
-                { id: 'modalReceiverName', label: '수령인 이름' },
-                { id: 'modalReceiverPhone', label: '수령인 전화번호' },
-                { id: 'modalAddress', label: '배송 주소' }
-            ];
-            
-            for (let field of requiredFields) {
-                const value = document.getElementById(field.id).value.trim();
-                if (!value) {
-                    alert(`${field.label}을(를) 입력해주세요.`);
-                    document.getElementById(field.id).focus();
-                    return;
-                }
-            }
-            
-            // 주문 데이터 수집
-            const orderData = {
-                product: {
-                    name: document.getElementById('modalProductSearch').value,
-                    option: document.getElementById('modalOptionName').value,
-                    spec: document.getElementById('modalProductSpec').value,
-                    unitPrice: document.getElementById('modalUnitPrice').value,
-                    quantity: document.getElementById('modalQuantity').value,
-                    totalPrice: document.getElementById('modalTotalPrice').textContent
-                },
-                seller: {
-                    name: document.getElementById('modalSellerName').value,
-                    phone: document.getElementById('modalSellerPhone').value
-                },
-                orderer: {
-                    name: document.getElementById('modalOrderName').value,
-                    phone: document.getElementById('modalOrderPhone').value
-                },
-                receiver: {
-                    name: document.getElementById('modalReceiverName').value,
-                    phone: document.getElementById('modalReceiverPhone').value,
-                    address: document.getElementById('modalAddress').value,
-                    request: document.getElementById('modalDeliveryRequest').value
-                }
-            };
-            
-            // 여기서 실제 주문 처리 (API 호출 등)
-            console.log('주문 데이터:', orderData);
-            alert('주문이 완료되었습니다!');
-            
-            closeQuickOrderModal();
-        }
+    };
+    
+    // 여기서 실제 주문 처리 (API 호출 등)
+    console.log('주문 데이터:', orderData);
+    alert('주문이 완료되었습니다!');
+    
+    closeQuickOrderModal();
+}
         
         // 차트 열기 (옵션 모달에서)
         function openChartFromOption() {
@@ -1656,31 +1657,6 @@
                             return `${date.getMonth() + 1}/${date.getDate()}`;
                         }),
                         datasets: [{
-                            label: '공급가',
-                            data: prices,
-                            borderColor: 'rgb(102, 126, 234)',
-                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                            tension: 0.1,
-                            borderWidth: 2,
-                            pointRadius: 4,
-                            pointBackgroundColor: 'rgb(102, 126, 234)',
-                            pointBorderColor: '#fff',
-                            pointBorderWidth: 2,
-                            pointHoverRadius: 6,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label:
-                                        datasets: [{
                             label: '공급가',
                             data: prices,
                             borderColor: 'rgb(102, 126, 234)',
@@ -1808,16 +1784,6 @@
                     closeOptionModal();
                 }
             });
-            
-            // 간편주문 모달 이벤트 리스너 추가
-            document.getElementById('quickOrderModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeQuickOrderModal();
-                }
-            });
-            
-            // 간편주문 폼 제출 이벤트 리스너
-            document.getElementById('modalQuickOrderForm').addEventListener('submit', submitModalOrder);
         }
     </script>
 </body>
