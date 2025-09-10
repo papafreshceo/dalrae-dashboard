@@ -638,8 +638,66 @@
         return;
       }
       
-      // 폼 데이터 수집
-      const formData = {
+      // 주문 확인 모달 표시
+      showOrderConfirmModal();
+    });
+
+    // 주문 확인 모달 표시
+    function showOrderConfirmModal() {
+      const formData = collectFormData();
+      
+      // 주문 내역 HTML 생성
+      const summaryHTML = `
+        <div class="summary-row">
+          <span class="summary-label">상품명</span>
+          <span class="summary-value">${formData.product.optionName}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">규격</span>
+          <span class="summary-value">${formData.product.spec || '-'}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">단가</span>
+          <span class="summary-value">${Number(formData.product.unitPrice).toLocaleString()}원</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">수량</span>
+          <span class="summary-value">${formData.product.quantity}개</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">판매자</span>
+          <span class="summary-value">${formData.seller.name} (${formData.seller.phone})</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">주문자</span>
+          <span class="summary-value">${formData.orderer.name} (${formData.orderer.phone})</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">수령인</span>
+          <span class="summary-value">${formData.receiver.name} (${formData.receiver.phone})</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">배송지</span>
+          <span class="summary-value">${formData.receiver.address}</span>
+        </div>
+        ${formData.receiver.request ? `
+        <div class="summary-row">
+          <span class="summary-label">배송 요청사항</span>
+          <span class="summary-value">${formData.receiver.request}</span>
+        </div>` : ''}
+        <div class="summary-total">
+          <span class="summary-label">총 주문금액</span>
+          <span class="summary-value">${Number(formData.product.totalAmount).toLocaleString()}원</span>
+        </div>
+      `;
+      
+      document.getElementById('orderSummary').innerHTML = summaryHTML;
+      document.getElementById('orderConfirmModal').classList.add('show');
+    }
+
+    // 폼 데이터 수집
+    function collectFormData() {
+      return {
         timestamp: new Date().toISOString(),
         product: {
           optionName: document.getElementById('optionName').value,
@@ -663,17 +721,70 @@
           request: document.getElementById('deliveryRequest').value
         }
       };
+    }
+
+    // 모달 닫기
+    function closeConfirmModal() {
+      document.getElementById('orderConfirmModal').classList.remove('show');
+    }
+
+    // 최종 제출
+    function finalSubmit() {
+      const formData = collectFormData();
       
-      // Google Sheets에 저장 (실제 구현 필요)
+      // Google Sheets에 저장
       saveToGoogleSheets(formData);
       
-      alert('주문이 접수되었습니다!\n\n' + 
-            '상품: ' + formData.product.optionName + '\n' +
-            '수량: ' + formData.product.quantity + '\n' +
-            '총액: ' + formData.product.totalAmount + '원');
+      alert('주문이 완료되었습니다!\n입금 확인 후 발송 예정입니다.');
       
+      closeConfirmModal();
       resetForm();
-    });
+    }
+
+    // 계좌번호 복사
+    function copyAccountNumber() {
+      const accountNumber = '302-1473-7870-91';
+      
+      // 클립보드에 복사
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(accountNumber).then(() => {
+          showCopySuccess();
+        }).catch(() => {
+          fallbackCopy(accountNumber);
+        });
+      } else {
+        fallbackCopy(accountNumber);
+      }
+    }
+
+    // 복사 성공 메시지 표시
+    function showCopySuccess() {
+      const successMsg = document.getElementById('copySuccess');
+      successMsg.classList.add('show');
+      setTimeout(() => {
+        successMsg.classList.remove('show');
+      }, 2000);
+    }
+
+    // 구형 브라우저용 복사 대체 방법
+    function fallbackCopy(text) {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      
+      try {
+        document.execCommand('copy');
+        showCopySuccess();
+      } catch (err) {
+        alert('계좌번호: ' + text);
+      }
+      
+      document.body.removeChild(textArea);
+    }
 
     // Google Sheets 저장 (구현 필요)
     function saveToGoogleSheets(data) {
