@@ -79,7 +79,7 @@
 
                 .nav-menu { 
                     display: flex; 
-                    gap: 12px; /* 간격 절반으로 축소 */
+                    gap: 12px;
                     align-items: center;
                     padding: 0;
                 }
@@ -94,7 +94,7 @@
                     font-size: 15px;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: all 0.3s ease; /* 부드러운 전환 */
+                    transition: all 0.3s ease;
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
                     position: relative;
@@ -108,21 +108,25 @@
                     color: #667eea;
                 }
 
+                /* PC 활성 메뉴 밑줄 - 수정됨 */
                 .nav-btn.active::after {
                     content: '';
                     position: absolute;
-                    bottom: -2px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: 0%;
+                    bottom: -8px;
+                    left: 10%;
+                    width: 80%;
                     height: 3px;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     border-radius: 2px;
-                    animation: underlineSlide 0.3s ease-out forwards;
+                    opacity: 0;
+                    animation: underlineShow 0.3s ease-out forwards;
                 }
                 
-                @keyframes underlineSlide {
-                    to { width: 80%; }
+                @keyframes underlineShow {
+                    to { 
+                        opacity: 1;
+                        bottom: -5px;
+                    }
                 }
             }
 
@@ -147,12 +151,13 @@
                 transform: scale(1.05);
             }
 
-            /* 서비스&프로그램 전설 아우라 효과 (50% 감소) */
+            /* 서비스&프로그램 전설 아우라 효과 - z-index 수정 */
             .legendary-btn {
                 position: relative;
                 font-weight: 700;
                 color: #fff;
-                text-shadow: 0 0 5px rgba(138, 43, 226, 0.4),  /* 절반으로 감소 */
+                z-index: 1; /* 글자를 위로 */
+                text-shadow: 0 0 5px rgba(138, 43, 226, 0.4),
                             0 0 10px rgba(138, 43, 226, 0.3),
                             0 0 15px rgba(138, 43, 226, 0.2);
                 background: linear-gradient(45deg, #8a2be2, #ff1493, #00bfff, #ffd700, #8a2be2);
@@ -163,7 +168,7 @@
                 animation: legendaryGlow 4s ease infinite, legendaryShift 8s ease infinite;
             }
 
-            /* 전설 아우라 배경 효과 (50% 감소) */
+            /* 전설 아우라 배경 효과 - z-index 수정 */
             .legendary-btn::before {
                 content: '';
                 position: absolute;
@@ -173,17 +178,17 @@
                 width: 110%;
                 height: 150%;
                 background: radial-gradient(ellipse at center, 
-                    rgba(138, 43, 226, 0.15) 0%,  /* 투명도 증가 */
+                    rgba(138, 43, 226, 0.15) 0%,
                     rgba(255, 20, 147, 0.1) 25%,
                     rgba(0, 191, 255, 0.05) 50%,
                     transparent 70%);
                 filter: blur(8px);
                 animation: legendaryPulse 3s ease-in-out infinite;
                 pointer-events: none;
-                z-index: -1;
+                z-index: -2; /* 글자 뒤로 */
             }
 
-            /* 전설 파티클 효과 (크기 감소) */
+            /* 전설 파티클 효과 */
             .legendary-btn::after {
                 content: '✦';
                 position: absolute;
@@ -194,6 +199,7 @@
                 animation: sparkle 2s ease-in-out infinite;
                 pointer-events: none;
                 opacity: 0.7;
+                z-index: 2; /* 글자 위로 */
             }
 
             @keyframes legendaryGlow {
@@ -243,7 +249,7 @@
                 
                 /* 모바일 로고 영역 - 좌측 정렬 */
                 .logo-container {
-                    text-align: left;  /* 좌측 정렬 */
+                    text-align: left;
                     padding: 2px 0;
                     margin-right: 0;
                 }
@@ -264,6 +270,7 @@
                     -webkit-overflow-scrolling: touch;
                     scrollbar-width: none;
                     -ms-overflow-style: none;
+                    scroll-behavior: smooth; /* 부드러운 스크롤 */
                 }
 
                 .nav-menu-container::-webkit-scrollbar {
@@ -294,7 +301,7 @@
                 
                 .nav-menu {
                     display: flex;
-                    gap: 10px; /* 간격 절반으로 축소 */
+                    gap: 10px;
                     justify-content: flex-start;
                     padding: 0 5px;
                     min-width: fit-content;
@@ -324,36 +331,39 @@
                     color: #667eea;
                 }
 
-                /* 모바일 활성 메뉴 밑줄 */
+                /* 모바일 활성 메뉴 밑줄 - 수정됨 */
                 .nav-btn.active::after {
                     content: '';
                     position: absolute;
-                    bottom: -2px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: 0%;
+                    bottom: -5px;
+                    left: 10%;
+                    width: 80%;
                     height: 2px;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     border-radius: 1px;
-                    animation: underlineSlide 0.3s ease-out forwards;
+                    opacity: 0;
+                    animation: underlineShow 0.3s ease-out forwards;
                 }
 
                 /* 모바일 전설 아우라 조정 */
                 .legendary-btn {
                     text-shadow: 0 0 4px rgba(138, 43, 226, 0.4),
                                 0 0 8px rgba(138, 43, 226, 0.3);
+                    z-index: 1;
                 }
 
                 .legendary-btn::before {
                     width: 105%;
                     height: 140%;
                     filter: blur(6px);
+                    z-index: -2;
                 }
 
                 .legendary-btn::after {
                     font-size: 6px;
                     top: -2px;
                     right: -6px;
+                    z-index: 2;
                 }
             }
         `;
@@ -483,6 +493,36 @@
         
         // 상태 저장
         saveHeaderState();
+        
+        // 모바일에서 활성 메뉴를 중앙으로 스크롤
+        scrollToActiveMenu();
+    }
+
+    // 모바일에서 활성 메뉴를 중앙으로 스크롤하는 함수
+    function scrollToActiveMenu() {
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                const activeBtn = document.querySelector('.nav-btn.active');
+                const container = document.querySelector('.nav-menu-container');
+                
+                if (activeBtn && container) {
+                    // 활성 버튼의 위치와 크기 계산
+                    const btnRect = activeBtn.getBoundingClientRect();
+                    const containerRect = container.getBoundingClientRect();
+                    const btnCenter = activeBtn.offsetLeft + (activeBtn.offsetWidth / 2);
+                    const containerCenter = container.offsetWidth / 2;
+                    
+                    // 버튼을 컨테이너 중앙에 위치시키기 위한 스크롤 위치 계산
+                    const scrollLeft = btnCenter - containerCenter;
+                    
+                    // 부드럽게 스크롤
+                    container.scrollTo({
+                        left: scrollLeft,
+                        behavior: 'smooth'
+                    });
+                }
+            }, 100);
+        }
     }
 
     // 부드러운 페이지 이동
@@ -568,27 +608,6 @@
             lastScrollTop = scrollTop;
         });
 
-        // 모바일에서 현재 활성 메뉴를 볼 수 있도록 스크롤
-        if (window.innerWidth <= 768) {
-            const activeBtn = document.querySelector('.nav-btn.active');
-            if (activeBtn) {
-                const container = document.querySelector('.nav-menu-container');
-                if (container) {
-                    // 활성 버튼이 중앙에 오도록 스크롤
-                    setTimeout(() => {
-                        const btnLeft = activeBtn.offsetLeft;
-                        const btnWidth = activeBtn.offsetWidth;
-                        const containerWidth = container.offsetWidth;
-                        const scrollLeft = btnLeft - (containerWidth / 2) + (btnWidth / 2);
-                        container.scrollTo({
-                            left: scrollLeft,
-                            behavior: 'smooth'
-                        });
-                    }, 100);
-                }
-            }
-        }
-
         // 화면 크기 변경 시 헤더 재생성
         let resizeTimer;
         window.addEventListener('resize', function() {
@@ -596,13 +615,19 @@
             resizeTimer = setTimeout(function() {
                 const currentWidth = window.innerWidth;
                 const isMobile = currentWidth <= 768;
-                const headerIsMobile = document.querySelector('.logo-container').style.textAlign === 'left';
+                const container = document.getElementById(containerId);
                 
-                // 모바일/PC 전환 시에만 재생성
-                if ((isMobile && !headerIsMobile) || (!isMobile && headerIsMobile)) {
+                if (container) {
+                    // 현재 활성 페이지 저장
+                    const currentActivePage = document.querySelector('.nav-btn.active')?.dataset.page;
+                    
+                    // 헤더 재생성
                     container.innerHTML = createHeader();
-                    const currentPage = getCurrentPageName();
-                    setActivePage(currentPage);
+                    
+                    // 활성 페이지 복원
+                    if (currentActivePage) {
+                        setActivePage(currentActivePage);
+                    }
                 }
             }, 250);
         });
