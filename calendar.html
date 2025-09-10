@@ -355,31 +355,37 @@
 }
         
         .year-months-header {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            border: 1px solid #dee2e6;
-            margin-bottom: 0;
-        }
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 0;
+    background: transparent;
+    border-bottom: 2px solid #e9ecef;
+    margin-bottom: 20px;
+}
         
         .year-month-label {
-            background: #f8f9fa;
-            padding: 10px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 13px;
-            color: #495057;
-            border-right: 1px solid #dee2e6;
-        }
+    background: transparent;
+    padding: 14px 8px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #6c757d;
+    border-right: none;
+}
         
         .year-month-label:last-child {
             border-right: none;
         }
         
-        .year-timeline-container {
-            position: relative;
-            min-height: 400px;
-            padding: 20px 0;
-        }
+      .year-timeline-container {
+    position: relative;
+    min-height: 400px;
+    padding: 0;
+    background: white;
+    border-radius: 8px;
+}
         
         .year-timeline-row {
             position: relative;
@@ -390,9 +396,13 @@
         }
         
         .year-month-cell {
-            position: relative;
-            border-left: 1px solid #f1f3f5;
-        }
+    position: relative;
+    border-right: 1px solid #f1f3f5;
+}
+
+.year-month-cell:last-child {
+    border-right: none;
+}
         
 .year-timeline-bar {
     position: absolute;
@@ -750,8 +760,18 @@
     }
     
     .year-timeline-row {
-        height: 30px;
-    }
+    position: relative;
+    height: 35px;
+    margin-bottom: 5px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    border-bottom: 1px solid #f8f9fa;
+    transition: background 0.2s;
+}
+
+.year-timeline-row:hover {
+    background: #fafbfc;
+}
     
     .year-timeline-bar {
         height: 20px;
