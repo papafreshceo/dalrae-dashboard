@@ -166,45 +166,88 @@
       100% { transform: rotate(360deg); }
     }
 
-   /* 농가 매칭 서비스 카드 - 별빛 애니메이션 */
-    .hero-card:last-child {
-      position: relative;
-      overflow: visible;
-    }
+/* 농가 매칭 서비스 카드 - 헤더와 동일한 전설 아우라 */
+.hero-card:last-child {
+    position: relative;
+    overflow: visible;
+}
 
-    .hero-card:last-child::before,
-    .hero-card:last-child::after {
-      content: '✨';
-      position: absolute;
-      font-size: 20px;
-      animation: starTwinkle 3s ease-in-out infinite;
-      pointer-events: none;
-    }
+.hero-card:last-child .accent {
+    position: relative;
+    font-weight: 700;
+    color: #fff;
+    z-index: 1;
+    text-shadow: 0 0 5px rgba(138, 43, 226, 0.4),
+                0 0 10px rgba(138, 43, 226, 0.3),
+                0 0 15px rgba(138, 43, 226, 0.2);
+    background: linear-gradient(45deg, #8a2be2, #ff1493, #00bfff, #ffd700, #8a2be2);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: legendaryGlow 4s ease infinite, legendaryShift 8s ease infinite;
+}
 
-    .hero-card:last-child::before {
-      top: 10px;
-      right: 20px;
-      animation-delay: 0s;
-    }
+/* 전설 아우라 배경 효과 */
+.hero-card:last-child .accent::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 110%;
+    height: 150%;
+    background: radial-gradient(ellipse at center, 
+        rgba(138, 43, 226, 0.15) 0%,
+        rgba(255, 20, 147, 0.1) 25%,
+        rgba(0, 191, 255, 0.05) 50%,
+        transparent 70%);
+    filter: blur(8px);
+    animation: legendaryPulse 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -2;
+}
 
-    .hero-card:last-child::after {
-      bottom: 15px;
-      left: 25px;
-      font-size: 16px;
-      animation-delay: 1s;
-    }
+/* 전설 파티클 효과 */
+.hero-card:last-child .accent::after {
+    content: '✦';
+    position: absolute;
+    top: -3px;
+    right: -8px;
+    font-size: 8px;
+    color: #ffd700;
+    animation: sparkle 2s ease-in-out infinite;
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 2;
+}
 
-    @keyframes starTwinkle {
-      0%, 100% { 
-        opacity: 0.3;
-        transform: scale(0.8) rotate(0deg);
-      }
-      50% { 
-        opacity: 1;
-        transform: scale(1.2) rotate(180deg);
-        filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
-      }
-    }
+@keyframes legendaryGlow {
+    0%, 100% { filter: brightness(1) contrast(1); }
+    50% { filter: brightness(1.1) contrast(1.05); }
+}
+
+@keyframes legendaryShift {
+    0%, 100% { background-position: 0% 50%; }
+    25% { background-position: 100% 50%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+}
+
+@keyframes legendaryPulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.05); }
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: translateY(0) rotate(0deg); }
+    50% { opacity: 0.7; transform: translateY(-2px) rotate(180deg); }
+}
+
+.hero-card:last-child:hover .accent {
+    transform: scale(1.05);
+    filter: brightness(1.15);
+}
 
     .hero-card:hover {
       transform: translateY(-8px) scale(1.02);
