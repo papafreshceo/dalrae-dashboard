@@ -180,10 +180,6 @@
     .no-data-title { font-size: 18px; color: #6b7280; margin-bottom: 6px; font-weight: 800; }
     .no-data-text { font-size: 13px; color: #9ca3af; }
 
-    /* 푸터 */
-    .footer { background: var(--card); border-top: 1px solid var(--border); padding: 36px 0; margin-top: 48px; }
-    .footer-content { max-width: 1400px; margin: 0 auto; padding: 0 30px; text-align: center; color: #6b7280; font-size: 13px; }
-
     /* 모바일 */
     @media (max-width: 768px) {
       .main-content { padding: 10px 14px 14px; }
@@ -343,17 +339,13 @@
     </div>
   </div>
 
-  <!-- 푸터 -->
-  <footer class="footer">
-    <div class="footer-content">
-      <p><strong>달래마켓</strong> | 대표: 남잠화 | 사업자등록번호: 107-30-96371</p>
-      <p>통신판매업신고: 2022-경북청도-0003 | 이메일: papa_fresh@naver.com</p>
-      <p>전화: 010-2688-1388 | 주소: 경북 청도군 청도읍 구미길 13</p>
-      <p style="margin-top: 18px;">© 2024 달래마켓. All rights reserved.</p>
-    </div>
-  </footer>
+  <!-- 공통 푸터 -->
+  <div id="footer-container"></div>
 
+  <!-- 외부 스크립트 로드 -->
   <script src="header.js"></script>
+  <script src="footer.js"></script>
+  
   <script>
     // 전역 상태
     let allProducts = []; 
@@ -382,13 +374,21 @@
     }
 
     window.onload = function(){
-      // header.js 사용
+      // 공통 헤더 초기화
       if(window.DalraeHeader) {
         DalraeHeader.init({ 
           containerId:'header-container', 
           activePage:'dashboard' 
         });
       }
+      
+      // 공통 푸터 초기화
+      if(window.DalraeFooter) {
+        DalraeFooter.init({
+          containerId: 'footer-container'
+        });
+      }
+      
       loadData(); 
       setupEventListeners();
     };
@@ -912,141 +912,4 @@
           labels: data.map(d=>{ 
             const dt=new Date(d.날짜); 
             return `${dt.getMonth()+1}/${dt.getDate()}`; 
-          }), 
-          datasets:[{ 
-            label:'공급가', 
-            data:prices, 
-            borderColor:'rgb(102,126,234)', 
-            backgroundColor:'rgba(102,126,234,.12)', 
-            tension:.1, 
-            borderWidth:isMobile?1.5:2, 
-            pointRadius:isMobile?2:4, 
-            pointBackgroundColor:'rgb(102,126,234)', 
-            pointBorderColor:'#fff', 
-            pointBorderWidth:isMobile?1:2, 
-            pointHoverRadius:isMobile?3:6, 
-            fill:true 
-          }] 
-        }, 
-        options:{ 
-          responsive:true, 
-          maintainAspectRatio:false, 
-          plugins:{ 
-            legend:{ display:false }, 
-            tooltip:{ 
-              callbacks:{ 
-                label:(c)=> '공급가: '+ c.parsed.y.toLocaleString() +'원' 
-              }, 
-              titleFont:{ size:isMobile?10:12 }, 
-              bodyFont:{ size:isMobile?10:12 }, 
-              padding:isMobile?4:8 
-            } 
-          }, 
-          scales:{ 
-            x:{ 
-              ticks:{ 
-                font:{ size:isMobile?9:12 }, 
-                maxRotation:isMobile?45:0, 
-                autoSkip:true, 
-                maxTicksLimit:isMobile?6:12 
-              }, 
-              grid:{ display:!isMobile } 
-            }, 
-            y:{ 
-              beginAtZero:true, 
-              max: Math.ceil(max*1.2), 
-              ticks:{ 
-                callback:(v)=> v.toLocaleString()+'원', 
-                font:{ size:isMobile?9:12 }, 
-                maxTicksLimit:isMobile?5:8 
-              }, 
-              grid:{ display:!isMobile } 
-            } 
-          }, 
-          layout:{ 
-            padding:{ 
-              left:isMobile?2:10, 
-              right:isMobile?2:10, 
-              top:isMobile?2:10, 
-              bottom:isMobile?2:10 
-            } 
-          } 
-        } 
-      });
-    }
-
-    function showNoChartData(){ 
-      document.getElementById('chartModalBody').innerHTML = `<div class="no-data-message"><div class="no-data-icon"></div><div class="no-data-title">가격 변동 데이터가 없습니다</div><div class="no-data-text">이 옵션의 가격 이력이 아직 기록되지 않았습니다.</div></div>`; 
-    }
-
-    function closeChartModal(){ 
-      document.getElementById('chartModal').classList.remove('show'); 
-      if(priceChart){ 
-        priceChart.destroy(); 
-        priceChart=null; 
-      } 
-    }
-
-    function applyFilters(){
-      filteredProducts=[...allProducts];
-      if(activeTypeFilter!=='all'){
-        const map={ 
-          agricultural:'농산물', 
-          seafood:'수산물', 
-          livestock:'축산물', 
-          imported:'농산물(수입)' 
-        };
-        filteredProducts = filteredProducts.filter(p=> p.대분류 === map[activeTypeFilter]);
-      }
-      if(activeStatusFilter!=='all'){
-        const today=new Date(), twenty=new Date(today.getTime()+20*24*60*60*1000);
-        switch(activeStatusFilter){
-          case 'active': 
-            filteredProducts=filteredProducts.filter(p=>getSupplyStatus(p)==='공급중'); 
-            break;
-          case 'paused': 
-            filteredProducts=filteredProducts.filter(p=>getSupplyStatus(p)==='시즌종료'); 
-            break;
-          case 'stopped': 
-            filteredProducts=filteredProducts.filter(p=>getSupplyStatus(p)==='공급중지'); 
-            break;
-          case 'preparing': 
-            filteredProducts=filteredProducts.filter(p=> p.시작일 && (d=> d>today && d<=twenty)(parseDate(p.시작일))); 
-            break;
-          case 'ending': 
-            filteredProducts=filteredProducts.filter(p=>{ 
-              if(!p.종료일) return false; 
-              const end=parseDate(p.종료일); 
-              if(!end) return false; 
-              const days=Math.ceil((end-today)/(1000*60*60*24)); 
-              return days>=0 && days<=7; 
-            }); 
-            break;
-        }
-      }
-      if(activeProductFilter!=='all') {
-        filteredProducts = filteredProducts.filter(p=> (p.품목||'')===activeProductFilter);
-      }
-      updateDashboard();
-    }
-
-    function setupEventListeners(){
-      document.querySelectorAll('.tag-filter').forEach(tag=> tag.addEventListener('click', function(){ 
-        handleFilterClick(this); 
-      }));
-      document.getElementById('optionsModal').addEventListener('click', e=>{ 
-        if(e.target===e.currentTarget) closeModal(); 
-      });
-      document.getElementById('chartModal').addEventListener('click', e=>{ 
-        if(e.target===e.currentTarget) closeChartModal(); 
-      });
-      document.addEventListener('keydown', e=>{ 
-        if(e.key==='Escape'){ 
-          if(document.getElementById('chartModal').classList.contains('show')) closeChartModal(); 
-          else if(document.getElementById('optionsModal').classList.contains('show')) closeModal(); 
-        }
-      });
-    }
-  </script>
-</body>
-</html>
+          }),
