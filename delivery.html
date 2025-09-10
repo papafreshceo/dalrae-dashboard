@@ -6,69 +6,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/png" href="/favicon.png">
     <title>달래마켓 배송캘린더</title>
-    <script src="header.js"></script>
     <style>
-        /* 모던 미니멀 디자인 변수 */
-        :root {
-            --primary-color: #5B21B6;
-            --primary-light: #7C3AED;
-            --primary-dark: #4C1D95;
-            --text-primary: #000000;
-            --text-secondary: #666666;
-            --text-muted: #999999;
-            --bg-primary: #ffffff;
-            --bg-secondary: #fafafa;
-            --border-color: #e0e0e0;
-            --border-light: #f0f0f0;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 2px 4px rgba(0,0,0,0.08);
-            --shadow-lg: 0 4px 8px rgba(0,0,0,0.1);
-            --success-color: #10b981;
-            --warning-color: #3b82f6;
-            --danger-color: #ef4444;
-        }
-
-        /* 기본 스타일 */
-        * {
+        body { 
+            font-family: 'Noto Sans KR', -apple-system, sans-serif; 
+            background: #f8f9fa; 
+            color: #212529; 
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+        }
+
+        .hero {
+            min-height: calc(100vh - 200px);
+            padding: 40px 20px; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         }
         
-        body { 
-            font-family: 'Segoe UI', -apple-system, sans-serif;
-            font-weight: 300;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-        
-        /* 미니멀 컨테이너 */
-        .calendar-container {
-            max-width: 1400px;
+        .card { 
+            max-width: 1400px; 
             margin: 0 auto;
-            padding: 30px;
+            background: white; 
+            border-radius: 16px; 
+            padding: 40px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
         }
         
-        /* 미니멀 섹션 타이틀 */
-        .section-title {
-            font-size: 24px;
-            font-weight: 300;
-            color: var(--text-primary);
-            margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-light);
-            letter-spacing: -0.5px;
+        /* 헤더 섹션 */
+        .header-section {
             display: flex;
-            align-items: center;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
         }
         
-        /* 미니멀 공지사항 */
-        #deliveryNotices {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
+        .title-group {
+            flex: 1;
+        }
+        
+        .eyebrow { 
+            font-size: 14px; 
+            font-weight: 700; 
+            letter-spacing: .06em; 
+            color: #6c757d; 
+            text-transform: uppercase; 
+            margin-bottom: 12px; 
+        }
+        
+        .title { 
+            font-size: 36px; 
+            line-height: 1.25; 
+            font-weight: 800; 
+            color: #212529; 
+            margin-bottom: 16px; 
+        }
+        
+        .subtitle { 
+            font-size: 16px; 
+            color: #495057; 
+            line-height: 1.6;
+            margin-bottom: 0; 
+        }
+
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #dee2e6;
+            margin: 0 0 40px 0;
+        }
+
+        /* 공지사항 */
+        .notice-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
             padding: 24px;
             margin-bottom: 30px;
         }
@@ -77,19 +86,27 @@
             display: flex;
             align-items: center;
             margin-bottom: 20px;
-            border-bottom: 1px solid var(--border-light);
             padding-bottom: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .notice-header-main h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
         }
         
         .notice-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
             margin-bottom: 12px;
             transition: all 0.2s;
         }
         
         .notice-card:hover {
-            border-color: var(--primary-color);
+            border-color: #2563eb;
         }
         
         .notice-header {
@@ -98,15 +115,14 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            min-height: 48px;
             background: transparent;
         }
         
         .notice-header h4 {
             margin: 0;
             font-size: 14px;
-            font-weight: 400;
-            color: var(--text-primary);
+            font-weight: 500;
+            color: #212529;
             line-height: 1.4;
             flex: 1;
         }
@@ -116,7 +132,7 @@
             border: none;
             cursor: pointer;
             padding: 4px;
-            color: var(--text-secondary);
+            color: #6c757d;
             font-size: 14px;
             transition: transform 0.2s;
             margin-left: 10px;
@@ -126,8 +142,8 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
-            background: var(--bg-primary);
-            border-top: 1px solid var(--border-light);
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
         }
         
         .notice-content > div {
@@ -138,30 +154,32 @@
             margin: 0;
             font-size: 13px;
             line-height: 1.6;
-            color: var(--text-secondary);
+            color: #495057;
         }
         
-        /* 미니멀 캘린더 래퍼 */
-        .delivery-calendar-wrapper {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            padding: 0;
+        /* 캘린더 래퍼 */
+        .calendar-wrapper {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
         }
         
-        /* 미니멀 네비게이션 */
-        .delivery-nav-controls {
+        /* 네비게이션 */
+        .nav-controls {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 20px;
             padding: 20px;
-            border-bottom: 1px solid var(--border-light);
+            border-bottom: 1px solid #dee2e6;
+            background: #f8f9fa;
         }
         
         .nav-button {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 2px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
             width: 40px;
             height: 40px;
             display: flex;
@@ -170,69 +188,69 @@
             cursor: pointer;
             transition: all 0.2s;
             font-size: 18px;
-            color: var(--text-secondary);
+            color: #495057;
         }
         
         .nav-button:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            background: var(--bg-secondary);
+            border-color: #2563eb;
+            color: #2563eb;
+            background: #f8f9fa;
         }
         
         .today-button {
             padding: 10px 24px;
-            background: transparent;
-            border: 1px solid var(--border-color);
-            border-radius: 2px;
-            color: var(--text-secondary);
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            color: #495057;
             font-size: 14px;
-            font-weight: 400;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
-            letter-spacing: 0.5px;
         }
         
         .today-button:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
+            border-color: #2563eb;
+            color: #2563eb;
+            background: #f8f9fa;
         }
         
         .month-display {
             font-size: 20px;
-            font-weight: 300;
+            font-weight: 600;
             min-width: 150px;
             text-align: center;
-            color: var(--text-primary);
-            letter-spacing: -0.5px;
+            color: #212529;
         }
         
-        /* 미니멀 캘린더 그리드 */
-        .delivery-month-view {
+        /* 캘린더 그리드 */
+        .month-view {
             padding: 0;
         }
         
         .weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            border-bottom: 1px solid var(--border-light);
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
         }
         
         .weekday {
             padding: 16px;
             text-align: center;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 12px;
-            color: var(--text-secondary);
+            color: #495057;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
         
         .weekday.sunday {
-            color: var(--danger-color);
+            color: #dc3545;
         }
         
         .weekday.saturday {
-            color: var(--warning-color);
+            color: #2563eb;
         }
         
         .days-grid {
@@ -241,12 +259,12 @@
         }
         
         .day-cell {
-            background: var(--bg-primary);
+            background: white;
             min-height: 120px;
             padding: 12px;
             position: relative;
-            border-right: 1px solid var(--border-light);
-            border-bottom: 1px solid var(--border-light);
+            border-right: 1px solid #f1f3f5;
+            border-bottom: 1px solid #f1f3f5;
             transition: all 0.2s;
         }
         
@@ -255,43 +273,41 @@
         }
         
         .day-cell:hover {
-            background: var(--bg-secondary);
+            background: #f8f9fa;
             z-index: 10;
         }
         
         .day-cell.other-month {
-            background: var(--bg-secondary);
+            background: #fafafa;
         }
         
         .day-cell.today {
-            background: var(--bg-secondary);
+            background: #e7f3ff;
         }
         
         .day-number {
             font-size: 14px;
-            font-weight: 400;
-            color: var(--text-primary);
+            font-weight: 500;
+            color: #212529;
             margin-bottom: 8px;
-            position: relative;
-            z-index: 2;
         }
         
         .day-cell.today .day-number {
-            color: var(--primary-color);
-            font-weight: 600;
+            color: #2563eb;
+            font-weight: 700;
         }
         
         .day-number.sunday,
         .day-number.holiday {
-            color: var(--danger-color);
+            color: #dc3545;
         }
         
         .day-number.saturday {
-            color: var(--warning-color);
+            color: #2563eb;
         }
         
-        /* 모던 미니멀 배송 아이콘 */
-        .delivery-status-icon {
+        /* 배송 아이콘 */
+        .delivery-icon {
             position: absolute;
             bottom: 12px;
             right: 12px;
@@ -303,28 +319,24 @@
             border-radius: 50%;
             font-size: 12px;
             font-weight: 600;
-            transition: all 0.2s;
         }
         
-        /* 일요일/연휴 특별 배송 - 파란색 원 */
-        .delivery-status-icon.special {
-            border: 2px solid var(--warning-color);
-            color: var(--warning-color);
+        .delivery-icon.special {
+            border: 2px solid #2563eb;
+            color: #2563eb;
         }
         
-        /* 일반 배송 - 초록색 체크 */
-        .delivery-status-icon.available {
-            border: 2px solid var(--success-color);
-            color: var(--success-color);
+        .delivery-icon.available {
+            border: 2px solid #10b981;
+            color: #10b981;
         }
         
-        /* 배송 불가 - 빨간색 X */
-        .delivery-status-icon.unavailable {
-            border: 2px solid var(--danger-color);
-            color: var(--danger-color);
+        .delivery-icon.unavailable {
+            border: 2px solid #ef4444;
+            color: #ef4444;
         }
         
-        /* 미니멀 배지 */
+        /* 배지 */
         .day-badges {
             position: absolute;
             top: 32px;
@@ -335,58 +347,55 @@
             align-items: center;
             width: 90%;
             gap: 4px;
-            z-index: 1;
         }
         
         .badge {
             padding: 2px 6px;
-            border-radius: 2px;
+            border-radius: 4px;
             font-size: 10px;
             font-weight: 500;
             width: 100%;
             text-align: center;
-            border: 1px solid;
         }
         
         .badge.issue {
-            background: transparent;
-            color: var(--danger-color);
-            border-color: var(--danger-color);
+            background: #fee2e2;
+            color: #dc3545;
+            border: 1px solid #fecaca;
         }
         
         .badge.other {
-            background: transparent;
-            color: var(--primary-color);
-            border-color: var(--primary-color);
+            background: #ede9fe;
+            color: #2563eb;
+            border: 1px solid #ddd6fe;
         }
         
         .badge.holiday {
-            background: transparent;
+            background: #fef3c7;
             color: #f59e0b;
-            border-color: #f59e0b;
+            border: 1px solid #fde68a;
         }
         
         .badge.temp-holiday {
-            background: transparent;
-            color: var(--warning-color);
-            border-color: var(--warning-color);
+            background: #dbeafe;
+            color: #2563eb;
+            border: 1px solid #bfdbfe;
         }
         
-        /* 미니멀 배송 안내 */
+        /* 배송 안내 */
         .delivery-info {
-            margin-top: 0;
             padding: 24px;
-            background: var(--bg-primary);
-            border-top: 1px solid var(--border-light);
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
         }
         
         .delivery-info h3 {
             font-size: 16px;
-            font-weight: 400;
-            color: var(--text-primary);
+            font-weight: 600;
+            color: #212529;
             margin-bottom: 16px;
             padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-light);
+            border-bottom: 1px solid #dee2e6;
         }
         
         .delivery-info ul {
@@ -397,17 +406,17 @@
         
         .delivery-info li {
             padding: 6px 0;
-            color: var(--text-secondary);
+            color: #495057;
             font-size: 13px;
             line-height: 1.5;
         }
         
         .delivery-info li.section-title {
-            font-weight: 500;
-            color: var(--text-primary);
+            font-weight: 600;
+            color: #212529;
             margin-top: 12px;
             padding-top: 12px;
-            border-top: 1px solid var(--border-light);
+            border-top: 1px solid #dee2e6;
         }
         
         .delivery-info li.section-title:first-child {
@@ -427,25 +436,34 @@
         }
         
         .icon-indicator.special {
-            border-color: var(--warning-color);
+            border-color: #2563eb;
         }
         
         .icon-indicator.available {
-            border-color: var(--success-color);
+            border-color: #10b981;
         }
         
         .icon-indicator.unavailable {
-            border-color: var(--danger-color);
+            border-color: #ef4444;
         }
         
         /* 모바일 반응형 */
         @media (max-width: 768px) {
-            .calendar-container {
-                padding: 20px;
+            .hero {
+                padding: 20px 15px;
             }
             
-            .section-title {
-                font-size: 20px;
+            .card {
+                padding: 25px 20px;
+                border-radius: 12px;
+            }
+            
+            .title {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
             }
             
             .day-cell {
@@ -457,7 +475,7 @@
                 font-size: 12px;
             }
             
-            .delivery-status-icon {
+            .delivery-icon {
                 width: 20px;
                 height: 20px;
                 bottom: 8px;
@@ -485,48 +503,66 @@
     <!-- 공통 헤더 -->
     <div id="header-container"></div>
 
-    <!-- 배송 캘린더 섹션 -->
-    <div class="calendar-container">
-        <h2 class="section-title">
-            <span>배송캘린더</span>
-        </h2>
-        
-        <!-- 공지사항 -->
-        <div id="deliveryNotices">
-            <div class="notice-header-main">
-                <h3 style="margin: 0; font-size: 18px; font-weight: 400; color: var(--text-primary);">공지사항</h3>
+    <!-- 본문 -->
+    <main class="hero">
+        <section class="card">
+            <div class="header-section">
+                <div class="title-group">
+                    <div class="eyebrow">Delivery Schedule</div>
+                    <h1 class="title">배송 <strong style="color:#2563eb">캘린더</strong></h1>
+                    <p class="subtitle">
+                        발송 가능일과 휴무일을 확인하실 수 있습니다.<br>
+                        정확한 배송 일정은 상품 상세 페이지를 참고해주세요.
+                    </p>
+                </div>
             </div>
-            <div id="noticesList">
-                <!-- 여기에 공지사항 동적 추가 -->
-            </div>
-        </div>
-        
-        <!-- 배송 캘린더 본체 -->
-        <div class="delivery-calendar-wrapper">
-            <div id="deliveryCalendarContent">
-                <div style="text-align: center; padding: 40px;">
-                    <div style="color: var(--text-muted);">배송 캘린더 로딩 중...</div>
+
+            <div class="divider"></div>
+            
+            <!-- 공지사항 -->
+            <div class="notice-section" id="deliveryNotices">
+                <div class="notice-header-main">
+                    <h3>공지사항</h3>
+                </div>
+                <div id="noticesList">
+                    <!-- 여기에 공지사항 동적 추가 -->
                 </div>
             </div>
             
-            <!-- 배송 안내 정보 -->
-            <div class="delivery-info">
-                <h3>발송 안내</h3>
-                <ul>
-                    <li class="section-title">발송 정책</li>
-                    <li>• 영업일: 발송</li>
-                    <li>• 토요일: 발송 없음</li>
-                    <li>• 일요일/연휴 마지막날: 상품/산지여건에 따라 발송</li>
-                    <li>• 공휴일 전날: 발송 휴무</li>
-                    
-                    <li class="section-title">아이콘 안내</li>
-                    <li><span class="icon-indicator special"></span>파란색: 상품/산지여건에 따라 발송</li>
-                    <li><span class="icon-indicator available"></span>초록색: 발송</li>
-                    <li><span class="icon-indicator unavailable"></span>빨간색: 발송 휴무</li>
-                </ul>
+            <!-- 배송 캘린더 본체 -->
+            <div class="calendar-wrapper">
+                <div id="deliveryCalendarContent">
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="color: #6c757d;">배송 캘린더 로딩 중...</div>
+                    </div>
+                </div>
+                
+                <!-- 배송 안내 정보 -->
+                <div class="delivery-info">
+                    <h3>발송 안내</h3>
+                    <ul>
+                        <li class="section-title">발송 정책</li>
+                        <li>• 영업일: 발송</li>
+                        <li>• 토요일: 발송 없음</li>
+                        <li>• 일요일/연휴 마지막날: 상품/산지여건에 따라 발송</li>
+                        <li>• 공휴일 전날: 발송 휴무</li>
+                        
+                        <li class="section-title">아이콘 안내</li>
+                        <li><span class="icon-indicator special"></span>파란색: 상품/산지여건에 따라 발송</li>
+                        <li><span class="icon-indicator available"></span>초록색: 발송</li>
+                        <li><span class="icon-indicator unavailable"></span>빨간색: 발송 휴무</li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
+
+    <!-- 공통 푸터 -->
+    <div id="footer-container"></div>
+
+    <!-- 외부 스크립트 로드 -->
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
 
     <script>
         // 전역 변수
@@ -534,31 +570,41 @@
         let deliveryYear = new Date().getFullYear();
         let globalDeliveryData = {};
 
+        // 페이지 로드 시 초기화
+        window.addEventListener('DOMContentLoaded', function() {
+            // 헤더 초기화
+            if (window.DalraeHeader) {
+                DalraeHeader.init({
+                    containerId: 'header-container',
+                    activePage: 'delivery'
+                });
+            }
+            
+            // 푸터 초기화
+            if (window.DalraeFooter) {
+                DalraeFooter.init({
+                    containerId: 'footer-container'
+                });
+            }
+
+            // 배송 데이터 로드
+            loadDeliveryData();
+        });
+
         // 배송 캘린더 데이터 로드
         async function loadDeliveryData() {
             try {
-                // 1. 구글 시트 데이터 가져오기
                 const sheetData = await fetchSheetData();
-                console.log('시트 데이터 로드:', sheetData);
-                
-                // 2. 공휴일 데이터 가져오기
                 const holidays = await fetchHolidays();
-                
-                // 3. 데이터 병합 및 배송 로직 적용
                 const deliveryMap = processDeliveryData(sheetData, holidays);
                 globalDeliveryData = deliveryMap;
-                
-                // 4. 캘린더 렌더링
                 renderDeliveryCalendar(deliveryMap);
-                
-                // 5. 안내 메시지 표시
                 displayDeliveryNotices(sheetData);
-                
             } catch (error) {
                 console.error('배송 데이터 로드 실패:', error);
                 document.getElementById('deliveryCalendarContent').innerHTML = `
                     <div style="text-align: center; padding: 40px;">
-                        <div style="color: var(--text-muted);">배송 캘린더 데이터를 불러올 수 없습니다.</div>
+                        <div style="color: #6c757d;">배송 캘린더 데이터를 불러올 수 없습니다.</div>
                     </div>
                 `;
             }
@@ -569,7 +615,6 @@
             const response = await fetch('/api/delivery');
             const data = await response.json();
             
-            // 각 행을 9개로 확장
             const expandedData = data.map(row => {
                 if (!row) return Array(9).fill('');
                 const newRow = [...row];
@@ -622,7 +667,6 @@
             const currentInfo = deliveryMap[dateStr];
             const nextInfo = deliveryMap[nextDateStr];
             
-            // 현재날이 공휴일/일요일이고, 다음날이 평일(월-금)이면서 공휴일이 아닌 경우만
             if (currentInfo && (currentInfo.holiday || currentInfo.tempHoliday || currentInfo.dayOfWeek === 0)) {
                 if (nextInfo && nextInfo.dayOfWeek >= 1 && nextInfo.dayOfWeek <= 5 && !nextInfo.holiday && !nextInfo.tempHoliday) {
                     return true;
@@ -641,7 +685,6 @@
             
             const nextInfo = deliveryMap[nextDateStr];
             
-            // 다음날이 공휴일이거나 일요일인 경우
             if (nextInfo && (nextInfo.holiday || nextInfo.tempHoliday || nextInfo.dayOfWeek === 0)) {
                 return true;
             }
@@ -655,7 +698,7 @@
             
             // 첫 번째 패스: 기본 데이터 생성
             sheetData.forEach((row, index) => {
-                if (index === 0) return; // 헤더 행 건너뛰기
+                if (index === 0) return;
                 
                 const [date, dayName, sheetHoliday, sheetTempHoliday, other, deliveryYN, issue, noticeHeader, noticeContent] = row;
                 
@@ -684,42 +727,28 @@
                 const dayOfWeek = info.dayOfWeek;
                 const sheetValue = info.sheetDeliveryYN?.toString().toUpperCase();
                 
-                // 기본 배송 로직
                 let canDeliver = false;
-                let deliveryType = 'none'; // 'normal', 'special', 'none'
+                let deliveryType = 'none';
                 
-                // 1. 토요일은 무조건 배송 불가
                 if (dayOfWeek === 6) {
                     canDeliver = false;
                     deliveryType = 'none';
-                }
-                // 2. 공휴일/일요일 전날은 무조건 배송 불가
-                else if (isBeforeHoliday(dateStr, deliveryMap)) {
+                } else if (isBeforeHoliday(dateStr, deliveryMap)) {
                     canDeliver = false;
                     deliveryType = 'none';
-                }
-                // 3. 일요일은 특별 배송
-                else if (dayOfWeek === 0) {
+                } else if (dayOfWeek === 0) {
                     canDeliver = true;
                     deliveryType = 'special';
-                }
-                // 4. 연휴 마지막날은 특별 배송
-                else if (isLastDayOfHolidayPeriod(dateStr, deliveryMap)) {
+                } else if (isLastDayOfHolidayPeriod(dateStr, deliveryMap)) {
                     canDeliver = true;
                     deliveryType = 'special';
-                }
-                // 5. 시트에 명시적으로 N이 있으면 배송 불가
-                else if (sheetValue === 'N') {
+                } else if (sheetValue === 'N') {
                     canDeliver = false;
                     deliveryType = 'none';
-                }
-                // 6. 공휴일은 배송 불가
-                else if (info.holiday || info.tempHoliday) {
+                } else if (info.holiday || info.tempHoliday) {
                     canDeliver = false;
                     deliveryType = 'none';
-                }
-                // 7. 평일(월-금)은 기본적으로 배송 가능
-                else if (dayOfWeek >= 1 && dayOfWeek <= 5) {
+                } else if (dayOfWeek >= 1 && dayOfWeek <= 5) {
                     canDeliver = true;
                     deliveryType = 'normal';
                 }
@@ -741,19 +770,15 @@
         // 배송 안내 메시지 표시
         function displayDeliveryNotices(sheetData) {
             const noticesList = document.getElementById('noticesList');
-            if (!noticesList) {
-                console.log('noticesList 요소를 찾을 수 없습니다');
-                return;
-            }
+            if (!noticesList) return;
             
             let noticesHTML = '';
             let hasNotices = false;
             let noticeIndex = 0;
             
-            // H열(인덱스 7)과 I열(인덱스 8) 읽기
             sheetData.forEach((row, index) => {
-                const header = row[7]; // H열 - 메시지 제목
-                const content = row[8]; // I열 - 메시지 내용
+                const header = row[7];
+                const content = row[8];
                 
                 if (header && content && header.trim() !== '' && content.trim() !== '') {
                     hasNotices = true;
@@ -777,7 +802,6 @@
             if (hasNotices) {
                 noticesList.innerHTML = noticesHTML;
             } else {
-                // 기본 메시지
                 noticesList.innerHTML = `
                     <div class="notice-card">
                         <div class="notice-header" onclick="toggleNotice(0)">
@@ -804,7 +828,6 @@
             
             const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
             
-            // 모든 다른 공지사항 닫기
             const allContents = document.querySelectorAll('.notice-content');
             const allButtons = document.querySelectorAll('.toggle-btn');
             
@@ -820,7 +843,6 @@
                 }
             });
             
-            // 현재 공지사항 토글
             if (isOpen) {
                 content.style.maxHeight = '0';
                 button.style.transform = 'rotate(0deg)';
@@ -840,7 +862,7 @@
             const currentDate = new Date();
             
             let html = `
-                <div class="delivery-nav-controls">
+                <div class="nav-controls">
                     <button onclick="changeDeliveryMonth(-1)" class="nav-button">‹</button>
                     <div class="month-display">
                         ${deliveryYear}년 ${deliveryMonth + 1}월
@@ -856,7 +878,7 @@
             const totalDays = lastDay.getDate();
             
             html += `
-                <div class="delivery-month-view">
+                <div class="month-view">
                     <div class="weekdays">
                         <div class="weekday sunday">일</div>
                         <div class="weekday">월</div>
@@ -869,12 +891,10 @@
                     <div class="days-grid">
             `;
             
-            // 이전 달 빈 칸
             for (let i = 0; i < startDay; i++) {
                 html += `<div class="day-cell other-month"></div>`;
             }
             
-            // 현재 달 날짜
             for (let day = 1; day <= totalDays; day++) {
                 const dateStr = `${deliveryYear}-${String(deliveryMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const deliveryInfo = deliveryData[dateStr] || {};
@@ -886,7 +906,6 @@
                 const isSaturday = deliveryInfo.dayOfWeek === 6;
                 const isHoliday = deliveryInfo.holiday || deliveryInfo.tempHoliday;
                 
-                // 날짜 색상 클래스 결정
                 let dayNumberClass = '';
                 if (isSunday || isHoliday) {
                     dayNumberClass = 'holiday';
@@ -897,25 +916,14 @@
                 let badges = [];
                 let deliveryIcon = '';
 
-                // 모던 배송 아이콘 처리
                 if (deliveryInfo.deliveryType === 'special') {
-                    // 특별 배송 (파란색 원)
-                    deliveryIcon = `
-                        <div class="delivery-status-icon special">◯</div>
-                    `;
+                    deliveryIcon = `<div class="delivery-icon special">◯</div>`;
                 } else if (deliveryInfo.deliveryType === 'normal') {
-                    // 일반 배송 (초록색 체크)
-                    deliveryIcon = `
-                        <div class="delivery-status-icon available">✓</div>
-                    `;
+                    deliveryIcon = `<div class="delivery-icon available">✓</div>`;
                 } else {
-                    // 배송 불가 (빨간색 X)
-                    deliveryIcon = `
-                        <div class="delivery-status-icon unavailable">×</div>
-                    `;
+                    deliveryIcon = `<div class="delivery-icon unavailable">×</div>`;
                 }
 
-                // 배지 처리
                 if (deliveryInfo.issue) {
                     badges.push(`<div class="badge issue">${deliveryInfo.issue}</div>`);
                 }
@@ -940,7 +948,6 @@
                 `;
             }
             
-            // 다음 달 빈 칸
             const remainingCells = 42 - (startDay + totalDays);
             for (let i = 0; i < remainingCells; i++) {
                 html += `<div class="day-cell other-month"></div>`;
@@ -977,11 +984,6 @@
 
         window.changeDeliveryMonth = changeDeliveryMonth;
         window.goToToday = goToToday;
-
-        // DOM 로드 완료 후 초기화
-        window.addEventListener('DOMContentLoaded', function() {
-            loadDeliveryData();
-        });
     </script>
 </body>
 </html>
