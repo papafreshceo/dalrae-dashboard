@@ -384,7 +384,7 @@
 
     window.navigateToPage = function(page) {
         const pageUrls = {
-            'dashboard': 'dashboard.html',
+            'dashboard': 'index.html',
             'products': 'products.html',
             'calendar': 'products-calendar.html',
             'delivery': 'delivery-calendar.html',
@@ -500,6 +500,7 @@
         setActivePage: setActivePage
     };
 })();
+
 
 
 
