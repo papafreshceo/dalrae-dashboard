@@ -1,4 +1,4 @@
-// delivery-data-service.js
+// services/delivery-data-service.js
 import { holidayAPI } from './delivery-holiday-api.js';
 
 export class DeliveryDataService {
@@ -8,15 +8,11 @@ export class DeliveryDataService {
         this.cacheExpiry = 10 * 60 * 1000; // 10분
     }
 
-    /**
-     * 구글 시트 데이터 가져오기
-     */
     async fetchSheetData() {
         try {
             const response = await fetch('/api/delivery');
             const data = await response.json();
             
-            // 데이터 확장 (9개 컬럼 보장)
             const expandedData = data.map(row => {
                 if (!row) return Array(9).fill('');
                 const newRow = [...row];
@@ -29,15 +25,40 @@ export class DeliveryDataService {
             return expandedData;
         } catch (error) {
             console.error('시트 데이터 로드 실패:', error);
-            throw error;
+            return this.getDummyData();
         }
     }
 
-    /**
-     * 배송 데이터 처리 및 병합
-     */
+    getDummyData() {
+        const today = new Date();
+        const dummyData = [
+            ['날짜', '요일', '공휴일', '임시공휴일', '기타', '배송YN', '이슈', '공지제목', '공지내용']
+        ];
+        
+        for (let i = 0; i < 30; i++) {
+            const date = new Date(today);
+            date.setDate(date.getDate() + i);
+            const dateStr = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')}`;
+            const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
+            const dayName = days[date.getDay()];
+            
+            dummyData.push([
+                dateStr,
+                dayName,
+                '', 
+                '', 
+                '', 
+                date.getDay() === 0 || date.getDay() === 6 ? 'N' : 'Y',
+                '', 
+                i === 1 ? '배송 안내' : '',
+                i === 1 ? '평일 오전 10시 이전 주문 시 당일 발송됩니다.' : ''
+            ]);
+        }
+        
+        return dummyData;
+    }
+
     async processDeliveryData() {
-        // 캐시 확인
         if (this.cache && this.cacheTimestamp && 
             Date.now() - this.cacheTimestamp < this.cacheExpiry) {
             return this.cache;
@@ -49,9 +70,8 @@ export class DeliveryDataService {
         
         const deliveryMap = {};
         
-        // 첫 번째 패스: 기본 데이터 생성
         sheetData.forEach((row, index) => {
-            if (index === 0) return; // 헤더 스킵
+            if (index === 0) return;
             
             const [date, dayName, sheetHoliday, sheetTempHoliday, other, deliveryYN, issue, noticeHeader, noticeContent] = row;
             
@@ -76,7 +96,6 @@ export class DeliveryDataService {
             };
         });
         
-        // 두 번째 패스: 배송 가능 여부 결정
         Object.keys(deliveryMap).forEach(dateStr => {
             const info = deliveryMap[dateStr];
             const dayOfWeek = info.dayOfWeek;
@@ -86,31 +105,24 @@ export class DeliveryDataService {
             let deliveryType = 'none';
             
             if (dayOfWeek === 6) {
-                // 토요일: 발송 없음
                 canDeliver = false;
                 deliveryType = 'none';
             } else if (this.isBeforeHoliday(dateStr, deliveryMap)) {
-                // 공휴일 전날: 발송 휴무
                 canDeliver = false;
                 deliveryType = 'none';
             } else if (dayOfWeek === 0) {
-                // 일요일: 조건부 발송
                 canDeliver = true;
                 deliveryType = 'special';
             } else if (this.isLastDayOfHolidayPeriod(dateStr, deliveryMap)) {
-                // 연휴 마지막날: 조건부 발송
                 canDeliver = true;
                 deliveryType = 'special';
             } else if (sheetValue === 'N') {
-                // 시트에서 명시적으로 발송 불가
                 canDeliver = false;
                 deliveryType = 'none';
             } else if (info.holiday || info.tempHoliday) {
-                // 공휴일: 발송 없음
                 canDeliver = false;
                 deliveryType = 'none';
             } else if (dayOfWeek >= 1 && dayOfWeek <= 5) {
-                // 평일: 발송
                 canDeliver = true;
                 deliveryType = 'normal';
             }
@@ -119,16 +131,12 @@ export class DeliveryDataService {
             deliveryMap[dateStr].deliveryType = deliveryType;
         });
         
-        // 캐시 저장
         this.cache = deliveryMap;
         this.cacheTimestamp = Date.now();
         
         return deliveryMap;
     }
 
-    /**
-     * 연휴 마지막날 체크
-     */
     isLastDayOfHolidayPeriod(dateStr, deliveryMap) {
         const date = new Date(dateStr);
         const nextDay = new Date(date);
@@ -148,9 +156,6 @@ export class DeliveryDataService {
         return false;
     }
 
-    /**
-     * 다음날이 공휴일인지 체크
-     */
     isBeforeHoliday(dateStr, deliveryMap) {
         const date = new Date(dateStr);
         const nextDay = new Date(date);
@@ -166,31 +171,22 @@ export class DeliveryDataService {
         return false;
     }
 
-    /**
-     * 날짜 포맷팅
-     */
     formatDate(date) {
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
-    /**
-     * 날짜에서 요일 구하기
-     */
     getDayNameFromDate(dateStr) {
         const days = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'];
         const date = new Date(dateStr);
         return days[date.getDay()];
     }
 
-    /**
-     * 공지사항 데이터 가져오기
-     */
     async getNotices() {
         const sheetData = await this.fetchSheetData();
         const notices = [];
         
         sheetData.forEach((row, index) => {
-            if (index === 0) return; // 헤더 스킵
+            if (index === 0) return;
             
             const noticeHeader = row[7];
             const noticeContent = row[8];
@@ -207,9 +203,6 @@ export class DeliveryDataService {
         return notices;
     }
 
-    /**
-     * 특정 월의 배송 데이터 가져오기
-     */
     async getMonthData(year, month) {
         const allData = await this.processDeliveryData();
         const monthData = {};
@@ -227,14 +220,10 @@ export class DeliveryDataService {
         return monthData;
     }
 
-    /**
-     * 캐시 초기화
-     */
     clearCache() {
         this.cache = null;
         this.cacheTimestamp = null;
     }
 }
 
-// 싱글톤 인스턴스
 export const deliveryDataService = new DeliveryDataService();
