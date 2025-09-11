@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>농산물 B2B – 온라인 셀러 전용 랜딩</title>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              DEFAULT: '#10b981',
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              200: '#a7f3d0',
+              300: '#6ee7b7',
+              400: '#34d399',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-white text-gray-900">
+  <header class="sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b border-gray-100">
+    <div class="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-400 shadow-sm"></div>
+        <span class="font-semibold tracking-tight">FreshFarm B2B</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm text-gray-600">
+        <a href="#features" class="hover:text-gray-900 transition">특징</a>
+        <a href="#showcase" class="hover:text-gray-900 transition">상품정보</a>
+        <a href="#tools" class="hover:text-gray-900 transition">셀러도구</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="/dashboard" class="hidden sm:inline-block rounded-xl border border-gray-200 px-4 py-2 text-sm font-medium hover:border-gray-300">대시보드</a>
+        <a href="/orders" class="inline-flex items-center rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition">발주시스템</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute -top-28 left-1/2 h-80 w-[120vw] -translate-x-1/2 rounded-full bg-gradient-to-r from-emerald-200 via-teal-100 to-cyan-100 blur-3xl opacity-70"></div>
+    </div>
+    <div class="mx-auto max-w-7xl px-6 py-20 lg:py-28 grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs text-gray-600 shadow-sm">
+          <span class="h-2 w-2 rounded-full bg-emerald-500"></span> 농산물 B2B · 온라인 셀러 전용
+        </div>
+        <h1 class="mt-5 text-4xl font-bold tracking-tight sm:text-5xl leading-tight">
+          제철·가격·이미지/영상까지
+          <br><span class="text-emerald-600">판매에 필요한 모든 상품정보</span>
+        </h1>
+        <p class="mt-5 text-gray-600 max-w-xl">
+          발주(별도 운영, 곧 통합)와 셀러용 자바스크립트 도구까지 한 곳에서. 간결한 UI로 빠르게 판매를 시작하세요.
+        </p>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+          <a href="/dashboard" class="inline-flex justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition">상품 대시보드 가기</a>
+          <a href="/orders" class="inline-flex justify-center rounded-2xl border border-emerald-200 bg-white px-5 py-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 transition">발주시스템 가기</a>
+        </div>
+        <p class="mt-3 text-xs text-gray-500">※ 현재 발주시스템은 별도 사이트에서 운영 중이며, 추후 본 사이트로 통합 예정입니다.</p>
+      </div>
+
+      <div class="relative">
+        <div class="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-emerald-100 to-teal-50 blur-xl"></div>
+        <div class="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm">
+          <div class="grid gap-4 md:grid-cols-5">
+            <div class="md:col-span-3 rounded-2xl overflow-hidden border border-gray-100 bg-gray-50 aspect-[4/3] flex items-center justify-center">
+              <span class="text-gray-400 text-sm">상품 이미지/영상 프리뷰</span>
+            </div>
+            <div class="md:col-span-2 flex flex-col">
+              <div>
+                <h3 class="text-base font-semibold">샤인머스캣</h3>
+                <p class="mt-1 text-sm text-gray-500">프리미엄 과일 · 국내산</p>
+                <div class="mt-3 flex items-center gap-2 text-xs">
+                  <span class="rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 px-2 py-1">제철 8–10월</span>
+                  <span class="rounded-full bg-gray-50 text-gray-700 border border-gray-200 px-2 py-1">저장 1–2주</span>
+                </div>
+                <p class="mt-4 text-2xl font-bold tracking-tight">₩ 23,900 / 2kg</p>
+              </div>
+              <div class="mt-5">
+                <div class="text-xs text-gray-600 mb-2">시즌 밴드</div>
+                <div class="h-2 w-full rounded-full bg-gray-100">
+                  <div class="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-400" style="width:24%; margin-left:58%"></div>
+                </div>
+                <div class="mt-2 flex justify-between text-[10px] text-gray-400">
+                  <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
+                </div>
+              </div>
+              <div class="mt-5 grid grid-cols-2 gap-2 text-xs">
+                <div class="rounded-xl border border-gray-100 bg-gray-50 p-3 text-gray-600">고해상도 이미지</div>
+                <div class="rounded-xl border border-gray-100 bg-gray-50 p-3 text-gray-600">짧은 리얼 영상</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="features" class="mx-auto max-w-7xl px-6 py-14">
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+          <svg viewBox="0 0 24 24" class="h-6 w-6"><path fill="currentColor" d="M4 5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5zm10 0v4h4"/></svg>
+        </div>
+        <h4 class="mt-4 text-lg font-semibold tracking-tight">상품정보 패키지</h4>
+        <p class="mt-1 text-sm text-gray-600">가격·제철·보관 및 고화질 이미지·영상까지, 판매에 필요한 에셋을 한 번에.</p>
+      </div>
+      <div class="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+          <svg viewBox="0 0 24 24" class="h-6 w-6"><path fill="currentColor" d="M12 2l6 6-6 6-6-6 6-6zm-8 16h16v2H4v-2z"/></svg>
+        </div>
+        <h4 class="mt-4 text-lg font-semibold tracking-tight">발주시스템</h4>
+        <p class="mt-1 text-sm text-gray-600">현재 별도 사이트에서 운영 중 · 추후 본 사이트로 통합 예정.</p>
+      </div>
+      <div class="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+          <svg viewBox="0 0 24 24" class="h-6 w-6"><path fill="currentColor" d="M4 7h16v2H4V7zm0 4h10v2H4v-2zm0 4h16v2H4v-2z"/></svg>
+        </div>
+        <h4 class="mt-4 text-lg font-semibold tracking-tight">셀러용 JS 도구</h4>
+        <p class="mt-1 text-sm text-gray-600">엑셀 통합·가격 계산 등 월 30회까지 사용 가능. 대시보드에서 바로 실행.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tools" class="mx-auto max-w-7xl px-6 pb-16">
+    <div class="rounded-3xl border border-gray-100 bg-gradient-to-br from-white to-emerald-50 p-6 md:p-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h3 class="text-xl font-semibold tracking-tight">온라인 셀러를 위한 빠른 툴</h3>
+          <p class="mt-1 text-gray-600 text-sm">엑셀 업로드→통합→다운로드, 가격/마진 계산, 시즌 캘린더 생성까지.</p>
+        </div>
+        <div class="flex gap-3">
+          <a href="/orders" class="inline-flex justify-center rounded-2xl border border-emerald-200 bg-white px-5 py-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-50 hover:border-emerald-300 transition">발주시스템 가기</a>
+          <a href="/dashboard" class="inline-flex justify-center rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition">상품 대시보드 가기</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-gray-100">
+    <div class="mx-auto max-w-7xl px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+      <p>© <span id="year"></span> FreshFarm B2B. All rights reserved.</p>
+      <div class="flex items-center gap-4">
+        <a href="#" class="hover:text-gray-700">이용약관</a>
+        <a href="#" class="hover:text-gray-700">개인정보처리방침</a>
+        <a href="#" class="hover:text-gray-700">문의</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
