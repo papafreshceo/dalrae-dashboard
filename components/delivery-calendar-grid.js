@@ -1,4 +1,4 @@
-// delivery-calendar-grid.js
+// components/delivery-calendar-grid.js
 export class DeliveryCalendarGrid extends HTMLElement {
     constructor() {
         super();
@@ -104,7 +104,6 @@ export class DeliveryCalendarGrid extends HTMLElement {
                     color: #2563eb;
                 }
                 
-                /* 배송 아이콘 */
                 .delivery-icon {
                     position: absolute;
                     bottom: 12px;
@@ -156,7 +155,6 @@ export class DeliveryCalendarGrid extends HTMLElement {
                     transform: rotate(5deg);
                 }
                 
-                /* 배지 */
                 .day-badges {
                     position: absolute;
                     top: 32px;
@@ -250,7 +248,6 @@ export class DeliveryCalendarGrid extends HTMLElement {
         `;
     }
 
-    // SVG 아이콘 정의
     getDeliveryIcon(type) {
         const icons = {
             special: `
@@ -391,5 +388,4 @@ export class DeliveryCalendarGrid extends HTMLElement {
     }
 }
 
-// 커스텀 엘리먼트 등록
 customElements.define('delivery-calendar-grid', DeliveryCalendarGrid);
