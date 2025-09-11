@@ -122,7 +122,7 @@
                     color: #ff1744;
                 }
 
-                /* 서비스&프로그램 특별 색상 */
+                /* win-win */
                 .legendary-btn {
                     color: #8a2be2;
                     font-weight: var(--font-bold, 700);
@@ -234,7 +234,7 @@
                     display: none; /* 모바일에서는 상단에 별도 버튼으로 표시 */
                 }
 
-                /* 서비스&프로그램 특별 색상 */
+                /* Win-Win 특별 색상 */
                 .legendary-btn {
                     color: #8a2be2;
                     font-weight: var(--font-bold, 700);
@@ -281,13 +281,13 @@
                                     대시보드
                                 </button>
                                 <button class="nav-btn" data-page="products" onclick="navigateToPage('products')">
-                                    상품리스트
+                                    상품목록
                                 </button>
                                 <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
-                                    상품캘린더
+                                    상품상세
                                 </button>
                                 <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
-                                    배송캘린더
+                                    발송달력
                                 </button>
                                 
                                 <!-- 3행: 나머지 메뉴 -->
@@ -295,7 +295,7 @@
                                     주문관리
                                 </button>
                                 <button class="nav-btn legendary-btn" data-page="services" onclick="navigateToPage('services')">
-                                    서비스
+                                    Win-Win
                                 </button>
                                 <button class="nav-btn" data-page="notice" onclick="navigateToPage('notice')">
                                     공지사항
@@ -336,16 +336,16 @@
                                     상품리스트
                                 </button>
                                 <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
-                                    상품캘린더
+                                    상품달력
                                 </button>
                                 <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
-                                    배송캘린더
+                                    발송달럭
                                 </button>
                                 <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
                                 </button>
                                 <button class="nav-btn legendary-btn" data-page="services" onclick="navigateToPage('services')">
-                                    서비스&프로그램
+                                    Win-Win
                                 </button>
                                 <button class="nav-btn" data-page="notice" onclick="navigateToPage('notice')">
                                     공지사항
@@ -495,4 +495,5 @@
         setActivePage: setActivePage
     };
 })();
+
 
