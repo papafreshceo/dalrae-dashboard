@@ -503,9 +503,9 @@
     // 푸터 페이지 이동
     window.navigateToFooterPage = function(page) {
         const pageUrls = {
-            'dashboard': 'index.html',
-            'products': 'products.html',
-            'calendar': 'calendar.html',
+            'dashboard': 'dashboard.html',
+            'products': 'products-calendar.html',
+            'calendar': 'delivery-calendar.html',
             'delivery': 'delivery.html',
             'orders': 'orders.html',
             'services': 'services.html',
