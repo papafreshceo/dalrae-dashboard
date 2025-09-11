@@ -160,39 +160,7 @@ class MonthCalendar extends HTMLElement {
                 
                 .day-cell.today {
                     position: relative;
-                    overflow: hidden;
-                }
-                
-                /* 무지개 그라데이션 애니메이션 */
-                @keyframes rainbow {
-                    0% {
-                        background-position: 0% 50%;
-                    }
-                    100% {
-                        background-position: 100% 50%;
-                    }
-                }
-                
-                .day-cell.today::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: linear-gradient(
-                        90deg,
-                        #ffffff,
-                        #ff0000,
-                        #ffff00,
-                        #0000ff,
-                        #00ff00,
-                        #ffffff
-                    );
-                    background-size: 200% 100%;
-                    animation: rainbow 2s ease-in-out;
-                    opacity: 0.3;
-                    pointer-events: none;
+                    background: #e7f3ff;
                 }
                 
                 .day-cell.today::after {
