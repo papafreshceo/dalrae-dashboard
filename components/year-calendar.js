@@ -453,14 +453,14 @@ class YearCalendar extends HTMLElement {
         const todayLine = this.shadowRoot.getElementById('todayLine');
         const todayMarker = this.shadowRoot.getElementById('todayMarker');
         
-        // 무지개 애니메이션 적용
+        // 깔끔한 애니메이션 적용
         todayLine.classList.add('highlight');
         todayMarker.classList.add('highlight');
         
         setTimeout(() => {
             todayLine.classList.remove('highlight');
             todayMarker.classList.remove('highlight');
-        }, 2000);
+        }, 1000);  // 애니메이션 시간과 동일하게
         
         // 스크롤
         const container = this.shadowRoot.querySelector('.year-container');
