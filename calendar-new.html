@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <base target="_top">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>달래마켓 상품캘린더 - Web Components</title>
+    
+    <style>
+        body {
+            font-family: 'Noto Sans KR', -apple-system, sans-serif;
+            background: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .hero {
+            min-height: calc(100vh - 200px);
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .card {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+        
+        .title-group {
+            flex: 1;
+        }
+        
+        .eyebrow {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: .06em;
+            color: #6c757d;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        
+        .title {
+            font-size: 36px;
+            line-height: 1.25;
+            font-weight: 800;
+            color: #212529;
+            margin-bottom: 16px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+        
+        .view-switcher {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .view-btn {
+            padding: 10px 20px;
+            border: 1px solid #2563eb;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+            color: #2563eb;
+            transition: all 0.2s;
+            white-space: nowrap;
+            min-height: 44px;
+        }
+        
+        .view-btn:hover {
+            background: #2563eb;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+        }
+        
+        .view-btn.active {
+            background: #2563eb;
+            color: white;
+        }
+        
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: #dee2e6;
+            margin: 20px 0 30px 0;
+        }
+        
+        .calendar-view {
+            display: none;
+        }
+        
+        .calendar-view.active {
+            display: block;
+        }
+        
+        .legend {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+        
+        .legend-disclaimer {
+            width: 100%;
+            text-align: center;
+            font-size: 13px;
+            color: #6c757d;
+            font-style: italic;
+            padding: 10px 0;
+        }
+        
+        /* 가격 차트 모달 스타일 */
+        .price-chart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+        
+        .price-chart-modal.show {
+            display: flex;
+        }
+        
+        .price-chart-content {
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+        }
+        
+        .price-chart-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .price-chart-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 8px;
+        }
+        
+        .price-chart-subtitle {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 30px 0;
+        }
+        
+        .chart-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .chart-stat-box {
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+        }
+        
+        .chart-stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+        
+        .chart-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #212529;
+        }
+        
+        .chart-stat-value.current {
+            color: #2563eb;
+        }
+        
+        .chart-stat-value.increase {
+            color: #dc3545;
+        }
+        
+        .chart-stat-value.decrease {
+            color: #28a745;
+        }
+        
+        .price-chart-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .chart-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f8f9fa;
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+        
+        .chart-btn:hover {
+            background: #e9ecef;
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 20px 15px;
+            }
+            
+            .card {
+                padding: 25px 20px;
+            }
+            
+            .title {
+                font-size: 28px;
+            }
+            
+            .chart-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .header-section {
+                flex-direction: column;
+            }
+            
+            .view-switcher {
+                flex-direction: column;
+            }
+            
+            .view-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 헤더 컨테이너 -->
+    <div id="header-container"></div>
+    
+    <!-- 공지사항 컨테이너 -->
+    <div id="notice-container"></div>
+    
+    <main class="hero">
+        <section class="card">
+            <div class="header-section">
+                <div class="title-group">
+                    <div class="eyebrow">Product Calendar</div>
+                    <h1 class="title">상품 <strong style="color:#2563eb">캘린더</strong></h1>
+                    <p class="subtitle">
+                        연중 상품 공급 일정을 한눈에 확인하세요.<br>
+                        시즌별 상품 계획 수립에 활용하실 수 있습니다.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="view-switcher">
+                <button class="view-btn active" data-view="month">월별 보기</button>
+                <button class="view-btn" data-view="year">연간 보기</button>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <!-- 월별 캘린더 뷰 -->
+            <div class="calendar-view active" id="monthView">
+                <month-calendar></month-calendar>
+            </div>
+            
+            <!-- 연간 캘린더 뷰 -->
+            <div class="calendar-view" id="yearView">
+                <year-calendar></year-calendar>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-disclaimer">
+                    ※ 상기 일정은 통상적인 일정이며 변동이 발생할 수 있습니다.
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- 푸터 컨테이너 -->
+    <div id="footer-container"></div>
+    
+    <!-- 상품 모달 -->
+    <product-modal></product-modal>
+    
+    <!-- 툴팁 매니저 -->
+    <tooltip-manager></tooltip-manager>
+    
+    <!-- 가격 차트 모달 -->
+    <div class="price-chart-modal" id="priceChartModal">
+        <div class="price-chart-content">
+            <div class="price-chart-header">
+                <h2 class="price-chart-title" id="chartTitle">가격 변동 차트</h2>
+                <p class="price-chart-subtitle" id="chartSubtitle">가격 추이를 확인하세요</p>
+            </div>
+            <div id="chartBody">
+                <div style="text-align: center; padding: 50px;">
+                    <div style="color: #6c757d;">데이터 로딩 중...</div>
+                </div>
+            </div>
+            <div class="price-chart-footer">
+                <button class="chart-btn" onclick="closePriceChart()">닫기</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- 컴포넌트 로드 -->
+    <script src="components/data-service.js"></script>
+    <script src="components/month-calendar.js"></script>
+    <script src="components/year-calendar.js"></script>
+    <script src="components/product-modal.js"></script>
+    <script src="components/tooltip-manager.js"></script>
+    
+    <!-- 기존 스크립트 -->
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+    <script src="global-notice.js"></script>
+    
+    <script>
+        let currentView = 'month';
+        let priceChart = null;
+        let priceDataCache = {};
+        
+        // 초기화
+        window.addEventListener('DOMContentLoaded', function() {
+            // 헤더/푸터 초기화
+            if (window.DalraeHeader) {
+                DalraeHeader.init({
+                    containerId: 'header-container',
+                    activePage: 'calendar'
+                });
+            }
+            
+            if (window.DalraeFooter) {
+                DalraeFooter.init({
+                    containerId: 'footer-container'
+                });
+            }
+            
+            // 공지사항 초기화
+            if (window.GlobalNotice) {
+                GlobalNotice.init({
+                    containerId: 'notice-container'
+                });
+            }
+            
+            // 뷰 전환 버튼 이벤트
+            const viewButtons = document.querySelectorAll('.view-btn');
+            viewButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const view = btn.dataset.view;
+                    switchView(view);
+                });
+            });
+            
+            // 컴포넌트 이벤트 리스너
+            setupComponentListeners();
+        });
+        
+        // 뷰 전환
+        function switchView(view) {
+            currentView = view;
+            
+            // 버튼 활성화 상태
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.view === view);
+            });
+            
+            // 뷰 표시/숨김
+            document.querySelectorAll('.calendar-view').forEach(v => {
+                v.classList.remove('active');
+            });
+            
+            if (view === 'month') {
+                document.getElementById('monthView').classList.add('active');
+            } else {
+                document.getElementById('yearView').classList.add('active');
+            }
+        }
+        
+        // 컴포넌트 이벤트 설정
+        function setupComponentListeners() {
+            const modal = document.querySelector('product-modal');
+            const tooltip = document.querySelector('tooltip-manager');
+            
+            // 모달 표시 이벤트
+            document.addEventListener('show-modal', (e) => {
+                modal.show(e.detail.variety);
+            });
+            
+            // 툴팁 표시 이벤트
+            document.addEventListener('show-tooltip', (e) => {
+                tooltip.showProduct(e.detail, e.detail.product);
+            });
+            
+            // 툴팁 숨김 이벤트
+            document.addEventListener('hide-tooltip', () => {
+                tooltip.hide();
+            });
+            
+            // 가격 차트 표시 이벤트
+            document.addEventListener('show-price-chart', (e) => {
+                showPriceChart(e.detail.optionCode, e.detail.optionName);
+            });
+        }
+        
+        // 가격 차트 표시
+        async function showPriceChart(optionCode, optionName) {
+            const modal = document.getElementById('priceChartModal');
+            const title = document.getElementById('chartTitle');
+            const body = document.getElementById('chartBody');
+            
+            title.textContent = optionName;
+            modal.classList.add('show');
+            
+            // 로딩 표시
+            body.innerHTML = `
+                <div style="text-align: center; padding: 50px;">
+                    <div style="color: #6c757d;">데이터를 불러오는 중...</div>
+                </div>
+            `;
+            
+            try {
+                // 캐시 확인
+                let data = priceDataCache[optionCode];
+                
+                if (!data) {
+                    // 데이터 로드
+                    data = await DataService.getPriceHistory(optionCode);
+                    priceDataCache[optionCode] = data;
+                }
+                
+                if (data && data.length > 0) {
+                    renderPriceChart(data, optionName);
+                } else {
+                    showNoChartData();
+                }
+            } catch (error) {
+                console.error('차트 데이터 로드 실패:', error);
+                showNoChartData();
+            }
+        }
+        
+        // 차트 렌더링
+        function renderPriceChart(data, optionName) {
+            // 데이터 정렬
+            data.sort((a, b) => new Date(a.날짜) - new Date(b.날짜));
+            
+            const prices = data.map(d => Number(String(d.셀러공급가).replace(/,/g, '')));
+            const currentPrice = prices[prices.length - 1];
+            const maxPrice = Math.max(...prices);
+            const minPrice = Math.min(...prices);
+            const avgPrice = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+            
+            const firstDate = new Date(data[0].날짜).toLocaleDateString('ko-KR');
+            const lastDate = new Date(data[data.length - 1].날짜).toLocaleDateString('ko-KR');
+            
+            const body = document.getElementById('chartBody');
+            body.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 14px; color: #6c757d;">${firstDate} ~ ${lastDate}</div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="priceChartCanvas"></canvas>
+                </div>
+                <div class="chart-stats">
+                    <div class="chart-stat-box">
+                        <div class="chart-stat-label">현재 가격</div>
+                        <div class="chart-stat-value current">${currentPrice.toLocaleString()}원</div>
+                    </div>
+                    <div class="chart-stat-box">
+                        <div class="chart-stat-label">최고 가격</div>
+                        <div class="chart-stat-value increase">${maxPrice.toLocaleString()}원</div>
+                    </div>
+                    <div class="chart-stat-box">
+                        <div class="chart-stat-label">최저 가격</div>
+                        <div class="chart-stat-value decrease">${minPrice.toLocaleString()}원</div>
+                    </div>
+                    <div class="chart-stat-box">
+                        <div class="chart-stat-label">평균 가격</div>
+                        <div class="chart-stat-value">${avgPrice.toLocaleString()}원</div>
+                    </div>
+                </div>
+            `;
+            
+            // Chart.js 렌더링
+            const ctx = document.getElementById('priceChartCanvas').getContext('2d');
+            
+            if (priceChart) {
+                priceChart.destroy();
+            }
+            
+            priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => {
+                        const date = new Date(d.날짜);
+                        return `${date.getMonth() + 1}/${date.getDate()}`;
+                    }),
+                    datasets: [{
+                        label: '공급가',
+                        data: prices,
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.1,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#2563eb',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 6,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '공급가: ' + context.parsed.y.toLocaleString() + '원';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                font: {
+                                    size: 12
+                                },
+                                maxRotation: 0,
+                                autoSkip: true,
+                                maxTicksLimit: window.innerWidth <= 768 ? 6 : 12
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            max: Math.ceil(maxPrice * 1.2),
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString() + '원';
+                                },
+                                font: {
+                                    size: 12
+                                },
+                                maxTicksLimit: 8
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 차트 데이터 없음 표시
+        function showNoChartData() {
+            const body = document.getElementById('chartBody');
+            body.innerHTML = `
+                <div style="text-align: center; padding: 80px 20px;">
+                    <div style="font-size: 48px; margin-bottom: 16px; color: #dee2e6;">📊</div>
+                    <div style="font-size: 18px; color: #495057; margin-bottom: 8px;">
+                        가격 변동 데이터가 없습니다
+                    </div>
+                    <div style="font-size: 14px; color: #6c757d;">
+                        이 옵션의 가격 이력이 아직 기록되지 않았습니다.
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 가격 차트 닫기
+        function closePriceChart() {
+            const modal = document.getElementById('priceChartModal');
+            modal.classList.remove('show');
+            
+            if (priceChart) {
+                priceChart.destroy();
+                priceChart = null;
+            }
+        }
+        
+        // ESC 키로 모달 닫기
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const priceModal = document.getElementById('priceChartModal');
+                if (priceModal.classList.contains('show')) {
+                    closePriceChart();
+                }
+            }
+        });
+        
+        // 모달 배경 클릭으로 닫기
+        document.getElementById('priceChartModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closePriceChart();
+            }
+        });
+    </script>
+</body>
+</html>
