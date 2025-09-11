@@ -43,8 +43,6 @@
     
     <script type="module">
         // 캘린더 컴포넌트가 로드된 후 초기화
-        
-        // 헤더/푸터 초기화 (있을 경우)
         window.addEventListener('DOMContentLoaded', function() {
             // 헤더 초기화
             if (window.DalraeHeader) {
@@ -72,6 +70,8 @@
         // deliveryCalendar.refresh();  // 데이터 새로고침
         // deliveryCalendar.goToToday(); // 오늘로 이동
         // deliveryCalendar.goToMonth(2025, 11); // 특정 월로 이동 (2025년 12월)
+        
+        console.log('✅ 배송 캘린더 페이지 로드 완료');
     </script>
     
     <!-- 기존 헤더/푸터 스크립트 (있을 경우) -->
