@@ -385,7 +385,7 @@
             'index': 'index.html',
             'dashboard': 'dashboard.html',
             'products': 'products.html',
-            'calendar': 'product-calendar.html',
+            'calendar': 'products-calendar.html',
             'delivery': 'delivery-calendar.html',
             'orders': 'orders.html',
             'services': 'services.html',
@@ -414,7 +414,7 @@
             'index.html': 'index',
             'dashboard.html': 'dashboard',
             'products.html': 'products',
-            'product-calendar.html': 'calendar',
+            'products-calendar.html': 'calendar',
             'delivery-calendar.html': 'delivery',
             'orders.html': 'orders',
             'services.html': 'services',
@@ -495,3 +495,4 @@
         setActivePage: setActivePage
     };
 })();
+
