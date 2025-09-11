@@ -312,4 +312,179 @@ function calculateQuote() {
       
       // 요리 메뉴 추가
       if (type === 'cooking') {
-        const addMenus = parseInt(document.
+        const addMenus = parseInt(document.getElementById('cooking-menu').value) || 0;
+        menuCost += addMenus * config.menuCost;
+        locationPhotos += addMenus * 30; // 메뉴당 30매 추가
+      }
+      
+      // 핸드컷/모델컷
+      if (document.getElementById(`${type}-hand`)?.checked) {
+        handCost += config.handCost;
+      }
+      if (document.getElementById(`${type}-model`)?.checked) {
+        modelCost += config.modelCost;
+      }
+      
+      totalPhotos += locationPhotos;
+      totalVideos += locationVideos;
+      
+      // 통계 표시
+      const statItem = document.createElement('div');
+      statItem.className = 'stat-item';
+      statItem.innerHTML = `
+        <div class="stat-location">${getLocationName(type)}</div>
+        <div class="stat-details">
+          <span>사진</span>
+          <span class="stat-value">${locationPhotos}매</span>
+        </div>
+        <div class="stat-details">
+          <span>영상</span>
+          <span class="stat-value">${locationVideos}분</span>
+        </div>
+      `;
+      statsGrid.appendChild(statItem);
+    }
+  });
+  
+  // 로케이션 전환 비용
+  if (activeLocations.length > 1) {
+    transitionCost = (activeLocations.length - 1) * PRICE_CONFIG.baseLocationCost;
+  }
+  
+  // 편집 비용 계산
+  ['basic', 'full'].forEach(editType => {
+    ['1min', '2min', '3min'].forEach(duration => {
+      const count = parseInt(document.getElementById(`edit-${editType}-${duration}`).value) || 0;
+      if (count > 0) {
+        totalEditVideos += count;
+        const minutes = parseInt(duration.replace('min', ''));
+        
+        if (editType === 'basic') {
+          editCost += count * minutes * PRICE_CONFIG.editing.basic.perMinute;
+        } else {
+          // 풀 편집: 1분은 기본요금, 2분 이상은 추가 요금
+          if (minutes === 1) {
+            editCost += count * PRICE_CONFIG.editing.full.basePrice;
+          } else {
+            editCost += count * (PRICE_CONFIG.editing.full.basePrice + (minutes - 1) * PRICE_CONFIG.editing.full.perMinute);
+          }
+        }
+      }
+    });
+  });
+  
+  // 통계 업데이트
+  document.getElementById('totalPhotos').textContent = totalPhotos + '매';
+  document.getElementById('totalVideos').textContent = totalVideos + '분';
+  document.getElementById('totalEditVideos').textContent = totalEditVideos + '개';
+  
+  // 견적 항목 업데이트
+  document.getElementById('locationCost').textContent = formatPrice(locationCost);
+  document.getElementById('transitionCost').textContent = formatPrice(transitionCost);
+  document.getElementById('menuCost').textContent = formatPrice(menuCost);
+  document.getElementById('photoCost').textContent = formatPrice(photoCost);
+  document.getElementById('videoCost').textContent = formatPrice(videoCost);
+  document.getElementById('handCost').textContent = formatPrice(handCost);
+  document.getElementById('modelCost').textContent = formatPrice(modelCost);
+  document.getElementById('editCost').textContent = formatPrice(editCost);
+  
+  // 총 비용
+  totalCost = locationCost + transitionCost + menuCost + photoCost + videoCost + handCost + modelCost + editCost;
+  document.getElementById('totalAmount').textContent = formatPrice(totalCost);
+}
+
+// 로케이션 이름 가져오기
+function getLocationName(type) {
+  const names = {
+    indoor: '일반 실내 촬영',
+    outdoor: '야외 촬영',
+    cooking: '요리 촬영',
+    drone: '드론 촬영'
+  };
+  return names[type] || type;
+}
+
+// 아코디언 토글
+function toggleAccordion(index) {
+  const cards = document.querySelectorAll('.accordion-card');
+  cards[index].classList.toggle('active');
+}
+
+// 농가 서비스 업데이트
+function updateFarmService() {
+  // 아코디언 생성
+  const accordionContainer = document.getElementById('serviceAccordion');
+  if (accordionContainer && PRICE_CONFIG.farmService.accordion.length > 0) {
+    accordionContainer.innerHTML = PRICE_CONFIG.farmService.accordion.map((item, index) => `
+      <div class="accordion-card">
+        <div class="accordion-header" onclick="toggleAccordion(${index})">
+          <span>${item.title || '제목 없음'}</span>
+          <span class="accordion-icon">▼</span>
+        </div>
+        <div class="accordion-body">${item.content || '내용 없음'}</div>
+      </div>
+    `).join('');
+  }
+
+  // 가격 업데이트
+  if (PRICE_CONFIG.farmService.visit.price) {
+    const visitPrice = document.getElementById('visit-price');
+    if (visitPrice) visitPrice.textContent = formatPrice(PRICE_CONFIG.farmService.visit.price);
+  }
+  if (PRICE_CONFIG.farmService.matching.price) {
+    const matchingPrice = document.getElementById('matching-price');
+    if (matchingPrice) matchingPrice.textContent = formatPrice(PRICE_CONFIG.farmService.matching.price);
+  }
+  if (PRICE_CONFIG.farmService.full.price) {
+    const fullPrice = document.getElementById('full-price');
+    if (fullPrice) fullPrice.textContent = formatPrice(PRICE_CONFIG.farmService.full.price);
+  }
+
+  // features 업데이트
+  ['visit', 'matching', 'full'].forEach(plan => {
+    const featuresEl = document.getElementById(`${plan}-features`);
+    if (featuresEl && PRICE_CONFIG.farmService[plan].features.length > 0) {
+      featuresEl.innerHTML = PRICE_CONFIG.farmService[plan].features
+        .filter(f => f) // 빈 값 제거
+        .map(feature => `<li>${feature}</li>`)
+        .join('');
+    }
+  });
+}
+
+// 페이지 로드 시 실행
+window.addEventListener('DOMContentLoaded', function() {
+  // API에서 가격 데이터 로드
+  loadPricesFromSheet();
+  
+  // 초기 견적 계산
+  calculateQuote();
+  
+  // 체크박스 이벤트 리스너 추가
+  ['indoor', 'outdoor', 'cooking', 'drone'].forEach(type => {
+    const checkbox = document.getElementById(`${type}-check`);
+    if (checkbox) {
+      checkbox.addEventListener('change', function() {
+        const card = document.getElementById(`${type}-card`);
+        if (this.checked) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+          // 옵션 초기화
+          document.getElementById(`${type}-photo`).value = 0;
+          document.getElementById(`${type}-video`).value = 0;
+          if (type === 'cooking') {
+            document.getElementById('cooking-menu').value = 0;
+          }
+          if (document.getElementById(`${type}-hand`)) {
+            document.getElementById(`${type}-hand`).checked = false;
+          }
+          if (document.getElementById(`${type}-model`)) {
+            document.getElementById(`${type}-model`).checked = false;
+          }
+        }
+        calculateQuote();
+      });
+    }
+  });
+});
