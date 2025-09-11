@@ -430,6 +430,15 @@
                 document.getElementById('monthView').classList.add('active');
             } else {
                 document.getElementById('yearView').classList.add('active');
+                // 연간 뷰로 전환 시 모바일에서 오늘 위치로 스크롤
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        const yearCalendar = document.querySelector('year-calendar');
+                        if (yearCalendar && yearCalendar.scrollToToday) {
+                            yearCalendar.scrollToToday();
+                        }
+                    }, 100);
+                }
             }
         }
         
