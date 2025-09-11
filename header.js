@@ -295,10 +295,10 @@
                                     상품리스트
                                 </button>
                                 <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
-                                    상품캘린더
+                                    캘린더
                                 </button>
                                 <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
-                                    배송캘린더
+                                    배송일정
                                 </button>
                                 <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
@@ -501,3 +501,4 @@
         setActivePage: setActivePage
     };
 })();
+
