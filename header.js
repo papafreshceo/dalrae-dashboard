@@ -280,7 +280,7 @@
                                 <button class="nav-btn special-btn" onclick="openOrderSystem()">
                                     발주시스템
                                 </button>
-                                <button class="nav-btn" data-page="dashboard" onclick="navigateToPage('dashboard')">
+                                <button class="nav-btn" data-page="index" onclick="navigateToPage('dashboard')">
                                     대시보드
                                 </button>
                                 <button class="nav-btn" data-page="products" onclick="navigateToPage('products')">
@@ -502,6 +502,7 @@
         setActivePage: setActivePage
     };
 })();
+
 
 
 
