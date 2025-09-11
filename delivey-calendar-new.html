@@ -31,4 +31,51 @@
 
     <!-- 배송 캘린더 컴포넌트 -->
     <delivery-calendar 
-        show
+        show-notices="true"
+        show-legend="true">
+    </delivery-calendar>
+
+    <!-- 공통 푸터 -->
+    <div id="footer-container"></div>
+
+    <!-- 컴포넌트 스크립트 로드 -->
+    <script type="module" src="./delivery-calendar.js"></script>
+    
+    <script type="module">
+        // 캘린더 컴포넌트가 로드된 후 초기화
+        
+        // 헤더/푸터 초기화 (있을 경우)
+        window.addEventListener('DOMContentLoaded', function() {
+            // 헤더 초기화
+            if (window.DalraeHeader) {
+                DalraeHeader.init({
+                    containerId: 'header-container',
+                    activePage: 'delivery'
+                });
+            }
+            
+            // 푸터 초기화
+            if (window.DalraeFooter) {
+                DalraeFooter.init({
+                    containerId: 'footer-container'
+                });
+            }
+        });
+        
+        // 캘린더 컴포넌트 접근 예시
+        const calendar = document.querySelector('delivery-calendar');
+        
+        // 디버깅용 전역 변수
+        window.deliveryCalendar = calendar;
+        
+        // 사용 예시: 
+        // deliveryCalendar.refresh();  // 데이터 새로고침
+        // deliveryCalendar.goToToday(); // 오늘로 이동
+        // deliveryCalendar.goToMonth(2025, 11); // 특정 월로 이동 (2025년 12월)
+    </script>
+    
+    <!-- 기존 헤더/푸터 스크립트 (있을 경우) -->
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+</body>
+</html>
