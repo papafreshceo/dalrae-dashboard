@@ -1136,7 +1136,7 @@
 
     <script src="header.js"></script>
     <script src="footer.js"></script>
-    <script src="notice.js"></script>
+    <script src="global-notice.js"></script>
 
     <script>
         let currentView = 'month';
@@ -1171,7 +1171,7 @@
             }
 
             // 공지사항 초기화
-            if (window.DalraeNotice) {
+            if (window.GlobalNotice) {
                 DalraeNotice.init({
                     containerId: 'notice-container'
                 });
