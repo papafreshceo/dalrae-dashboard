@@ -1807,7 +1807,6 @@
                 if (p.규격3) specs += (specs ? ' ' : '') + p.규격3;
                 
                 html += `
-                    html += `
                     <div class="option-card">
                         <div class="option-top-row">
                             ${p.썸네일 ? 
@@ -1909,8 +1908,8 @@
                     </div>
                     <div class="chart-stat-box">
                         <div class="chart-stat-label">최고 가격</div>
-                        <div class="chart-stat-value increase">${maxPrice.toLocaleString()}원
-                        </div>
+                        <div class="chart-stat-value increase">${maxPrice.toLocaleString()}원</div>
+                    </div>
                     <div class="chart-stat-box">
                         <div class="chart-stat-label">최저 가격</div>
                         <div class="chart-stat-value decrease">${minPrice.toLocaleString()}원</div>
