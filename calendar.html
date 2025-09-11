@@ -298,40 +298,6 @@
             color: #2563eb;
         }
         
-        .month-timeline-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-        }
-        
-        .month-timeline-bar {
-            position: absolute;
-            height: 14px;
-            font-size: 10px;
-            color: white;
-            display: flex;
-            align-items: center;
-            padding: 0 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            z-index: 10;
-            pointer-events: auto;
-            transition: all 0.2s;
-            border-radius: 4px;
-        }
-        
-        .month-timeline-bar:hover {
-            transform: scale(1.1) translateY(-2px);
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        
         .year-calendar-content {
             width: 100%;
             max-width: 100%;
@@ -430,7 +396,6 @@
             opacity: 1;
         }
         
-        /* 오늘 표시선 강조 */
         .year-today-line {
             position: absolute;
             top: 0;
@@ -786,11 +751,6 @@
                 padding: 8px;
             }
             
-            .month-timeline-bar {
-                height: 12px;
-                font-size: 9px;
-            }
-            
             .year-timeline-row {
                 height: 30px;
                 margin-bottom: 3px;
@@ -819,77 +779,73 @@
             }
         }
         
-@media (max-width: 640px) {
-    .header-section {
-        flex-direction: column;
-    }
-    
-    .title {
-        font-size: 28px;
-    }
-    
-    .subtitle {
-        font-size: 14px;
-    }
-    
-    /* 캘린더 컨트롤 한 줄로 유지 */
-    .calendar-controls {
-        flex-direction: row;
-        gap: 8px;
-        padding: 12px 10px;
-    }
-    
-    .nav-controls {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        justify-content: flex-start;
-    }
-    
-    /* 네비게이션 버튼 축소 */
-    .calendar-nav-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 16px;
-        min-width: 32px;
-    }
-    
-    /* 년월 표시 글자 크기 축소 */
-    .month-year-display {
-        font-size: 15px;
-        min-width: auto;
-        flex: 1;
-        text-align: center;
-        white-space: nowrap;
-    }
-    
-    /* 오늘 버튼 축소 */
-    .today-btn {
-        padding: 7px 14px;
-        font-size: 13px;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-    
-    .chart-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .modal-content {
-        width: 95%;
-        padding: 20px;
-    }
-    
-    .year-view {
-        padding: 12px;
-    }
-    
-    .year-timeline-bar {
-        height: 18px;
-        font-size: 9px;
-    }
-}
+        @media (max-width: 640px) {
+            .header-section {
+                flex-direction: column;
+            }
+            
+            .title {
+                font-size: 28px;
+            }
+            
+            .subtitle {
+                font-size: 14px;
+            }
+            
+            .calendar-controls {
+                flex-direction: row;
+                gap: 8px;
+                padding: 12px 10px;
+            }
+            
+            .nav-controls {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                justify-content: flex-start;
+            }
+            
+            .calendar-nav-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+                min-width: 32px;
+            }
+            
+            .month-year-display {
+                font-size: 15px;
+                min-width: auto;
+                flex: 1;
+                text-align: center;
+                white-space: nowrap;
+            }
+            
+            .today-btn {
+                padding: 7px 14px;
+                font-size: 13px;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            
+            .chart-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+            
+            .year-view {
+                padding: 12px;
+            }
+            
+            .year-timeline-bar {
+                height: 18px;
+                font-size: 9px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1004,15 +960,12 @@
     <script src="footer.js"></script>
 
     <script>
-        // 전역 변수
         let currentView = 'month';
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
         let allProducts = [];
-        let productTimelines = [];
         let yearProductTimelines = [];
         let productColors = {};
-        let monthProductTimelines = [];
         let priceChart = null;
         let priceDataCache = {};
 
@@ -1092,30 +1045,25 @@
             }
         }
 
-       // goToToday 함수도 약간 수정
-function goToToday() {
-    const today = new Date();
-    
-    if (currentView === 'month') {
-        currentMonth = today.getMonth();
-        currentYear = today.getFullYear();
-        updatePeriodDisplay();
-        renderCalendar();
-    } else {
-        // 년 보기에서 오늘 강조 및 스크롤
-        highlightTodayInYearView();
-        
-        // 모바일 확인 후 스크롤
-        if (window.innerWidth <= 768) {
-            // 렌더링 완료 후 스크롤 실행
-            setTimeout(() => {
-                scrollToTodayInYearView();
-            }, 100);
+        function goToToday() {
+            const today = new Date();
+            
+            if (currentView === 'month') {
+                currentMonth = today.getMonth();
+                currentYear = today.getFullYear();
+                updatePeriodDisplay();
+                renderCalendar();
+            } else {
+                highlightTodayInYearView();
+                
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        scrollToTodayInYearView();
+                    }, 100);
+                }
+            }
         }
-    }
-}
 
-        // 년 보기에서 오늘 날짜 강조
         function highlightTodayInYearView() {
             const todayLine = document.querySelector('.year-today-line');
             const todayMarker = document.querySelector('.today-marker');
@@ -1135,84 +1083,52 @@ function goToToday() {
             }
         }
 
-// 모바일에서 오늘 날짜로 스크롤 - 수정된 버전
-function scrollToTodayInYearView() {
-    const yearView = document.getElementById('yearView');
-    const yearCalendarContent = yearView.querySelector('.year-calendar-content');
-    
-    if (!yearCalendarContent) return;
-    
-    const today = new Date();
-    const currentMonthNow = today.getMonth();
-    const currentDayNow = today.getDate();
-    
-    // 월별 일수
-    const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-    
-    // 전체 너비의 백분율로 오늘 위치 계산
-    const todayPositionPercent = (currentMonthNow + currentDayNow / monthDays[currentMonthNow]) / 12;
-    
-    // 모바일에서만 작동
-    if (window.innerWidth <= 768) {
-        // year-calendar-content의 실제 너비
-        const contentWidth = yearCalendarContent.scrollWidth;
-        
-        // 뷰포트 너비
-        const viewportWidth = yearView.clientWidth;
-        
-        // 오늘이 있는 월의 중앙 위치 계산
-        const monthWidth = contentWidth / 12;
-        const targetMonthCenter = (currentMonthNow + 0.5) * monthWidth;
-        
-        // 스크롤 위치 (월의 중앙이 화면 중앙에 오도록)
-        const scrollPosition = targetMonthCenter - (viewportWidth / 2);
-        
-        // 스크롤 실행
-        yearView.scrollTo({
-            left: Math.max(0, Math.min(scrollPosition, contentWidth - viewportWidth)),
-            behavior: 'smooth'
-        });
-        
-        // 오늘 선 강조 효과도 추가
-        setTimeout(() => {
-            const todayLine = document.querySelector('.year-today-line');
-            if (todayLine) {
-                todayLine.scrollIntoView({
-                    behavior: 'smooth',
-                    inline: 'center',
-                    block: 'nearest'
+        function scrollToTodayInYearView() {
+            const yearView = document.getElementById('yearView');
+            const yearCalendarContent = yearView.querySelector('.year-calendar-content');
+            
+            if (!yearCalendarContent) return;
+            
+            const today = new Date();
+            const currentMonthNow = today.getMonth();
+            const currentDayNow = today.getDate();
+            
+            const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+            
+            if (window.innerWidth <= 768) {
+                const contentWidth = yearCalendarContent.scrollWidth;
+                const viewportWidth = yearView.clientWidth;
+                const monthWidth = contentWidth / 12;
+                const targetMonthCenter = (currentMonthNow + 0.5) * monthWidth;
+                const scrollPosition = targetMonthCenter - (viewportWidth / 2);
+                
+                yearView.scrollTo({
+                    left: Math.max(0, Math.min(scrollPosition, contentWidth - viewportWidth)),
+                    behavior: 'smooth'
                 });
+                
+                setTimeout(() => {
+                    const todayLine = document.querySelector('.year-today-line');
+                    if (todayLine) {
+                        todayLine.scrollIntoView({
+                            behavior: 'smooth',
+                            inline: 'center',
+                            block: 'nearest'
+                        });
+                    }
+                }, 300);
             }
-        }, 300);
-    }
-}
+        }
 
         function updatePeriodDisplay() {
-    const display = document.getElementById('periodDisplay');
-    const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
-    
-    if (currentView === 'month') {
-        display.textContent = `${currentYear}년 ${monthNames[currentMonth]}`;
-    } else {
-        display.textContent = '연간 보기';
-    }
-}
-
-        function parseDate(dateStr) {
-            if (!dateStr || dateStr === '') return null;
+            const display = document.getElementById('periodDisplay');
+            const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
             
-            if (dateStr.length === 5 && dateStr.indexOf('-') === 2) {
-                const month = parseInt(dateStr.substring(0, 2)) - 1;
-                const day = parseInt(dateStr.substring(3, 5));
-                
-                if (isNaN(month) || isNaN(day)) return null;
-                
-                let date = new Date(currentYear, month, day);
-                return date;
+            if (currentView === 'month') {
+                display.textContent = `${currentYear}년 ${monthNames[currentMonth]}`;
+            } else {
+                display.textContent = '연간 보기';
             }
-            
-            const date = new Date(dateStr);
-            return isNaN(date.getTime()) ? null : date;
         }
 
         async function loadData() {
@@ -1232,7 +1148,6 @@ function scrollToTodayInYearView() {
                     });
                     
                     if (allProducts.length > 0) {
-                        processProductTimelines();
                         assignColors();
                         renderCalendar();
                     } else {
@@ -1247,7 +1162,6 @@ function scrollToTodayInYearView() {
             }
         }
 
-        // 년 보기용 타임라인 처리
         function processYearTimelines() {
             const yearMap = {};
             
@@ -1289,72 +1203,6 @@ function scrollToTodayInYearView() {
             return Object.values(yearMap);
         }
 
-        // 월 보기용 타임라인 처리
-        function processMonthTimelines() {
-            const monthMap = {};
-            
-            allProducts.forEach(p => {
-                const item = p.품목;
-                if (!item) return;
-                
-                const startStr = p.시작일;
-                const endStr = p.종료일;
-                
-                if (!startStr || !endStr) return;
-                
-                const startMonth = parseInt(startStr.substring(0, 2)) - 1;
-                const startDay = parseInt(startStr.substring(3, 5));
-                const endMonth = parseInt(endStr.substring(0, 2)) - 1;
-                const endDay = parseInt(endStr.substring(3, 5));
-                
-                let startDate = new Date(currentYear, startMonth, startDay);
-                let endDate = new Date(currentYear, endMonth, endDay);
-                
-                if (startMonth > endMonth) {
-                    if (currentMonth <= endMonth) {
-                        startDate = new Date(currentYear - 1, startMonth, startDay);
-                    } else if (currentMonth >= startMonth) {
-                        endDate = new Date(currentYear + 1, endMonth, endDay);
-                    }
-                }
-                
-                if (!monthMap[item]) {
-                    monthMap[item] = {
-                        name: item,
-                        type: getProductType(p.대분류),
-                        startDate: startDate,
-                        endDate: endDate,
-                        options: []
-                    };
-                }
-                
-                if (startDate < monthMap[item].startDate) {
-                    monthMap[item].startDate = startDate;
-                }
-                if (endDate > monthMap[item].endDate) {
-                    monthMap[item].endDate = endDate;
-                }
-                
-                monthMap[item].options.push({
-                    name: p.옵션명,
-                    variety: p.품종,
-                    status: p.공급상태,
-                    price: p.셀러공급가,
-                    code: p.옵션코드
-                });
-            });
-            
-            return Object.values(monthMap);
-        }
-
-        function processProductTimelines() {
-            if (currentView === 'month') {
-                productTimelines = processMonthTimelines();
-            } else {
-                yearProductTimelines = processYearTimelines();
-            }
-        }
-
         function assignColors() {
             const allItems = new Set();
             allProducts.forEach(p => {
@@ -1377,7 +1225,6 @@ function scrollToTodayInYearView() {
         function renderCalendar() {
             requestAnimationFrame(() => {
                 if (currentView === 'month') {
-                    productTimelines = processMonthTimelines();
                     renderMonthView();
                 } else {
                     yearProductTimelines = processYearTimelines();
@@ -1425,204 +1272,7 @@ function scrollToTodayInYearView() {
                 html += `<div class="day-cell other-month"><div class="day-number">${day}</div></div>`;
             }
             
-            html += '<div class="month-timeline-wrapper" id="monthTimelineWrapper"></div>';
-            
             grid.innerHTML = html;
-            
-            setTimeout(() => {
-                drawMonthTimelines();
-            }, 100);
-        }
-
-        function hasOverlap(product1, product2) {
-            return !(product1.endDate < product2.startDate || product1.startDate > product2.endDate);
-        }
-
-function drawMonthTimelines() {
-    monthProductTimelines = productTimelines.filter(product => {
-        const startMonth = product.startDate.getMonth();
-        const endMonth = product.endDate.getMonth();
-        const startYear = product.startDate.getFullYear();
-        const endYear = product.endDate.getFullYear();
-        
-        if (startYear === currentYear && endYear === currentYear) {
-            return currentMonth >= startMonth && currentMonth <= endMonth;
-        } else if (startYear < currentYear) {
-            return currentMonth <= endMonth;
-        } else if (endYear > currentYear) {
-            return currentMonth >= startMonth;
-        } else {
-            return false;
-        }
-    });
-    
-    const timelineRows = [];
-    monthProductTimelines.forEach(product => {
-        let placed = false;
-        
-        for (let row = 0; row < timelineRows.length; row++) {
-            let canPlace = true;
-            
-            for (let existingProduct of timelineRows[row]) {
-                if (hasOverlap(product, existingProduct)) {
-                    canPlace = false;
-                    break;
-                }
-            }
-            
-            if (canPlace) {
-                timelineRows[row].push(product);
-                product.row = row;
-                placed = true;
-                break;
-            }
-        }
-        
-        if (!placed) {
-            product.row = timelineRows.length;
-            timelineRows.push([product]);
-        }
-    });
-    
-    const minHeight = 100;
-    const rowHeight = 18;
-    const newHeight = minHeight + (timelineRows.length * rowHeight);
-    
-    document.querySelectorAll('.day-cell').forEach(cell => {
-        cell.style.minHeight = `${newHeight}px`;
-    });
-    
-    const wrapper = document.getElementById('monthTimelineWrapper');
-    if (!wrapper) return;
-    
-    wrapper.innerHTML = '';
-    
-    const grid = document.getElementById('daysGrid');
-    const cells = grid.querySelectorAll('.day-cell:not(.other-month)');
-    const allCells = grid.querySelectorAll('.day-cell');
-    
-    // 실제 셀 크기 계산
-    if (allCells.length === 0) return;
-    const firstCell = allCells[0];
-    const cellRect = firstCell.getBoundingClientRect();
-    const actualCellHeight = cellRect.height;
-    const actualCellWidth = cellRect.width;
-    
-    monthProductTimelines.forEach((product) => {
-        const startMonth = product.startDate.getMonth();
-        const startDay = product.startDate.getDate();
-        const endMonth = product.endDate.getMonth();
-        const endDay = product.endDate.getDate();
-        
-        let displayStart, displayEnd;
-        const lastDayOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-        
-        const hasStartInMonth = (startMonth === currentMonth && product.startDate.getFullYear() === currentYear);
-        
-        if (hasStartInMonth) {
-            displayStart = startDay;
-        } else if (product.startDate < new Date(currentYear, currentMonth, 1)) {
-            displayStart = 1;
-        } else {
-            return;
-        }
-        
-        const hasEndInMonth = (endMonth === currentMonth && product.endDate.getFullYear() === currentYear);
-        
-        if (hasEndInMonth) {
-            displayEnd = endDay;
-        } else if (product.endDate > new Date(currentYear, currentMonth, lastDayOfMonth)) {
-            displayEnd = lastDayOfMonth;
-        } else {
-            return;
-        }
-        
-        // 시작 셀 인덱스 찾기 (전체 그리드에서)
-        let startCellIndex = -1;
-        allCells.forEach((cell, idx) => {
-            if (!cell.classList.contains('other-month') && 
-                cell.dataset.day === String(displayStart)) {
-                startCellIndex = idx;
-            }
-        });
-        
-        if (startCellIndex === -1) return;
-        
-        const col = startCellIndex % 7;
-        const row = Math.floor(startCellIndex / 7);
-        
-        const duration = displayEnd - displayStart + 1;
-        const endCol = (col + duration - 1) % 7;
-        const endRow = row + Math.floor((col + duration - 1) / 7);
-        
-        const barOffset = (product.row || 0) * rowHeight;
-        
-        if (endRow > row) {
-            const firstWeekDays = 7 - col;
-            const showName = hasStartInMonth || (!hasStartInMonth && displayStart === 1);
-            
-            createTimelineBar(wrapper, {
-                left: col * actualCellWidth + 2,
-                top: row * actualCellHeight + 30 + barOffset,
-                width: firstWeekDays * actualCellWidth - 4,
-                color: productColors[product.name],
-                text: showName ? product.name : '',
-                product: product,
-                productName: product.name
-            });
-            
-            for (let weekRow = row + 1; weekRow < endRow; weekRow++) {
-                createTimelineBar(wrapper, {
-                    left: 2,
-                    top: weekRow * actualCellHeight + 30 + barOffset,
-                    width: 7 * actualCellWidth - 4,
-                    color: productColors[product.name],
-                    text: '',
-                    product: product,
-                    productName: product.name
-                });
-            }
-            
-            const lastWeekDays = endCol + 1;
-            
-            createTimelineBar(wrapper, {
-                left: 2,
-                top: endRow * actualCellHeight + 30 + barOffset,
-                width: lastWeekDays * actualCellWidth - 4,
-                color: productColors[product.name],
-                text: '',
-                product: product,
-                productName: product.name
-            });
-        } else {
-            const showName = hasStartInMonth || (!hasStartInMonth && displayStart === 1);
-            
-            createTimelineBar(wrapper, {
-                left: col * actualCellWidth + 2,
-                top: row * actualCellHeight + 30 + barOffset,
-                width: duration * actualCellWidth - 4,
-                color: productColors[product.name],
-                text: showName ? product.name : '',
-                product: product,
-                productName: product.name
-            });
-        }
-    });
-}
-
-        function createTimelineBar(container, options) {
-            const bar = document.createElement('div');
-            bar.className = 'month-timeline-bar';
-            
-            bar.style.left = `${options.left}px`;
-            bar.style.top = `${options.top}px`;
-            bar.style.width = `${options.width}px`;
-            bar.style.background = options.color;
-            bar.textContent = options.text;
-            bar.dataset.productName = options.productName;
-            bar.dataset.product = JSON.stringify(options.product);
-            
-            container.appendChild(bar);
         }
 
         function renderYearView() {
@@ -1715,16 +1365,16 @@ function drawMonthTimelines() {
             const legend = document.getElementById('legend');
             let html = '';
             
-            const productsToShow = currentView === 'month' ? monthProductTimelines : yearProductTimelines;
-            
-            productsToShow.forEach(product => {
-                html += `
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: ${productColors[product.name]};"></div>
-                        <span>${product.name}</span>
-                    </div>
-                `;
-            });
+            if (currentView === 'year') {
+                yearProductTimelines.forEach(product => {
+                    html += `
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: ${productColors[product.name]};"></div>
+                            <span>${product.name}</span>
+                        </div>
+                    `;
+                });
+            }
             
             legend.innerHTML = html;
         }
@@ -1737,9 +1387,7 @@ function drawMonthTimelines() {
             title.textContent = product.name;
             
             let dateInfo = '';
-            if (product.startDate && product.endDate) {
-                dateInfo = `기간: ${formatDate(product.startDate)} ~ ${formatDate(product.endDate)}`;
-            } else if (product.startMonth !== undefined) {
+            if (product.startMonth !== undefined) {
                 dateInfo = `기간: ${product.startMonth + 1}/${product.startDay} ~ ${product.endMonth + 1}/${product.endDay}`;
             }
             
@@ -1756,13 +1404,6 @@ function drawMonthTimelines() {
 
         function hideTooltip() {
             document.getElementById('tooltip').classList.remove('show');
-        }
-
-        function formatDate(date) {
-            if (typeof date === 'string') {
-                date = new Date(date);
-            }
-            return `${date.getMonth() + 1}/${date.getDate()}`;
         }
 
         function showModalForProduct(productName) {
@@ -2040,16 +1681,7 @@ function drawMonthTimelines() {
         }
 
         function setupEventListeners() {
-            // 이벤트 위임을 사용한 클릭 이벤트
             document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('month-timeline-bar')) {
-                    e.stopPropagation();
-                    const productName = e.target.dataset.productName;
-                    if (productName) {
-                        showModalForProduct(productName);
-                    }
-                }
-                
                 if (e.target.classList.contains('year-timeline-bar')) {
                     e.stopPropagation();
                     const productName = e.target.dataset.productName;
@@ -2059,30 +1691,22 @@ function drawMonthTimelines() {
                 }
             });
             
-            // 툴팁 이벤트 위임
             document.addEventListener('mouseover', function(e) {
-                if (e.target.classList.contains('month-timeline-bar') || 
-                    e.target.classList.contains('year-timeline-bar')) {
-                    const productData = e.target.dataset.product;
-                    if (productData) {
-                        try {
-                            const product = JSON.parse(productData);
-                            showTooltip(e, product);
-                        } catch (error) {
-                            console.error('툴팁 데이터 파싱 오류:', error);
-                        }
+                if (e.target.classList.contains('year-timeline-bar')) {
+                    const productName = e.target.dataset.productName;
+                    const product = yearProductTimelines.find(p => p.name === productName);
+                    if (product) {
+                        showTooltip(e, product);
                     }
                 }
             });
             
             document.addEventListener('mouseout', function(e) {
-                if (e.target.classList.contains('month-timeline-bar') || 
-                    e.target.classList.contains('year-timeline-bar')) {
+                if (e.target.classList.contains('year-timeline-bar')) {
                     hideTooltip();
                 }
             });
             
-            // 모달 외부 클릭 시 닫기
             document.getElementById('optionsModal').addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeModal();
@@ -2095,7 +1719,6 @@ function drawMonthTimelines() {
                 }
             });
             
-            // ESC 키로 모달 닫기
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     if (document.getElementById('chartModal').classList.contains('show')) {
@@ -2104,17 +1727,6 @@ function drawMonthTimelines() {
                         closeModal();
                     }
                 }
-            });
-            
-            // 화면 크기 변경 감지
-            let resizeTimer;
-            window.addEventListener('resize', function() {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(function() {
-                    if (currentView === 'month') {
-                        drawMonthTimelines();
-                    }
-                }, 250);
             });
         }
     </script>
