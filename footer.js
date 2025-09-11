@@ -503,7 +503,7 @@
     // 푸터 페이지 이동
     window.navigateToFooterPage = function(page) {
         const pageUrls = {
-            'dashboard': 'dashboard.html',
+            'dashboard': 'index.html',
             'products': 'products-calendar.html',
             'calendar': 'delivery-calendar.html',
             'delivery': 'delivery.html',
