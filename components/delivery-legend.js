@@ -1,4 +1,4 @@
-// delivery-legend.js
+// components/delivery-legend.js
 export class DeliveryLegend extends HTMLElement {
     constructor() {
         super();
@@ -175,5 +175,4 @@ export class DeliveryLegend extends HTMLElement {
     }
 }
 
-// 커스텀 엘리먼트 등록
 customElements.define('delivery-legend', DeliveryLegend);
