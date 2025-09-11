@@ -414,8 +414,16 @@
 
     // 헤더 초기화
     function initHeader(options = {}) {
-        // 스타일 먼저 추가
-        createHeaderStyles();
+    // 스크롤 복원 비활성화
+    if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+    }
+    
+    // 페이지 로드 시 최상단으로
+    window.scrollTo(0, 0);
+    
+    // 스타일 먼저 추가
+    createHeaderStyles();
         
         // 옵션 설정
         const { 
@@ -497,5 +505,6 @@
         setActivePage: setActivePage
     };
 })();
+
 
 
