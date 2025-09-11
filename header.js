@@ -286,7 +286,9 @@
                                 <button class="nav-btn" data-page="products" onclick="navigateToPage('products')">
                                     상품리스트
                                 </button>
-                                <button class="nav-btn" data-page="products-calendar" onclick="naviga력
+                                
+                                 <button class="nav-btn" data-page="products-calendar" onclick="navigateToPage('calendar')">
+                                    상품달력
                                 </button>
                                 <button class="nav-btn" data-page="delivery-calendar" onclick="navigateToPage('delivery')">
                                     발송달력
@@ -500,6 +502,7 @@
         setActivePage: setActivePage
     };
 })();
+
 
 
 
