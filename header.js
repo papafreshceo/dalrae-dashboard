@@ -237,11 +237,7 @@
                     border-radius: 1px;
                 }
 
-                /* 발주시스템 특별 색상 (애니메이션 제거) */
-                .special-btn {
-                    color: #ff6b6b;
-                    font-weight: 700;
-                }
+
 
                 /* 서비스&프로그램 특별 색상 (애니메이션 제거) */
                 .legendary-btn {
@@ -505,6 +501,7 @@
         setActivePage: setActivePage
     };
 })();
+
 
 
 
