@@ -286,11 +286,10 @@
                                 <button class="nav-btn" data-page="products" onclick="navigateToPage('products')">
                                     상품리스트
                                 </button>
-                                <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
-                                    캘린더
+                                <button class="nav-btn" data-page="products-calendar" onclick="naviga력
                                 </button>
-                                <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
-                                    발송캘린더
+                                <button class="nav-btn" data-page="delivery-calendar" onclick="navigateToPage('delivery')">
+                                    발송달력
                                 </button>
                                 <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
@@ -335,11 +334,11 @@
                                 <button class="nav-btn" data-page="products" onclick="navigateToPage('products')">
                                     상품리스트
                                 </button>
-                                <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
-                                    상품캘린더
+                                <button class="nav-btn" data-page="products-calendar" onclick="navigateToPage('calendar')">
+                                    상품달력
                                 </button>
-                                <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
-                                    배송캘린더
+                                <button class="nav-btn" data-page="delivery-calendar" onclick="navigateToPage('delivery')">
+                                    발송달력
                                 </button>
                                 <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
@@ -385,10 +384,10 @@
 
     window.navigateToPage = function(page) {
         const pageUrls = {
-            'dashboard': 'index.html',
+            'dashboard': 'dashboard.html',
             'products': 'products.html',
-            'calendar': 'calendar.html',
-            'delivery': 'delivery.html',
+            'calendar': 'products-calendar.html',
+            'delivery': 'delivery-calendar.html',
             'orders': 'orders.html',
             'services': 'services.html',
             'notice': 'notice.html'
@@ -501,6 +500,7 @@
         setActivePage: setActivePage
     };
 })();
+
 
 
 
