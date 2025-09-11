@@ -1,4 +1,4 @@
-// delivery-calendar-nav.js
+// components/delivery-calendar-nav.js
 export class DeliveryCalendarNav extends HTMLElement {
     constructor() {
         super();
@@ -182,5 +182,4 @@ export class DeliveryCalendarNav extends HTMLElement {
     }
 }
 
-// 커스텀 엘리먼트 등록
 customElements.define('delivery-calendar-nav', DeliveryCalendarNav);
