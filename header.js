@@ -2,7 +2,7 @@
 (function() {
     // 페이지 전환 전 상태 저장
     function saveHeaderState() {
-        const activePage = document.querySelector('.nav-btn.active')?.dataset.page || 'dashboard';
+        const activePage = document.querySelector('.nav-btn.active')?.dataset.page || 'index';
         localStorage.setItem('dalrae_active_page', activePage);
     }
 
@@ -28,14 +28,14 @@
 
             /* 헤더 - 고정 */
             .top-header {
-                background: white;
-                border-bottom: 1px solid #e8e9eb;
-                padding: 12px 0;
+                background: var(--bg-primary, #ffffff);
+                border-bottom: 1px solid var(--border-default, #dee2e6);
+                padding: var(--space-md, 12px) 0;
                 position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
-                z-index: 1000;
+                z-index: var(--z-sticky, 30);
             }
 
             /* 헤더 스페이서 - 고정 헤더 공간 확보 */
@@ -46,7 +46,7 @@
             /* PC 스타일 - 1행 레이아웃 */
             @media (min-width: 769px) {
                 .header-content {
-                    max-width: 1400px;
+                    max-width: var(--container-max, 1400px);
                     margin: 0 auto;
                     padding: 0 30px;
                     display: flex;
@@ -72,7 +72,7 @@
 
                 .nav-menu { 
                     display: flex; 
-                    gap: 12px;
+                    gap: var(--space-md, 12px);
                     align-items: center;
                     padding: 0;
                 }
@@ -83,22 +83,22 @@
                     padding: 5px 10px;
                     background: none;
                     border: none;
-                    color: #5a5c60;
+                    color: var(--text-secondary, #495057);
                     font-size: 15px;
-                    font-weight: 600;
+                    font-weight: var(--font-semibold, 600);
                     cursor: pointer;
-                    transition: color 0.3s ease;
+                    transition: var(--transition-fast, all 0.2s);
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
                     position: relative;
                 }
 
                 .nav-btn:hover {
-                    color: #667eea;
+                    color: var(--brand-primary, #2563eb);
                 }
 
                 .nav-btn.active {
-                    color: #667eea;
+                    color: var(--brand-primary, #2563eb);
                 }
 
                 /* PC 활성 메뉴 밑줄 */
@@ -109,13 +109,13 @@
                     left: 10%;
                     width: 80%;
                     height: 3px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: var(--brand-primary, #2563eb);
                     border-radius: 2px;
                 }
                 
                 .special-btn {
-                    color: #ff5252;
-                    font-weight: 700;
+                    color: var(--danger, #ef4444);
+                    font-weight: var(--font-bold, 700);
                 }
                 
                 .special-btn:hover {
@@ -125,7 +125,7 @@
                 /* 서비스&프로그램 특별 색상 */
                 .legendary-btn {
                     color: #8a2be2;
-                    font-weight: 700;
+                    font-weight: var(--font-bold, 700);
                 }
 
                 .legendary-btn:hover {
@@ -136,7 +136,7 @@
             /* 모바일 스타일 - 3행 레이아웃 */
             @media (max-width: 768px) {
                 .top-header {
-                    padding: 8px 0;
+                    padding: var(--space-sm, 8px) 0;
                 }
 
                 .header-spacer {
@@ -152,7 +152,7 @@
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 8px;
+                    margin-bottom: var(--space-sm, 8px);
                 }
                 
                 .logo-container {
@@ -167,12 +167,12 @@
                 
                 .order-system-btn {
                     padding: 4px 10px;
-                    background: #ff5252;
+                    background: var(--danger, #ef4444);
                     color: white;
                     border: none;
                     border-radius: 4px;
-                    font-size: 12px;
-                    font-weight: 600;
+                    font-size: var(--text-sm, 12px);
+                    font-weight: var(--font-semibold, 600);
                     cursor: pointer;
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
@@ -190,20 +190,20 @@
                 .nav-menu {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
-                    gap: 8px;
+                    gap: var(--space-sm, 8px);
                     padding: 0 15px;
                 }
                 
                 /* 모바일 메뉴 버튼 */
                 .nav-btn {
-                    font-size: 12px;
+                    font-size: var(--text-sm, 12px);
                     padding: 5px;
                     background: none;
                     border: none;
-                    color: #5a5c60;
-                    font-weight: 600;
+                    color: var(--text-secondary, #495057);
+                    font-weight: var(--font-semibold, 600);
                     cursor: pointer;
-                    transition: color 0.3s ease;
+                    transition: var(--transition-fast, all 0.2s);
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
                     text-align: center;
@@ -211,11 +211,11 @@
                 }
 
                 .nav-btn:hover {
-                    color: #667eea;
+                    color: var(--brand-primary, #2563eb);
                 }
 
                 .nav-btn.active {
-                    color: #667eea;
+                    color: var(--brand-primary, #2563eb);
                 }
 
                 /* 모바일 활성 메뉴 밑줄 */
@@ -226,7 +226,7 @@
                     left: 10%;
                     width: 80%;
                     height: 2px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: var(--brand-primary, #2563eb);
                     border-radius: 1px;
                 }
 
@@ -237,7 +237,7 @@
                 /* 서비스&프로그램 특별 색상 */
                 .legendary-btn {
                     color: #8a2be2;
-                    font-weight: 700;
+                    font-weight: var(--font-bold, 700);
                 }
             }
         `;
@@ -382,7 +382,8 @@
 
     window.navigateToPage = function(page) {
         const pageUrls = {
-            'dashboard': 'index.html',
+            'index': 'index.html',
+            'dashboard': 'dashboard.html',
             'products': 'products.html',
             'calendar': 'product-calendar.html',
             'delivery': 'delivery-calendar.html',
@@ -392,11 +393,10 @@
         };
         
         const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-        const currentPage = currentFile.replace('.html', '');
-        const currentPageName = currentPage === 'index' ? 'dashboard' : currentPage;
+        const targetFile = pageUrls[page];
         
-        if (currentPageName !== page) {
-            navigateTo(pageUrls[page]);
+        if (currentFile !== targetFile) {
+            navigateTo(targetFile);
         }
     };
 
@@ -404,6 +404,25 @@
     window.openOrderSystem = function() {
         window.open('https://papafarmers.com/orders/', '_blank');
     };
+
+    // 현재 페이지 이름 가져오기
+    function getCurrentPageName() {
+        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+        
+        // 파일명과 페이지 이름 매핑
+        const fileToPage = {
+            'index.html': 'index',
+            'dashboard.html': 'dashboard',
+            'products.html': 'products',
+            'product-calendar.html': 'calendar',
+            'delivery-calendar.html': 'delivery',
+            'orders.html': 'orders',
+            'services.html': 'services',
+            'notice.html': 'notice'
+        };
+        
+        return fileToPage[currentFile] || 'index';
+    }
 
     // 헤더 초기화
     function initHeader(options = {}) {
@@ -428,15 +447,12 @@
         
         container.innerHTML = createHeader();
         
-        const savedPage = localStorage.getItem('dalrae_active_page');
+        // 활성 페이지 설정
         if (activePage) {
             setActivePage(activePage);
-        } else if (savedPage) {
-            setActivePage(savedPage);
         } else {
-            const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-            const pageName = currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
-            setActivePage(pageName);
+            const currentPageName = getCurrentPageName();
+            setActivePage(currentPageName);
         }
 
         // 화면 크기 변경 시 헤더 재생성
@@ -458,11 +474,6 @@
                 }
             }, 250);
         });
-    }
-
-    function getCurrentPageName() {
-        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-        return currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
     }
 
     // DOM이 로드되면 자동 초기화
