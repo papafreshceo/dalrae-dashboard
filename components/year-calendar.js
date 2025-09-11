@@ -1,5 +1,6 @@
 /**
  * 연간 캘린더 Web Component
+ * 흰색-초록색 그라데이션 애니메이션 (1초)
  * 12월 중순 이후 시작 품종은 시작 아이콘만 12월에 표시하고 텍스트는 1월에 표시
  */
 class YearCalendar extends HTMLElement {
@@ -183,37 +184,23 @@ class YearCalendar extends HTMLElement {
                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 }
                 
-                /* 무지개 애니메이션 */
-                @keyframes rainbow-pulse {
+                /* 흰색-초록색 그라데이션 애니메이션 (1초) */
+                @keyframes colorSlide {
                     0% {
-                        background: #2563eb;
-                        box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+                        background: linear-gradient(180deg, #ffffff 0%, #ffffff 50%, #2563eb 100%);
                     }
-                    20% {
-                        background: #ff0000;
-                        box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-                    }
-                    40% {
-                        background: #ffff00;
-                        box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
-                    }
-                    60% {
-                        background: #0000ff;
-                        box-shadow: 0 0 15px rgba(0, 0, 255, 0.5);
-                    }
-                    80% {
-                        background: #00ff00;
-                        box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+                    50% {
+                        background: linear-gradient(180deg, #ffffff 0%, #10b981 50%, #2563eb 100%);
                     }
                     100% {
                         background: #2563eb;
-                        box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
                     }
                 }
                 
                 .today-line.highlight {
                     width: 5px;
-                    animation: rainbow-pulse 2s ease-in-out;
+                    animation: colorSlide 1s ease-in-out;
+                    box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
                 }
                 
                 .today-marker {
@@ -233,7 +220,7 @@ class YearCalendar extends HTMLElement {
                 
                 .today-marker.highlight {
                     transform: translateX(-50%) scale(1.1);
-                    animation: rainbow-pulse 2s ease-in-out;
+                    animation: colorSlide 1s ease-in-out;
                 }
                 
                 .loading {
@@ -255,6 +242,11 @@ class YearCalendar extends HTMLElement {
                         height: 14px;
                         font-size: 8px;
                         padding: 0 6px;
+                    }
+                    
+                    .today-btn {
+                        padding: 6px 12px;
+                        font-size: 13px;
                     }
                 }
             </style>
@@ -453,7 +445,7 @@ class YearCalendar extends HTMLElement {
         const todayLine = this.shadowRoot.getElementById('todayLine');
         const todayMarker = this.shadowRoot.getElementById('todayMarker');
         
-        // 깔끔한 애니메이션 적용 (모바일/데스크톱 모두)
+        // 흰색-초록색 애니메이션 적용 (모바일/데스크톱 모두)
         todayLine.classList.add('highlight');
         todayMarker.classList.add('highlight');
         
@@ -462,18 +454,16 @@ class YearCalendar extends HTMLElement {
             todayMarker.classList.remove('highlight');
         }, 1000);  // 애니메이션 시간과 동일하게
         
-        // 모바일에서 스크롤
-        if (window.innerWidth <= 768) {
-            const container = this.shadowRoot.querySelector('.year-container');
-            const todayPosition = parseFloat(todayLine.style.left);
-            const containerWidth = container.scrollWidth;
-            const scrollPosition = (containerWidth * todayPosition / 100) - (container.clientWidth / 2);
-            
-            container.scrollTo({
-                left: Math.max(0, scrollPosition),
-                behavior: 'smooth'
-            });
-        }
+        // 스크롤 (모바일/데스크톱 모두)
+        const container = this.shadowRoot.querySelector('.year-container');
+        const todayPosition = parseFloat(todayLine.style.left);
+        const containerWidth = container.scrollWidth;
+        const scrollPosition = (containerWidth * todayPosition / 100) - (container.clientWidth / 2);
+        
+        container.scrollTo({
+            left: Math.max(0, scrollPosition),
+            behavior: 'smooth'
+        });
     }
     
     showError() {
