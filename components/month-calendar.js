@@ -1,10 +1,7 @@
 /**
  * 월별 캘린더 Web Component
- * 요청사항 반영:
- * 1. 12월 중순 이후 시작 품종은 아이콘만 표시
- * 2. 색코드 열 값 반영
- * 3. 툴팁 위치 자동 조정
- * 4. 오늘 날짜 무지개 애니메이션
+ * 오늘 날짜 클릭 시 테두리 애니메이션 추가
+ * 모바일에서 오늘 날짜를 화면 중앙으로 스크롤
  */
 class MonthCalendar extends HTMLElement {
     constructor() {
@@ -34,6 +31,7 @@ class MonthCalendar extends HTMLElement {
                     border-radius: 12px;
                     padding: 24px;
                     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                    overflow-x: auto;
                 }
                 
                 .calendar-controls {
@@ -94,6 +92,17 @@ class MonthCalendar extends HTMLElement {
                     background: #2563eb;
                     color: white;
                     border-color: #2563eb;
+                }
+                
+                .calendar-wrapper {
+                    position: relative;
+                    overflow-x: auto;
+                    -webkit-overflow-scrolling: touch;
+                }
+                
+                .calendar-grid {
+                    min-width: 600px;
+                    position: relative;
                 }
                 
                 .weekdays {
@@ -163,6 +172,22 @@ class MonthCalendar extends HTMLElement {
                     background: #e7f3ff;
                 }
                 
+                /* 오늘 날짜 테두리 애니메이션 */
+                @keyframes borderPulse {
+                    0% {
+                        border-color: #2563eb;
+                        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+                    }
+                    50% {
+                        border-color: #10b981;
+                        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+                    }
+                    100% {
+                        border-color: #2563eb;
+                        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+                    }
+                }
+                
                 .day-cell.today::after {
                     content: '';
                     position: absolute;
@@ -173,6 +198,10 @@ class MonthCalendar extends HTMLElement {
                     border: 2px solid #2563eb;
                     border-radius: 4px;
                     pointer-events: none;
+                }
+                
+                .day-cell.today.animate::after {
+                    animation: borderPulse 1s ease-in-out;
                 }
                 
                 .day-cell.today .day-number {
@@ -261,6 +290,14 @@ class MonthCalendar extends HTMLElement {
                         padding: 15px;
                     }
                     
+                    .calendar-wrapper {
+                        overflow-x: auto;
+                    }
+                    
+                    .calendar-grid {
+                        min-width: 600px;
+                    }
+                    
                     .day-cell {
                         min-height: 100px;
                         padding: 8px;
@@ -269,6 +306,16 @@ class MonthCalendar extends HTMLElement {
                     .day-tag {
                         font-size: 9px;
                         padding: 1px 4px;
+                    }
+                    
+                    .nav-btn {
+                        width: 32px;
+                        height: 32px;
+                    }
+                    
+                    .month-display {
+                        font-size: 16px;
+                        min-width: 140px;
                     }
                 }
             </style>
@@ -283,18 +330,22 @@ class MonthCalendar extends HTMLElement {
                     <button class="today-btn" id="todayBtn">오늘</button>
                 </div>
                 
-                <div class="weekdays">
-                    <div class="weekday sunday">일</div>
-                    <div class="weekday">월</div>
-                    <div class="weekday">화</div>
-                    <div class="weekday">수</div>
-                    <div class="weekday">목</div>
-                    <div class="weekday">금</div>
-                    <div class="weekday saturday">토</div>
-                </div>
-                
-                <div class="days-grid" id="daysGrid">
-                    <div class="loading">캘린더 로딩중...</div>
+                <div class="calendar-wrapper" id="calendarWrapper">
+                    <div class="calendar-grid">
+                        <div class="weekdays">
+                            <div class="weekday sunday">일</div>
+                            <div class="weekday">월</div>
+                            <div class="weekday">화</div>
+                            <div class="weekday">수</div>
+                            <div class="weekday">목</div>
+                            <div class="weekday">금</div>
+                            <div class="weekday saturday">토</div>
+                        </div>
+                        
+                        <div class="days-grid" id="daysGrid">
+                            <div class="loading">캘린더 로딩중...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -344,6 +395,35 @@ class MonthCalendar extends HTMLElement {
         this.currentMonth = today.getMonth();
         this.currentYear = today.getFullYear();
         this.loadData();
+        
+        // 오늘 날짜 셀로 스크롤 및 애니메이션
+        setTimeout(() => {
+            this.scrollToToday();
+        }, 100);
+    }
+    
+    scrollToToday() {
+        const todayCell = this.shadowRoot.querySelector('.day-cell.today');
+        if (todayCell) {
+            // 애니메이션 적용
+            todayCell.classList.add('animate');
+            setTimeout(() => {
+                todayCell.classList.remove('animate');
+            }, 1000);
+            
+            // 모바일에서 가로 스크롤
+            if (window.innerWidth <= 768) {
+                const wrapper = this.shadowRoot.getElementById('calendarWrapper');
+                const cellRect = todayCell.getBoundingClientRect();
+                const wrapperRect = wrapper.getBoundingClientRect();
+                const scrollLeft = wrapper.scrollLeft + cellRect.left - wrapperRect.left - (wrapperRect.width / 2) + (cellRect.width / 2);
+                
+                wrapper.scrollTo({
+                    left: scrollLeft,
+                    behavior: 'smooth'
+                });
+            }
+        }
     }
     
     updateDisplay() {
@@ -437,6 +517,22 @@ class MonthCalendar extends HTMLElement {
         
         // 태그 클릭 이벤트 추가
         this.attachTagEvents();
+        
+        // 오늘 날짜 셀 클릭 이벤트
+        const todayCell = this.shadowRoot.querySelector('.day-cell.today');
+        if (todayCell) {
+            todayCell.addEventListener('click', () => {
+                todayCell.classList.add('animate');
+                setTimeout(() => {
+                    todayCell.classList.remove('animate');
+                }, 1000);
+                
+                // 모바일에서 중앙으로 스크롤
+                if (window.innerWidth <= 768) {
+                    this.scrollToToday();
+                }
+            });
+        }
     }
     
     getUniqueEvents(events) {
