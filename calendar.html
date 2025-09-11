@@ -238,7 +238,7 @@
 
         .day-cell {
             background: white;
-            min-height: 100px;
+            min-height: 120px;
             padding: 10px;
             position: relative;
             border-right: 1px solid #f1f3f5;
@@ -259,7 +259,7 @@
             font-size: 14px;
             font-weight: 500;
             color: #212529;
-            margin-bottom: 4px;
+            margin-bottom: 8px;
             position: relative;
             z-index: 2;
         }
@@ -296,6 +296,74 @@
 
         .day-cell.saturday .day-number {
             color: #2563eb;
+        }
+
+        /* 날짜 태그 스타일 */
+        .day-tags {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            margin-top: 4px;
+        }
+
+        .day-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            border: 1px solid;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .day-tag:hover {
+            transform: translateX(2px);
+        }
+
+        .day-tag.start {
+            border-color: #10b981;
+            color: #047857;
+        }
+
+        .day-tag.start::before {
+            content: '시작';
+            background: #10b981;
+            color: white;
+            padding: 0 3px;
+            border-radius: 2px;
+            font-size: 9px;
+        }
+
+        .day-tag.end {
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        .day-tag.end::before {
+            content: '종료';
+            background: #ef4444;
+            color: white;
+            padding: 0 3px;
+            border-radius: 2px;
+            font-size: 9px;
+        }
+
+        .day-tag.notice {
+            border-color: #f59e0b;
+            color: #b45309;
+        }
+
+        .day-tag.notice::before {
+            content: '공지';
+            background: #f59e0b;
+            color: white;
+            padding: 0 3px;
+            border-radius: 2px;
+            font-size: 9px;
         }
         
         .year-calendar-content {
@@ -395,6 +463,18 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.15);
             opacity: 1;
         }
+
+        .year-timeline-bar .bar-icon {
+            margin-right: 4px;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .year-timeline-bar .bar-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
         
         .year-today-line {
             position: absolute;
@@ -404,7 +484,7 @@
             background: #2563eb;
             z-index: 999;
             opacity: 1;
-            transition: all 0.3s;
+            transition: all 0.3s ease-in-out;
         }
         
         .year-today-line.highlight {
@@ -415,13 +495,17 @@
         }
         
         @keyframes pulse {
-            0%, 100% {
+            0% {
                 opacity: 1;
                 transform: scaleX(1);
             }
             50% {
                 opacity: 0.8;
                 transform: scaleX(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: scaleX(1);
             }
         }
         
@@ -437,7 +521,7 @@
             font-size: 12px;
             font-weight: 600;
             box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-            transition: all 0.3s;
+            transition: all 0.3s ease-in-out;
         }
         
         .today-marker.highlight {
@@ -445,6 +529,7 @@
             transform: translateX(-50%) scale(1.1);
         }
         
+        /* 범례 스타일 업데이트 */
         .legend {
             display: flex;
             gap: 16px;
@@ -457,16 +542,78 @@
             border-radius: 8px;
         }
 
+        .legend-section {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 0 16px;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .legend-section:last-child {
+            border-right: none;
+        }
+
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-size: 13px;
             color: #495057;
-            padding: 4px 8px;
-            background: white;
+        }
+
+        .legend-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
             border-radius: 4px;
-            border: 1px solid #e9ecef;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid;
+            background: white;
+        }
+
+        .legend-indicator.start {
+            border-color: #10b981;
+            color: #047857;
+        }
+
+        .legend-indicator.start::before {
+            content: '시작';
+            background: #10b981;
+            color: white;
+            padding: 0 3px;
+            border-radius: 2px;
+            font-size: 10px;
+        }
+
+        .legend-indicator.end {
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        .legend-indicator.end::before {
+            content: '종료';
+            background: #ef4444;
+            color: white;
+            padding: 0 3px;
+            border-radius: 2px;
+            font-size: 10px;
+        }
+
+        .legend-indicator.notice {
+            border-color: #f59e0b;
+            color: #b45309;
+        }
+
+        .legend-indicator.notice::before {
+            content: '공지';
+            background: #f59e0b;
+            color: white;
+            padding: 0 3px;
+            border-radius: 2px;
+            font-size: 10px;
         }
 
         .legend-color {
@@ -747,7 +894,7 @@
         
         @media (max-width: 1400px) and (min-width: 769px) {
             .day-cell {
-                min-height: 90px;
+                min-height: 110px;
                 padding: 8px;
             }
             
@@ -776,6 +923,19 @@
             .year-timeline-bar {
                 height: 20px;
                 font-size: 10px;
+            }
+
+            .day-cell {
+                min-height: 100px;
+            }
+
+            .day-tag {
+                font-size: 9px;
+                padding: 1px 4px;
+            }
+
+            .legend-section {
+                padding: 0 8px;
             }
         }
         
@@ -845,11 +1005,29 @@
                 height: 18px;
                 font-size: 9px;
             }
+
+            .legend {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .legend-section {
+                border-right: none;
+                border-bottom: 1px solid #dee2e6;
+                padding-bottom: 8px;
+            }
+
+            .legend-section:last-child {
+                border-bottom: none;
+            }
         }
     </style>
 </head>
 <body>
     <div id="header-container"></div>
+
+    <!-- 공지사항 영역 -->
+    <div id="notice-container"></div>
 
     <main class="hero">
         <section class="card">
@@ -958,6 +1136,7 @@
 
     <script src="header.js"></script>
     <script src="footer.js"></script>
+    <script src="notice.js"></script>
 
     <script>
         let currentView = 'month';
@@ -968,6 +1147,7 @@
         let productColors = {};
         let priceChart = null;
         let priceDataCache = {};
+        let monthEvents = {}; // 월별 이벤트 저장
 
         const colorPalette = [
             '#2563eb', '#1e40af', '#3b82f6', '#6b7280', '#10b981',
@@ -987,6 +1167,13 @@
             if (window.DalraeFooter) {
                 DalraeFooter.init({
                     containerId: 'footer-container'
+                });
+            }
+
+            // 공지사항 초기화
+            if (window.DalraeNotice) {
+                DalraeNotice.init({
+                    containerId: 'notice-container'
                 });
             }
 
@@ -1072,14 +1259,14 @@
                 todayLine.classList.add('highlight');
                 setTimeout(() => {
                     todayLine.classList.remove('highlight');
-                }, 3000);
+                }, 2000); // 2초 후 부드럽게 제거
             }
             
             if (todayMarker) {
                 todayMarker.classList.add('highlight');
                 setTimeout(() => {
                     todayMarker.classList.remove('highlight');
-                }, 3000);
+                }, 2000); // 2초 후 부드럽게 제거
             }
         }
 
@@ -1149,6 +1336,7 @@
                     
                     if (allProducts.length > 0) {
                         assignColors();
+                        processMonthEvents();
                         renderCalendar();
                     } else {
                         showNoDataMessage();
@@ -1162,12 +1350,48 @@
             }
         }
 
+        // 월별 이벤트 처리
+        function processMonthEvents() {
+            monthEvents = {};
+            
+            allProducts.forEach(p => {
+                const variety = p.품종 || p.품목;
+                if (!variety) return;
+                
+                const startStr = p.시작일;
+                const endStr = p.종료일;
+                
+                if (startStr) {
+                    const startMonth = parseInt(startStr.substring(0, 2)) - 1;
+                    const startDay = parseInt(startStr.substring(3, 5));
+                    const startKey = `${currentYear}-${startMonth}-${startDay}`;
+                    
+                    if (!monthEvents[startKey]) {
+                        monthEvents[startKey] = { starts: [], ends: [], notices: [] };
+                    }
+                    monthEvents[startKey].starts.push(variety);
+                }
+                
+                if (endStr) {
+                    const endMonth = parseInt(endStr.substring(0, 2)) - 1;
+                    const endDay = parseInt(endStr.substring(3, 5));
+                    const endKey = `${currentYear}-${endMonth}-${endDay}`;
+                    
+                    if (!monthEvents[endKey]) {
+                        monthEvents[endKey] = { starts: [], ends: [], notices: [] };
+                    }
+                    monthEvents[endKey].ends.push(variety);
+                }
+            });
+        }
+
         function processYearTimelines() {
             const yearMap = {};
             
             allProducts.forEach(p => {
+                const variety = p.품종 || p.품목;
                 const item = p.품목;
-                if (!item) return;
+                if (!variety) return;
                 
                 const startStr = p.시작일;
                 const endStr = p.종료일;
@@ -1179,9 +1403,10 @@
                 const endMonth = parseInt(endStr.substring(0, 2)) - 1;
                 const endDay = parseInt(endStr.substring(3, 5));
                 
-                if (!yearMap[item]) {
-                    yearMap[item] = {
-                        name: item,
+                if (!yearMap[variety]) {
+                    yearMap[variety] = {
+                        name: variety,
+                        item: item,
                         type: getProductType(p.대분류),
                         startMonth: startMonth,
                         startDay: startDay,
@@ -1191,7 +1416,7 @@
                     };
                 }
                 
-                yearMap[item].options.push({
+                yearMap[variety].options.push({
                     name: p.옵션명,
                     variety: p.품종,
                     status: p.공급상태,
@@ -1204,13 +1429,14 @@
         }
 
         function assignColors() {
-            const allItems = new Set();
+            const allVarieties = new Set();
             allProducts.forEach(p => {
-                if (p.품목) allItems.add(p.품목);
+                const variety = p.품종 || p.품목;
+                if (variety) allVarieties.add(variety);
             });
             
-            Array.from(allItems).forEach((item, index) => {
-                productColors[item] = colorPalette[index % colorPalette.length];
+            Array.from(allVarieties).forEach((variety, index) => {
+                productColors[variety] = colorPalette[index % colorPalette.length];
             });
         }
 
@@ -1225,6 +1451,7 @@
         function renderCalendar() {
             requestAnimationFrame(() => {
                 if (currentView === 'month') {
+                    processMonthEvents();
                     renderMonthView();
                 } else {
                     yearProductTimelines = processYearTimelines();
@@ -1262,8 +1489,36 @@
                 if (date.getDay() === 0) classes.push('sunday');
                 if (date.getDay() === 6) classes.push('saturday');
                 
+                const eventKey = `${currentYear}-${currentMonth}-${day}`;
+                const events = monthEvents[eventKey] || { starts: [], ends: [], notices: [] };
+                
+                let tagsHtml = '';
+                if (events.starts.length > 0 || events.ends.length > 0 || events.notices.length > 0) {
+                    tagsHtml = '<div class="day-tags">';
+                    
+                    // 시작 이벤트
+                    const uniqueStarts = [...new Set(events.starts)];
+                    uniqueStarts.forEach(variety => {
+                        tagsHtml += `<div class="day-tag start" onclick="showModalForVariety('${variety}')">${variety}</div>`;
+                    });
+                    
+                    // 종료 이벤트
+                    const uniqueEnds = [...new Set(events.ends)];
+                    uniqueEnds.forEach(variety => {
+                        tagsHtml += `<div class="day-tag end" onclick="showModalForVariety('${variety}')">${variety}</div>`;
+                    });
+                    
+                    // 공지 이벤트
+                    events.notices.forEach(notice => {
+                        tagsHtml += `<div class="day-tag notice">${notice}</div>`;
+                    });
+                    
+                    tagsHtml += '</div>';
+                }
+                
                 html += `<div class="${classes.join(' ')}" data-day="${day}">
                     <div class="day-number">${day}</div>
+                    ${tagsHtml}
                 </div>`;
             }
             
@@ -1292,6 +1547,14 @@
                 
                 const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
                 
+                // 표시 텍스트 결정
+                let displayText = '';
+                if (product.item === product.name) {
+                    displayText = product.name;
+                } else {
+                    displayText = `${product.item} | ${product.name}`;
+                }
+                
                 if (product.startMonth > product.endMonth) {
                     const firstStart = (100 / 12) * (product.startMonth + product.startDay / monthDays[product.startMonth]);
                     const firstWidth = 100 - firstStart;
@@ -1300,7 +1563,8 @@
                         <div class="year-timeline-bar"
                              data-product-name="${product.name}"
                              style="left: ${firstStart}%; width: ${firstWidth}%; background: ${productColors[product.name]};">
-                            ${product.name}
+                            <span class="bar-icon">▶</span>
+                            <span class="bar-text">${displayText}</span>
                         </div>
                     `;
                     
@@ -1310,6 +1574,7 @@
                         <div class="year-timeline-bar"
                              data-product-name="${product.name}"
                              style="left: 0; width: ${secondWidth}%; background: ${productColors[product.name]};">
+                            <span class="bar-icon">■</span>
                         </div>
                     `;
                 } else {
@@ -1321,7 +1586,8 @@
                         <div class="year-timeline-bar"
                              data-product-name="${product.name}"
                              style="left: ${startOffset}%; width: ${width}%; background: ${productColors[product.name]};">
-                            ${product.name}
+                            <span class="bar-icon">▶</span>
+                            <span class="bar-text">${displayText}</span>
                         </div>
                     `;
                 }
@@ -1345,7 +1611,7 @@
                 document.querySelectorAll('.year-timeline-bar').forEach(bar => {
                     const productName = bar.dataset.productName;
                     
-                    bar.onclick = () => showModalForProduct(productName);
+                    bar.onclick = () => showModalForVariety(productName);
                     
                     bar.onmouseover = (e) => {
                         const product = yearProductTimelines.find(p => p.name === productName);
@@ -1365,7 +1631,24 @@
             const legend = document.getElementById('legend');
             let html = '';
             
-            if (currentView === 'year') {
+            if (currentView === 'month') {
+                // 월별 보기 범례: 시작/종료/공지 표시
+                html = `
+                    <div class="legend-section">
+                        <div class="legend-item">
+                            <span class="legend-indicator start">품종명</span>
+                            <span>상품 공급 시작일</span>
+                        </div>
+                    </div>
+                    <div class="legend-section">
+                        <div class="legend-item">
+                            <span class="legend-indicator end">품종명</span>
+                            <span>상품 공급 종료일</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // 연간 보기 범례: 품종별 색상
                 yearProductTimelines.forEach(product => {
                     html += `
                         <div class="legend-item">
@@ -1392,6 +1675,7 @@
             }
             
             info.innerHTML = `
+                품목: ${product.item}<br>
                 ${dateInfo}<br>
                 옵션: ${product.options ? product.options.length : 0}개<br>
                 상태: ${product.options && product.options[0] ? product.options[0].status : '확인 필요'}
@@ -1406,20 +1690,12 @@
             document.getElementById('tooltip').classList.remove('show');
         }
 
-        function showModalForProduct(productName) {
-            const products = allProducts.filter(p => p.품목 === productName);
+        function showModalForVariety(variety) {
+            const products = allProducts.filter(p => (p.품종 || p.품목) === variety);
             
             if (products.length === 0) return;
             
-            const varietyGroups = {};
-            products.forEach(p => {
-                const variety = p.품종 || p.품목;
-                if (!varietyGroups[variety]) varietyGroups[variety] = [];
-                varietyGroups[variety].push(p);
-            });
-            
-            const varieties = Object.keys(varietyGroups);
-            showModal(varieties[0]);
+            showModal(variety);
         }
 
         function showModal(variety) {
@@ -1681,54 +1957,54 @@
         }
 
         function setupEventListeners() {
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('year-timeline-bar')) {
-                    e.stopPropagation();
-                    const productName = e.target.dataset.productName;
-                    if (productName) {
-                        showModalForProduct(productName);
-                    }
-                }
-            });
-            
-            document.addEventListener('mouseover', function(e) {
-                if (e.target.classList.contains('year-timeline-bar')) {
-                    const productName = e.target.dataset.productName;
-                    const product = yearProductTimelines.find(p => p.name === productName);
-                    if (product) {
-                        showTooltip(e, product);
-                    }
-                }
-            });
-            
-            document.addEventListener('mouseout', function(e) {
-                if (e.target.classList.contains('year-timeline-bar')) {
-                    hideTooltip();
-                }
-            });
-            
-            document.getElementById('optionsModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
-                }
-            });
-            
-            document.getElementById('chartModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeChartModal();
-                }
-            });
-            
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    if (document.getElementById('chartModal').classList.contains('show')) {
-                        closeChartModal();
-                    } else if (document.getElementById('optionsModal').classList.contains('show')) {
-                        closeModal();
-                    }
-                }
-            });
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('year-timeline-bar')) {
+            e.stopPropagation();
+            const productName = e.target.dataset.productName;
+            if (productName) {
+                showModalForVariety(productName);
+            }
         }
+    });
+    
+    document.addEventListener('mouseover', function(e) {
+        if (e.target.classList.contains('year-timeline-bar')) {
+            const productName = e.target.dataset.productName;
+            const product = yearProductTimelines.find(p => p.name === productName);
+            if (product) {
+                showTooltip(e, product);
+            }
+        }
+    });
+    
+    document.addEventListener('mouseout', function(e) {
+        if (e.target.classList.contains('year-timeline-bar')) {
+            hideTooltip();
+        }
+    });
+    
+    document.getElementById('optionsModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+    
+    document.getElementById('chartModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeChartModal();
+        }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            if (document.getElementById('chartModal').classList.contains('show')) {
+                closeChartModal();
+            } else if (document.getElementById('optionsModal').classList.contains('show')) {
+                closeModal();
+            }
+        }
+    });
+}
     </script>
 </body>
 </html>
