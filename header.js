@@ -294,7 +294,7 @@
                                     캘린더
                                 </button>
                                 <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
-                                    배송일정
+                                    발송캘린더
                                 </button>
                                 <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
@@ -505,6 +505,7 @@
         setActivePage: setActivePage
     };
 })();
+
 
 
 
