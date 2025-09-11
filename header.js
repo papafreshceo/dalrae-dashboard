@@ -113,11 +113,7 @@
                     border-radius: 2px;
                 }
                 
-                /* 발주시스템 특별 색상 (애니메이션 제거) */
-                .special-btn {
-                    color: #ff6b6b;
-                    font-weight: 700;
-                }
+
                 
                 .special-btn:hover {
                     color: #ff5252;
@@ -501,4 +497,5 @@
         setActivePage: setActivePage
     };
 })();
+
 
