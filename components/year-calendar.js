@@ -453,7 +453,7 @@ class YearCalendar extends HTMLElement {
         const todayLine = this.shadowRoot.getElementById('todayLine');
         const todayMarker = this.shadowRoot.getElementById('todayMarker');
         
-        // 깔끔한 애니메이션 적용
+        // 깔끔한 애니메이션 적용 (모바일/데스크톱 모두)
         todayLine.classList.add('highlight');
         todayMarker.classList.add('highlight');
         
@@ -462,13 +462,16 @@ class YearCalendar extends HTMLElement {
             todayMarker.classList.remove('highlight');
         }, 1000);  // 애니메이션 시간과 동일하게
         
-        // 스크롤
-        const container = this.shadowRoot.querySelector('.year-container');
+        // 모바일에서 스크롤
         if (window.innerWidth <= 768) {
-            todayLine.scrollIntoView({
-                behavior: 'smooth',
-                inline: 'center',
-                block: 'nearest'
+            const container = this.shadowRoot.querySelector('.year-container');
+            const todayPosition = parseFloat(todayLine.style.left);
+            const containerWidth = container.scrollWidth;
+            const scrollPosition = (containerWidth * todayPosition / 100) - (container.clientWidth / 2);
+            
+            container.scrollTo({
+                left: Math.max(0, scrollPosition),
+                behavior: 'smooth'
             });
         }
     }
