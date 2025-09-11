@@ -1,4 +1,4 @@
-// delivery-notices.js
+// components/delivery-notices.js
 export class DeliveryNotices extends HTMLElement {
     constructor() {
         super();
@@ -259,5 +259,4 @@ export class DeliveryNotices extends HTMLElement {
     }
 }
 
-// 커스텀 엘리먼트 등록
 customElements.define('delivery-notices', DeliveryNotices);
