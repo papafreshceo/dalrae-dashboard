@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <base target="_top">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" href="/favicon.png">
-    <title>공지사항 - 달래마켓</title>
-    <script src="header.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>달래마켓 - 신선한 농산물 B2B 플랫폼</title>
     <style>
+        /* ========== 메인 페이지 스타일 ========== */
         * {
             margin: 0;
             padding: 0;
@@ -15,714 +13,827 @@
         }
 
         body {
-            font-family: 'Noto Sans KR', -apple-system, sans-serif;
-            background: #f8fafc;
-            color: #1e293b;
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
-        }
-
-        /* 메인 컨테이너 */
-        .notice-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* 페이지 헤더 */
-        .page-header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 24px;
-            color: white;
-        }
-
-        .page-title {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 12px;
-        }
-
-        .page-subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-        }
-
-        /* 검색 및 필터 바 */
-        .filter-bar {
             background: white;
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
+            color: #212529;
+            line-height: 1.5;
         }
 
-        .search-box {
-            flex: 1;
-            min-width: 250px;
+        /* Hero Section */
+        .hero {
             position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 14px;
-            transition: all 0.2s;
-            outline: none;
-        }
-
-        .search-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-        }
-
-        .filter-tags {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .filter-tag {
-            padding: 8px 16px;
-            background: #f1f5f9;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-tag:hover {
-            background: #e2e8f0;
-        }
-
-        .filter-tag.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        /* 공지사항 그리드 */
-        .notice-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        /* 고정 공지사항 */
-        .pinned-section {
-            margin-bottom: 32px;
-        }
-
-        .section-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 16px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #64748b;
-        }
-
-        /* 공지사항 카드 */
-        .notice-card {
-            background: white;
-            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            transition: all 0.3s;
+            padding-top: 20px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -10;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            top: -96px;
+            left: 50%;
+            height: 288px;
+            width: 120vw;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            background: linear-gradient(to right, #dbeafe, #cffafe);
+            filter: blur(48px);
+            opacity: 0.6;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 40px 80px;
+            display: grid;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-container {
+                padding: 40px 40px 112px;
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 9999px;
+            border: 1px solid #dee2e6;
+            background: white;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: #6c757d;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .badge-dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            background: #2563eb;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 36px;
+            font-weight: 600;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+        }
+
+        @media (min-width: 640px) {
+            h1 {
+                font-size: 48px;
+            }
+        }
+
+        .text-sky {
+            color: #2563eb;
+        }
+
+        .underline-sky {
+            text-decoration: underline;
+            text-decoration-color: #2563eb;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        .hero-description {
+            margin-top: 20px;
+            color: #6c757d;
+            max-width: 576px;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            margin-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .hero-buttons {
+                flex-direction: row;
+            }
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 300;
+            text-decoration: none;
+            transition: all 0.2s;
             cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 1px solid #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-secondary:hover {
+            background: #f8f9fa;
+            border-color: #bfdbfe;
+        }
+
+        .feature-dots {
+            margin-top: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            color: #6c757d;
+            font-weight: 300;
+        }
+
+        .feature-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+        }
+
+        .dot-sky { background: #2563eb; }
+        .dot-cyan { background: #06b6d4; }
+        .dot-gray { background: #9ca3af; }
+
+        /* Calendar Preview */
+        .calendar-wrapper {
             position: relative;
         }
 
-        .notice-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-        }
-
-        .notice-card.pinned {
-            border: 2px solid #fbbf24;
-            background: linear-gradient(to right, #fffbeb, white);
-        }
-
-        .pinned-badge {
+        .calendar-bg {
             position: absolute;
-            top: 16px;
-            right: 16px;
-            background: #fbbf24;
-            color: #78350f;
-            padding: 4px 12px;
-            border-radius: 20px;
+            inset: -16px;
+            z-index: -10;
+            border-radius: 32px;
+            background: linear-gradient(135deg, #dbeafe, #cffafe);
+            filter: blur(48px);
+        }
+
+        .calendar-card {
+            border-radius: 16px;
+            border: 1px solid #dee2e6;
+            background: white;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .calendar-title {
+            font-size: 14px;
+            font-weight: 400;
+            color: #212529;
+        }
+
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .calendar-nav button {
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+            padding: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-nav button:hover {
+            background: #f8f9fa;
+            border-color: #2563eb;
+        }
+
+        .calendar-nav svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .calendar-weekdays {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
             font-size: 12px;
-            font-weight: 600;
+            color: #6c757d;
+            font-weight: 300;
+        }
+
+        .calendar-weekday {
+            padding: 4px;
+        }
+
+        .calendar-days {
+            margin-top: 8px;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            background: white;
+            padding: 4px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            font-size: 10px;
+            color: #9ca3af;
+            position: relative;
+            font-weight: 300;
+        }
+
+        .calendar-day.active {
+            color: #495057;
+        }
+
+        .calendar-marker {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            height: 6px;
+            width: 6px;
+            border-radius: 50%;
+        }
+
+        .marker-sky { background: #2563eb; }
+        .marker-cyan { background: #06b6d4; }
+
+        .calendar-legend {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #6c757d;
+            font-weight: 300;
+        }
+
+        .legend-item {
             display: flex;
             align-items: center;
             gap: 4px;
-            z-index: 1;
         }
 
-        .notice-card-header {
-            padding: 24px;
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
+        .legend-item + .legend-item {
+            margin-left: 12px;
         }
 
-        .notice-thumbnail {
-            width: 120px;
-            height: 120px;
-            border-radius: 12px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
-            flex-shrink: 0;
+        .calendar-status {
+            margin-top: 24px;
+            border-radius: 16px;
+            border: 1px solid #dbeafe;
+            background: rgba(219, 234, 254, 0.3);
+            padding: 16px;
         }
 
-        .notice-content {
-            flex: 1;
-        }
-
-        .notice-date {
-            font-size: 13px;
-            color: #94a3b8;
-            margin-bottom: 8px;
-        }
-
-        .notice-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-
-        .notice-excerpt {
+        .status-title {
             font-size: 14px;
-            color: #64748b;
-            line-height: 1.6;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            color: #495057;
+            font-weight: 300;
         }
 
-        .notice-meta {
-            display: flex;
-            gap: 16px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid #f1f5f9;
+        .status-title strong {
+            font-weight: 500;
+            color: #2563eb;
         }
 
-        .meta-item {
+        .status-bar {
+            margin-top: 8px;
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            color: #94a3b8;
+            justify-content: space-between;
         }
 
-        /* 공지사항 상세 모달 */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 1000;
-            animation: fadeIn 0.3s;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 24px;
-            max-width: 800px;
+        .progress-bar {
+            height: 8px;
             width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: slideUp 0.3s;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 0 1px #dbeafe;
         }
 
-        .modal-header {
-            padding: 32px;
-            border-bottom: 1px solid #e2e8f0;
-            position: relative;
+        .progress-fill {
+            height: 8px;
+            border-radius: 9999px;
+            background: linear-gradient(to right, #2563eb, #06b6d4);
+            width: 60%;
         }
 
-        .modal-close {
-            position: absolute;
-            top: 24px;
-            right: 24px;
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: #f1f5f9;
-            border-radius: 50%;
-            cursor: pointer;
+        .status-text {
+            margin-left: 12px;
+            font-size: 14px;
+            font-weight: 400;
+            color: #495057;
+        }
+
+        /* Season Band */
+        .season-band {
+            margin-top: 16px;
+            border-radius: 16px;
+            background: #e7f3ff;
+            border: 1px solid #bfdbfe;
+            padding: 16px;
+        }
+
+        .season-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .season-icon {
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            color: #2563eb;
+        }
+
+        .season-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2563eb;
+        }
+
+        .season-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .season-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 1px solid #e0f2fe;
+            border-radius: 8px;
+            padding: 8px 12px;
             transition: all 0.2s;
         }
 
-        .modal-close:hover {
-            background: #e2e8f0;
-            transform: rotate(90deg);
+        .season-item:hover {
+            border-color: #93c5fd;
+            background: #f0f9ff;
         }
 
-        .modal-body {
-            padding: 32px;
+        .season-item-icon {
+            width: 16px;
+            height: 16px;
+            color: #2563eb;
         }
 
-        .modal-thumbnail {
-            width: 100%;
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 16px;
-            margin-bottom: 24px;
+        .season-item-text {
+            font-size: 13px;
+            color: #495057;
+            font-weight: 400;
         }
 
-        .modal-section {
-            margin-bottom: 32px;
-        }
-
-        .modal-section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 12px;
-            padding-left: 12px;
-            border-left: 4px solid #3b82f6;
-        }
-
-        .modal-section-content {
-            font-size: 15px;
-            color: #475569;
-            line-height: 1.8;
-            white-space: pre-wrap;
-        }
-
-        /* 로딩 상태 */
-        .loading-spinner {
-            display: flex;
-            justify-content: center;
+        .season-badge {
+            display: inline-flex;
             align-items: center;
-            padding: 60px;
+            gap: 4px;
+            border-radius: 6px;
+            background: #2563eb;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 300;
+            color: white;
         }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e2e8f0;
-            border-top-color: #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .season-badge-icon {
+            width: 12px;
+            height: 12px;
         }
 
-        /* 빈 상태 */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: #94a3b8;
+        /* Features Section */
+        .features {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 64px 40px;
         }
 
-        .empty-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            opacity: 0.5;
+        .features-grid {
+            display: grid;
+            gap: 24px;
         }
 
-        .empty-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 8px;
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
-        .empty-message {
+        .feature-card {
+            border-radius: 16px;
+            border: 1px solid #dee2e6;
+            background: white;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            height: 44px;
+            width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: #e7f3ff;
+            color: #2563eb;
+        }
+
+        .feature-icon svg {
+            height: 24px;
+            width: 24px;
+        }
+
+        .feature-title {
+            margin-top: 16px;
+            font-size: 18px;
+            font-weight: 400;
+            letter-spacing: -0.025em;
+        }
+
+        .feature-description {
+            margin-top: 4px;
             font-size: 14px;
+            color: #6c757d;
+            font-weight: 300;
         }
 
-        /* 애니메이션 */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* CTA Section */
+        .cta {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 80px;
         }
 
-        @keyframes slideUp {
-            from { 
-                opacity: 0;
-                transform: translateY(20px);
+        .cta-card {
+            border-radius: 16px;
+            border: 1px solid #dee2e6;
+            background: linear-gradient(135deg, white, #e7f3ff);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .cta-card {
+                padding: 48px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
             }
-            to { 
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .cta-content h3 {
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: -0.025em;
+        }
+
+        .cta-content p {
+            margin-top: 8px;
+            color: #6c757d;
+            font-weight: 300;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 12px;
         }
 
         /* 모바일 반응형 */
         @media (max-width: 768px) {
-            .notice-container {
-                padding: 20px 15px;
+            .hero-container {
+                padding: 20px 20px 40px;
             }
 
-            .page-header {
-                padding: 30px 20px;
-                border-radius: 16px;
-            }
-
-            .page-title {
+            h1 {
                 font-size: 28px;
             }
 
-            .filter-bar {
-                padding: 16px;
+            .features {
+                padding: 40px 20px;
             }
 
-            .search-box {
-                min-width: 100%;
+            .cta {
+                padding: 0 20px 40px;
             }
 
-            .notice-card-header {
-                padding: 20px;
-                flex-direction: column;
+            .hero-buttons {
+                gap: 8px;
             }
 
-            .notice-thumbnail {
-                width: 100%;
-                height: 200px;
-            }
-
-            .modal-content {
-                border-radius: 16px;
-            }
-
-            .modal-header,
-            .modal-body {
-                padding: 24px;
+            .btn {
+                font-size: 12px;
+                padding: 8px 16px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 공통 헤더 -->
+    <!-- 공통 헤더 컨테이너 -->
     <div id="header-container"></div>
 
-    <div class="notice-container">
-        <!-- 페이지 헤더 -->
-        <div class="page-header">
-            <h1 class="page-title">📢 공지사항</h1>
-            <p class="page-subtitle">달래마켓의 새로운 소식과 중요한 안내사항을 확인하세요</p>
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
         </div>
-
-        <!-- 검색 및 필터 -->
-        <div class="filter-bar">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" class="search-input" id="searchInput" placeholder="공지사항 검색...">
+        <div class="hero-container">
+            <div>
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    <span>최신 트렌드 · 모던 · 미니멀 · Bright</span>
+                </div>
+                <h1>
+                    농산물 주문부터 <span class="text-sky">배송</span>·<span class="text-sky">관리</span>까지<br>
+                    매일 <span class="underline-sky">365일</span> 간단하게.
+                </h1>
+                <p class="hero-description">
+                    캘린더 UI와 통일된 밝은 테마. 최소한의 클릭으로 업무 자동화.
+                    상품 선택하고, 주문하고, 결과를 확인하세요.
+                </p>
+                <div class="hero-buttons">
+                    <a href="https://papafarmers.com/orders/" target="_blank" class="btn btn-primary">발주시스템 가기</a>
+                    <a href="dashboard.html" class="btn btn-secondary">상품 대시보드 가기</a>
+                </div>
+                <div class="feature-dots">
+                    <span class="feature-dot">
+                        <span class="dot dot-sky"></span>
+                        <span>실시간 재고</span>
+                    </span>
+                    <span class="feature-dot">
+                        <span class="dot dot-cyan"></span>
+                        <span>새벽 배송</span>
+                    </span>
+                    <span class="feature-dot">
+                        <span class="dot dot-gray"></span>
+                        <span>주문 관리</span>
+                    </span>
+                </div>
             </div>
-            <div class="filter-tags">
-                <button class="filter-tag active" data-filter="all">전체</button>
-                <button class="filter-tag" data-filter="pinned">고정</button>
-                <button class="filter-tag" data-filter="recent">최신</button>
-            </div>
-        </div>
 
-        <!-- 공지사항 리스트 -->
-        <div id="noticeList">
-            <div class="loading-spinner">
-                <div class="spinner"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 상세보기 모달 -->
-    <div class="modal-overlay" id="noticeModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="modal-close" onclick="closeModal()">✕</button>
-                <div id="modalHeader"></div>
-            </div>
-            <div class="modal-body" id="modalBody"></div>
-        </div>
-    </div>
-
-    <script>
-        let noticesData = [];
-        let currentFilter = 'all';
-
-        // 공지사항 데이터 로드
-        async function loadNotices() {
-            try {
-                const response = await fetch('/api/notice');
-                const data = await response.json();
-                
-                // 데이터 파싱 (헤더 행 제외)
-                noticesData = data.slice(1).map((row, index) => ({
-                    id: row[0] || index + 1,
-                    date: row[1] || '',
-                    isPinned: row[2] === 'Y',
-                    title: row[3] || '제목 없음',
-                    titleThumbnail: row[4] || '',
-                    contentThumbnail: row[5] || '',
-                    header1: row[6] || '',
-                    content1: row[7] || '',
-                    header2: row[8] || '',
-                    content2: row[9] || '',
-                    header3: row[10] || '',
-                    content3: row[11] || ''
-                })).filter(notice => notice.title && notice.title !== '제목 없음');
-
-                // 날짜순 정렬 (최신순)
-                noticesData.sort((a, b) => {
-                    if (a.isPinned && !b.isPinned) return -1;
-                    if (!a.isPinned && b.isPinned) return 1;
-                    return new Date(b.date) - new Date(a.date);
-                });
-
-                renderNotices();
-            } catch (error) {
-                console.error('공지사항 로드 실패:', error);
-                showEmptyState();
-            }
-        }
-
-        // 공지사항 렌더링
-        function renderNotices() {
-            const container = document.getElementById('noticeList');
-            
-            let filteredNotices = noticesData;
-            
-            // 필터 적용
-            if (currentFilter === 'pinned') {
-                filteredNotices = noticesData.filter(n => n.isPinned);
-            } else if (currentFilter === 'recent') {
-                const oneWeekAgo = new Date();
-                oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-                filteredNotices = noticesData.filter(n => new Date(n.date) >= oneWeekAgo);
-            }
-
-            // 검색어 적용
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            if (searchTerm) {
-                filteredNotices = filteredNotices.filter(n => 
-                    n.title.toLowerCase().includes(searchTerm) ||
-                    n.content1.toLowerCase().includes(searchTerm) ||
-                    n.content2.toLowerCase().includes(searchTerm) ||
-                    n.content3.toLowerCase().includes(searchTerm)
-                );
-            }
-
-            if (filteredNotices.length === 0) {
-                showEmptyState();
-                return;
-            }
-
-            // 고정 공지와 일반 공지 분리
-            const pinnedNotices = filteredNotices.filter(n => n.isPinned);
-            const regularNotices = filteredNotices.filter(n => !n.isPinned);
-
-            let html = '';
-
-            // 고정 공지사항
-            if (pinnedNotices.length > 0) {
-                html += `
-                    <div class="pinned-section">
-                        <div class="section-label">
-                            <span>📌</span>
-                            <span>고정 공지사항</span>
-                        </div>
-                        <div class="notice-grid">
-                            ${pinnedNotices.map(notice => createNoticeCard(notice, true)).join('')}
+            <!-- Calendar Preview -->
+            <div class="calendar-wrapper">
+                <div class="calendar-bg"></div>
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <h3 class="calendar-title">배송 캘린더 · 2025년 1월</h3>
+                        <div class="calendar-nav">
+                            <button aria-label="Previous">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                </svg>
+                            </button>
+                            <button aria-label="Next">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
-                `;
-            }
-
-            // 일반 공지사항
-            if (regularNotices.length > 0) {
-                html += `
-                    <div class="notice-grid">
-                        ${regularNotices.map(notice => createNoticeCard(notice, false)).join('')}
+                    <div class="calendar-weekdays">
+                        <div class="calendar-weekday">일</div>
+                        <div class="calendar-weekday">월</div>
+                        <div class="calendar-weekday">화</div>
+                        <div class="calendar-weekday">수</div>
+                        <div class="calendar-weekday">목</div>
+                        <div class="calendar-weekday">금</div>
+                        <div class="calendar-weekday">토</div>
                     </div>
-                `;
-            }
-
-            container.innerHTML = html;
-        }
-
-        // 공지사항 카드 생성
-        function createNoticeCard(notice, isPinned) {
-            const excerpt = notice.content1 ? 
-                (notice.content1.length > 100 ? notice.content1.substring(0, 100) + '...' : notice.content1) : 
-                '내용이 없습니다.';
-
-            return `
-                <div class="notice-card ${isPinned ? 'pinned' : ''}" onclick="showNoticeDetail(${noticesData.indexOf(notice)})">
-                    ${isPinned ? '<div class="pinned-badge">📌 고정</div>' : ''}
-                    <div class="notice-card-header">
-                        ${notice.titleThumbnail ? `
-                            <img src="${notice.titleThumbnail}" alt="${notice.title}" class="notice-thumbnail" onerror="this.style.display='none'">
-                        ` : ''}
-                        <div class="notice-content">
-                            <div class="notice-date">${formatDate(notice.date)}</div>
-                            <h3 class="notice-title">${notice.title}</h3>
-                            <p class="notice-excerpt">${excerpt}</p>
-                            <div class="notice-meta">
-                                <span class="meta-item">
-                                    <span>👁</span>
-                                    <span>자세히 보기</span>
-                                </span>
+                    <div class="calendar-days" id="calendar-grid"></div>
+                    <div class="calendar-legend">
+                        <span class="legend-item">
+                            <span class="dot dot-sky"></span>
+                            발주 마감
+                        </span>
+                        <span class="legend-item">
+                            <span class="dot dot-cyan"></span>
+                            배송 완료
+                        </span>
+                    </div>
+                    <div class="calendar-status">
+                        <p class="status-title"><strong>이번 달 배송 현황</strong></p>
+                        <div class="status-bar">
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <span class="status-text">18/30</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Season Band -->
+                    <div class="season-band">
+                        <div class="season-header">
+                            <svg class="season-icon" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/>
+                            </svg>
+                            <span class="season-title">1월 제철 상품</span>
+                        </div>
+                        <div class="season-grid">
+                            <div class="season-item">
+                                <svg class="season-item-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm3.707 5.293a1 1 0 00-1.414 0L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z"/>
+                                </svg>
+                                <span class="season-item-text">시금치</span>
+                            </div>
+                            <div class="season-item">
+                                <svg class="season-item-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm3.707 5.293a1 1 0 00-1.414 0L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z"/>
+                                </svg>
+                                <span class="season-item-text">브로콜리</span>
+                            </div>
+                            <div class="season-item">
+                                <svg class="season-item-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm3.707 5.293a1 1 0 00-1.414 0L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z"/>
+                                </svg>
+                                <span class="season-item-text">한라봉</span>
+                            </div>
+                            <div class="season-item">
+                                <svg class="season-item-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm3.707 5.293a1 1 0 00-1.414 0L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z"/>
+                                </svg>
+                                <span class="season-item-text">딸기</span>
                             </div>
                         </div>
+                        <div>
+                            <span class="season-badge">
+                                <svg class="season-badge-icon" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                신선도 100% 보장
+                            </span>
+                        </div>
                     </div>
                 </div>
-            `;
-        }
+            </div>
+        </div>
+    </section>
 
-        // 공지사항 상세 보기
-        function showNoticeDetail(index) {
-            const notice = noticesData[index];
-            const modal = document.getElementById('noticeModal');
-            const modalHeader = document.getElementById('modalHeader');
-            const modalBody = document.getElementById('modalBody');
-
-            // 헤더 내용
-            modalHeader.innerHTML = `
-                <div class="notice-date">${formatDate(notice.date)}</div>
-                <h2 class="notice-title" style="font-size: 24px; margin-top: 8px;">${notice.title}</h2>
-            `;
-
-            // 바디 내용
-            let bodyHtml = '';
-            
-            if (notice.contentThumbnail) {
-                bodyHtml += `<img src="${notice.contentThumbnail}" alt="${notice.title}" class="modal-thumbnail" onerror="this.style.display='none'">`;
-            }
-
-            // 섹션 1
-            if (notice.header1 || notice.content1) {
-                bodyHtml += `
-                    <div class="modal-section">
-                        ${notice.header1 ? `<h3 class="modal-section-title">${notice.header1}</h3>` : ''}
-                        ${notice.content1 ? `<div class="modal-section-content">${notice.content1}</div>` : ''}
-                    </div>
-                `;
-            }
-
-            // 섹션 2
-            if (notice.header2 || notice.content2) {
-                bodyHtml += `
-                    <div class="modal-section">
-                        ${notice.header2 ? `<h3 class="modal-section-title">${notice.header2}</h3>` : ''}
-                        ${notice.content2 ? `<div class="modal-section-content">${notice.content2}</div>` : ''}
-                    </div>
-                `;
-            }
-
-            // 섹션 3
-            if (notice.header3 || notice.content3) {
-                bodyHtml += `
-                    <div class="modal-section">
-                        ${notice.header3 ? `<h3 class="modal-section-title">${notice.header3}</h3>` : ''}
-                        ${notice.content3 ? `<div class="modal-section-content">${notice.content3}</div>` : ''}
-                    </div>
-                `;
-            }
-
-            modalBody.innerHTML = bodyHtml;
-            modal.classList.add('active');
-        }
-
-        // 모달 닫기
-        function closeModal() {
-            document.getElementById('noticeModal').classList.remove('active');
-        }
-
-        // 빈 상태 표시
-        function showEmptyState() {
-            document.getElementById('noticeList').innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-icon">📭</div>
-                    <div class="empty-title">공지사항이 없습니다</div>
-                    <div class="empty-message">새로운 공지사항이 등록되면 여기에 표시됩니다.</div>
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M4 5a2 2 0 0 1 2-2h8l6 6v10a 2 2 0 0 1-2 2H6a 2 2 0 0 1-2-2V5zm10 0v4h4"/>
+                    </svg>
                 </div>
-            `;
-        }
+                <h4 class="feature-title">상품 등록</h4>
+                <p class="feature-description">드래그&드롭 또는 선택으로 빠르게 업로드. 자동 카테고리 분류.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M4 7h16v2H4V7zm0 4h10v2H4v-2zm0 4h16v2H4v-2z"/>
+                    </svg>
+                </div>
+                <h4 class="feature-title">주문 관리</h4>
+                <p class="feature-description">실시간 주문 현황 확인. 배송 상태 자동 업데이트.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M5 20h14v-2H5v2zm7-18l6 6h-4v6h-4V8H6l6-6z"/>
+                    </svg>
+                </div>
+                <h4 class="feature-title">데이터 분석</h4>
+                <p class="feature-description">매출 통계와 트렌드 분석. 시각화된 리포트 제공.</p>
+            </div>
+        </div>
+    </section>
 
-        // 날짜 포맷
-        function formatDate(dateStr) {
-            if (!dateStr) return '';
-            const date = new Date(dateStr);
-            const now = new Date();
-            const diff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-            
-            if (diff === 0) return '오늘';
-            if (diff === 1) return '어제';
-            if (diff < 7) return `${diff}일 전`;
-            
-            return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
-        }
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-card">
+            <div class="cta-content">
+                <h3>지금 바로 시작하세요</h3>
+                <p>밝고 단순한 캘린더 스타일로 한 눈에. 클릭은 최소로.</p>
+            </div>
+            <div class="cta-buttons">
+                <a href="https://papafarmers.com/orders/" target="_blank" class="btn btn-primary">발주시스템 가기</a>
+                <a href="dashboard.html" class="btn btn-secondary">상품 대시보드 가기</a>
+            </div>
+        </div>
+    </section>
 
-        // 필터 이벤트
-        document.addEventListener('DOMContentLoaded', function() {
-            // 필터 태그 클릭
-            document.querySelectorAll('.filter-tag').forEach(tag => {
-                tag.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    currentFilter = this.dataset.filter;
-                    renderNotices();
+    <!-- 공통 푸터 컨테이너 -->
+    <div id="footer-container"></div>
+
+    <!-- 공통 헤더/푸터 스크립트 로드 -->
+    <script src="header.js"></script>
+    <script src="footer.js"></script>
+    
+    <script>
+        // 공통 헤더 초기화
+        window.onload = function() {
+            // 헤더 초기화
+            if (window.DalraeHeader) {
+                DalraeHeader.init({
+                    containerId: 'header-container',
+                    activePage: 'dashboard'  // index는 대시보드로 간주
                 });
-            });
-
-            // 검색 입력
-            document.getElementById('searchInput').addEventListener('input', renderNotices);
-
-            // 모달 외부 클릭 시 닫기
-            document.getElementById('noticeModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeModal();
+            }
+            
+            // 푸터 초기화
+            if (window.DalraeFooter) {
+                DalraeFooter.init({
+                    containerId: 'footer-container'
+                });
+            }
+            
+            // 캘린더 생성
+            generateCalendar();
+        };
+        
+        // Generate calendar
+        function generateCalendar() {
+            const calendarGrid = document.getElementById('calendar-grid');
+            const firstDay = 3; // January 1, 2025 is Wednesday
+            const daysInMonth = 31;
+            
+            for (let i = 0; i < 35; i++) {
+                const day = document.createElement('div');
+                const dayNum = i - firstDay + 1;
+                const isCurrentMonth = dayNum > 0 && dayNum <= daysInMonth;
+                
+                day.className = isCurrentMonth ? 'calendar-day active' : 'calendar-day';
+                
+                if (isCurrentMonth) {
+                    day.textContent = dayNum;
+                    
+                    // Add markers
+                    if (dayNum === 8 || dayNum === 15 || dayNum === 22) {
+                        const marker = document.createElement('span');
+                        marker.className = 'calendar-marker marker-sky';
+                        day.appendChild(marker);
+                    }
+                    if (dayNum === 9 || dayNum === 16 || dayNum === 23) {
+                        const marker = document.createElement('span');
+                        marker.className = 'calendar-marker marker-cyan';
+                        day.appendChild(marker);
+                    }
                 }
-            });
-
-            // 데이터 로드
-            loadNotices();
-
-            // 헤더 활성화
-            setTimeout(() => {
-                if (window.DalraeHeader && window.DalraeHeader.setActivePage) {
-                    window.DalraeHeader.setActivePage('notice');
-                }
-            }, 200);
-        });
+                
+                calendarGrid.appendChild(day);
+            }
+        }
     </script>
 </body>
 </html>
