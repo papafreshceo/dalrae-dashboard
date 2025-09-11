@@ -727,22 +727,12 @@
         }
         
         .option-card {
-            display: flex;
-            gap: 15px;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 6px;
             border: 1px solid #dee2e6;
             margin-bottom: 10px;
-            align-items: center;
             transition: all 0.2s;
-        }
-        
-        @media (max-width: 768px) {
-            .option-card {
-                flex-direction: column;
-                align-items: flex-start;
-            }
         }
         
         .option-card:hover {
@@ -750,40 +740,112 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
+        .option-top-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
         .option-thumb {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 6px;
             object-fit: cover;
             background: #dee2e6;
             flex-shrink: 0;
         }
         
-        .option-info {
+        .option-details {
             flex: 1;
             display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+        
+        .option-name {
+            font-weight: 600;
+            color: #212529;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .option-specs {
+            font-size: 12px;
+            color: #6c757d;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .option-price {
+            flex-shrink: 0;
+            text-align: right;
+        }
+        
+        .option-badges {
+            display: flex;
+            gap: 6px;
             flex-wrap: wrap;
+            align-items: center;
+            padding-left: 72px;
         }
         
         @media (max-width: 768px) {
-            .option-info {
-                width: 100%;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
+            .option-card {
+                padding: 12px;
+            }
+            
+            .option-thumb {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .option-details {
+                gap: 2px;
+            }
+            
+            .option-name {
+                font-size: 13px;
+            }
+            
+            .option-specs {
+                font-size: 11px;
+            }
+            
+            .option-badges {
+                padding-left: 62px;
+            }
+            
+            .price-amount {
+                font-size: 16px;
             }
         }
         
-        .option-col {
-            display: inline-block;
-            flex-shrink: 0;
-        }
-        
-        @media (max-width: 768px) {
-            .option-col {
-                width: 100%;
+        @media (max-width: 480px) {
+            .option-top-row {
+                gap: 10px;
+            }
+            
+            .option-badges {
+                padding-left: 0;
+                margin-top: 8px;
+            }
+            
+            .option-thumb {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .option-name {
+                font-size: 12px;
+            }
+            
+            .price-amount {
+                font-size: 15px;
             }
         }
         
@@ -1745,29 +1807,30 @@
                 if (p.규격3) specs += (specs ? ' ' : '') + p.규격3;
                 
                 html += `
+                    html += `
                     <div class="option-card">
-                        ${p.썸네일 ? 
-                            `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` :
-                            `<div class="option-thumb"></div>`
-                        }
-                        <div class="option-info">
-                            <span class="option-col" style="min-width: 200px;">
-                                <strong style="color: #212529;">${p.옵션명 || '옵션명 없음'}</strong>
+                        <div class="option-top-row">
+                            ${p.썸네일 ? 
+                                `<img src="${p.썸네일}" class="option-thumb" alt="${p.옵션명}">` :
+                                `<div class="option-thumb"></div>`
+                            }
+                            <div class="option-details">
+                                <div class="option-name">${p.옵션명 || '옵션명 없음'}</div>
+                                <div class="option-specs">${specs}</div>
+                            </div>
+                            <div class="option-price">
+                                <span class="price-amount">${price}원</span>
+                            </div>
+                        </div>
+                        <div class="option-badges">
+                            <span class="status-badge ${statusClass}">
+                                ${p.공급상태 || '미정'}
                             </span>
-                            <span class="option-col" style="min-width: 120px; color: #6c757d; font-size: 13px;">
-                                ${specs}
-                            </span>
-                            <span class="option-col" style="flex: 1; text-align: right;">
-                                <span class="price-amount" style="margin-right: 15px;">${price}원</span>
-                                <span class="status-badge ${statusClass}">
-                                    ${p.공급상태 || '미정'}
-                                </span>
-                                <span class="badge-free">무료배송</span>
-                                <button class="badge-chart" 
-                                        onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
-                                    가격차트
-                                </button>
-                            </span>
+                            <span class="badge-free">무료배송</span>
+                            <button class="badge-chart" 
+                                    onclick="event.stopPropagation(); openPriceChart('${p.옵션코드}', '${p.옵션명}')">
+                                가격차트
+                            </button>
                         </div>
                     </div>
                 `;
