@@ -1,0 +1,315 @@
+/**
+ * services.js
+ * 촬영 서비스 페이지 JavaScript
+ */
+
+// 가격 설정 객체
+const PRICE_CONFIG = {
+  locations: {
+    indoor: {
+      basePrice: 30000,
+      basePhoto: 50,
+      baseVideo: 10,
+      photoAddCost: 500,
+      videoAddCost: 2000,
+      handCost: 30000,
+      modelCost: 200000,
+      sceneAddCost: 30000
+    },
+    outdoor: {
+      basePrice: 50000,
+      basePhoto: 50,
+      baseVideo: 5,
+      photoAddCost: 500,
+      videoAddCost: 2000,
+      handCost: 30000,
+      modelCost: 200000,
+      sceneAddCost: 50000
+    },
+    cooking: {
+      basePrice: 60000,
+      basePhoto: 30,
+      baseVideo: 3,
+      photoAddCost: 500,
+      videoAddCost: 2000,
+      menuCost: 30000,
+      handCost: 30000,
+      modelCost: 200000,
+      sceneAddCost: 60000
+    },
+    drone: {
+      basePrice: 90000,
+      basePhoto: 20,
+      baseVideo: 5,
+      photoAddCost: 500,
+      videoAddCost: 2000,
+      handCost: 0,
+      modelCost: 0,
+      sceneAddCost: 90000
+    }
+  },
+  editing: {
+    basic: {
+      basePrice: 30000,
+      perMinute: 30000
+    },
+    full: {
+      basePrice: 70000,
+      perMinute: 20000
+    }
+  },
+  baseLocationCost: 30000,
+  farmService: {
+    visit: { price: 150000, features: [] },
+    matching: { price: 100000, features: [] },
+    full: { price: 200000, features: [] },
+    accordion: []
+  }
+};
+
+// API 상태 표시 함수
+function showApiStatus(message, type) {
+  const statusEl = document.getElementById('apiStatus');
+  statusEl.textContent = message;
+  statusEl.className = `api-status ${type}`;
+  
+  if (type === 'success' || type === 'error') {
+    setTimeout(() => {
+      statusEl.className = 'api-status';
+    }, 3000);
+  }
+}
+
+// API에서 가격 데이터 로드
+async function loadPricesFromSheet() {
+  try {
+    console.log('서비스 가격 데이터 로딩 중...');
+    showApiStatus('가격 데이터 로딩 중...', 'loading');
+    
+    const response = await fetch('/api/services');
+    
+    if (response.ok) {
+      const data = await response.json();
+      
+      if (data && data.length > 0) {
+        console.log('Google Sheets 데이터 로드 성공:', data);
+        showApiStatus('가격 데이터 로드 완료', 'success');
+        parseServicePrices(data);
+      } else {
+        console.log('시트 응답이 비어있습니다.');
+        showApiStatus('시트 데이터 없음 - 기본 가격 사용', 'error');
+      }
+    } else {
+      throw new Error(`API 응답 실패: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('API 로드 실패:', error);
+    showApiStatus('API 연결 실패 - 기본 가격 사용', 'error');
+    
+    // localStorage 백업 확인
+    const savedPrices = localStorage.getItem('dalraeServicePrices');
+    if (savedPrices) {
+      const prices = JSON.parse(savedPrices);
+      Object.assign(PRICE_CONFIG, prices);
+      updateAllPrices();
+      console.log('localStorage 백업 데이터 사용');
+    }
+  }
+}
+
+// API 데이터 파싱
+function parseServicePrices(data) {
+  console.log('파싱 시작:', data);
+  
+  if (Array.isArray(data)) {
+    data.forEach(row => {
+      const itemName = row['구분'] || row[0];
+      
+      switch(itemName) {
+        case '기본요금':
+          if (row['실내촬영']) PRICE_CONFIG.locations.indoor.basePrice = parseInt(String(row['실내촬영']).replace(/,/g, ''));
+          if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.basePrice = parseInt(String(row['야외촬영']).replace(/,/g, ''));
+          if (row['요리촬영']) PRICE_CONFIG.locations.cooking.basePrice = parseInt(String(row['요리촬영']).replace(/,/g, ''));
+          if (row['드론촬영']) PRICE_CONFIG.locations.drone.basePrice = parseInt(String(row['드론촬영']).replace(/,/g, ''));
+          break;
+          
+        case '기본제공 사진(매)':
+          if (row['실내촬영']) PRICE_CONFIG.locations.indoor.basePhoto = parseInt(row['실내촬영']);
+          if (row['야외촬영']) PRICE_CONFIG.locations.outdoor.basePhoto = parseInt(row['야외촬영']);
+          if (row['요리촬영']) PRICE_CONFIG.locations.cooking.basePhoto = parseInt(row['요리촬영']);
+          if (row['드론촬영']) PRICE_CONFIG.locations.drone.basePhoto = parseInt(row['드론촬영']);
+          break;
+          
+        // 농가 서비스 features
+        default:
+          if (row['방문견학동행'] && row['방문견학동행'] !== '') {
+            PRICE_CONFIG.farmService.visit.features.push(row['방문견학동행']);
+          }
+          if (row['농가매칭'] && row['농가매칭'] !== '') {
+            PRICE_CONFIG.farmService.matching.features.push(row['농가매칭']);
+          }
+          if (row['풀서비스'] && row['풀서비스'] !== '') {
+            PRICE_CONFIG.farmService.full.features.push(row['풀서비스']);
+          }
+          break;
+      }
+      
+      // 아코디언 데이터
+      if (row['제목'] && row['설명내용']) {
+        PRICE_CONFIG.farmService.accordion.push({
+          title: row['제목'],
+          content: row['설명내용']
+        });
+      }
+    });
+    
+    console.log('파싱 완료:', PRICE_CONFIG);
+    updateAllPrices();
+    localStorage.setItem('dalraeServicePrices', JSON.stringify(PRICE_CONFIG));
+  }
+}
+
+// 모든 가격 표시 업데이트
+function updateAllPrices() {
+  // 기본 가격 업데이트
+  document.getElementById('indoor-base-price').textContent = formatPrice(PRICE_CONFIG.locations.indoor.basePrice);
+  document.getElementById('outdoor-base-price').textContent = formatPrice(PRICE_CONFIG.locations.outdoor.basePrice);
+  document.getElementById('cooking-base-price').textContent = formatPrice(PRICE_CONFIG.locations.cooking.basePrice);
+  document.getElementById('drone-base-price').textContent = formatPrice(PRICE_CONFIG.locations.drone.basePrice);
+  
+  // 기본 제공 정보 업데이트
+  document.getElementById('indoor-default-info').textContent = 
+    `기본 제공: 사진 ${PRICE_CONFIG.locations.indoor.basePhoto}매, 영상길이 ${PRICE_CONFIG.locations.indoor.baseVideo}분 이상`;
+  document.getElementById('outdoor-default-info').textContent = 
+    `기본 제공: 사진 ${PRICE_CONFIG.locations.outdoor.basePhoto}매, 영상길이 ${PRICE_CONFIG.locations.outdoor.baseVideo}분 이상`;
+  document.getElementById('cooking-default-info').textContent = 
+    `기본 제공: 1개 메뉴 (사진 ${PRICE_CONFIG.locations.cooking.basePhoto}매), 영상길이 ${PRICE_CONFIG.locations.cooking.baseVideo}분 이상`;
+  document.getElementById('drone-default-info').textContent = 
+    `기본 제공: 사진 ${PRICE_CONFIG.locations.drone.basePhoto}매, 영상길이 ${PRICE_CONFIG.locations.drone.baseVideo}분 이상`;
+  
+  // 농가 서비스 업데이트
+  updateFarmService();
+  
+  // 견적 재계산
+  calculateQuote();
+}
+
+// 서비스 전환
+function switchService(service) {
+  const photoBtn = document.getElementById('photo-service-btn');
+  const farmBtn = document.getElementById('farm-service-btn');
+  const photoSection = document.getElementById('photo-service');
+  const farmSection = document.getElementById('farm-service');
+  
+  if (service === 'photo') {
+    photoBtn.classList.add('active');
+    photoBtn.classList.remove('btn-secondary');
+    photoBtn.classList.add('btn-primary');
+    
+    farmBtn.classList.remove('active');
+    farmBtn.classList.remove('btn-primary');
+    farmBtn.classList.add('btn-secondary');
+    
+    photoSection.classList.add('active');
+    farmSection.classList.remove('active');
+  } else {
+    farmBtn.classList.add('active');
+    farmBtn.classList.remove('btn-secondary');
+    farmBtn.classList.add('btn-primary');
+    
+    photoBtn.classList.remove('active');
+    photoBtn.classList.remove('btn-primary');
+    photoBtn.classList.add('btn-secondary');
+    
+    farmSection.classList.add('active');
+    photoSection.classList.remove('active');
+  }
+}
+
+// 로케이션 토글
+function toggleLocation(type) {
+  const card = document.getElementById(`${type}-card`);
+  const checkbox = document.getElementById(`${type}-check`);
+  
+  card.classList.toggle('active');
+  checkbox.checked = card.classList.contains('active');
+  
+  calculateQuote();
+}
+
+// 수량 조절
+function adjustQuantity(id, delta) {
+  const input = document.getElementById(id);
+  const newValue = Math.max(0, parseInt(input.value || 0) + delta);
+  input.value = newValue;
+  calculateQuote();
+}
+
+// 편집 수량 조절
+function adjustEditQuantity(type, delta) {
+  const input = document.getElementById(`edit-${type}`);
+  const newValue = Math.max(0, parseInt(input.value || 0) + delta);
+  input.value = newValue;
+  calculateQuote();
+}
+
+// 직접 입력 처리
+function handleDirectInput(id) {
+  const input = document.getElementById(id);
+  const value = parseInt(input.value) || 0;
+  input.value = Math.max(0, value);
+  calculateQuote();
+}
+
+// 가격 포맷
+function formatPrice(price) {
+  return price.toLocaleString() + '원';
+}
+
+// 견적 계산
+function calculateQuote() {
+  let totalCost = 0;
+  let locationCost = 0;
+  let transitionCost = 0;
+  let photoCost = 0;
+  let videoCost = 0;
+  let handCost = 0;
+  let modelCost = 0;
+  let menuCost = 0;
+  let editCost = 0;
+  
+  let totalPhotos = 0;
+  let totalVideos = 0;
+  let totalEditVideos = 0;
+  
+  const activeLocations = [];
+  const statsGrid = document.getElementById('statsGrid');
+  statsGrid.innerHTML = '';
+  
+  // 각 로케이션 체크
+  ['indoor', 'outdoor', 'cooking', 'drone'].forEach(type => {
+    const checkbox = document.getElementById(`${type}-check`);
+    if (checkbox && checkbox.checked) {
+      activeLocations.push(type);
+      const config = PRICE_CONFIG.locations[type];
+      
+      // 기본 비용
+      locationCost += config.basePrice;
+      
+      // 기본 제공 수량
+      let locationPhotos = config.basePhoto;
+      let locationVideos = config.baseVideo;
+      
+      // 추가 사진/영상
+      const addPhotos = parseInt(document.getElementById(`${type}-photo`).value) || 0;
+      const addVideos = parseInt(document.getElementById(`${type}-video`).value) || 0;
+      
+      photoCost += addPhotos * config.photoAddCost;
+      videoCost += addVideos * config.videoAddCost;
+      
+      locationPhotos += addPhotos;
+      locationVideos += addVideos;
+      
+      // 요리 메뉴 추가
+      if (type === 'cooking') {
+        const addMenus = parseInt(document.
