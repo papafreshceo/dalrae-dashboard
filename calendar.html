@@ -1613,24 +1613,10 @@
         }
 
         function updateLegend() {
-            const legend = document.getElementById('legend');
-            let html = '';
-            
-            if (currentView === 'month') {
-                html = `<div class="legend-disclaimer">※ 상기 일정은 통상적인 일정이며 변동이 발생할 수 있습니다.</div>`;
-            } else {
-                yearProductTimelines.forEach(product => {
-                    html += `
-                        <div class="legend-item">
-                            <div class="legend-color" style="background: ${productColors[product.name]};"></div>
-                            <span>${product.name}</span>
-                        </div>
-                    `;
-                });
-            }
-            
-            legend.innerHTML = html;
-        }
+    const legend = document.getElementById('legend');
+    let html = `<div class="legend-disclaimer">※ 상기 일정은 통상적인 일정이며 변동이 발생할 수 있습니다.</div>`;
+    legend.innerHTML = html;
+}
 
         function showTooltip(event, product) {
             const tooltip = document.getElementById('tooltip');
