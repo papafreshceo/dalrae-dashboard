@@ -1,4 +1,4 @@
-// header.js - 달래마켓 공통 헤더 (단순화 버전)
+// header.js - 달래마켓 공통 헤더 (모바일 3행 버전)
 (function() {
     // 페이지 전환 전 상태 저장
     function saveHeaderState() {
@@ -113,13 +113,16 @@
                     border-radius: 2px;
                 }
                 
-
+                .special-btn {
+                    color: #ff5252;
+                    font-weight: 700;
+                }
                 
                 .special-btn:hover {
-                    color: #ff5252;
+                    color: #ff1744;
                 }
 
-                /* 서비스&프로그램 특별 색상 (애니메이션 제거) */
+                /* 서비스&프로그램 특별 색상 */
                 .legendary-btn {
                     color: #8a2be2;
                     font-weight: 700;
@@ -130,82 +133,71 @@
                 }
             }
 
-            /* 모바일 스타일 - 2행 레이아웃 */
+            /* 모바일 스타일 - 3행 레이아웃 */
             @media (max-width: 768px) {
                 .top-header {
-                    padding: 5px 0;
+                    padding: 8px 0;
                 }
 
                 .header-spacer {
-                    height: 60px;
+                    height: 90px;
                 }
 
                 .header-content {
                     padding: 0 15px;
                 }
                 
-                /* 모바일 로고 영역 - 좌측 정렬 */
+                /* 1행: 로고 + 발주시스템 */
+                .mobile-top-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                }
+                
                 .logo-container {
-                    text-align: left;
-                    padding: 2px 0;
-                    margin-right: 0;
+                    flex-shrink: 0;
                 }
                 
                 .logo-img {
                     height: 16px;
+                    object-fit: contain;
+                    cursor: pointer;
                 }
-
-                /* 모바일 메뉴 영역 (2행) */
+                
+                .order-system-btn {
+                    padding: 4px 10px;
+                    background: #ff5252;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    white-space: nowrap;
+                    font-family: 'Noto Sans KR', -apple-system, sans-serif;
+                }
+                
+                .order-system-btn:active {
+                    background: #ff1744;
+                }
+                
+                /* 2행, 3행: 메뉴 */
                 .nav-menu-container {
-                    position: relative;
-                    padding: 3px 0;
                     margin: 0 -15px;
-                    overflow-x: auto;
-                    overflow-y: hidden;
-                    -webkit-overflow-scrolling: touch;
-                    scrollbar-width: none;
-                    -ms-overflow-style: none;
-                }
-
-                .nav-menu-container::-webkit-scrollbar {
-                    display: none;
-                }
-
-                /* 좌우 그라데이션 효과 (스크롤 힌트) */
-                .nav-menu-container::before,
-                .nav-menu-container::after {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    width: 15px;
-                    z-index: 1;
-                    pointer-events: none;
-                }
-
-                .nav-menu-container::before {
-                    left: 0;
-                    background: linear-gradient(to right, white, transparent);
-                }
-
-                .nav-menu-container::after {
-                    right: 0;
-                    background: linear-gradient(to left, white, transparent);
                 }
                 
                 .nav-menu {
-                    display: flex;
-                    gap: 10px;
-                    justify-content: flex-start;
-                    padding: 0 15px; /* 좌우 패딩 추가로 맨 좌측에서 시작 */
-                    min-width: fit-content;
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 8px;
+                    padding: 0 15px;
                 }
                 
-                /* 모바일 메뉴 - 텍스트만 표시 */
+                /* 모바일 메뉴 버튼 */
                 .nav-btn {
-                    font-size: 14px;
-                    padding: 5px 8px;
-                    flex-shrink: 0;
+                    font-size: 12px;
+                    padding: 5px;
                     background: none;
                     border: none;
                     color: #5a5c60;
@@ -214,6 +206,7 @@
                     transition: color 0.3s ease;
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
+                    text-align: center;
                     position: relative;
                 }
 
@@ -229,7 +222,7 @@
                 .nav-btn.active::after {
                     content: '';
                     position: absolute;
-                    bottom: -5px;
+                    bottom: -2px;
                     left: 10%;
                     width: 80%;
                     height: 2px;
@@ -237,9 +230,11 @@
                     border-radius: 1px;
                 }
 
+                .special-btn {
+                    display: none; /* 모바일에서는 상단에 별도 버튼으로 표시 */
+                }
 
-
-                /* 서비스&프로그램 특별 색상 (애니메이션 제거) */
+                /* 서비스&프로그램 특별 색상 */
                 .legendary-btn {
                     color: #8a2be2;
                     font-weight: 700;
@@ -247,7 +242,6 @@
             }
         `;
         
-        // style 태그 생성 및 추가
         const styleElement = document.createElement('style');
         styleElement.textContent = styles;
         document.head.appendChild(styleElement);
@@ -258,7 +252,7 @@
         const isMobile = window.innerWidth <= 768;
         
         if (isMobile) {
-            // 모바일용 2행 레이아웃
+            // 모바일용 3행 레이아웃
             return `
                 <!-- 헤더 스페이서 -->
                 <div class="header-spacer"></div>
@@ -266,42 +260,47 @@
                 <!-- 상단 헤더 -->
                 <header class="top-header">
                     <div class="header-content">
-                        <!-- 로고 영역 (1행) -->
-                        <div class="logo-container">
-                            <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
-                                 alt="달래마켓" 
-                                 class="logo-img"
-                                 onclick="navigateTo('index.html')">
+                        <!-- 1행: 로고 + 발주시스템 -->
+                        <div class="mobile-top-row">
+                            <div class="logo-container">
+                                <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
+                                     alt="달래마켓" 
+                                     class="logo-img"
+                                     onclick="navigateTo('index.html')">
+                            </div>
+                            <button class="order-system-btn" onclick="openOrderSystem()">
+                                발주시스템
+                            </button>
                         </div>
                         
-                        <!-- 메뉴 영역 (2행) -->
+                        <!-- 2행, 3행: 메뉴 그리드 -->
                         <div class="nav-menu-container">
                             <nav class="nav-menu" id="mainMenu">
-                                <button class="nav-btn special-btn" onclick="openOrderSystem()">
-                                    발주시스템
-                                </button>
-                                <button class="nav-btn" data-page="index" onclick="navigateToPage('dashboard')">
+                                <!-- 2행: 4개 메뉴 -->
+                                <button class="nav-btn" data-page="dashboard" onclick="navigateToPage('dashboard')">
                                     대시보드
                                 </button>
                                 <button class="nav-btn" data-page="products" onclick="navigateToPage('products')">
                                     상품리스트
                                 </button>
+                                <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
+                                    상품캘린더
+                                </button>
+                                <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
+                                    배송캘린더
+                                </button>
                                 
-                                 <button class="nav-btn" data-page="products-calendar" onclick="navigateToPage('calendar')">
-                                    상품달력
-                                </button>
-                                <button class="nav-btn" data-page="delivery-calendar" onclick="navigateToPage('delivery')">
-                                    발송달력
-                                </button>
+                                <!-- 3행: 나머지 메뉴 -->
                                 <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
                                 </button>
                                 <button class="nav-btn legendary-btn" data-page="services" onclick="navigateToPage('services')">
-                                    서비스&프로그램
+                                    서비스
                                 </button>
                                 <button class="nav-btn" data-page="notice" onclick="navigateToPage('notice')">
                                     공지사항
                                 </button>
+                                <div></div> <!-- 빈 칸 -->
                             </nav>
                         </div>
                     </div>
@@ -336,11 +335,11 @@
                                 <button class="nav-btn" data-page="products" onclick="navigateToPage('products')">
                                     상품리스트
                                 </button>
-                                <button class="nav-btn" data-page="products-calendar" onclick="navigateToPage('calendar')">
-                                    상품달력
+                                <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
+                                    상품캘린더
                                 </button>
-                                <button class="nav-btn" data-page="delivery-calendar" onclick="navigateToPage('delivery')">
-                                    발송달력
+                                <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
+                                    배송캘린더
                                 </button>
                                 <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
@@ -361,17 +360,14 @@
 
     // 현재 페이지 활성화
     function setActivePage(pageName) {
-        // 모든 nav-btn에서 active 클래스 제거
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.classList.remove('active');
         });
         
-        // 현재 페이지 버튼에 active 클래스 추가
         document.querySelectorAll(`.nav-btn[data-page="${pageName}"]`).forEach(btn => {
             btn.classList.add('active');
         });
         
-        // 상태 저장
         saveHeaderState();
     }
 
@@ -388,7 +384,7 @@
         const pageUrls = {
             'dashboard': 'index.html',
             'products': 'products.html',
-            'calendar': 'products-calendar.html',
+            'calendar': 'product-calendar.html',
             'delivery': 'delivery-calendar.html',
             'orders': 'orders.html',
             'services': 'services.html',
@@ -411,41 +407,33 @@
 
     // 헤더 초기화
     function initHeader(options = {}) {
-    // 스크롤 복원 비활성화
-    if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-    }
-    
-    // 페이지 로드 시 최상단으로
-    window.scrollTo(0, 0);
-    
-    // 스타일 먼저 추가
-    createHeaderStyles();
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
         
-        // 옵션 설정
+        window.scrollTo(0, 0);
+        
+        createHeaderStyles();
+        
         const { 
             containerId = 'header-container',
             activePage = null
         } = options;
         
-        // 헤더 컨테이너 찾기
         const container = document.getElementById(containerId);
         if (!container) {
             console.error(`헤더 컨테이너 '${containerId}'를 찾을 수 없습니다`);
             return;
         }
         
-        // 헤더 HTML 삽입
         container.innerHTML = createHeader();
         
-        // 저장된 상태 복원 또는 현재 페이지 활성화
         const savedPage = localStorage.getItem('dalrae_active_page');
         if (activePage) {
             setActivePage(activePage);
         } else if (savedPage) {
             setActivePage(savedPage);
         } else {
-            // URL에서 현재 페이지 추출
             const currentFile = window.location.pathname.split('/').pop() || 'index.html';
             const pageName = currentFile === 'index.html' ? 'dashboard' : currentFile.replace('.html', '');
             setActivePage(pageName);
@@ -461,13 +449,9 @@
                 const container = document.getElementById(containerId);
                 
                 if (container) {
-                    // 현재 활성 페이지 저장
                     const currentActivePage = document.querySelector('.nav-btn.active')?.dataset.page;
-                    
-                    // 헤더 재생성
                     container.innerHTML = createHeader();
                     
-                    // 활성 페이지 복원
                     if (currentActivePage) {
                         setActivePage(currentActivePage);
                     }
@@ -484,13 +468,11 @@
     // DOM이 로드되면 자동 초기화
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-            // 헤더 컨테이너가 있으면 자동 초기화
             if (document.getElementById('header-container')) {
                 initHeader();
             }
         });
     } else {
-        // 이미 DOM이 로드된 경우
         if (document.getElementById('header-container')) {
             initHeader();
         }
@@ -502,12 +484,3 @@
         setActivePage: setActivePage
     };
 })();
-
-
-
-
-
-
-
-
-
