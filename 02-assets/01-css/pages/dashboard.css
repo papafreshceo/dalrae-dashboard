@@ -1,0 +1,385 @@
+/**
+ * dashboard.css
+ * 대시보드 페이지 전용 스타일
+ * design-system.css 변수 활용
+ */
+
+/* ========== 메인 컨테이너 ========== */
+.main-content {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 15px 30px 30px;
+}
+
+/* ========== 대시보드 헤더 ========== */
+.dashboard-header {
+    background: var(--bg-primary);
+    border-radius: 14px;
+    padding: 28px;
+    margin-bottom: var(--space-2xl);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-default);
+}
+
+.dashboard-header h1 {
+    font-size: 26px;
+    font-weight: var(--font-bold);
+    letter-spacing: -0.2px;
+    margin-bottom: var(--space-lg);
+    color: var(--text-primary);
+}
+
+/* ========== 통계 카드 ========== */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--space-md);
+}
+
+.stat-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: var(--space-lg) 18px;
+    border: 1px solid var(--border-default);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border-color: var(--brand-primary);
+}
+
+.stat-card.active {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, #764ba2 100%);
+    border-color: transparent;
+}
+
+.stat-icon {
+    width: 26px;
+    height: 26px;
+    margin-bottom: var(--space-sm);
+    opacity: 0.85;
+}
+
+.stat-card.active .stat-icon path {
+    fill: white;
+}
+
+.stat-value {
+    font-size: 26px;
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: var(--space-xs);
+}
+
+.stat-label {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-weight: var(--font-bold);
+    letter-spacing: 0.2px;
+}
+
+.stat-sub {
+    margin-top: var(--space-sm);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: #eef0f3;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+.stat-card.active .stat-value,
+.stat-card.active .stat-label,
+.stat-card.active .stat-sub {
+    color: white;
+}
+
+.stat-card.active .stat-sub {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* ========== 필터 섹션 ========== */
+.filter-section {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    border: 1px solid var(--border-default);
+}
+
+.filter-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-md);
+}
+
+.filter-section-title {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    font-weight: var(--font-bold);
+    letter-spacing: 0.2px;
+}
+
+.toggle-button {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--btn-radius);
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-weight: var(--font-bold);
+    transition: var(--transition-fast);
+}
+
+.toggle-button:hover {
+    background: var(--bg-secondary);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+.toggle-button.collapsed {
+    background: var(--brand-primary);
+    color: white;
+    border-color: var(--brand-primary);
+}
+
+/* ========== 필터 콘텐츠 ========== */
+.filter-content {
+    display: grid;
+    grid-template-columns: 70% 30%;
+    gap: var(--space-lg);
+    align-items: start;
+    transition: var(--transition-normal);
+    overflow: hidden;
+    max-height: 500px;
+}
+
+.filter-content.collapsed {
+    max-height: 0;
+    margin-bottom: 0;
+}
+
+/* ========== 태그 필터 ========== */
+.tag-filters {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.filter-row {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+}
+
+.tag-filter {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    cursor: pointer;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    font-weight: var(--font-bold);
+    transition: var(--transition-fast);
+}
+
+.tag-filter:hover {
+    background: var(--bg-secondary);
+}
+
+.tag-filter.active {
+    background: linear-gradient(135deg, var(--brand-primary) 0%, #764ba2 100%);
+    color: white;
+    border-color: transparent;
+}
+
+/* ========== 스코어보드 ========== */
+.scoreboard-stats {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+}
+
+.scoreboard-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.scoreboard-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    font-weight: var(--font-bold);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.scoreboard-digits {
+    display: flex;
+    gap: 3px;
+}
+
+.digit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 48px;
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    color: #00ff88;
+    font-size: 28px;
+    font-weight: var(--font-bold);
+    font-family: 'Courier New', monospace;
+    border-radius: 6px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    line-height: 1;
+}
+
+.scoreboard-item.option .digit {
+    width: 24px;
+    height: 32px;
+    font-size: 18px;
+}
+
+/* ========== 상품 그리드 ========== */
+.products-section {
+    background: var(--bg-primary);
+    border-radius: 14px;
+    padding: var(--space-2xl);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-default);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: var(--space-lg);
+}
+
+/* ========== 그룹 구분자 ========== */
+.group-divider {
+    grid-column: 1 / -1;
+    height: 32px;
+}
+
+.group-title {
+    grid-column: 1 / -1;
+    font-size: var(--text-base);
+    font-weight: var(--font-bold);
+    color: var(--text-secondary);
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--bg-secondary);
+    border-radius: var(--btn-radius);
+    margin-bottom: var(--space-sm);
+}
+
+/* ========== 상품 카드 ========== */
+.product-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    padding: var(--space-lg);
+    transition: var(--transition-fast);
+    display: flex;
+    gap: var(--space-lg);
+    position: relative;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+}
+
+/* 상태별 카드 스타일 */
+.product-card.status-active {
+    background: linear-gradient(90deg, #ffffff 0%, #e7f3ff 50%, #ffffff 100%);
+    background-size: 200% 100%;
+    animation: activeGradient 8s linear infinite;
+}
+
+@keyframes activeGradient {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+.product-card.status-preparing {
+    border-color: var(--blue-200);
+    background: var(--blue-50);
+}
+
+.product-card.status-warning {
+    border-color: var(--yellow-200);
+    background: var(--yellow-100);
+}
+
+.product-card.status-paused {
+    opacity: 0.7;
+}
+
+.product-card.status-stopped {
+    opacity: 0.5;
+    background: var(--bg-secondary);
+}
+
+/* ========== 상품 콘텐츠 ========== */
+.product-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-row1 {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--space-sm);
+}
+
+.product-title {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+.product-status-options {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: center;
+}
+
+.product-row2 {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+}
+
+.separator {
+    margin: 0 var(--space-sm);
+    color: var(--text-muted);
+}
+
+.product-divider {
+    height: 1px;
+    background: var(--border-light);
+    margin: var(--space-md) 0;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.next-
