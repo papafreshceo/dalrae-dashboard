@@ -353,15 +353,42 @@
 
     // 푸터 페이지 이동
     window.navigateToFooterPage = function(page) {
-        const pageUrls = {
-            'dashboard': 'index.html',
-            'products': 'products.html',
-            'calendar': 'product-calendar.html',
-            'delivery': 'delivery-calendar.html',
-            'orders': 'orders.html',
-            'services': 'services.html',
-            'notice': 'notice.html'
-        };
+    // 현재 페이지 위치 확인
+        const currentPath = window.location.pathname;
+        const isInPagesFolder = currentPath.includes('/01-pages/');
+        const isRoot = !isInPagesFolder;
+        
+        let pageUrls = {};
+        
+        if (isRoot) {
+            // 루트(index.html)에서 다른 페이지로 이동
+            pageUrls = {
+                'dashboard': '01-pages/01-dashboard.html',
+                'products': '01-pages/02-products.html',
+                'calendar': '01-pages/03-products-calendar.html',
+                'delivery': '01-pages/04-delivery-calendar.html',
+                'orders': '01-pages/05-orders.html',
+                'services': '01-pages/06-services.html',
+                'notice': '01-pages/07-notice.html'
+            };
+        } else {
+            // 01-pages 폴더 내에서 이동
+            pageUrls = {
+                'dashboard': '01-dashboard.html',
+                'products': '02-products.html',
+                'calendar': '03-products-calendar.html',
+                'delivery': '04-delivery-calendar.html',
+                'orders': '05-orders.html',
+                'services': '06-services.html',
+                'notice': '07-notice.html'
+            };
+            
+            // index로 가는 경우
+            if (page === 'index') {
+                window.location.href = '../index.html';
+                return;
+            }
+        }
         
         if (pageUrls[page]) {
             if (window.navigateTo) {
