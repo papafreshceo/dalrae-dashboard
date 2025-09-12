@@ -282,7 +282,16 @@
                 width: 100%;
             }
         }
-    </style>
+</style>
+
+    <!-- CSS 파일 링크 수정 -->
+    <link rel="stylesheet" href="../02-assets/01-css/design-system.css">
+    <link rel="stylesheet" href="../02-assets/01-css/common-styles.css">
+    <link rel="stylesheet" href="../02-assets/01-css/pages/products-calendar.css">
+
+    <!-- 헤더 스크립트 링크 수정 -->
+    <script src="../02-assets/02-js/00-common/header.js"></script>
+    <script src="../02-assets/02-js/00-common/footer.js"></script>
 </head>
 <body>
     <!-- 헤더 컨테이너 -->
@@ -359,17 +368,15 @@
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     
-    <!-- 컴포넌트 로드 -->
-    <script src="components/data-service.js"></script>
-    <script src="components/month-calendar.js"></script>
-    <script src="components/year-calendar.js"></script>
-    <script src="components/product-modal.js"></script>
-    <script src="components/tooltip-manager.js"></script>
+<!-- 컴포넌트 로드 -->
+    <script src="../02-assets/03-components/data-service.js"></script>
+    <script src="../02-assets/03-components/month-calendar.js"></script>
+    <script src="../02-assets/03-components/year-calendar.js"></script>
+    <script src="../02-assets/03-components/product-modal.js"></script>
+    <script src="../02-assets/03-components/tooltip-manager.js"></script>
     
     <!-- 기존 스크립트 -->
-    <script src="header.js"></script>
-    <script src="footer.js"></script>
-    <script src="global-notice.js"></script>
+    <script src="../02-assets/02-js/00-common/global-notice.js"></script>
     
     <script>
         let currentView = 'month';
@@ -664,5 +671,7 @@
             }
         });
     </script>
+<!-- 페이지 스크립트 링크 수정 -->
+    <script src="../02-assets/02-js/01-pages/products-calendar.js"></script>
 </body>
 </html>
