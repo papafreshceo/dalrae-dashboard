@@ -1,0 +1,718 @@
+/**
+ * products-calendar.css
+ * 상품 캘린더 페이지 스타일
+ * design-system.css 변수 활용
+ */
+
+/* ========== 캘린더 컨테이너 ========== */
+.hero {
+    background: var(--bg-secondary);
+    min-height: 100vh;
+    padding: var(--space-xl) 0;
+}
+
+.card {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    background: var(--bg-primary);
+    border-radius: var(--card-radius);
+    padding: var(--card-padding);
+    box-shadow: var(--card-shadow);
+}
+
+/* ========== 헤더 섹션 ========== */
+.header-section {
+    text-align: center;
+    margin-bottom: var(--space-3xl);
+}
+
+.eyebrow {
+    display: inline-block;
+    font-size: var(--eyebrow-size);
+    font-weight: var(--eyebrow-weight);
+    letter-spacing: var(--eyebrow-spacing);
+    color: var(--eyebrow-color);
+    text-transform: var(--eyebrow-transform);
+    margin-bottom: var(--eyebrow-margin-bottom);
+}
+
+.title {
+    font-size: var(--text-4xl);
+    font-weight: var(--h1-weight);
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+}
+
+.subtitle {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+}
+
+/* ========== 뷰 전환 버튼 ========== */
+.view-switcher {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-2xl);
+}
+
+.view-btn {
+    padding: var(--btn-padding);
+    background: var(--bg-primary);
+    border: var(--nav-btn-border);
+    border-radius: var(--btn-radius);
+    color: var(--nav-btn-color);
+    font-size: var(--btn-font-size);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: var(--btn-transition);
+    min-width: 120px;
+}
+
+.view-btn:hover {
+    background: var(--nav-btn-hover-bg);
+    border-color: var(--nav-btn-hover-border);
+    color: var(--nav-btn-hover-color);
+}
+
+.view-btn.active {
+    background: var(--brand-primary);
+    color: white;
+    border-color: var(--brand-primary);
+}
+
+/* ========== 구분선 ========== */
+.divider {
+    height: 1px;
+    background: var(--border-light);
+    margin: var(--space-2xl) 0;
+}
+
+/* ========== 캘린더 뷰 ========== */
+.calendar-view {
+    display: none;
+    min-height: 400px;
+}
+
+.calendar-view.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ========== 월별 캘린더 ========== */
+.calendar-month {
+    width: 100%;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: var(--calendar-grid-cols);
+    gap: 1px;
+    background: var(--border-light);
+    border-radius: var(--btn-radius) var(--btn-radius) 0 0;
+    overflow: hidden;
+}
+
+.weekday {
+    background: var(--bg-secondary);
+    padding: var(--space-md);
+    text-align: center;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+}
+
+.weekday.sunday {
+    color: var(--text-sunday);
+}
+
+.weekday.saturday {
+    color: var(--text-saturday);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: var(--calendar-grid-cols);
+    gap: 1px;
+    background: var(--border-light);
+}
+
+.calendar-cell {
+    background: var(--bg-primary);
+    min-height: var(--calendar-cell-height);
+    padding: var(--calendar-cell-padding);
+    position: relative;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.calendar-cell:hover {
+    background: var(--bg-hover);
+}
+
+.calendar-cell.other-month {
+    background: var(--bg-muted);
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.calendar-cell.weekend {
+    background: var(--bg-secondary);
+}
+
+.calendar-cell.today {
+    background: var(--bg-today);
+    position: relative;
+}
+
+.calendar-cell.today::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background: var(--brand-primary);
+    border-radius: 50%;
+}
+
+.calendar-cell.highlight {
+    animation: highlightPulse 2s ease;
+}
+
+@keyframes highlightPulse {
+    0%, 100% { background: var(--bg-today); }
+    50% { background: var(--blue-100); }
+}
+
+.cell-date {
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--space-sm);
+}
+
+.cell-events {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.event-tag {
+    padding: 2px 6px;
+    border-radius: var(--badge-radius);
+    font-size: var(--text-xs);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.event-tag:hover {
+    transform: var(--hover-scale);
+}
+
+.event-tag.status-active {
+    background: var(--success-bg);
+    color: var(--success);
+}
+
+.event-tag.status-preparing {
+    background: var(--info-bg);
+    color: var(--info);
+}
+
+.event-tag.status-warning {
+    background: var(--yellow-100);
+    color: var(--warning);
+}
+
+.event-tag.status-paused {
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+}
+
+.event-tag.status-stopped {
+    background: var(--danger-bg);
+    color: var(--danger);
+}
+
+.more-events {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    text-align: center;
+    padding: 2px;
+}
+
+/* ========== 연간 캘린더 ========== */
+.calendar-year {
+    width: 100%;
+}
+
+.year-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+}
+
+.year-grid-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+}
+
+.month-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--btn-radius);
+    padding: var(--space-lg);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.month-card:hover {
+    border-color: var(--brand-primary);
+    transform: var(--hover-lift);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.month-card.current-month {
+    border-color: var(--brand-primary);
+    background: var(--bg-today);
+}
+
+.month-card.highlight {
+    animation: highlightPulse 2s ease;
+}
+
+.month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.month-header h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--h2-weight);
+    color: var(--text-primary);
+}
+
+.event-count {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* ========== 미니 캘린더 ========== */
+.mini-calendar {
+    margin-bottom: var(--space-md);
+}
+
+.mini-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    margin-bottom: 4px;
+}
+
+.mini-weekday {
+    text-align: center;
+    font-size: 9px;
+    color: var(--text-muted);
+}
+
+.mini-weekday.sunday {
+    color: var(--text-sunday);
+}
+
+.mini-weekday.saturday {
+    color: var(--text-saturday);
+}
+
+.mini-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+}
+
+.mini-date {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+    border-radius: 2px;
+}
+
+.mini-date.empty {
+    background: transparent;
+}
+
+.mini-date.has-event {
+    background: var(--success-bg);
+    color: var(--success);
+    font-weight: var(--font-medium);
+}
+
+.mini-date.today {
+    background: var(--brand-primary);
+    color: white;
+}
+
+.mini-date.weekend {
+    color: var(--text-muted);
+}
+
+/* ========== 이벤트 리스트 ========== */
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.event-item {
+    padding: 4px 8px;
+    border-radius: var(--badge-radius);
+    font-size: var(--text-xs);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.event-item:hover {
+    transform: translateX(4px);
+}
+
+.event-item.status-active {
+    background: var(--success-bg);
+    color: var(--success);
+}
+
+.event-item.status-preparing {
+    background: var(--info-bg);
+    color: var(--info);
+}
+
+.event-item.status-warning {
+    background: var(--yellow-100);
+    color: var(--warning);
+}
+
+.event-status {
+    font-size: 9px;
+    opacity: 0.8;
+}
+
+.more-events-link {
+    text-align: center;
+    font-size: var(--text-xs);
+    color: var(--brand-primary);
+    padding: var(--space-xs);
+    cursor: pointer;
+}
+
+.more-events-link:hover {
+    text-decoration: underline;
+}
+
+/* ========== 범례 ========== */
+.legend {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+}
+
+.legend-disclaimer {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+/* ========== 모달 스타일 ========== */
+.calendar-modal-content {
+    max-width: 800px;
+}
+
+.products-modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.product-modal-card {
+    display: flex;
+    gap: var(--space-xl);
+    padding: var(--space-lg);
+    background: var(--bg-secondary);
+    border-radius: var(--btn-radius);
+    transition: var(--transition-fast);
+}
+
+.product-modal-card:hover {
+    background: var(--bg-hover);
+}
+
+.product-modal-image {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+}
+
+.product-modal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--badge-radius);
+}
+
+.product-modal-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.product-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.product-modal-header h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-medium);
+}
+
+.product-modal-details p {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.product-modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.price-value {
+    font-size: var(--text-xl);
+    font-weight: var(--font-semibold);
+    color: var(--brand-primary);
+}
+
+.product-modal-actions {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: auto;
+}
+
+.btn-chart,
+.btn-order {
+    padding: 8px 16px;
+    border: none;
+    border-radius: var(--btn-radius);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-chart {
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-default);
+}
+
+.btn-chart:hover {
+    background: var(--bg-hover);
+}
+
+.btn-order {
+    background: var(--brand-primary);
+    color: white;
+}
+
+.btn-order:hover {
+    background: var(--brand-primary-hover);
+}
+
+/* ========== 차트 모달 ========== */
+.price-chart-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-modal);
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-xl);
+}
+
+.price-chart-modal.show {
+    display: flex;
+}
+
+.price-chart-content {
+    background: white;
+    border-radius: var(--card-radius);
+    max-width: 900px;
+    width: 100%;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.price-chart-header {
+    padding: var(--space-2xl);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.price-chart-title {
+    font-size: var(--text-2xl);
+    font-weight: var(--h1-weight);
+    margin-bottom: var(--space-sm);
+}
+
+.price-chart-subtitle {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+#chartBody {
+    flex: 1;
+    padding: var(--space-2xl);
+    overflow-y: auto;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin: var(--space-xl) 0;
+}
+
+.chart-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-md);
+}
+
+.chart-stat-box {
+    background: var(--bg-secondary);
+    border-radius: var(--btn-radius);
+    padding: var(--space-md);
+    text-align: center;
+}
+
+.chart-stat-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-bottom: var(--space-xs);
+}
+
+.chart-stat-value {
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+.chart-stat-value.current {
+    color: var(--brand-primary);
+}
+
+.chart-stat-value.increase {
+    color: var(--danger);
+}
+
+.chart-stat-value.decrease {
+    color: var(--success);
+}
+
+.price-chart-footer {
+    padding: var(--space-lg);
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+}
+
+.chart-btn {
+    padding: var(--btn-padding);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--btn-radius);
+    font-size: var(--btn-font-size);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.chart-btn:hover {
+    background: var(--bg-hover);
+}
+
+/* ========== 모바일 반응형 ========== */
+@media (max-width: 768px) {
+    .hero {
+        padding: var(--space-md) 0;
+    }
+    
+    .card {
+        padding: var(--card-padding-mobile);
+        border-radius: 0;
+    }
+    
+    .title {
+        font-size: var(--text-3xl);
+    }
+    
+    .view-switcher {
+        flex-direction: column;
+    }
+    
+    .view-btn {
+        width: 100%;
+    }
+    
+    .calendar-cell {
+        min-height: var(--calendar-cell-height-mobile);
+        padding: var(--calendar-cell-padding-mobile);
+    }
+    
+    .year-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .products-modal-list {
+        gap: var(--space-md);
+    }
+    
+    .product-modal-card {
+        flex-direction: column;
+    }
+    
+    .chart-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
