@@ -30,7 +30,7 @@
             .top-header {
                 background: var(--bg-primary, #ffffff);
                 border-bottom: 1px solid var(--border-default, #dee2e6);
-                padding: var(--space-md, 12px) 0;
+                padding: var(--space-lg, 16px) 0;
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -40,7 +40,7 @@
 
             /* 헤더 스페이서 - 고정 헤더 공간 확보 */
             .header-spacer {
-                height: 60px;
+                height: 70px;
             }
 
             /* PC 스타일 - 1행 레이아웃 */
@@ -51,12 +51,12 @@
                     padding: 0 30px;
                     display: flex;
                     align-items: center;
-                    gap: 0;
+                    gap: 20px;
                 }
 
                 .logo-container {
                     flex-shrink: 0;
-                    margin-right: 50px;
+                    margin-right: 30px;
                 }
 
                 .logo-img { 
@@ -68,29 +68,33 @@
                 .nav-menu-container {
                     flex: 1;
                     overflow: visible;
+                    display: flex;
+                    justify-content: center;
                 }
 
                 .nav-menu { 
                     display: flex; 
-                    gap: var(--space-md, 12px);
+                    gap: var(--space-lg, 16px);
                     align-items: center;
                     padding: 0;
+                    flex-wrap: nowrap;
                 }
 
                 /* PC 텍스트 버튼 */
                 .nav-btn {
                     display: inline-block;
-                    padding: 5px 10px;
+                    padding: 8px 12px;
                     background: none;
                     border: none;
                     color: var(--text-secondary, #495057);
-                    font-size: 15px;
-                    font-weight: var(--font-semibold, 600);
+                    font-size: 14px;
+                    font-weight: var(--font-medium, 500);
                     cursor: pointer;
                     transition: var(--transition-fast, all 0.2s);
                     white-space: nowrap;
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
                     position: relative;
+                    min-width: fit-content;
                 }
 
                 .nav-btn:hover {
@@ -105,7 +109,7 @@
                 .nav-btn.active::after {
                     content: '';
                     position: absolute;
-                    bottom: -5px;
+                    bottom: -8px;
                     left: 10%;
                     width: 80%;
                     height: 3px;
@@ -134,56 +138,14 @@
             }
 
             /* 모바일 스타일 - 3행 레이아웃 */
-            /* 모바일 스타일 - 3행 레이아웃 */
-@media (max-width: 768px) {
-    .top-header {
-        padding: var(--space-sm, 8px) 0;
-    }
+            @media (max-width: 768px) {
+                .top-header {
+                    padding: var(--space-sm, 8px) 0;
+                }
 
-    .header-spacer {
-        height: 120px;  /* 90px에서 120px로 늘림 */
-    }
-
-    .header-content {
-        padding: 0 15px;
-    }
-    
-    /* 1행: 로고 + 발주시스템 */
-    .mobile-top-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: var(--space-md, 12px);  /* 8px에서 12px로 늘림 */
-    }
-    
-    /* 2행, 3행: 메뉴 */
-    .nav-menu-container {
-        margin: var(--space-sm, 8px) -15px 0 -15px;  /* 상단 여백 추가 */
-    }
-    
-    .nav-menu {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: var(--space-md, 12px);  /* 8px에서 12px로 늘림 */
-        padding: 0 15px;
-    }
-    
-    /* 모바일 메뉴 버튼 */
-    .nav-btn {
-        font-size: var(--text-sm, 12px);
-        padding: 8px 4px;  /* 5px에서 8px 4px로 변경 */
-        background: none;
-        border: none;
-        color: var(--text-secondary, #495057);
-        font-weight: var(--font-semibold, 600);
-        cursor: pointer;
-        transition: var(--transition-fast, all 0.2s);
-        white-space: nowrap;
-        font-family: 'Noto Sans KR', -apple-system, sans-serif;
-        text-align: center;
-        position: relative;
-        line-height: 1.2;  /* 줄 간격 추가 */
-    }
+                .header-spacer {
+                    height: 120px;
+                }
 
                 .header-content {
                     padding: 0 15px;
@@ -194,7 +156,7 @@
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: var(--space-sm, 8px);
+                    margin-bottom: var(--space-md, 12px);
                 }
                 
                 .logo-container {
@@ -226,20 +188,20 @@
                 
                 /* 2행, 3행: 메뉴 */
                 .nav-menu-container {
-                    margin: 0 -15px;
+                    margin: var(--space-sm, 8px) -15px 0 -15px;
                 }
                 
                 .nav-menu {
                     display: grid;
                     grid-template-columns: repeat(4, 1fr);
-                    gap: var(--space-sm, 8px);
+                    gap: var(--space-md, 12px);
                     padding: 0 15px;
                 }
                 
                 /* 모바일 메뉴 버튼 */
                 .nav-btn {
                     font-size: var(--text-sm, 12px);
-                    padding: 5px;
+                    padding: 8px 4px;
                     background: none;
                     border: none;
                     color: var(--text-secondary, #495057);
@@ -250,6 +212,7 @@
                     font-family: 'Noto Sans KR', -apple-system, sans-serif;
                     text-align: center;
                     position: relative;
+                    line-height: 1.2;
                 }
 
                 .nav-btn:hover {
@@ -378,10 +341,10 @@
                                     상품리스트
                                 </button>
                                 <button class="nav-btn" data-page="calendar" onclick="navigateToPage('calendar')">
-                                    상품달력
+                                    상품캘린더
                                 </button>
                                 <button class="nav-btn" data-page="delivery" onclick="navigateToPage('delivery')">
-                                    발송달럭
+                                    발송캘린더
                                 </button>
                                 <button class="nav-btn" data-page="orders" onclick="navigateToPage('orders')">
                                     주문관리
@@ -423,44 +386,42 @@
     };
 
     window.navigateToPage = function(page) {
-    // 현재 페이지 위치 확인
-    const currentPath = window.location.pathname;
-    const isInPagesFolder = currentPath.includes('/01-pages/');
-    const isRoot = !isInPagesFolder;
-    
-    let pageUrls = {};
-    
-    if (isRoot) {
-        // 루트(index.html)에서 다른 페이지로 이동
-        pageUrls = {
-            'index': 'index.html',
-            'dashboard': '01-pages/01-dashboard.html',
-            'products': '01-pages/02-products.html',
-            'calendar': '01-pages/03-products-calendar.html',
-            'delivery': '01-pages/04-delivery-calendar.html',
-            'orders': '01-pages/05-orders.html',
-            'services': '01-pages/06-services.html',
-            'notice': '01-pages/07-notice.html'
-        };
-    } else {
-        // 01-pages 폴더 내에서 이동
-        pageUrls = {
-            'index': '../index.html',
-            'dashboard': '01-dashboard.html',
-            'products': '02-products.html',
-            'calendar': '03-products-calendar.html',
-            'delivery': '04-delivery-calendar.html',
-            'orders': '05-orders.html',
-            'services': '06-services.html',
-            'notice': '07-notice.html'
-        };
-    }
+        // 현재 페이지 위치 확인
+        const currentPath = window.location.pathname;
+        const isInPagesFolder = currentPath.includes('/01-pages/');
+        const isRoot = !isInPagesFolder;
         
-        const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+        let pageUrls = {};
+        
+        if (isRoot) {
+            // 루트(index.html)에서 다른 페이지로 이동
+            pageUrls = {
+                'index': 'index.html',
+                'dashboard': '01-pages/01-dashboard.html',
+                'products': '01-pages/02-products.html',
+                'calendar': '01-pages/03-products-calendar.html',
+                'delivery': '01-pages/04-delivery-calendar.html',
+                'orders': '01-pages/05-orders.html',
+                'services': '01-pages/06-services.html',
+                'notice': '01-pages/07-notice.html'
+            };
+        } else {
+            // 01-pages 폴더 내에서 이동
+            pageUrls = {
+                'index': '../index.html',
+                'dashboard': '01-dashboard.html',
+                'products': '02-products.html',
+                'calendar': '03-products-calendar.html',
+                'delivery': '04-delivery-calendar.html',
+                'orders': '05-orders.html',
+                'services': '06-services.html',
+                'notice': '07-notice.html'
+            };
+        }
+        
         const targetFile = pageUrls[page];
-        
-        if (currentFile !== targetFile) {
-            navigateTo(targetFile);
+        if (targetFile) {
+            window.location.href = targetFile;
         }
     };
 
@@ -476,13 +437,13 @@
         // 파일명과 페이지 이름 매핑
         const fileToPage = {
             'index.html': 'index',
-            'dashboard.html': 'dashboard',
-            'products.html': 'products',
-            'products-calendar.html': 'calendar',
-            'delivery-calendar.html': 'delivery',
-            'orders.html': 'orders',
-            'services.html': 'services',
-            'notice.html': 'notice'
+            '01-dashboard.html': 'dashboard',
+            '02-products.html': 'products',
+            '03-products-calendar.html': 'calendar',
+            '04-delivery-calendar.html': 'delivery',
+            '05-orders.html': 'orders',
+            '06-services.html': 'services',
+            '07-notice.html': 'notice'
         };
         
         return fileToPage[currentFile] || 'index';
@@ -559,5 +520,3 @@
         setActivePage: setActivePage
     };
 })();
-
-
