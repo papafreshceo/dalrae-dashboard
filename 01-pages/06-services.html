@@ -4,18 +4,10 @@
   <base target="_top">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <link rel="icon" type="image/png" href="../favicon.png" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
   <title>촬영 서비스 & 견적 - Premium</title>
-  
-  <!-- 공통 스타일 -->
-  <link rel="stylesheet" href="../02-assets/01-css/common-styles.css">
-  <link rel="stylesheet" href="../02-assets/01-css/design-system.css">
-  
-  <!-- 페이지 전용 스타일 -->
-  <link rel="stylesheet" href="../02-assets/01-css/pages/services.css">
-  
-  <!-- 헤더 스크립트 -->
-  <script src="../02-assets/02-js/00-common/header.js"></script>
+  <link rel="stylesheet" href="services.css">
+  <script src="header.js"></script>
 </head>
 <body>
   <!-- 공통 헤더 -->
@@ -63,10 +55,10 @@
 
     <!-- 서비스 전환 버튼 -->
     <div class="service-tabs">
-      <button id="photo-service-btn" class="service-tab-btn active">
+      <button id="photo-service-btn" class="service-tab-btn active" onclick="switchService('photo')">
         📸 촬영 서비스
       </button>
-      <button id="farm-service-btn" class="service-tab-btn">
+      <button id="farm-service-btn" class="service-tab-btn" onclick="switchService('farm')">
         🤝 농가 매칭 서비스
       </button>
     </div>
@@ -81,9 +73,9 @@
           <div class="location-list">
             <!-- 일반 실내 촬영 -->
             <div class="location-card" id="indoor-card">
-              <div class="location-header">
+              <div class="location-header" onclick="toggleLocation('indoor')">
                 <div class="location-info">
-                  <input type="checkbox" class="location-checkbox" id="indoor-check">
+                  <input type="checkbox" class="location-checkbox" id="indoor-check" onclick="event.stopPropagation()">
                   <div class="location-title">일반 실내 촬영</div>
                 </div>
                 <div class="location-price" id="indoor-base-price">30,000원</div>
@@ -97,18 +89,18 @@
                   <div class="quantity-control">
                     <span class="quantity-label">추가 사진</span>
                     <div class="stepper">
-                      <button class="stepper-btn" data-type="indoor-photo" data-delta="-10">−</button>
-                      <input type="number" id="indoor-photo" value="0" min="0" step="10">
-                      <button class="stepper-btn" data-type="indoor-photo" data-delta="10">+</button>
+                      <button onclick="adjustQuantity('indoor-photo', -10)">−</button>
+                      <input type="number" id="indoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('indoor-photo')">
+                      <button onclick="adjustQuantity('indoor-photo', 10)">+</button>
                     </div>
                     <span style="font-size: 11px; color: var(--text-color);" id="indoor-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
                     <div class="stepper">
-                      <button class="stepper-btn" data-type="indoor-video" data-delta="-1">−</button>
-                      <input type="number" id="indoor-video" value="0" min="0" step="1">
-                      <button class="stepper-btn" data-type="indoor-video" data-delta="1">+</button>
+                      <button onclick="adjustQuantity('indoor-video', -1)">−</button>
+                      <input type="number" id="indoor-video" value="0" min="0" step="1" onchange="handleDirectInput('indoor-video')">
+                      <button onclick="adjustQuantity('indoor-video', 1)">+</button>
                     </div>
                     <span style="font-size: 11px; color: var(--text-color);" id="indoor-video-cost">분 (2,000원/분)</span>
                   </div>
@@ -117,11 +109,11 @@
                   <label class="option-label">추가 옵션</label>
                   <div class="checkbox-options">
                     <div class="checkbox-option">
-                      <input type="checkbox" id="indoor-hand" class="option-checkbox">
+                      <input type="checkbox" id="indoor-hand" onchange="calculateQuote()">
                       <label for="indoor-hand" id="indoor-hand-label">핸드컷 (+30,000원)</label>
                     </div>
                     <div class="checkbox-option">
-                      <input type="checkbox" id="indoor-model" class="option-checkbox">
+                      <input type="checkbox" id="indoor-model" onchange="calculateQuote()">
                       <label for="indoor-model" id="indoor-model-label">모델컷 (+200,000원)</label>
                     </div>
                   </div>
@@ -131,9 +123,9 @@
 
             <!-- 야외 촬영 -->
             <div class="location-card" id="outdoor-card">
-              <div class="location-header">
+              <div class="location-header" onclick="toggleLocation('outdoor')">
                 <div class="location-info">
-                  <input type="checkbox" class="location-checkbox" id="outdoor-check">
+                  <input type="checkbox" class="location-checkbox" id="outdoor-check" onclick="event.stopPropagation()">
                   <div class="location-title">야외 촬영</div>
                 </div>
                 <div class="location-price" id="outdoor-base-price">50,000원</div>
@@ -147,18 +139,18 @@
                   <div class="quantity-control">
                     <span class="quantity-label">추가 사진</span>
                     <div class="stepper">
-                      <button class="stepper-btn" data-type="outdoor-photo" data-delta="-10">−</button>
-                      <input type="number" id="outdoor-photo" value="0" min="0" step="10">
-                      <button class="stepper-btn" data-type="outdoor-photo" data-delta="10">+</button>
+                      <button onclick="adjustQuantity('outdoor-photo', -10)">−</button>
+                      <input type="number" id="outdoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('outdoor-photo')">
+                      <button onclick="adjustQuantity('outdoor-photo', 10)">+</button>
                     </div>
                     <span style="font-size: 11px; color: var(--text-color);" id="outdoor-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
                     <div class="stepper">
-                      <button class="stepper-btn" data-type="outdoor-video" data-delta="-1">−</button>
-                      <input type="number" id="outdoor-video" value="0" min="0" step="1">
-                      <button class="stepper-btn" data-type="outdoor-video" data-delta="1">+</button>
+                      <button onclick="adjustQuantity('outdoor-video', -1)">−</button>
+                      <input type="number" id="outdoor-video" value="0" min="0" step="1" onchange="handleDirectInput('outdoor-video')">
+                      <button onclick="adjustQuantity('outdoor-video', 1)">+</button>
                     </div>
                     <span style="font-size: 11px; color: var(--text-color);" id="outdoor-video-cost">분 (2,000원/분)</span>
                   </div>
@@ -167,11 +159,11 @@
                   <label class="option-label">추가 옵션</label>
                   <div class="checkbox-options">
                     <div class="checkbox-option">
-                      <input type="checkbox" id="outdoor-hand" class="option-checkbox">
+                      <input type="checkbox" id="outdoor-hand" onchange="calculateQuote()">
                       <label for="outdoor-hand" id="outdoor-hand-label">핸드컷 (+30,000원)</label>
                     </div>
                     <div class="checkbox-option">
-                      <input type="checkbox" id="outdoor-model" class="option-checkbox">
+                      <input type="checkbox" id="outdoor-model" onchange="calculateQuote()">
                       <label for="outdoor-model" id="outdoor-model-label">모델컷 (+200,000원)</label>
                     </div>
                   </div>
@@ -181,9 +173,9 @@
 
             <!-- 요리 촬영 -->
             <div class="location-card" id="cooking-card">
-              <div class="location-header">
+              <div class="location-header" onclick="toggleLocation('cooking')">
                 <div class="location-info">
-                  <input type="checkbox" class="location-checkbox" id="cooking-check">
+                  <input type="checkbox" class="location-checkbox" id="cooking-check" onclick="event.stopPropagation()">
                   <div class="location-title">요리 촬영</div>
                 </div>
                 <div class="location-price" id="cooking-base-price">60,000원</div>
@@ -197,9 +189,9 @@
                   <div class="quantity-control">
                     <span class="quantity-label">추가 메뉴</span>
                     <div class="stepper">
-                      <button class="stepper-btn" data-type="cooking-menu" data-delta="-1">−</button>
-                      <input type="number" id="cooking-menu" value="0" min="0" step="1">
-                      <button class="stepper-btn" data-type="cooking-menu" data-delta="1">+</button>
+                      <button onclick="adjustQuantity('cooking-menu', -1)">−</button>
+                      <input type="number" id="cooking-menu" value="0" min="0" step="1" onchange="handleDirectInput('cooking-menu')">
+                      <button onclick="adjustQuantity('cooking-menu', 1)">+</button>
                     </div>
                     <span style="font-size: 11px; color: var(--text-color);" id="cooking-menu-cost">개 (메뉴당 30,000원 추가)</span>
                   </div>
@@ -209,18 +201,18 @@
                   <div class="quantity-control">
                     <span class="quantity-label">추가 사진</span>
                     <div class="stepper">
-                      <button class="stepper-btn" data-type="cooking-photo" data-delta="-10">−</button>
-                      <input type="number" id="cooking-photo" value="0" min="0" step="10">
-                      <button class="stepper-btn" data-type="cooking-photo" data-delta="10">+</button>
+                      <button onclick="adjustQuantity('cooking-photo', -10)">−</button>
+                      <input type="number" id="cooking-photo" value="0" min="0" step="10" onchange="handleDirectInput('cooking-photo')">
+                      <button onclick="adjustQuantity('cooking-photo', 10)">+</button>
                     </div>
                     <span style="font-size: 11px; color: var(--text-color);" id="cooking-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
                     <div class="stepper">
-                      <button class="stepper-btn" data-type="cooking-video" data-delta="-1">−</button>
-                      <input type="number" id="cooking-video" value="0" min="0" step="1">
-                      <button class="stepper-btn" data-type="cooking-video" data-delta="1">+</button>
+                      <button onclick="adjustQuantity('cooking-video', -1)">−</button>
+                      <input type="number" id="cooking-video" value="0" min="0" step="1" onchange="handleDirectInput('cooking-video')">
+                      <button onclick="adjustQuantity('cooking-video', 1)">+</button>
                     </div>
                     <span style="font-size: 11px; color: var(--text-color);" id="cooking-video-cost">분 (2,000원/분)</span>
                   </div>
@@ -229,11 +221,11 @@
                   <label class="option-label">추가 옵션</label>
                   <div class="checkbox-options">
                     <div class="checkbox-option">
-                      <input type="checkbox" id="cooking-hand" class="option-checkbox">
+                      <input type="checkbox" id="cooking-hand" onchange="calculateQuote()">
                       <label for="cooking-hand" id="cooking-hand-label">핸드컷 (+30,000원)</label>
                     </div>
                     <div class="checkbox-option">
-                      <input type="checkbox" id="cooking-model" class="option-checkbox">
+                      <input type="checkbox" id="cooking-model" onchange="calculateQuote()">
                       <label for="cooking-model" id="cooking-model-label">모델컷 (+200,000원)</label>
                     </div>
                   </div>
@@ -243,9 +235,9 @@
 
             <!-- 드론 촬영 -->
             <div class="location-card" id="drone-card">
-              <div class="location-header">
+              <div class="location-header" onclick="toggleLocation('drone')">
                 <div class="location-info">
-                  <input type="checkbox" class="location-checkbox" id="drone-check">
+                  <input type="checkbox" class="location-checkbox" id="drone-check" onclick="event.stopPropagation()">
                   <div class="location-title">드론 촬영</div>
                 </div>
                 <div class="location-price" id="drone-base-price">90,000원</div>
@@ -259,18 +251,18 @@
                   <div class="quantity-control">
                     <span class="quantity-label">추가 사진</span>
                     <div class="stepper">
-                      <button class="stepper-btn" data-type="drone-photo" data-delta="-10">−</button>
-                      <input type="number" id="drone-photo" value="0" min="0" step="10">
-                      <button class="stepper-btn" data-type="drone-photo" data-delta="10">+</button>
+                      <button onclick="adjustQuantity('drone-photo', -10)">−</button>
+                      <input type="number" id="drone-photo" value="0" min="0" step="10" onchange="handleDirectInput('drone-photo')">
+                      <button onclick="adjustQuantity('drone-photo', 10)">+</button>
                     </div>
                     <span style="font-size: 11px; color: var(--text-color);" id="drone-photo-cost">매 (500원/매)</span>
                   </div>
                   <div class="quantity-control">
                     <span class="quantity-label">추가 영상</span>
                     <div class="stepper">
-                      <button class="stepper-btn" data-type="drone-video" data-delta="-1">−</button>
-                      <input type="number" id="drone-video" value="0" min="0" step="1">
-                      <button class="stepper-btn" data-type="drone-video" data-delta="1">+</button>
+                      <button onclick="adjustQuantity('drone-video', -1)">−</button>
+                      <input type="number" id="drone-video" value="0" min="0" step="1" onchange="handleDirectInput('drone-video')">
+                      <button onclick="adjustQuantity('drone-video', 1)">+</button>
                     </div>
                     <span style="font-size: 11px; color: var(--text-color);" id="drone-video-cost">분 (2,000원/분)</span>
                   </div>
@@ -317,194 +309,3 @@
           <!-- 편집 옵션 -->
           <div class="edit-section">
             <h3 class="section-title">✂️ 영상 편집 옵션</h3>
-            
-            <div class="edit-options-grid">
-              <!-- 일반 편집 -->
-              <div class="edit-option-card">
-                <div class="edit-option-header">
-                  <div class="edit-title">일반 편집</div>
-                  <div class="edit-description">고객이 시나리오 제공 (<span id="basic-edit-price" style="color: var(--primary-color);">30,000원</span>/분)</div>
-                </div>
-                <div class="duration-grid">
-                  <div class="duration-item">
-                    <span class="duration-label">1분</span>
-                    <div class="duration-stepper">
-                      <button class="edit-stepper-btn" data-type="basic-1min" data-delta="-1">−</button>
-                      <input type="number" id="edit-basic-1min" value="0" min="0" step="1">
-                      <button class="edit-stepper-btn" data-type="basic-1min" data-delta="1">+</button>
-                    </div>
-                  </div>
-                  <div class="duration-item">
-                    <span class="duration-label">2분</span>
-                    <div class="duration-stepper">
-                      <button class="edit-stepper-btn" data-type="basic-2min" data-delta="-1">−</button>
-                      <input type="number" id="edit-basic-2min" value="0" min="0" step="1">
-                      <button class="edit-stepper-btn" data-type="basic-2min" data-delta="1">+</button>
-                    </div>
-                  </div>
-                  <div class="duration-item">
-                    <span class="duration-label">3분</span>
-                    <div class="duration-stepper">
-                      <button class="edit-stepper-btn" data-type="basic-3min" data-delta="-1">−</button>
-                      <input type="number" id="edit-basic-3min" value="0" min="0" step="1">
-                      <button class="edit-stepper-btn" data-type="basic-3min" data-delta="1">+</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 풀 편집 -->
-              <div class="edit-option-card">
-                <div class="edit-option-header">
-                  <div class="edit-title">풀 편집</div>
-                  <div class="edit-description">썸네일, 시나리오, 자막 등 모든 작업 위임</div>
-                  <div class="edit-description" style="color: var(--primary-color); margin-top: 3px;">
-                    1분: <span id="full-edit-base">70,000원</span> / 2분 이상: +<span id="full-edit-per">20,000원</span>/분
-                  </div>
-                </div>
-                <div class="duration-grid">
-                  <div class="duration-item">
-                    <span class="duration-label">1분</span>
-                    <div class="duration-stepper">
-                      <button class="edit-stepper-btn" data-type="full-1min" data-delta="-1">−</button>
-                      <input type="number" id="edit-full-1min" value="0" min="0" step="1">
-                      <button class="edit-stepper-btn" data-type="full-1min" data-delta="1">+</button>
-                    </div>
-                  </div>
-                  <div class="duration-item">
-                    <span class="duration-label">2분</span>
-                    <div class="duration-stepper">
-                      <button class="edit-stepper-btn" data-type="full-2min" data-delta="-1">−</button>
-                      <input type="number" id="edit-full-2min" value="0" min="0" step="1">
-                      <button class="edit-stepper-btn" data-type="full-2min" data-delta="1">+</button>
-                    </div>
-                  </div>
-                  <div class="duration-item">
-                    <span class="duration-label">3분</span>
-                    <div class="duration-stepper">
-                      <button class="edit-stepper-btn" data-type="full-3min" data-delta="-1">−</button>
-                      <input type="number" id="edit-full-3min" value="0" min="0" step="1">
-                      <button class="edit-stepper-btn" data-type="full-3min" data-delta="1">+</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="edit-stats">
-              <div class="edit-stat-row">
-                <span>📹 총 편집 영상 개수</span>
-                <span id="totalEditVideos" style="font-weight: 700; color: var(--primary-color);">0개</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- 최종 견적 -->
-          <div class="final-quote">
-            <h3 class="section-title">💰 최종 견적</h3>
-            <div class="quote-breakdown">
-              <div class="quote-item">
-                <span class="quote-label">로케이션 기본</span>
-                <span class="quote-value" id="locationCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">로케이션 전환</span>
-                <span class="quote-value" id="transitionCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">추가 메뉴</span>
-                <span class="quote-value" id="menuCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">추가 사진</span>
-                <span class="quote-value" id="photoCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">추가 영상</span>
-                <span class="quote-value" id="videoCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">핸드컷</span>
-                <span class="quote-value" id="handCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">모델컷</span>
-                <span class="quote-value" id="modelCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">영상 편집</span>
-                <span class="quote-value" id="editCost">0원</span>
-              </div>
-            </div>
-            <div class="quote-total">
-              <div class="quote-total-label">예상 총 비용</div>
-              <div class="quote-total-amount" id="totalAmount">0원</div>
-              <div class="quote-vat">* 부가세 별도</div>
-            </div>
-            <div class="quote-contact">
-              <div class="quote-contact-text">
-                진행 시 유선상담 조율 후 진행 가능합니다
-              </div>
-              <a href="tel:01026881388" class="phone-link">010-2688-1388</a>
-            </div>
-            <div class="quote-warning">
-              ⚠️ 본 견적은 예상 금액이며, 현장 상황에 따라 변동될 수 있습니다
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 농가 매칭 서비스 섹션 -->
-    <div id="farm-service" class="service-section">
-      <div class="farm-service-card">
-        <div class="farm-service-title">
-          <span style="font-size: 28px;">🤝</span>
-          <span>농가 매칭 서비스</span>
-        </div>
-        <div class="farm-service-desc">
-          믿을 수 있는 산지 농가와 직접 연결해 드립니다. 품질 좋은 상품을 산지 가격으로 소싱하여 경쟁력 있는 가격으로 판매하실 수 있도록 지원합니다.
-        </div>
-
-        <!-- 아코디언 서비스 설명 -->
-        <div class="service-accordion" id="serviceAccordion">
-          <!-- JavaScript로 동적 생성 -->
-        </div>
-
-        <!-- 가격 플랜 카드 -->
-        <div class="farm-price-cards">
-          <div class="plan-card">
-            <div class="plan-title">방문견학동행</div>
-            <div class="plan-price" id="visit-price">150,000원</div>
-            <ul class="plan-features" id="visit-features">
-              <!-- JavaScript로 동적 생성 -->
-            </ul>
-          </div>
-          <div class="plan-card featured">
-            <div class="plan-badge">추천</div>
-            <div class="plan-title">농가매칭</div>
-            <div class="plan-price" id="matching-price">100,000원</div>
-            <ul class="plan-features" id="matching-features">
-              <!-- JavaScript로 동적 생성 -->
-            </ul>
-          </div>
-          <div class="plan-card">
-            <div class="plan-title">풀서비스</div>
-            <div class="plan-price" id="full-price">200,000원</div>
-            <ul class="plan-features" id="full-features">
-              <!-- JavaScript로 동적 생성 -->
-            </ul>
-          </div>
-        </div>
-
-        <div class="price-note">
-          💡 매칭 후 달래마켓에서는 특별한 사정이 없는 한 관여하지 않습니다
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 페이지 전용 스크립트 -->
-  <script src="../02-assets/02-js/01-pages/services.js"></script>
-</body>
-</html>
