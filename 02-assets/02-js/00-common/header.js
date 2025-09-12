@@ -6,251 +6,273 @@
         localStorage.setItem('dalrae_active_page', activePage);
     }
 
-    // 헤더 스타일 생성
     function createHeaderStyles() {
-        const styles = `
-            /* 페이지 전환 부드럽게 */
-            body {
-                opacity: 0;
-                animation: fadeIn 0.3s ease-out forwards;
+    const styles = `
+        /* 페이지 전환 부드럽게 */
+        body {
+            opacity: 0;
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* 공통 헤더 스타일 */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        /* 헤더 - 고정 */
+        .top-header {
+            background: var(--bg-primary, #ffffff);
+            border-bottom: 1px solid var(--border-default, #dee2e6);
+            padding: var(--space-lg, 16px) 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: var(--z-sticky, 30);
+        }
+
+        /* 헤더 스페이서 - 고정 헤더 공간 확보 */
+        .header-spacer {
+            height: 70px;
+        }
+
+        /* PC 스타일 - 1행 레이아웃 */
+        @media (min-width: 769px) {
+            .header-content {
+                max-width: var(--container-max, 1400px);
+                margin: 0 auto;
+                padding: 0 30px;
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .logo-container {
+                flex-shrink: 0;
+                margin-right: 30px;
+            }
+
+            .logo-img { 
+                height: 32px;
+                object-fit: contain;
+                cursor: pointer;
+            }
+
+            .nav-menu-container {
+                flex: 1;
+                overflow: visible;
+                display: flex;
+                justify-content: center;
+            }
+
+            .nav-menu { 
+                display: flex; 
+                gap: var(--space-lg, 16px);
+                align-items: center;
+                padding: 0;
+                flex-wrap: nowrap;
+            }
+
+            /* PC 텍스트 버튼 */
+            .nav-btn {
+                display: inline-block;
+                padding: 8px 12px;
+                background: transparent;
+                border: none;
+                color: #495057;
+                font-size: 14px;
+                font-weight: var(--font-medium, 500);
+                cursor: pointer;
+                transition: var(--transition-fast, all 0.2s);
+                white-space: nowrap;
+                font-family: 'Noto Sans KR', -apple-system, sans-serif;
+                position: relative;
+                min-width: fit-content;
+            }
+
+            .nav-btn:hover {
+                color: #2563eb;
+                background: transparent;
+            }
+
+            .nav-btn.active {
+                color: #2563eb !important;
+                background: transparent !important;
             }
             
-            @keyframes fadeIn {
-                to { opacity: 1; }
+            /* PC 활성 메뉴 밑줄 */
+            .nav-btn.active::after {
+                content: '';
+                position: absolute;
+                bottom: -8px;
+                left: 10%;
+                width: 80%;
+                height: 3px;
+                background: #2563eb;
+                border-radius: 2px;
+            }
+            
+            .special-btn {
+                color: var(--danger, #ef4444);
+                font-weight: var(--font-bold, 700);
+            }
+            
+            .special-btn:hover {
+                color: #ff1744;
             }
 
-            /* 공통 헤더 스타일 */
-            * { 
-                margin: 0; 
-                padding: 0; 
-                box-sizing: border-box; 
+            /* win-win */
+            .legendary-btn {
+                color: #8a2be2;
+                font-weight: var(--font-bold, 700);
             }
 
-            /* 헤더 - 고정 */
+            .legendary-btn:hover {
+                color: #7b1fa2;
+            }
+        }
+
+        /* 모바일 스타일 - 3행 레이아웃 */
+        @media (max-width: 768px) {
             .top-header {
-                background: var(--bg-primary, #ffffff);
-                border-bottom: 1px solid var(--border-default, #dee2e6);
-                padding: var(--space-lg, 16px) 0;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: var(--z-sticky, 30);
+                padding: 6px 0;
             }
 
-            /* 헤더 스페이서 - 고정 헤더 공간 확보 */
             .header-spacer {
-                height: 70px;
+                height: 95px;
             }
 
-            /* PC 스타일 - 1행 레이아웃 */
-            @media (min-width: 769px) {
-                .header-content {
-                    max-width: var(--container-max, 1400px);
-                    margin: 0 auto;
-                    padding: 0 30px;
-                    display: flex;
-                    align-items: center;
-                    gap: 20px;
-                }
+            .header-content {
+                padding: 0 15px;
+            }
+            
+            /* 1행: 로고 + 발주시스템 */
+            .mobile-top-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 6px;
+                padding-bottom: 6px;
+            }
+            
+            .logo-container {
+                flex-shrink: 0;
+            }
+            
+            .logo-img {
+                height: 16px;
+                object-fit: contain;
+                cursor: pointer;
+            }
+            
+            .order-system-btn {
+                padding: 4px 10px;
+                background: var(--danger, #ef4444);
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-size: var(--text-sm, 12px);
+                font-weight: var(--font-semibold, 600);
+                cursor: pointer;
+                white-space: nowrap;
+                font-family: 'Noto Sans KR', -apple-system, sans-serif;
+            }
+            
+            .order-system-btn:active {
+                background: #ff1744;
+            }
+            
+            /* 2행, 3행: 메뉴 */
+            .nav-menu-container {
+                margin: 0 -15px;
+                padding: 6px 15px;
+                position: relative;
+            }
+            
+            /* 2행과 3행 사이 구분선 */
+            .nav-menu-container::before {
+                content: '';
+                position: absolute;
+                left: 15px;
+                right: 15px;
+                top: 50%;
+                height: 1px;
+                background: rgba(255, 255, 255, 0.15);
+                pointer-events: none;
+            }
+            
+            .nav-menu {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+                padding: 0;
+            }
+            
+            /* 모바일 메뉴 버튼 */
+            .nav-btn {
+                font-size: 11px;
+                padding: 6px 2px;
+                background: transparent;
+                border: none;
+                color: #495057;
+                font-weight: var(--font-semibold, 600);
+                cursor: pointer;
+                transition: var(--transition-fast, all 0.2s);
+                white-space: nowrap;
+                font-family: 'Noto Sans KR', -apple-system, sans-serif;
+                text-align: center;
+                position: relative;
+                line-height: 1.2;
+                min-height: 28px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
 
-                .logo-container {
-                    flex-shrink: 0;
-                    margin-right: 30px;
-                }
+            .nav-btn:hover {
+                color: #2563eb;
+                background: transparent;
+            }
 
-                .logo-img { 
-                    height: 32px;
-                    object-fit: contain;
-                    cursor: pointer;
-                }
+            .nav-btn.active {
+                color: #2563eb !important;
+                background: transparent !important;
+            }
 
-                .nav-menu-container {
-                    flex: 1;
-                    overflow: visible;
-                    display: flex;
-                    justify-content: center;
-                }
+            /* 모바일 활성 메뉴 밑줄 */
+            .nav-btn.active::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 10%;
+                width: 80%;
+                height: 2px;
+                background: #2563eb;
+                border-radius: 1px;
+            }
 
-                .nav-menu { 
-                    display: flex; 
-                    gap: var(--space-lg, 16px);
-                    align-items: center;
-                    padding: 0;
-                    flex-wrap: nowrap;
-                }
+            .special-btn {
+                display: none; /* 모바일에서는 상단에 별도 버튼으로 표시 */
+            }
 
-                /* PC 텍스트 버튼 */
-                .nav-btn {
-                    display: inline-block;
-                    padding: 8px 12px;
-                    background: none;
-                    border: none;
-                    color: var(--text-secondary, #495057);
-                    font-size: 14px;
-                    font-weight: var(--font-medium, 500);
-                    cursor: pointer;
-                    transition: var(--transition-fast, all 0.2s);
-                    white-space: nowrap;
-                    font-family: 'Noto Sans KR', -apple-system, sans-serif;
-                    position: relative;
-                    min-width: fit-content;
-                }
-
-                .nav-btn:hover {
-                    color: var(--brand-primary, #2563eb);
-                }
-
-.nav-btn.active {
-    color: var(--brand-primary, #2563eb);
-    background: transparent !important;  /* 배경 강제로 투명 */
+            /* Win-Win 특별 색상 */
+            .legendary-btn {
+                color: #8a2be2;
+                font-weight: var(--font-bold, 700);
+            }
+        }
+    `;
+    
+    const styleElement = document.createElement('style');
+    styleElement.textContent = styles;
+    document.head.appendChild(styleElement);
 }
-                /* PC 활성 메뉴 밑줄 */
-                .nav-btn.active::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -8px;
-                    left: 10%;
-                    width: 80%;
-                    height: 3px;
-                    background: var(--brand-primary, #2563eb);
-                    border-radius: 2px;
-                }
-                
-                .special-btn {
-                    color: var(--danger, #ef4444);
-                    font-weight: var(--font-bold, 700);
-                }
-                
-                .special-btn:hover {
-                    color: #ff1744;
-                }
-
-                /* win-win */
-                .legendary-btn {
-                    color: #8a2be2;
-                    font-weight: var(--font-bold, 700);
-                }
-
-                .legendary-btn:hover {
-                    color: #7b1fa2;
-                }
-            }
-
-            /* 모바일 스타일 - 3행 레이아웃 */
-            @media (max-width: 768px) {
-                .top-header {
-                    padding: var(--space-sm, 8px) 0;
-                }
-
-                .header-spacer {
-                    height: 120px;
-                }
-
-                .header-content {
-                    padding: 0 15px;
-                }
-                
-                /* 1행: 로고 + 발주시스템 */
-                .mobile-top-row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: var(--space-md, 12px);
-                }
-                
-                .logo-container {
-                    flex-shrink: 0;
-                }
-                
-                .logo-img {
-                    height: 16px;
-                    object-fit: contain;
-                    cursor: pointer;
-                }
-                
-                .order-system-btn {
-                    padding: 4px 10px;
-                    background: var(--danger, #ef4444);
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    font-size: var(--text-sm, 12px);
-                    font-weight: var(--font-semibold, 600);
-                    cursor: pointer;
-                    white-space: nowrap;
-                    font-family: 'Noto Sans KR', -apple-system, sans-serif;
-                }
-                
-                .order-system-btn:active {
-                    background: #ff1744;
-                }
-                
-                /* 2행, 3행: 메뉴 */
-                .nav-menu-container {
-                    margin: var(--space-sm, 8px) -15px 0 -15px;
-                }
-                
-                .nav-menu {
-                    display: grid;
-                    grid-template-columns: repeat(4, 1fr);
-                    gap: var(--space-md, 12px);
-                    padding: 0 15px;
-                }
-                
-                /* 모바일 메뉴 버튼 */
-                .nav-btn {
-                    font-size: var(--text-sm, 12px);
-                    padding: 8px 4px;
-                    background: none;
-                    border: none;
-                    color: var(--text-secondary, #495057);
-                    font-weight: var(--font-semibold, 600);
-                    cursor: pointer;
-                    transition: var(--transition-fast, all 0.2s);
-                    white-space: nowrap;
-                    font-family: 'Noto Sans KR', -apple-system, sans-serif;
-                    text-align: center;
-                    position: relative;
-                    line-height: 1.2;
-                }
-
-                .nav-btn:hover {
-                    color: var(--brand-primary, #2563eb);
-                }
-
-                .nav-btn.active {
-                    color: var(--brand-primary, #2563eb);
-                }
-
-                /* 모바일 활성 메뉴 밑줄 */
-                .nav-btn.active::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -2px;
-                    left: 10%;
-                    width: 80%;
-                    height: 2px;
-                    background: var(--brand-primary, #2563eb);
-                    border-radius: 1px;
-                }
-
-                .special-btn {
-                    display: none; /* 모바일에서는 상단에 별도 버튼으로 표시 */
-                }
-
-                /* Win-Win 특별 색상 */
-                .legendary-btn {
-                    color: #8a2be2;
-                    font-weight: var(--font-bold, 700);
-                }
-            }
-        `;
-        
-        const styleElement = document.createElement('style');
-        styleElement.textContent = styles;
-        document.head.appendChild(styleElement);
-    }
 
     // 헤더 HTML 생성
     function createHeader() {
@@ -521,5 +543,6 @@
     };
 
 })();
+
 
 
