@@ -1,5 +1,69 @@
 // services.js - 촬영 서비스 페이지 JavaScript
+// services.js 파일 맨 위에 추가
 
+// 전역 함수로 등록 (인라인 onclick을 위해)
+window.toggleLocation = function(type) {
+  const card = document.getElementById(`${type}-card`);
+  const checkbox = document.getElementById(`${type}-check`);
+  
+  if (card && checkbox) {
+    card.classList.toggle('active');
+    checkbox.checked = card.classList.contains('active');
+    calculateQuote();
+  }
+}
+
+window.switchService = function(service) {
+  const photoBtn = document.getElementById('photo-service-btn');
+  const farmBtn = document.getElementById('farm-service-btn');
+  const photoSection = document.getElementById('photo-service');
+  const farmSection = document.getElementById('farm-service');
+  
+  if (photoBtn && farmBtn && photoSection && farmSection) {
+    if (service === 'photo') {
+      photoBtn.classList.add('active');
+      farmBtn.classList.remove('active');
+      photoSection.classList.add('active');
+      farmSection.classList.remove('active');
+    } else {
+      farmBtn.classList.add('active');
+      photoBtn.classList.remove('active');
+      farmSection.classList.add('active');
+      photoSection.classList.remove('active');
+    }
+  }
+}
+
+window.adjustQuantity = function(id, delta) {
+  const input = document.getElementById(id);
+  if (input) {
+    const newValue = Math.max(0, parseInt(input.value || 0) + delta);
+    input.value = newValue;
+    calculateQuote();
+  }
+}
+
+window.adjustEditQuantity = function(type, delta) {
+  const input = document.getElementById(`edit-${type}`);
+  if (input) {
+    const newValue = Math.max(0, parseInt(input.value || 0) + delta);
+    input.value = newValue;
+    calculateQuote();
+  }
+}
+
+window.handleDirectInput = function(id) {
+  const input = document.getElementById(id);
+  if (input) {
+    const value = parseInt(input.value) || 0;
+    input.value = Math.max(0, value);
+    calculateQuote();
+  }
+}
+
+window.calculateQuote = function() {
+  // 기존 calculateQuote 함수 내용
+}
 // 가격 설정 객체
 const PRICE_CONFIG = {
   locations: {
