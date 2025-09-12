@@ -101,10 +101,10 @@
                     color: var(--brand-primary, #2563eb);
                 }
 
-                .nav-btn.active {
-                    color: var(--brand-primary, #2563eb);
-                }
-
+.nav-btn.active {
+    color: var(--brand-primary, #2563eb);
+    background: transparent !important;  /* 배경 강제로 투명 */
+}
                 /* PC 활성 메뉴 밑줄 */
                 .nav-btn.active::after {
                     content: '';
@@ -521,4 +521,5 @@
     };
 
 })();
+
 
