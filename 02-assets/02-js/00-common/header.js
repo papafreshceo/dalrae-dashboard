@@ -271,7 +271,7 @@
                                 <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
                                      alt="달래마켓" 
                                      class="logo-img"
-                                     onclick="navigateTo('index.html')">
+                                     onclick="navigateToPage('index')">
                             </div>
                             <button class="order-system-btn" onclick="openOrderSystem()">
                                 발주시스템
@@ -519,4 +519,5 @@
         init: initHeader,
         setActivePage: setActivePage
     };
+
 })();
