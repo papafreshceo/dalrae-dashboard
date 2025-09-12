@@ -7,12 +7,12 @@
   <link rel="icon" type="image/png" href="/favicon.png">
   <title>Win-Win</title>
   
-  <!-- CSS 파일 분리 -->
-  <link rel="stylesheet" href="css/design-system.css">
-  <link rel="stylesheet" href="css/services.css">
+  <!-- CSS 파일 - 올바른 경로로 수정 -->
+  <link rel="stylesheet" href="../02-assets/01-css/design-system.css">
+  <link rel="stylesheet" href="../02-assets/01-css/pages/services.css">
   
-  <!-- 헤더 스크립트 -->
-  <script src="header.js"></script>
+  <!-- 헤더 스크립트 - 올바른 경로로 수정 -->
+  <script src="../02-assets/02-js/00-common/header.js"></script>
 </head>
 <body>
   <!-- 공통 헤더 -->
@@ -51,385 +51,224 @@
           첫발을 내딛어 견문을 넓힐수 있는 기회와 동기부여 기회를 제공합니다.
         </p>
         <p class="caption">
-          (매칭 후 달래마켓에서는 특별한 사정이 없는 한 관여하지 않습니다)
+          품질 좋은 상품을 산지 가격으로 소싱하여 경쟁력 있는 가격으로 판매하실 수 있도록 지원합니다.
         </p>
       </div>
     </section>
 
     <!-- 서비스 탭 -->
-    <section class="service-tabs">
-      <button id="photo-service-btn" class="btn btn-primary active" onclick="switchService('photo')">
-        촬영 서비스
-      </button>
-      <button id="farm-service-btn" class="btn btn-secondary" onclick="switchService('farm')">
-        농가 매칭 서비스
-      </button>
-    </section>
+    <div class="service-tabs">
+      <button class="btn active" onclick="showService('photo')">촬영 서비스</button>
+      <button class="btn" onclick="showService('farm')">농가 매칭</button>
+    </div>
 
     <!-- 촬영 서비스 섹션 -->
     <div id="photo-service" class="service-section active">
       <div class="content-layout">
-        <!-- 좌측: 로케이션 선택 -->
         <div class="location-section">
-          <h2 class="section-title">촬영 로케이션 선택</h2>
-          
+          <h2 class="section-title">촬영 장소 선택</h2>
           <div class="location-list">
-            <!-- 일반 실내 촬영 -->
-            <div class="location-card" id="indoor-card">
-              <div class="location-header" onclick="toggleLocation('indoor')">
-                <div class="location-info">
-                  <input type="checkbox" class="location-checkbox" id="indoor-check" onclick="event.stopPropagation()">
-                  <span class="location-title">일반 실내 촬영</span>
-                </div>
-                <span class="location-price" id="indoor-base-price">30,000원</span>
+            <div class="location-card" onclick="selectLocation('indoor')">
+              <div class="location-header">
+                <h3>실내촬영</h3>
+                <span class="location-price" id="indoor-price">30,000원</span>
               </div>
-              <div class="location-body">
-                <div class="default-info" id="indoor-default-info">
-                  기본 제공: 사진 50매, 영상길이 10분 이상
-                </div>
-                <div class="option-group">
-                  <label class="option-label">추가 수량</label>
-                  <div class="quantity-control">
-                    <span class="quantity-label">추가 사진</span>
-                    <div class="stepper">
-                      <button onclick="adjustQuantity('indoor-photo', -10)">-</button>
-                      <input type="number" id="indoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('indoor-photo')">
-                      <button onclick="adjustQuantity('indoor-photo', 10)">+</button>
-                    </div>
-                    <span class="quantity-cost" id="indoor-photo-cost">매 (500원/매)</span>
-                  </div>
-                  <div class="quantity-control">
-                    <span class="quantity-label">추가 영상</span>
-                    <div class="stepper">
-                      <button onclick="adjustQuantity('indoor-video', -1)">-</button>
-                      <input type="number" id="indoor-video" value="0" min="0" step="1" onchange="handleDirectInput('indoor-video')">
-                      <button onclick="adjustQuantity('indoor-video', 1)">+</button>
-                    </div>
-                    <span class="quantity-cost" id="indoor-video-cost">분 (2,000원/분)</span>
-                  </div>
-                </div>
-                <div class="option-group">
-                  <label class="option-label">추가 옵션</label>
-                  <div class="checkbox-options">
-                    <label class="checkbox-label">
-                      <input type="checkbox" id="indoor-hand">
-                      <span id="indoor-hand-label">핸드컷 (+30,000원)</span>
-                    </label>
-                    <label class="checkbox-label">
-                      <input type="checkbox" id="indoor-model">
-                      <span id="indoor-model-label">모델컷 (+200,000원)</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
+              <p>스튜디오에서 진행하는 전문 상품 촬영</p>
+              <span class="location-photos" id="indoor-photos">기본 사진 5매</span>
             </div>
-
-            <!-- 야외 촬영 -->
-            <div class="location-card" id="outdoor-card">
-              <div class="location-header" onclick="toggleLocation('outdoor')">
-                <div class="location-info">
-                  <input type="checkbox" class="location-checkbox" id="outdoor-check" onclick="event.stopPropagation()">
-                  <span class="location-title">야외 촬영</span>
-                </div>
-                <span class="location-price" id="outdoor-base-price">50,000원</span>
+            
+            <div class="location-card" onclick="selectLocation('outdoor')">
+              <div class="location-header">
+                <h3>야외촬영</h3>
+                <span class="location-price" id="outdoor-price">50,000원</span>
               </div>
-              <div class="location-body">
-                <div class="default-info" id="outdoor-default-info">
-                  기본 제공: 사진 50매, 영상길이 5분 이상
-                </div>
-                <div class="option-group">
-                  <label class="option-label">추가 수량</label>
-                  <div class="quantity-control">
-                    <span class="quantity-label">추가 사진</span>
-                    <div class="stepper">
-                      <button onclick="adjustQuantity('outdoor-photo', -10)">-</button>
-                      <input type="number" id="outdoor-photo" value="0" min="0" step="10" onchange="handleDirectInput('outdoor-photo')">
-                      <button onclick="adjustQuantity('outdoor-photo', 10)">+</button>
-                    </div>
-                    <span class="quantity-cost" id="outdoor-photo-cost">매 (500원/매)</span>
-                  </div>
-                  <div class="quantity-control">
-                    <span class="quantity-label">추가 영상</span>
-                    <div class="stepper">
-                      <button onclick="adjustQuantity('outdoor-video', -1)">-</button>
-                      <input type="number" id="outdoor-video" value="0" min="0" step="1" onchange="handleDirectInput('outdoor-video')">
-                      <button onclick="adjustQuantity('outdoor-video', 1)">+</button>
-                    </div>
-                    <span class="quantity-cost" id="outdoor-video-cost">분 (2,000원/분)</span>
-                  </div>
-                </div>
-                <div class="option-group">
-                  <label class="option-label">추가 옵션</label>
-                  <div class="checkbox-options">
-                    <label class="checkbox-label">
-                      <input type="checkbox" id="outdoor-hand">
-                      <span id="outdoor-hand-label">핸드컷 (+30,000원)</span>
-                    </label>
-                    <label class="checkbox-label">
-                      <input type="checkbox" id="outdoor-model">
-                      <span id="outdoor-model-label">모델컷 (+200,000원)</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
+              <p>자연광을 활용한 아웃도어 촬영</p>
+              <span class="location-photos" id="outdoor-photos">기본 사진 5매</span>
             </div>
-
-            <!-- 요리 촬영 -->
-            <div class="location-card" id="cooking-card">
-              <div class="location-header" onclick="toggleLocation('cooking')">
-                <div class="location-info">
-                  <input type="checkbox" class="location-checkbox" id="cooking-check" onclick="event.stopPropagation()">
-                  <span class="location-title">요리 촬영</span>
-                </div>
-                <span class="location-price" id="cooking-base-price">60,000원</span>
+            
+            <div class="location-card" onclick="selectLocation('cooking')">
+              <div class="location-header">
+                <h3>요리촬영</h3>
+                <span class="location-price" id="cooking-price">80,000원</span>
               </div>
-              <div class="location-body">
-                <div class="default-info" id="cooking-default-info">
-                  기본 제공: 1개 메뉴 (사진 30매), 영상길이 3분 이상
-                </div>
-                <div class="option-group">
-                  <label class="option-label">추가 수량</label>
-                  <div class="quantity-control">
-                    <span class="quantity-label">추가 메뉴</span>
-                    <div class="stepper">
-                      <button onclick="adjustQuantity('cooking-menu', -1)">-</button>
-                      <input type="number" id="cooking-menu" value="0" min="0" step="1" onchange="handleDirectInput('cooking-menu')">
-                      <button onclick="adjustQuantity('cooking-menu', 1)">+</button>
-                    </div>
-                    <span class="quantity-cost" id="cooking-menu-cost">개 (메뉴당 30,000원 추가)</span>
-                  </div>
-                  <div class="quantity-control">
-                    <span class="quantity-label">추가 사진</span>
-                    <div class="stepper">
-                      <button onclick="adjustQuantity('cooking-photo', -10)">-</button>
-                      <input type="number" id="cooking-photo" value="0" min="0" step="10" onchange="handleDirectInput('cooking-photo')">
-                      <button onclick="adjustQuantity('cooking-photo', 10)">+</button>
-                    </div>
-                    <span class="quantity-cost" id="cooking-photo-cost">매 (500원/매)</span>
-                  </div>
-                  <div class="quantity-control">
-                    <span class="quantity-label">추가 영상</span>
-                    <div class="stepper">
-                      <button onclick="adjustQuantity('cooking-video', -1)">-</button>
-                      <input type="number" id="cooking-video" value="0" min="0" step="1" onchange="handleDirectInput('cooking-video')">
-                      <button onclick="adjustQuantity('cooking-video', 1)">+</button>
-                    </div>
-                    <span class="quantity-cost" id="cooking-video-cost">분 (2,000원/분)</span>
-                  </div>
-                </div>
-                <div class="option-group">
-                  <label class="option-label">추가 옵션</label>
-                  <div class="checkbox-options">
-                    <label class="checkbox-label">
-                      <input type="checkbox" id="cooking-hand">
-                      <span id="cooking-hand-label">핸드컷 (+30,000원)</span>
-                    </label>
-                    <label class="checkbox-label">
-                      <input type="checkbox" id="cooking-model">
-                      <span id="cooking-model-label">모델컷 (+200,000원)</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
+              <p>조리 과정 및 완성 요리 촬영</p>
+              <span class="location-photos" id="cooking-photos">기본 사진 10매</span>
             </div>
+            
+            <div class="location-card" onclick="selectLocation('drone')">
+              <div class="location-header">
+                <h3>드론촬영</h3>
+                <span class="location-price" id="drone-price">100,000원</span>
+              </div>
+              <p>드론을 활용한 항공 촬영</p>
+              <span class="location-photos" id="drone-photos">기본 사진 15매</span>
+            </div>
+          </div>
 
-            <!-- 드론 촬영 -->
-            <div class="location-card" id="drone-card">
-              <div class="location-header" onclick="toggleLocation('drone')">
-                <div class="location-info">
-                  <input type="checkbox" class="location-checkbox" id="drone-check" onclick="event.stopPropagation()">
-                  <span class="location-title">드론 촬영</span>
-                </div>
-                <span class="location-price" id="drone-base-price">90,000원</span>
+          <!-- 추가 옵션 -->
+          <h3 class="section-subtitle">추가 옵션</h3>
+          <div class="option-section">
+            <div class="option-item">
+              <label class="option-label">추가 사진 수량</label>
+              <div class="stepper">
+                <button onclick="updatePhotoCount(-1)">-</button>
+                <input type="number" id="extra-photos" value="0" min="0">
+                <button onclick="updatePhotoCount(1)">+</button>
               </div>
-              <div class="location-body">
-                <div class="default-info" id="drone-default-info">
-                  기본 제공: 사진 20매, 영상길이 5분 이상
-                </div>
-                <div class="option-group">
-                  <label class="option-label">추가 수량</label>
-                  <div class="quantity-control">
-                    <span class="quantity-label">추가 사진</span>
-                    <div class="stepper">
-                      <button onclick="adjustQuantity('drone-photo', -10)">-</button>
-                      <input type="number" id="drone-photo" value="0" min="0" step="10" onchange="handleDirectInput('drone-photo')">
-                      <button onclick="adjustQuantity('drone-photo', 10)">+</button>
-                    </div>
-                    <span class="quantity-cost" id="drone-photo-cost">매 (500원/매)</span>
-                  </div>
-                  <div class="quantity-control">
-                    <span class="quantity-label">추가 영상</span>
-                    <div class="stepper">
-                      <button onclick="adjustQuantity('drone-video', -1)">-</button>
-                      <input type="number" id="drone-video" value="0" min="0" step="1" onchange="handleDirectInput('drone-video')">
-                      <button onclick="adjustQuantity('drone-video', 1)">+</button>
-                    </div>
-                    <span class="quantity-cost" id="drone-video-cost">분 (2,000원/분)</span>
-                  </div>
-                </div>
-              </div>
+              <span class="quantity-cost" id="photo-cost">0원</span>
+            </div>
+            
+            <div class="checkbox-options">
+              <label class="checkbox-label">
+                <input type="checkbox" id="multi-location" onchange="updateQuote()">
+                <span>2곳 이상 추가 (+30,000원)</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" id="model-option" onchange="updateQuote()">
+                <span>모델 섭외 (+100,000원)</span>
+              </label>
             </div>
           </div>
 
           <!-- 편집 서비스 -->
-          <h2 class="section-title mt-4">영상 편집 서비스</h2>
+          <h3 class="section-subtitle">편집 서비스</h3>
           <div class="edit-section">
             <div class="edit-option">
-              <h3>일반 편집</h3>
-              <p class="edit-price">
-                <span id="basic-edit-price">30,000원</span>/분
-              </p>
+              <h3>일반편집</h3>
+              <p class="edit-price" id="basic-edit-price">30,000원</p>
               <div class="duration-grid">
                 <div class="duration-item">
-                  <span class="duration-label">1분</span>
+                  <span class="duration-label">15초</span>
                   <div class="duration-stepper">
-                    <button onclick="adjustEditQuantity('basic-1min', -1)">-</button>
-                    <input type="number" id="edit-basic-1min" value="0" min="0" step="1" onchange="handleDirectInput('edit-basic-1min')">
-                    <button onclick="adjustEditQuantity('basic-1min', 1)">+</button>
+                    <button onclick="updateDuration('basic-15', -1)">-</button>
+                    <input type="number" id="basic-15" value="0" min="0">
+                    <button onclick="updateDuration('basic-15', 1)">+</button>
                   </div>
                 </div>
                 <div class="duration-item">
-                  <span class="duration-label">2분</span>
+                  <span class="duration-label">30초</span>
                   <div class="duration-stepper">
-                    <button onclick="adjustEditQuantity('basic-2min', -1)">-</button>
-                    <input type="number" id="edit-basic-2min" value="0" min="0" step="1" onchange="handleDirectInput('edit-basic-2min')">
-                    <button onclick="adjustEditQuantity('basic-2min', 1)">+</button>
+                    <button onclick="updateDuration('basic-30', -1)">-</button>
+                    <input type="number" id="basic-30" value="0" min="0">
+                    <button onclick="updateDuration('basic-30', 1)">+</button>
                   </div>
                 </div>
                 <div class="duration-item">
-                  <span class="duration-label">3분</span>
+                  <span class="duration-label">60초</span>
                   <div class="duration-stepper">
-                    <button onclick="adjustEditQuantity('basic-3min', -1)">-</button>
-                    <input type="number" id="edit-basic-3min" value="0" min="0" step="1" onchange="handleDirectInput('edit-basic-3min')">
-                    <button onclick="adjustEditQuantity('basic-3min', 1)">+</button>
+                    <button onclick="updateDuration('basic-60', -1)">-</button>
+                    <input type="number" id="basic-60" value="0" min="0">
+                    <button onclick="updateDuration('basic-60', 1)">+</button>
                   </div>
+                </div>
+              </div>
+              <div class="edit-stats">
+                <div class="edit-stat-row">
+                  <span>선택: <span id="basic-count">0</span>개</span>
+                  <span>소계: <span id="basic-total">0</span>원</span>
                 </div>
               </div>
             </div>
 
             <div class="edit-option">
-              <h3>풀 편집</h3>
-              <p class="edit-price">
-                1분: <span id="full-edit-base">70,000원</span> (기본)<br>
-                2분 이상: +<span id="full-edit-per">20,000원</span>/분
-              </p>
+              <h3>풀편집</h3>
+              <p class="edit-price" id="full-edit-price">60,000원</p>
               <div class="duration-grid">
                 <div class="duration-item">
-                  <span class="duration-label">1분</span>
+                  <span class="duration-label">15초</span>
                   <div class="duration-stepper">
-                    <button onclick="adjustEditQuantity('full-1min', -1)">-</button>
-                    <input type="number" id="edit-full-1min" value="0" min="0" step="1" onchange="handleDirectInput('edit-full-1min')">
-                    <button onclick="adjustEditQuantity('full-1min', 1)">+</button>
+                    <button onclick="updateDuration('full-15', -1)">-</button>
+                    <input type="number" id="full-15" value="0" min="0">
+                    <button onclick="updateDuration('full-15', 1)">+</button>
                   </div>
                 </div>
                 <div class="duration-item">
-                  <span class="duration-label">2분</span>
+                  <span class="duration-label">30초</span>
                   <div class="duration-stepper">
-                    <button onclick="adjustEditQuantity('full-2min', -1)">-</button>
-                    <input type="number" id="edit-full-2min" value="0" min="0" step="1" onchange="handleDirectInput('edit-full-2min')">
-                    <button onclick="adjustEditQuantity('full-2min', 1)">+</button>
+                    <button onclick="updateDuration('full-30', -1)">-</button>
+                    <input type="number" id="full-30" value="0" min="0">
+                    <button onclick="updateDuration('full-30', 1)">+</button>
                   </div>
                 </div>
                 <div class="duration-item">
-                  <span class="duration-label">3분</span>
+                  <span class="duration-label">60초</span>
                   <div class="duration-stepper">
-                    <button onclick="adjustEditQuantity('full-3min', -1)">-</button>
-                    <input type="number" id="edit-full-3min" value="0" min="0" step="1" onchange="handleDirectInput('edit-full-3min')">
-                    <button onclick="adjustEditQuantity('full-3min', 1)">+</button>
+                    <button onclick="updateDuration('full-60', -1)">-</button>
+                    <input type="number" id="full-60" value="0" min="0">
+                    <button onclick="updateDuration('full-60', 1)">+</button>
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div class="edit-stats">
-              <div class="edit-stat-row">
-                <span>이 편집 영상 개수</span>
-                <span id="totalEditVideos">0개</span>
+              <div class="edit-stats">
+                <div class="edit-stat-row">
+                  <span>선택: <span id="full-count">0</span>개</span>
+                  <span>소계: <span id="full-total">0</span>원</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 우측: 통계 및 최종 견적 -->
-        <div class="quote-section">
-          <!-- 선택 통계 -->
+        <!-- 실시간 견적서 -->
+        <aside class="quote-section">
+          <div class="quote-card">
+            <h2 class="quote-title">실시간 견적서</h2>
+            
+            <div class="quote-items" id="quote-items">
+              <p class="empty-quote">서비스를 선택해주세요</p>
+            </div>
+            
+            <div class="quote-summary">
+              <div class="summary-row">
+                <span>소계</span>
+                <span id="subtotal">0원</span>
+              </div>
+              <div class="summary-row">
+                <span>부가세 (10%)</span>
+                <span id="vat">0원</span>
+              </div>
+              <div class="summary-row total">
+                <span>총 금액</span>
+                <span id="total">0원</span>
+              </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="submitQuote()">견적 요청하기</button>
+          </div>
+
+          <!-- 통계 섹션 -->
           <div class="stats-section">
-            <h3 class="section-title">선택 통계</h3>
-            <div class="stats-summary">
-              <div class="stat-total">
-                <span>총 사진</span>
-                <span id="totalPhotos">0매</span>
+            <h3 class="stats-title">서비스 현황</h3>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-label">총 촬영 건수</span>
+                <span class="stat-value">1,234건</span>
               </div>
-              <div class="stat-total">
-                <span>총 영상</span>
-                <span id="totalVideos">0분</span>
+              <div class="stat-item">
+                <span class="stat-label">고객 만족도</span>
+                <span class="stat-value">98.5%</span>
               </div>
-            </div>
-            <div class="stats-grid" id="statsGrid"></div>
-          </div>
-
-          <!-- 최종 견적 -->
-          <div class="final-quote">
-            <h3 class="section-title">최종 견적</h3>
-            <div class="quote-breakdown">
-              <div class="quote-item">
-                <span class="quote-label">로케이션 기본</span>
-                <span class="quote-value" id="locationCost">0원</span>
+              <div class="stat-item">
+                <span class="stat-label">평균 작업시간</span>
+                <span class="stat-value">3.5일</span>
               </div>
-              <div class="quote-item">
-                <span class="quote-label">로케이션 전환</span>
-                <span class="quote-value" id="transitionCost">0원</span>
+              <div class="stat-item">
+                <span class="stat-label">재촬영률</span>
+                <span class="stat-value">0.8%</span>
               </div>
-              <div class="quote-item">
-                <span class="quote-label">추가 메뉴</span>
-                <span class="quote-value" id="menuCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">추가 사진</span>
-                <span class="quote-value" id="photoCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">추가 영상</span>
-                <span class="quote-value" id="videoCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">핸드컷</span>
-                <span class="quote-value" id="handCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">모델컷</span>
-                <span class="quote-value" id="modelCost">0원</span>
-              </div>
-              <div class="quote-item">
-                <span class="quote-label">영상 편집</span>
-                <span class="quote-value" id="editCost">0원</span>
-              </div>
-            </div>
-            <div class="quote-total">
-              <div class="quote-total-label">예상 총 비용</div>
-              <div class="quote-total-amount" id="totalAmount">0원</div>
-              <div class="quote-vat">* 부가세 별도</div>
-            </div>
-            <div class="quote-contact">
-              <div class="quote-contact-text">
-                진행 시 유선상담 조율 후 진행 가능합니다
-              </div>
-              <a href="tel:01026881388" class="phone-link">010-2688-1388</a>
-            </div>
-            <div class="quote-warning">
-              본 견적은 예상 금액이며, 현장 상황에 따라 변동될 수 있습니다
             </div>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
 
-    <!-- 농가 매칭 서비스 섹션 -->
+    <!-- 농가 매칭 섹션 -->
     <div id="farm-service" class="service-section">
-      <div class="farm-service-card">
-        <h2 class="farm-service-title">농가 매칭 서비스</h2>
-        <p class="farm-service-desc">
-          믿을 수 있는 산지 농가와 직접 연결해 드립니다. 품질 좋은 상품을 산지 가격으로 소싱하여 경쟁력 있는 가격으로 판매하실 수 있도록 지원합니다.
+      <div class="farm-content">
+        <h2 class="section-title">농가 매칭 서비스</h2>
+        <p class="section-description">
+          달래마켓은 우수한 농가와 판매자를 연결하여 상생의 가치를 만들어갑니다.<br>
+          품질 좋은 상품을 산지 가격으로 소싱하여 경쟁력 있는 가격으로 판매하실 수 있도록 지원합니다.
         </p>
 
         <!-- 아코디언 서비스 설명 -->
@@ -462,7 +301,7 @@
     </div>
   </div>
 
-  <!-- JavaScript 파일 분리 -->
-  <script src="js/services.js"></script>
+  <!-- JavaScript 파일 - 올바른 경로로 수정 -->
+  <script src="../02-assets/02-js/01-pages/services.js"></script>
 </body>
 </html>
