@@ -178,7 +178,7 @@
                     color: white;
                     border: none;
                     border-radius: 3px;
-                    font-size: 16px;
+                    font-size: 14px;
                     font-weight: var(--font-semibold, 600);
                     cursor: pointer;
                     white-space: nowrap;
@@ -217,8 +217,8 @@
                 
                 /* 모바일 메뉴 버튼 */
                 .nav-btn {
-                    font-size: 16px;
-                    padding: 1px 1px;
+                    font-size: 14px;
+                    padding: 1px 3px;
                     background: transparent;
                     border: none;
                     color: #495057;
@@ -544,4 +544,5 @@
     };
 
 })();
+
 
