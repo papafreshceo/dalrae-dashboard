@@ -1,0 +1,65 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/dashboard",
+      "destination": "/01-pages/01-dashboard.html"
+    },
+    {
+      "source": "/products",
+      "destination": "/01-pages/02-products.html"
+    },
+    {
+      "source": "/products-calendar",
+      "destination": "/01-pages/03-products-calendar.html"
+    },
+    {
+      "source": "/delivery",
+      "destination": "/01-pages/04-delivery-calendar.html"
+    },
+    {
+      "source": "/orders",
+      "destination": "/01-pages/05-orders.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/01-pages/06-services.html"
+    },
+    {
+      "source": "/notice",
+      "destination": "/01-pages/07-notice.html"
+    },
+    {
+      "source": "/css/(.*)",
+      "destination": "/02-assets/01-css/$1"
+    },
+    {
+      "source": "/js/(.*)",
+      "destination": "/02-assets/02-js/$1"
+    },
+    {
+      "source": "/components/(.*)",
+      "destination": "/02-assets/03-components/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
+}
