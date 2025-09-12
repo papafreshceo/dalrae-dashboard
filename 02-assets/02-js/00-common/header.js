@@ -167,7 +167,7 @@
                 }
                 
                 .logo-img {
-                    height: 14px;
+                    height: 18px;
                     object-fit: contain;
                     cursor: pointer;
                 }
@@ -178,7 +178,7 @@
                     color: white;
                     border: none;
                     border-radius: 3px;
-                    font-size: 10px;
+                    font-size: 16px;
                     font-weight: var(--font-semibold, 600);
                     cursor: pointer;
                     white-space: nowrap;
@@ -217,8 +217,8 @@
                 
                 /* 모바일 메뉴 버튼 */
                 .nav-btn {
-                    font-size: 12px;
-                    padding: 3px 2px;
+                    font-size: 16px;
+                    padding: 1px 1px;
                     background: transparent;
                     border: none;
                     color: #495057;
@@ -230,7 +230,7 @@
                     text-align: center;
                     position: relative;
                     line-height: 1.1;
-                    min-height: 20px;
+                    min-height: 15px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -544,3 +544,4 @@
     };
 
 })();
+
