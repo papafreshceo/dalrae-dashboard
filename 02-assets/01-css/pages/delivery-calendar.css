@@ -1,0 +1,569 @@
+/* ========== DELIVERY CALENDAR PAGE STYLES ========== */
+
+/* Hero Section */
+.hero {
+    min-height: calc(100vh - 200px);
+    padding: var(--space-4xl) var(--space-xl);
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.card {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    background: var(--bg-primary);
+    border-radius: var(--card-radius);
+    padding: var(--card-padding);
+    box-shadow: var(--card-shadow);
+}
+
+/* Header Section */
+.header-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-3xl);
+}
+
+.title-group {
+    flex: 1;
+}
+
+.eyebrow {
+    font-size: var(--eyebrow-size);
+    font-weight: var(--eyebrow-weight);
+    letter-spacing: var(--eyebrow-spacing);
+    color: var(--eyebrow-color);
+    text-transform: var(--eyebrow-transform);
+    margin-bottom: var(--eyebrow-margin-bottom);
+}
+
+.title {
+    font-size: var(--text-4xl);
+    line-height: var(--leading-tight);
+    font-weight: var(--h1-weight);
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
+}
+
+.subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+    margin-bottom: 0;
+}
+
+/* View Toggle */
+.view-toggle {
+    display: flex;
+    gap: var(--space-sm);
+    margin-left: var(--space-3xl);
+}
+
+.toggle-btn {
+    padding: var(--space-md) var(--space-2xl);
+    border: 1px solid var(--border-default);
+    border-radius: var(--btn-radius);
+    font-weight: var(--font-medium);
+    font-size: var(--text-base);
+    cursor: pointer;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+}
+
+.toggle-btn.active {
+    background: var(--brand-primary);
+    color: white;
+    border-color: var(--brand-primary);
+}
+
+.toggle-btn:hover:not(.active) {
+    background: var(--bg-hover);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+/* Info Box */
+.info-box {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    padding: var(--space-lg) var(--space-xl);
+    background: var(--blue-50);
+    border: 1px solid var(--blue-200);
+    border-radius: var(--btn-radius);
+    margin-bottom: var(--space-2xl);
+}
+
+.info-icon {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.info-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--brand-primary);
+}
+
+.info-text p {
+    margin: 0;
+    font-size: var(--text-base);
+    color: var(--text-primary);
+    line-height: var(--leading-normal);
+}
+
+/* Divider */
+.divider {
+    height: 1px;
+    background: var(--border-light);
+    margin: var(--space-2xl) 0;
+}
+
+/* Notice Section */
+.notice-section {
+    margin-bottom: var(--space-3xl);
+}
+
+.notice-header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-lg);
+}
+
+.notice-header-main h3 {
+    font-size: var(--text-xl);
+    font-weight: var(--h2-weight);
+    color: var(--text-primary);
+}
+
+#noticesList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* Calendar Wrapper */
+.calendar-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-2xl);
+}
+
+/* Calendar Navigation */
+.calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+}
+
+.nav-btn {
+    width: var(--nav-btn-size);
+    height: var(--nav-btn-size);
+    background: var(--nav-btn-bg);
+    border: var(--nav-btn-border);
+    border-radius: 8px;
+    color: var(--nav-btn-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.nav-btn:hover {
+    border-color: var(--nav-btn-hover-border);
+    color: var(--nav-btn-hover-color);
+    background: var(--nav-btn-hover-bg);
+}
+
+.month-title {
+    font-size: var(--text-2xl);
+    font-weight: var(--h2-weight);
+    color: var(--text-primary);
+}
+
+/* Calendar Grid */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: var(--calendar-grid-cols);
+    gap: 1px;
+    background: var(--border-light);
+    border: 1px solid var(--border-light);
+}
+
+/* Calendar Header */
+.day-header {
+    background: var(--bg-secondary);
+    padding: var(--space-md);
+    text-align: center;
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    color: var(--text-secondary);
+}
+
+.day-header.sunday {
+    color: var(--text-sunday);
+}
+
+.day-header.saturday {
+    color: var(--text-saturday);
+}
+
+/* Day Cell */
+.day-cell {
+    background: var(--bg-primary);
+    padding: var(--calendar-cell-padding);
+    min-height: var(--calendar-cell-height);
+    position: relative;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.day-cell:hover {
+    background: var(--bg-hover);
+    z-index: var(--z-hover);
+}
+
+.day-cell.other-month {
+    background: var(--bg-muted);
+    opacity: 0.4;
+}
+
+.day-cell.today {
+    background: var(--bg-today);
+}
+
+.day-number {
+    font-size: var(--text-base);
+    font-weight: var(--font-medium);
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.day-cell.today .day-number {
+    color: var(--brand-primary);
+    font-weight: var(--font-bold);
+}
+
+.day-number.sunday,
+.day-number.holiday {
+    color: var(--text-sunday);
+}
+
+.day-number.saturday {
+    color: var(--text-saturday);
+}
+
+/* Delivery Icons */
+.delivery-icon {
+    position: absolute;
+    bottom: var(--space-md);
+    right: var(--space-md);
+    width: var(--icon-size);
+    height: var(--icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition-fast);
+}
+
+.delivery-icon svg {
+    width: var(--icon-inner-size);
+    height: var(--icon-inner-size);
+    transition: transform var(--transition-fast);
+}
+
+.delivery-icon.special {
+    background: var(--icon-special-bg);
+}
+
+.delivery-icon.special svg {
+    stroke: var(--icon-special-color);
+}
+
+.delivery-icon.available {
+    background: var(--icon-available-bg);
+}
+
+.delivery-icon.available svg {
+    stroke: var(--icon-available-color);
+}
+
+.delivery-icon.unavailable {
+    background: var(--icon-unavailable-bg);
+}
+
+.delivery-icon.unavailable svg {
+    stroke: var(--icon-unavailable-color);
+}
+
+.day-cell:hover .delivery-icon {
+    transform: var(--hover-scale);
+}
+
+.day-cell:hover .delivery-icon svg {
+    transform: var(--rotate-icon);
+}
+
+/* Day Badges */
+.day-badges {
+    position: absolute;
+    top: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    gap: var(--space-xs);
+}
+
+.badge {
+    padding: var(--badge-padding);
+    border-radius: var(--badge-radius);
+    font-size: var(--badge-font-size);
+    font-weight: var(--badge-font-weight);
+    width: 100%;
+    text-align: center;
+}
+
+.badge.issue {
+    background: var(--badge-issue-bg);
+    color: var(--badge-issue-color);
+    border: 1px solid var(--badge-issue-border);
+}
+
+.badge.other {
+    background: var(--badge-other-bg);
+    color: var(--badge-other-color);
+    border: 1px solid var(--badge-other-border);
+}
+
+.badge.holiday {
+    background: var(--badge-holiday-bg);
+    color: var(--badge-holiday-color);
+    border: 1px solid var(--badge-holiday-border);
+}
+
+.badge.temp-holiday {
+    background: var(--badge-temp-holiday-bg);
+    color: var(--badge-temp-holiday-color);
+    border: 1px solid var(--badge-temp-holiday-border);
+}
+
+/* Delivery Info Sidebar */
+.delivery-info {
+    padding: var(--space-2xl);
+    background: var(--bg-secondary);
+    border-radius: var(--card-radius);
+    border: 1px solid var(--border-default);
+}
+
+.delivery-info h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--h2-weight);
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--border-default);
+}
+
+.delivery-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.delivery-info li {
+    padding: var(--space-sm) 0;
+    color: var(--text-secondary);
+    font-size: var(--text-md);
+    line-height: var(--leading-normal);
+    display: flex;
+    align-items: center;
+}
+
+.delivery-info li.section-title {
+    font-weight: var(--h3-weight);
+    color: var(--text-primary);
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--border-default);
+}
+
+.delivery-info li.section-title:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.icon-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: var(--space-sm);
+    flex-shrink: 0;
+}
+
+.icon-indicator svg {
+    width: 14px;
+    height: 14px;
+}
+
+.icon-indicator.special {
+    background: var(--icon-special-bg);
+}
+
+.icon-indicator.special svg {
+    stroke: var(--icon-special-color);
+}
+
+.icon-indicator.available {
+    background: var(--icon-available-bg);
+}
+
+.icon-indicator.available svg {
+    stroke: var(--icon-available-color);
+}
+
+.icon-indicator.unavailable {
+    background: var(--icon-unavailable-bg);
+}
+
+.icon-indicator.unavailable svg {
+    stroke: var(--icon-unavailable-color);
+}
+
+/* Year View */
+.year-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-2xl);
+}
+
+.month-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: var(--card-radius);
+    padding: var(--space-lg);
+}
+
+.month-card-header {
+    text-align: center;
+    margin-bottom: var(--space-md);
+}
+
+.month-card-title {
+    font-size: var(--text-lg);
+    font-weight: var(--h3-weight);
+    color: var(--text-primary);
+}
+
+.mini-calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.mini-day-header,
+.mini-day-cell {
+    text-align: center;
+    padding: var(--space-xs);
+    font-size: var(--text-xs);
+}
+
+.mini-day-header {
+    background: var(--bg-secondary);
+    font-weight: var(--font-medium);
+    color: var(--text-muted);
+}
+
+.mini-day-cell {
+    background: var(--bg-primary);
+    position: relative;
+}
+
+.mini-day-cell.delivery-available {
+    background: var(--blue-50);
+}
+
+.mini-day-cell.delivery-special {
+    background: var(--blue-100);
+}
+
+.mini-day-cell.no-delivery {
+    background: var(--red-100);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .hero {
+        padding: var(--container-padding-mobile);
+    }
+
+    .card {
+        padding: var(--card-padding-mobile);
+        border-radius: var(--space-md);
+    }
+
+    .header-section {
+        flex-direction: column;
+        gap: var(--space-xl);
+    }
+
+    .view-toggle {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .toggle-btn {
+        flex: 1;
+    }
+
+    .title {
+        font-size: var(--text-3xl);
+    }
+
+    .subtitle {
+        font-size: var(--text-base);
+    }
+
+    .calendar-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .delivery-info {
+        order: -1;
+    }
+
+    .year-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .day-cell {
+        min-height: var(--calendar-cell-height-mobile);
+        padding: var(--calendar-cell-padding-mobile);
+    }
+
+    .delivery-icon {
+        width: var(--icon-size-mobile);
+        height: var(--icon-size-mobile);
+    }
+
+    .badge {
+        font-size: var(--badge-font-size-mobile);
+    }
+}
