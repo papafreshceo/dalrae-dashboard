@@ -1,5 +1,5 @@
 // services/delivery-data-service.js
-import { holidayAPI } from './delivery-holiday-api.js';
+import { holidayAPI } from './get-delivery-holiday-api.js';
 
 export class DeliveryDataService {
     constructor() {

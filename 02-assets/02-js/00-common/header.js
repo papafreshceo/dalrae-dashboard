@@ -134,14 +134,56 @@
             }
 
             /* 모바일 스타일 - 3행 레이아웃 */
-            @media (max-width: 768px) {
-                .top-header {
-                    padding: var(--space-sm, 8px) 0;
-                }
+            /* 모바일 스타일 - 3행 레이아웃 */
+@media (max-width: 768px) {
+    .top-header {
+        padding: var(--space-sm, 8px) 0;
+    }
 
-                .header-spacer {
-                    height: 90px;
-                }
+    .header-spacer {
+        height: 120px;  /* 90px에서 120px로 늘림 */
+    }
+
+    .header-content {
+        padding: 0 15px;
+    }
+    
+    /* 1행: 로고 + 발주시스템 */
+    .mobile-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-md, 12px);  /* 8px에서 12px로 늘림 */
+    }
+    
+    /* 2행, 3행: 메뉴 */
+    .nav-menu-container {
+        margin: var(--space-sm, 8px) -15px 0 -15px;  /* 상단 여백 추가 */
+    }
+    
+    .nav-menu {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-md, 12px);  /* 8px에서 12px로 늘림 */
+        padding: 0 15px;
+    }
+    
+    /* 모바일 메뉴 버튼 */
+    .nav-btn {
+        font-size: var(--text-sm, 12px);
+        padding: 8px 4px;  /* 5px에서 8px 4px로 변경 */
+        background: none;
+        border: none;
+        color: var(--text-secondary, #495057);
+        font-weight: var(--font-semibold, 600);
+        cursor: pointer;
+        transition: var(--transition-fast, all 0.2s);
+        white-space: nowrap;
+        font-family: 'Noto Sans KR', -apple-system, sans-serif;
+        text-align: center;
+        position: relative;
+        line-height: 1.2;  /* 줄 간격 추가 */
+    }
 
                 .header-content {
                     padding: 0 15px;
