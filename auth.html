@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 / 회원가입</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* ========== COLOR SYSTEM ========== */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-muted: #fafafa;
+            --bg-hover: #f8f9fa;
+            
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6c757d;
+            --text-link: #2563eb;
+            
+            --brand-primary: #2563eb;
+            --brand-primary-hover: #1d4ed8;
+            
+            --border-default: #dee2e6;
+            --border-light: #f1f3f5;
+            --border-heavy: #e5e7eb;
+            
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.1);
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            
+            /* ========== TYPOGRAPHY ========== */
+            --text-xs: 10px;
+            --text-sm: 12px;
+            --text-base: 14px;
+            --text-lg: 18px;
+            --text-xl: 20px;
+            --text-2xl: 24px;
+            --text-3xl: 28px;
+            --text-4xl: 36px;
+            
+            --font-extralight: 200;
+            --font-light: 300;
+            --font-normal: 400;
+            --font-medium: 500;
+            --font-semibold: 600;
+            --font-bold: 700;
+            
+            --h1-weight: 600;
+            --body-weight: 300;
+            --eyebrow-weight: 700;
+            
+            /* ========== SPACING ========== */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 20px;
+            --space-2xl: 24px;
+            --space-3xl: 32px;
+            --space-4xl: 40px;
+            
+            --card-padding: 40px;
+            --card-padding-mobile: 25px 20px;
+            --card-radius: 16px;
+            
+            /* ========== COMPONENTS ========== */
+            --btn-padding: 10px 24px;
+            --btn-radius: 6px;
+            --btn-font-size: 14px;
+            --btn-font-weight: 300;
+            --btn-transition: all 0.2s;
+            
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            
+            --transition-fast: all 0.2s;
+            --breakpoint-mobile: 768px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-weight: var(--body-weight);
+            font-size: var(--text-base);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-xl);
+        }
+        
+        .auth-container {
+            background: var(--bg-primary);
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
+            width: 100%;
+            max-width: 450px;
+            padding: var(--card-padding);
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--space-4xl);
+        }
+        
+        .eyebrow {
+            font-size: var(--text-base);
+            font-weight: var(--eyebrow-weight);
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-md);
+        }
+        
+        .auth-title {
+            font-size: var(--text-4xl);
+            font-weight: var(--h1-weight);
+            color: var(--text-primary);
+        }
+        
+        .tab-container {
+            display: flex;
+            border-bottom: 1px solid var(--border-default);
+            margin-bottom: var(--space-3xl);
+        }
+        
+        .tab-button {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: var(--space-md) 0;
+            font-size: var(--text-base);
+            font-weight: var(--font-normal);
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition-fast);
+        }
+        
+        .tab-button.active {
+            color: var(--brand-primary);
+            font-weight: var(--font-medium);
+        }
+        
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--brand-primary);
+        }
+        
+        .tab-button:hover {
+            color: var(--text-primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .form-label {
+            display: block;
+            font-size: var(--text-sm);
+            font-weight: var(--font-normal);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .form-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 var(--space-lg);
+            font-size: var(--text-base);
+            font-weight: var(--font-light);
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--btn-radius);
+            transition: var(--transition-fast);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-input.error {
+            border-color: var(--danger);
+        }
+        
+        .error-message {
+            display: none;
+            font-size: var(--text-sm);
+            color: var(--danger);
+            margin-top: var(--space-xs);
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .checkbox-input {
+            width: 18px;
+            height: 18px;
+            margin-right: var(--space-sm);
+            cursor: pointer;
+        }
+        
+        .checkbox-label {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        
+        .checkbox-label a {
+            color: var(--text-link);
+            text-decoration: none;
+        }
+        
+        .checkbox-label a:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            height: 48px;
+            background: var(--brand-primary);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--btn-radius);
+            font-size: var(--text-base);
+            font-weight: var(--font-normal);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover {
+            background: var(--brand-primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary.loading {
+            color: transparent;
+        }
+        
+        .btn-primary.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid var(--bg-primary);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spinner 0.6s linear infinite;
+        }
+        
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
+        }
+        
+        .divider {
+            text-align: center;
+            margin: var(--space-3xl) 0;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-default);
+        }
+        
+        .divider span {
+            background: var(--bg-primary);
+            padding: 0 var(--space-lg);
+            font-size: var(--text-sm);
+            color: var(--text-muted);
+            position: relative;
+        }
+        
+        .social-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+        }
+        
+        .btn-social {
+            height: 44px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--btn-radius);
+            font-size: var(--text-sm);
+            font-weight: var(--font-light);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+        }
+        
+        .btn-social:hover {
+            background: var(--bg-hover);
+            border-color: var(--brand-primary);
+        }
+        
+        .footer-links {
+            margin-top: var(--space-3xl);
+            text-align: center;
+        }
+        
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: var(--text-sm);
+            margin: 0 var(--space-md);
+            transition: var(--transition-fast);
+        }
+        
+        .footer-links a:hover {
+            color: var(--text-link);
+        }
+        
+        .success-message {
+            display: none;
+            background: var(--success-bg);
+            color: var(--success);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--btn-radius);
+            margin-bottom: var(--space-xl);
+            font-size: var(--text-sm);
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: var(--space-lg);
+            }
+            
+            .auth-container {
+                padding: var(--card-padding-mobile);
+            }
+            
+            .auth-title {
+                font-size: var(--text-3xl);
+            }
+            
+            .social-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-md);
+            }
+            
+            .footer-links a {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="eyebrow">Welcome</div>
+            <h1 class="auth-title">서비스명</h1>
+        </div>
+        
+        <div class="tab-container">
+            <button class="tab-button active" onclick="switchTab('login')">로그인</button>
+            <button class="tab-button" onclick="switchTab('signup')">회원가입</button>
+        </div>
+        
+        <div class="success-message" id="successMessage"></div>
+        
+        <!-- 로그인 폼 -->
+        <div id="login" class="tab-content active">
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="loginEmail">이메일</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="example@email.com" required>
+                    <div class="error-message" id="loginEmailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="loginPassword">비밀번호</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="비밀번호를 입력하세요" required>
+                    <div class="error-message" id="loginPasswordError"></div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="rememberMe" class="checkbox-input">
+                    <label for="rememberMe" class="checkbox-label">로그인 상태 유지</label>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="loginBtn">로그인</button>
+            </form>
+            
+            <div class="divider">
+                <span>또는</span>
+            </div>
+            
+            <div class="social-buttons">
+                <button class="btn-social" onclick="socialLogin('google')">
+                    <span>Google 로그인</span>
+                </button>
+                <button class="btn-social" onclick="socialLogin('kakao')">
+                    <span>카카오 로그인</span>
+                </button>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#" onclick="alert('비밀번호 찾기 페이지로 이동'); return false;">비밀번호를 잊으셨나요?</a>
+            </div>
+        </div>
+        
+        <!-- 회원가입 폼 -->
+        <div id="signup" class="tab-content">
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label class="form-label" for="signupName">이름</label>
+                    <input type="text" id="signupName" class="form-input" placeholder="홍길동" required>
+                    <div class="error-message" id="signupNameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="signupEmail">이메일</label>
+                    <input type="email" id="signupEmail" class="form-input" placeholder="example@email.com" required>
+                    <div class="error-message" id="signupEmailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="signupPassword">비밀번호</label>
+                    <input type="password" id="signupPassword" class="form-input" placeholder="8자 이상 입력하세요" required>
+                    <div class="error-message" id="signupPasswordError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="signupPasswordConfirm">비밀번호 확인</label>
+                    <input type="password" id="signupPasswordConfirm" class="form-input" placeholder="비밀번호를 다시 입력하세요" required>
+                    <div class="error-message" id="signupPasswordConfirmError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="signupPhone">전화번호 (선택)</label>
+                    <input type="tel" id="signupPhone" class="form-input" placeholder="010-1234-5678">
+                    <div class="error-message" id="signupPhoneError"></div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="agreeTerms" class="checkbox-input" required>
+                    <label for="agreeTerms" class="checkbox-label">
+                        <a href="#" onclick="alert('이용약관 페이지로 이동'); return false;">이용약관</a> 및 
+                        <a href="#" onclick="alert('개인정보처리방침 페이지로 이동'); return false;">개인정보처리방침</a>에 동의합니다
+                    </label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="agreeMarketing" class="checkbox-input">
+                    <label for="agreeMarketing" class="checkbox-label">마케팅 정보 수신에 동의합니다 (선택)</label>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="signupBtn">회원가입</button>
+            </form>
+            
+            <div class="divider">
+                <span>또는</span>
+            </div>
+            
+            <div class="social-buttons">
+                <button class="btn-social" onclick="socialLogin('google')">
+                    <span>Google로 가입</span>
+                </button>
+                <button class="btn-social" onclick="socialLogin('kakao')">
+                    <span>카카오로 가입</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function switchTab(tab) {
+            // 탭 버튼 활성화 상태 변경
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // 탭 콘텐츠 표시 변경
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            
+            // 에러 메시지 초기화
+            clearErrors();
+            
+            // 성공 메시지 숨기기
+            document.getElementById('successMessage').classList.remove('show');
+        }
+        
+        function clearErrors() {
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(error => {
+                error.classList.remove('show');
+                error.textContent = '';
+            });
+            
+            const inputs = document.querySelectorAll('.form-input');
+            inputs.forEach(input => input.classList.remove('error'));
+        }
+        
+        function showError(inputId, message) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + 'Error');
+            
+            input.classList.add('error');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+        
+        function showSuccess(message) {
+            const successElement = document.getElementById('successMessage');
+            successElement.textContent = message;
+            successElement.classList.add('show');
+            
+            setTimeout(() => {
+                successElement.classList.remove('show');
+            }, 3000);
+        }
+        
+        function handleLogin(event) {
+            event.preventDefault();
+            clearErrors();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // 유효성 검사
+            let isValid = true;
+            
+            if (!email) {
+                showError('loginEmail', '이메일을 입력해주세요');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('loginEmail', '올바른 이메일 형식이 아닙니다');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showError('loginPassword', '비밀번호를 입력해주세요');
+                isValid = false;
+            } else if (password.length < 8) {
+                showError('loginPassword', '비밀번호는 8자 이상이어야 합니다');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // 로딩 상태 표시
+                const loginBtn = document.getElementById('loginBtn');
+                loginBtn.classList.add('loading');
+                loginBtn.disabled = true;
+                
+                // API 호출 시뮬레이션
+                setTimeout(() => {
+                    loginBtn.classList.remove('loading');
+                    loginBtn.disabled = false;
+                    showSuccess('로그인에 성공했습니다');
+                    
+                    // 실제로는 여기서 페이지 이동 또는 상태 업데이트
+                    console.log('로그인 성공:', { email, password });
+                }, 1500);
+            }
+        }
+        
+        function handleSignup(event) {
+            event.preventDefault();
+            clearErrors();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
+            const phone = document.getElementById('signupPhone').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            // 유효성 검사
+            let isValid = true;
+            
+            if (!name) {
+                showError('signupName', '이름을 입력해주세요');
+                isValid = false;
+            } else if (name.length < 2) {
+                showError('signupName', '이름은 2자 이상이어야 합니다');
+                isValid = false;
+            }
+            
+            if (!email) {
+                showError('signupEmail', '이메일을 입력해주세요');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('signupEmail', '올바른 이메일 형식이 아닙니다');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showError('signupPassword', '비밀번호를 입력해주세요');
+                isValid = false;
+            } else if (password.length < 8) {
+                showError('signupPassword', '비밀번호는 8자 이상이어야 합니다');
+                isValid = false;
+            }
+            
+            if (password !== passwordConfirm) {
+                showError('signupPasswordConfirm', '비밀번호가 일치하지 않습니다');
+                isValid = false;
+            }
+            
+            if (phone && !/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/.test(phone)) {
+                showError('signupPhone', '올바른 전화번호 형식이 아닙니다 (예: 010-1234-5678)');
+                isValid = false;
+            }
+            
+            if (!agreeTerms) {
+                alert('이용약관에 동의해주세요');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // 로딩 상태 표시
+                const signupBtn = document.getElementById('signupBtn');
+                signupBtn.classList.add('loading');
+                signupBtn.disabled = true;
+                
+                // API 호출 시뮬레이션
+                setTimeout(() => {
+                    signupBtn.classList.remove('loading');
+                    signupBtn.disabled = false;
+                    showSuccess('회원가입이 완료되었습니다. 로그인해주세요.');
+                    
+                    // 로그인 탭으로 전환
+                    setTimeout(() => {
+                        document.querySelectorAll('.tab-button')[0].click();
+                    }, 1500);
+                    
+                    console.log('회원가입 성공:', { name, email, password, phone });
+                }, 1500);
+            }
+        }
+        
+        function socialLogin(provider) {
+            console.log(`${provider} 로그인 시도`);
+            alert(`${provider} 로그인 페이지로 이동합니다`);
+        }
+        
+        // 전화번호 자동 포맷팅
+        document.getElementById('signupPhone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length > 3 && value.length <= 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            } else if (value.length > 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
