@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인 / 회원가입</title>
+    <title>달래마켓 - 로그인</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -48,6 +48,7 @@
             --font-bold: 700;
             
             --h1-weight: 600;
+            --h2-weight: 500;
             --body-weight: 300;
             --eyebrow-weight: 700;
             
@@ -75,6 +76,7 @@
             --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
             
             --transition-fast: all 0.2s;
+            --transition-normal: all 0.3s;
             --breakpoint-mobile: 768px;
         }
         
@@ -86,7 +88,6 @@
         
         body {
             font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-secondary);
             color: var(--text-primary);
             font-weight: var(--body-weight);
             font-size: var(--text-base);
@@ -96,15 +97,89 @@
             align-items: center;
             justify-content: center;
             padding: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(147, 197, 253, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(186, 230, 253, 0.25) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 80%, rgba(224, 242, 254, 0.2) 0%, transparent 45%);
+            animation: gradientFlow 20s ease-in-out infinite;
+        }
+        
+        @keyframes gradientFlow {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translate(-10%, 5%) rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: translate(5%, -10%) rotate(180deg) scale(0.95);
+            }
+            75% {
+                transform: translate(10%, 10%) rotate(270deg) scale(1.05);
+            }
+        }
+        
+        /* AI 애니메이션 요소 */
+        .ai-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .neural-node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .neural-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.15), transparent);
+            animation: pulse 3s infinite;
+            transform-origin: left center;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -30px); }
+            50% { transform: translate(-20px, 20px); }
+            75% { transform: translate(-30px, -10px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0; width: 0; }
+            50% { opacity: 1; width: 100px; }
         }
         
         .auth-container {
-            background: var(--bg-primary);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: var(--card-radius);
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             padding: var(--card-padding);
+            position: relative;
+            z-index: 10;
         }
         
         .auth-header {
@@ -125,53 +200,26 @@
             font-size: var(--text-4xl);
             font-weight: var(--h1-weight);
             color: var(--text-primary);
+            margin-bottom: var(--space-sm);
         }
         
-        .tab-container {
-            display: flex;
-            border-bottom: 1px solid var(--border-default);
-            margin-bottom: var(--space-3xl);
+        .subtitle {
+            font-size: var(--text-lg);
+            font-weight: var(--font-light);
+            color: var(--text-secondary);
         }
         
-        .tab-button {
-            flex: 1;
-            background: none;
-            border: none;
-            padding: var(--space-md) 0;
-            font-size: var(--text-base);
-            font-weight: var(--font-normal);
-            color: var(--text-muted);
-            cursor: pointer;
-            position: relative;
-            transition: var(--transition-fast);
+        .form-content {
+            display: block;
+            animation: fadeIn 0.3s ease;
         }
         
-        .tab-button.active {
-            color: var(--brand-primary);
-            font-weight: var(--font-medium);
-        }
-        
-        .tab-button.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--brand-primary);
-        }
-        
-        .tab-button:hover {
-            color: var(--text-primary);
-        }
-        
-        .tab-content {
+        .form-content.signup-mode {
             display: none;
         }
         
-        .tab-content.active {
+        .form-content.signup-mode.active {
             display: block;
-            animation: fadeIn 0.3s ease;
         }
         
         @keyframes fadeIn {
@@ -180,7 +228,7 @@
         }
         
         .form-group {
-            margin-bottom: var(--space-2xl);
+            margin-bottom: var(--space-lg);
         }
         
         .form-label {
@@ -193,8 +241,8 @@
         
         .form-input {
             width: 100%;
-            height: 48px;
-            padding: 0 var(--space-lg);
+            height: 34px;
+            padding: 0 var(--space-md);
             font-size: var(--text-base);
             font-weight: var(--font-light);
             color: var(--text-primary);
@@ -206,8 +254,8 @@
         
         .form-input:focus {
             outline: none;
-            border-color: var(--brand-primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            border-color: var(--success);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
         }
         
         .form-input.error {
@@ -253,10 +301,70 @@
             text-decoration: underline;
         }
         
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        
+        .btn-social {
+            width: 100%;
+            height: 48px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--btn-radius);
+            font-size: var(--text-base);
+            font-weight: var(--font-normal);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+        }
+        
+        .btn-social:hover {
+            background: var(--bg-hover);
+            transform: translateY(-1px);
+        }
+        
+        .btn-social.google {
+            border-color: #ea4335;
+            color: #ea4335;
+        }
+        
+        .btn-social.google:hover {
+            background: rgba(234, 67, 53, 0.05);
+            border-color: #ea4335;
+        }
+        
+        .btn-social.kakao {
+            background: #FEE500;
+            border-color: #FEE500;
+            color: #000000;
+        }
+        
+        .btn-social.kakao:hover {
+            background: #fada00;
+            transform: translateY(-1px);
+        }
+        
+        .btn-social.naver {
+            background: #03C75A;
+            border-color: #03C75A;
+            color: white;
+        }
+        
+        .btn-social.naver:hover {
+            background: #02b351;
+            transform: translateY(-1px);
+        }
+        
         .btn-primary {
             width: 100%;
             height: 48px;
-            background: var(--brand-primary);
+            background: var(--success);
             color: var(--bg-primary);
             border: none;
             border-radius: var(--btn-radius);
@@ -266,10 +374,20 @@
             transition: var(--transition-fast);
             position: relative;
             overflow: hidden;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .btn-primary.btn-login {
+            background: var(--brand-primary);
+        }
+        
+        .btn-primary.btn-login:hover {
+            background: var(--brand-primary-hover);
+            transform: translateY(-1px);
         }
         
         .btn-primary:hover {
-            background: var(--brand-primary-hover);
+            background: #0ea968;
             transform: translateY(-1px);
         }
         
@@ -302,7 +420,7 @@
         
         .divider {
             text-align: center;
-            margin: var(--space-3xl) 0;
+            margin: var(--space-2xl) 0;
             position: relative;
         }
         
@@ -317,55 +435,51 @@
         }
         
         .divider span {
-            background: var(--bg-primary);
+            background: rgba(255, 255, 255, 0.98);
             padding: 0 var(--space-lg);
             font-size: var(--text-sm);
             color: var(--text-muted);
             position: relative;
         }
         
-        .social-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-md);
-        }
-        
-        .btn-social {
-            height: 44px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-default);
-            border-radius: var(--btn-radius);
-            font-size: var(--text-sm);
-            font-weight: var(--font-light);
-            cursor: pointer;
-            transition: var(--transition-fast);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-sm);
-        }
-        
-        .btn-social:hover {
-            background: var(--bg-hover);
-            border-color: var(--brand-primary);
-        }
-        
         .footer-links {
-            margin-top: var(--space-3xl);
-            text-align: center;
+            margin-top: var(--space-2xl);
+            display: flex;
+            justify-content: center;
+            gap: var(--space-2xl);
         }
         
         .footer-links a {
             color: var(--text-muted);
             text-decoration: none;
             font-size: var(--text-sm);
-            margin: 0 var(--space-md);
             transition: var(--transition-fast);
+            cursor: pointer;
         }
         
         .footer-links a:hover {
-            color: var(--text-link);
+            color: var(--success);
+        }
+        
+        .back-link {
+            display: none;
+            margin-bottom: var(--space-2xl);
+            text-align: center;
+        }
+        
+        .back-link.show {
+            display: block;
+        }
+        
+        .back-link a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: var(--text-sm);
+            transition: var(--transition-fast);
+        }
+        
+        .back-link a:hover {
+            color: var(--success);
         }
         
         .success-message {
@@ -395,39 +509,36 @@
                 font-size: var(--text-3xl);
             }
             
-            .social-buttons {
-                grid-template-columns: 1fr;
+            .subtitle {
+                font-size: var(--text-base);
             }
             
             .footer-links {
-                display: flex;
-                flex-direction: column;
-                gap: var(--space-md);
-            }
-            
-            .footer-links a {
-                margin: 0;
+                gap: var(--space-lg);
             }
         }
     </style>
 </head>
 <body>
+    <!-- AI 애니메이션 배경 -->
+    <div class="ai-animation" id="aiAnimation"></div>
+    
     <div class="auth-container">
         <div class="auth-header">
-            <div class="eyebrow">Welcome</div>
-            <h1 class="auth-title">서비스명</h1>
+            <div class="eyebrow">돌아오신 걸 환영해요</div>
+            <h1 class="auth-title">달래마켓</h1>
+            <p class="subtitle">성공을 위한 파트너</p>
         </div>
         
-        <div class="tab-container">
-            <button class="tab-button active" onclick="switchTab('login')">로그인</button>
-            <button class="tab-button" onclick="switchTab('signup')">회원가입</button>
+        <div class="back-link" id="backLink">
+            <a href="#" onclick="showLogin(); return false;">← 로그인으로 돌아가기</a>
         </div>
         
         <div class="success-message" id="successMessage"></div>
         
         <!-- 로그인 폼 -->
-        <div id="login" class="tab-content active">
-            <form id="loginForm" onsubmit="handleLogin(event)">
+        <div id="loginForm" class="form-content">
+            <form onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label class="form-label" for="loginEmail">이메일</label>
                     <input type="email" id="loginEmail" class="form-input" placeholder="example@email.com" required>
@@ -440,35 +551,46 @@
                     <div class="error-message" id="loginPasswordError"></div>
                 </div>
                 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="rememberMe" class="checkbox-input">
-                    <label for="rememberMe" class="checkbox-label">로그인 상태 유지</label>
+                <button type="submit" class="btn-primary btn-login" id="loginBtn">로그인</button>
+                
+                <div class="divider">
+                    <span>간편 로그인</span>
                 </div>
                 
-                <button type="submit" class="btn-primary" id="loginBtn">로그인</button>
+                <div class="social-buttons">
+                    <button type="button" class="btn-social google" onclick="socialLogin('google')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span>Google 로그인</span>
+                    </button>
+                    <button type="button" class="btn-social kakao" onclick="socialLogin('kakao')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3C6.477 3 2 6.362 2 10.5c0 2.627 1.862 4.966 4.746 6.32-.21.92-.766 3.35-.877 3.87-.137.64.236.63.497.458.204-.134 3.253-2.206 4.569-3.102.68.097 1.368.148 2.065.148 5.523 0 10-3.362 10-7.5S17.523 3 12 3z" fill="#000000"/>
+                        </svg>
+                        <span>카카오 로그인</span>
+                    </button>
+                    <button type="button" class="btn-social naver" onclick="socialLogin('naver')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727v12.845z" fill="white"/>
+                        </svg>
+                        <span>네이버 로그인</span>
+                    </button>
+                </div>
+                
+                <div class="footer-links">
+                    <a onclick="showSignup(); return false;">회원가입</a>
+                    <a onclick="alert('비밀번호 찾기 페이지로 이동'); return false;">비밀번호 찾기</a>
+                </div>
             </form>
-            
-            <div class="divider">
-                <span>또는</span>
-            </div>
-            
-            <div class="social-buttons">
-                <button class="btn-social" onclick="socialLogin('google')">
-                    <span>Google 로그인</span>
-                </button>
-                <button class="btn-social" onclick="socialLogin('kakao')">
-                    <span>카카오 로그인</span>
-                </button>
-            </div>
-            
-            <div class="footer-links">
-                <a href="#" onclick="alert('비밀번호 찾기 페이지로 이동'); return false;">비밀번호를 잊으셨나요?</a>
-            </div>
         </div>
         
         <!-- 회원가입 폼 -->
-        <div id="signup" class="tab-content">
-            <form id="signupForm" onsubmit="handleSignup(event)">
+        <div id="signupForm" class="form-content signup-mode">
+            <form onsubmit="handleSignup(event)">
                 <div class="form-group">
                     <label class="form-label" for="signupName">이름</label>
                     <input type="text" id="signupName" class="form-input" placeholder="홍길동" required>
@@ -494,9 +616,48 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label" for="signupPhone">전화번호 (선택)</label>
-                    <input type="tel" id="signupPhone" class="form-input" placeholder="010-1234-5678">
+                    <label class="form-label" for="signupPhone">전화번호</label>
+                    <input type="tel" id="signupPhone" class="form-input" placeholder="010-1234-5678" required>
                     <div class="error-message" id="signupPhoneError"></div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sellerSignup" class="checkbox-input" onchange="toggleSellerFields()">
+                    <label for="sellerSignup" class="checkbox-label">
+                        판매자로 가입 <span style="color: var(--text-muted); font-size: var(--text-xs);">(발주서 등록은 판매자회원만 가능합니다)</span>
+                    </label>
+                </div>
+                
+                <div id="sellerFields" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label" for="businessNumber">사업자등록번호</label>
+                        <input type="text" id="businessNumber" class="form-input" placeholder="123-45-67890">
+                        <div class="error-message" id="businessNumberError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="representativeName">대표자명</label>
+                        <input type="text" id="representativeName" class="form-input" placeholder="대표자명을 입력하세요">
+                        <div class="error-message" id="representativeNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="businessAddress">주소</label>
+                        <input type="text" id="businessAddress" class="form-input" placeholder="사업장 주소를 입력하세요">
+                        <div class="error-message" id="businessAddressError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="representativePhone">대표자 연락처</label>
+                        <input type="tel" id="representativePhone" class="form-input" placeholder="010-1234-5678">
+                        <div class="error-message" id="representativePhoneError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="taxEmail">세금계산서 발행 이메일</label>
+                        <input type="email" id="taxEmail" class="form-input" placeholder="tax@company.com">
+                        <div class="error-message" id="taxEmailError"></div>
+                    </div>
                 </div>
                 
                 <div class="checkbox-group">
@@ -507,46 +668,109 @@
                     </label>
                 </div>
                 
-                <div class="checkbox-group">
-                    <input type="checkbox" id="agreeMarketing" class="checkbox-input">
-                    <label for="agreeMarketing" class="checkbox-label">마케팅 정보 수신에 동의합니다 (선택)</label>
+                <button type="submit" class="btn-primary" id="signupBtn">회원가입</button>
+                
+                <div class="divider">
+                    <span>간편 가입</span>
                 </div>
                 
-                <button type="submit" class="btn-primary" id="signupBtn">회원가입</button>
+                <div class="social-buttons">
+                    <button type="button" class="btn-social google" onclick="socialLogin('google')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span>Google로 가입</span>
+                    </button>
+                    <button type="button" class="btn-social kakao" onclick="socialLogin('kakao')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3C6.477 3 2 6.362 2 10.5c0 2.627 1.862 4.966 4.746 6.32-.21.92-.766 3.35-.877 3.87-.137.64.236.63.497.458.204-.134 3.253-2.206 4.569-3.102.68.097 1.368.148 2.065.148 5.523 0 10-3.362 10-7.5S17.523 3 12 3z" fill="#000000"/>
+                        </svg>
+                        <span>카카오로 가입</span>
+                    </button>
+                    <button type="button" class="btn-social naver" onclick="socialLogin('naver')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727v12.845z" fill="white"/>
+                        </svg>
+                        <span>네이버로 가입</span>
+                    </button>
+                </div>
             </form>
-            
-            <div class="divider">
-                <span>또는</span>
-            </div>
-            
-            <div class="social-buttons">
-                <button class="btn-social" onclick="socialLogin('google')">
-                    <span>Google로 가입</span>
-                </button>
-                <button class="btn-social" onclick="socialLogin('kakao')">
-                    <span>카카오로 가입</span>
-                </button>
-            </div>
         </div>
     </div>
     
     <script>
-        function switchTab(tab) {
-            // 탭 버튼 활성화 상태 변경
-            const tabButtons = document.querySelectorAll('.tab-button');
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        // AI 애니메이션 생성
+        function createAIAnimation() {
+            const container = document.getElementById('aiAnimation');
             
-            // 탭 콘텐츠 표시 변경
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(content => content.classList.remove('active'));
-            document.getElementById(tab).classList.add('active');
+            // 뉴럴 노드 생성
+            for (let i = 0; i < 15; i++) {
+                const node = document.createElement('div');
+                node.className = 'neural-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                node.style.animationDelay = Math.random() * 20 + 's';
+                node.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(node);
+            }
             
-            // 에러 메시지 초기화
+            // 연결선 생성
+            for (let i = 0; i < 10; i++) {
+                const connection = document.createElement('div');
+                connection.className = 'neural-connection';
+                connection.style.left = Math.random() * 100 + '%';
+                connection.style.top = Math.random() * 100 + '%';
+                connection.style.transform = `rotate(${Math.random() * 360}deg)`;
+                connection.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(connection);
+            }
+        }
+        
+        // 페이지 로드 시 애니메이션 생성
+        window.addEventListener('load', createAIAnimation);
+        
+        function showSignup() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').classList.add('active');
+            document.getElementById('backLink').classList.add('show');
+            document.querySelector('.eyebrow').textContent = '회원가입';
             clearErrors();
-            
-            // 성공 메시지 숨기기
             document.getElementById('successMessage').classList.remove('show');
+        }
+        
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').classList.remove('active');
+            document.getElementById('backLink').classList.remove('show');
+            document.querySelector('.eyebrow').textContent = '돌아오신 걸 환영해요';
+            clearErrors();
+            document.getElementById('successMessage').classList.remove('show');
+        }
+        
+        function toggleSellerFields() {
+            const checkbox = document.getElementById('sellerSignup');
+            const sellerFields = document.getElementById('sellerFields');
+            
+            if (checkbox.checked) {
+                sellerFields.style.display = 'block';
+                // 판매자 필드들을 필수로 설정
+                document.getElementById('businessNumber').required = true;
+                document.getElementById('representativeName').required = true;
+                document.getElementById('businessAddress').required = true;
+                document.getElementById('representativePhone').required = true;
+                document.getElementById('taxEmail').required = true;
+            } else {
+                sellerFields.style.display = 'none';
+                // 판매자 필드들을 필수 해제
+                document.getElementById('businessNumber').required = false;
+                document.getElementById('representativeName').required = false;
+                document.getElementById('businessAddress').required = false;
+                document.getElementById('representativePhone').required = false;
+                document.getElementById('taxEmail').required = false;
+            }
         }
         
         function clearErrors() {
@@ -606,20 +830,8 @@
             }
             
             if (isValid) {
-                // 로딩 상태 표시
-                const loginBtn = document.getElementById('loginBtn');
-                loginBtn.classList.add('loading');
-                loginBtn.disabled = true;
-                
-                // API 호출 시뮬레이션
-                setTimeout(() => {
-                    loginBtn.classList.remove('loading');
-                    loginBtn.disabled = false;
-                    showSuccess('로그인에 성공했습니다');
-                    
-                    // 실제로는 여기서 페이지 이동 또는 상태 업데이트
-                    console.log('로그인 성공:', { email, password });
-                }, 1500);
+                showSuccess('로그인에 성공했습니다');
+                console.log('로그인 성공:', { email, password });
             }
         }
         
@@ -677,20 +889,17 @@
             }
             
             if (isValid) {
-                // 로딩 상태 표시
                 const signupBtn = document.getElementById('signupBtn');
                 signupBtn.classList.add('loading');
                 signupBtn.disabled = true;
                 
-                // API 호출 시뮬레이션
                 setTimeout(() => {
                     signupBtn.classList.remove('loading');
                     signupBtn.disabled = false;
                     showSuccess('회원가입이 완료되었습니다. 로그인해주세요.');
                     
-                    // 로그인 탭으로 전환
                     setTimeout(() => {
-                        document.querySelectorAll('.tab-button')[0].click();
+                        showLogin();
                     }, 1500);
                     
                     console.log('회원가입 성공:', { name, email, password, phone });
@@ -710,6 +919,28 @@
                 value = value.slice(0, 3) + '-' + value.slice(3);
             } else if (value.length > 7) {
                 value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+            }
+            e.target.value = value;
+        });
+        
+        // 대표자 연락처 자동 포맷팅
+        document.getElementById('representativePhone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length > 3 && value.length <= 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            } else if (value.length > 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+            }
+            e.target.value = value;
+        });
+        
+        // 사업자등록번호 자동 포맷팅
+        document.getElementById('businessNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length > 3 && value.length <= 5) {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            } else if (value.length > 5) {
+                value = value.slice(0, 3) + '-' + value.slice(3, 5) + '-' + value.slice(5, 10);
             }
             e.target.value = value;
         });
