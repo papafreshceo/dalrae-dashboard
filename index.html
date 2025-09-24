@@ -3,935 +3,1085 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>달래마켓 - 신선한 농산물 B2B 플랫폼</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <title>달래마켓 - 로그인</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* 
-        디자인 규칙 - 무조건 지켜
-        - 색상: #0284c7 파란색만
-        - 폰트: Noto Sans KR
-        - 이모지 금지, SVG만
-        - 그라데이션 금지, 단색만
-        - Excel Integrator 스타일 참고
-        */
+        :root {
+            /* ========== COLOR SYSTEM ========== */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-muted: #fafafa;
+            --bg-hover: #f8f9fa;
+            
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-muted: #6c757d;
+            --text-link: #2563eb;
+            
+            --brand-primary: #2563eb;
+            --brand-primary-hover: #1d4ed8;
+            
+            --border-default: #dee2e6;
+            --border-light: #f1f3f5;
+            --border-heavy: #e5e7eb;
+            
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.1);
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+            
+            /* ========== TYPOGRAPHY ========== */
+            --text-xs: 10px;
+            --text-sm: 12px;
+            --text-base: 14px;
+            --text-lg: 18px;
+            --text-xl: 20px;
+            --text-2xl: 24px;
+            --text-3xl: 28px;
+            --text-4xl: 36px;
+            
+            --font-extralight: 200;
+            --font-light: 300;
+            --font-normal: 400;
+            --font-medium: 500;
+            --font-semibold: 600;
+            --font-bold: 700;
+            
+            --h1-weight: 600;
+            --h2-weight: 500;
+            --body-weight: 300;
+            --eyebrow-weight: 700;
+            
+            /* ========== SPACING ========== */
+            --space-xs: 4px;
+            --space-sm: 8px;
+            --space-md: 12px;
+            --space-lg: 16px;
+            --space-xl: 20px;
+            --space-2xl: 24px;
+            --space-3xl: 32px;
+            --space-4xl: 40px;
+            
+            --card-padding: 40px;
+            --card-padding-mobile: 25px 20px;
+            --card-radius: 16px;
+            
+            /* ========== COMPONENTS ========== */
+            --btn-padding: 10px 24px;
+            --btn-radius: 6px;
+            --btn-font-size: 14px;
+            --btn-font-weight: 300;
+            --btn-transition: all 0.2s;
+            
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            
+            --transition-fast: all 0.2s;
+            --transition-normal: all 0.3s;
+            --breakpoint-mobile: 768px;
+        }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100vh;
-            background: white;
-            color: #111827;
+            color: var(--text-primary);
+            font-weight: var(--body-weight);
+            font-size: var(--text-base);
             line-height: 1.5;
-        }
-
-        /* Header */
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 30;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid #f3f4f6;
-        }
-
-        .header-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 16px 24px;
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .logo {
-            height: 36px;
-        }
-
-        nav {
-            display: none;
-            align-items: center;
-            gap: 24px;
-        }
-
-        @media (min-width: 768px) {
-            nav {
-                display: flex;
-            }
-        }
-
-        nav a {
-            font-size: 14px;
-            color: #6b7280;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #111827;
-        }
-
-        .header-buttons {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            border-radius: 12px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-login {
-            background: white;
-            border: 1px solid #e5e7eb;
-            color: #374151;
-            display: none;
-        }
-
-        @media (min-width: 640px) {
-            .btn-login {
-                display: inline-flex;
-            }
-        }
-
-        .btn-login:hover {
-            border-color: #9ca3af;
-        }
-
-        .btn-primary {
-            background: #0284c7;
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary:hover {
-            background: #0369a1;
-        }
-
-        /* Hero Section */
-        .hero {
+            justify-content: center;
+            padding: var(--space-xl);
             position: relative;
             overflow: hidden;
+            background: #ffffff;
         }
-
-        .hero-bg {
+        
+        body::before {
+            content: '';
             position: absolute;
-            inset: 0;
-            z-index: -10;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 40%, rgba(147, 197, 253, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 60%, rgba(186, 230, 253, 0.25) 0%, transparent 40%),
+                        radial-gradient(circle at 50% 80%, rgba(224, 242, 254, 0.2) 0%, transparent 45%);
+            animation: gradientFlow 20s ease-in-out infinite;
         }
-
-        .hero-gradient {
-            position: absolute;
-            top: -96px;
-            left: 50%;
-            height: 288px;
-            width: 120vw;
-            transform: translateX(-50%);
-            border-radius: 50%;
-            background: linear-gradient(to right, #bae6fd, #a5f3fc);
-            filter: blur(48px);
-            opacity: 0.6;
-        }
-
-        .hero-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 80px 24px;
-            display: grid;
-            gap: 48px;
-            align-items: center;
-        }
-
-        @media (min-width: 1024px) {
-            .hero-container {
-                padding: 112px 24px;
-                grid-template-columns: 1fr 1fr;
+        
+        @keyframes gradientFlow {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translate(-10%, 5%) rotate(90deg) scale(1.1);
+            }
+            50% {
+                transform: translate(5%, -10%) rotate(180deg) scale(0.95);
+            }
+            75% {
+                transform: translate(10%, 10%) rotate(270deg) scale(1.05);
             }
         }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border-radius: 9999px;
-            border: 1px solid #e5e7eb;
-            background: white;
-            padding: 4px 12px;
-            font-size: 12px;
-            color: #6b7280;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        
+        /* AI 애니메이션 요소 */
+        .ai-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
-
-        .badge-dot {
-            height: 8px;
-            width: 8px;
+        
+        .neural-node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.3);
             border-radius: 50%;
-            background: #0284c7;
+            animation: float 20s infinite ease-in-out;
         }
-
-        h1 {
-            margin-top: 20px;
-            font-size: 36px;
-            font-weight: 700;
-            line-height: 1.2;
-            letter-spacing: -0.025em;
+        
+        .neural-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.15), transparent);
+            animation: pulse 3s infinite;
+            transform-origin: left center;
         }
-
-        @media (min-width: 640px) {
-            h1 {
-                font-size: 48px;
-            }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -30px); }
+            50% { transform: translate(-20px, 20px); }
+            75% { transform: translate(-30px, -10px); }
         }
-
-        .text-sky {
-            color: #0284c7;
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0; width: 0; }
+            50% { opacity: 1; width: 100px; }
         }
-
-        .underline-sky {
+        
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--card-radius);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 420px;
+            padding: var(--card-padding);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: var(--space-4xl);
+        }
+        
+        .eyebrow {
+            font-size: var(--text-base);
+            font-weight: var(--eyebrow-weight);
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-md);
+        }
+        
+        .auth-title {
+            font-size: var(--text-4xl);
+            font-weight: var(--h1-weight);
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .subtitle {
+            font-size: var(--text-lg);
+            font-weight: var(--font-light);
+            color: var(--text-secondary);
+        }
+        
+        .form-content {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .form-content.signup-mode {
+            display: none;
+        }
+        
+        .form-content.signup-mode.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+        
+        .form-label {
+            display: block;
+            font-size: var(--text-sm);
+            font-weight: var(--font-normal);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .form-input {
+            width: 100%;
+            height: 34px;
+            padding: 0 var(--space-md);
+            font-size: var(--text-base);
+            font-weight: var(--font-light);
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--btn-radius);
+            transition: var(--transition-fast);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--success);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        
+        .form-input.error {
+            border-color: var(--danger);
+        }
+        
+        .error-message {
+            display: none;
+            font-size: var(--text-sm);
+            color: var(--danger);
+            margin-top: var(--space-xs);
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .checkbox-input {
+            width: 18px;
+            height: 18px;
+            margin-right: var(--space-sm);
+            cursor: pointer;
+        }
+        
+        .checkbox-label {
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        
+        .checkbox-label a {
+            color: var(--text-link);
+            text-decoration: none;
+        }
+        
+        .checkbox-label a:hover {
             text-decoration: underline;
-            text-decoration-color: #38bdf8;
-            text-decoration-thickness: 2px;
-            text-underline-offset: 4px;
         }
-
-        .hero-description {
-            margin-top: 20px;
-            color: #6b7280;
-            max-width: 576px;
-        }
-
-        .hero-buttons {
-            margin-top: 32px;
+        
+        .social-buttons {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: var(--space-md);
         }
-
-        @media (min-width: 640px) {
-            .hero-buttons {
-                flex-direction: row;
-            }
-        }
-
-        .btn-large {
-            justify-content: center;
-            border-radius: 16px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .btn-secondary {
-            background: white;
-            border: 1px solid #bae6fd;
-            color: #0369a1;
-        }
-
-        .btn-secondary:hover {
-            background: #f0f9ff;
-            border-color: #7dd3fc;
-        }
-
-        .feature-dots {
-            margin-top: 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        .feature-dot {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .dot {
-            height: 8px;
-            width: 8px;
-            border-radius: 50%;
-        }
-
-        .dot-sky { background: #0284c7; }
-        .dot-cyan { background: #06b6d4; }
-        .dot-gray { background: #9ca3af; }
-
-        /* Calendar Preview */
-        .calendar-wrapper {
-            position: relative;
-        }
-
-        .calendar-bg {
-            position: absolute;
-            inset: -16px;
-            z-index: -10;
-            border-radius: 32px;
-            background: linear-gradient(135deg, #dbeafe, #cffafe);
-            filter: blur(48px);
-        }
-
-        .calendar-card {
-            border-radius: 24px;
-            border: 1px solid #f3f4f6;
-            background: white;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .calendar-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .calendar-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        .calendar-nav {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .calendar-nav button {
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
-            padding: 6px;
-            background: white;
-            cursor: pointer;
-            transition: background 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .calendar-nav button:hover {
-            background: #f9fafb;
-        }
-
-        .calendar-nav svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .calendar-weekdays {
-            margin-top: 16px;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        .calendar-weekday {
-            padding: 4px;
-        }
-
-        .calendar-days {
-            margin-top: 8px;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            border-radius: 12px;
-            border: 1px solid #f3f4f6;
-            background: white;
-            padding: 4px;
-            display: flex;
-            align-items: flex-start;
-            justify-content: flex-end;
-            font-size: 10px;
-            color: #9ca3af;
-            position: relative;
-        }
-
-        .calendar-day.active {
-            color: #374151;
-        }
-
-        .calendar-marker {
-            position: absolute;
-            bottom: 4px;
-            left: 4px;
-            height: 6px;
-            width: 6px;
-            border-radius: 50%;
-        }
-
-        .marker-sky { background: #0284c7; }
-        .marker-cyan { background: #06b6d4; }
-
-        .calendar-legend {
-            margin-top: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #6b7280;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .legend-item + .legend-item {
-            margin-left: 12px;
-        }
-
-        .calendar-status {
-            margin-top: 24px;
-            border-radius: 16px;
-            border: 1px solid #dbeafe;
-            background: rgba(186, 230, 253, 0.3);
-            padding: 16px;
-        }
-
-        .status-title {
-            font-size: 14px;
-            color: #374151;
-        }
-
-        .status-title strong {
-            font-weight: 600;
-            color: #0369a1;
-        }
-
-        .status-bar {
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .progress-bar {
-            height: 8px;
+        
+        .btn-social {
             width: 100%;
-            border-radius: 9999px;
-            background: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 0 0 1px #dbeafe;
-        }
-
-        .progress-fill {
-            height: 8px;
-            border-radius: 9999px;
-            background: linear-gradient(to right, #0284c7, #06b6d4);
-            width: 60%;
-        }
-
-        .status-text {
-            margin-left: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        /* Season Band - Excel Integrator 스타일 */
-        .season-band {
-            margin-top: 16px;
-            border-radius: 16px;
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            padding: 16px;
-        }
-
-        .season-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .season-icon {
-            width: 20px;
-            height: 20px;
+            height: 48px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
+            border-radius: var(--btn-radius);
+            font-size: var(--text-base);
+            font-weight: var(--font-normal);
+            cursor: pointer;
+            transition: var(--transition-fast);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #0284c7;
+            gap: var(--space-sm);
         }
-
-        .season-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #0369a1;
+        
+        .btn-social:hover {
+            background: var(--bg-hover);
+            transform: translateY(-1px);
         }
-
-        .season-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 12px;
+        
+        .btn-social.google {
+            border-color: #ea4335;
+            color: #ea4335;
         }
-
-        .season-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: white;
-            border: 1px solid #e0f2fe;
-            border-radius: 8px;
-            padding: 8px 12px;
-            transition: all 0.2s;
+        
+        .btn-social.google:hover {
+            background: rgba(234, 67, 53, 0.05);
+            border-color: #ea4335;
         }
-
-        .season-item:hover {
-            border-color: #7dd3fc;
-            background: #f0f9ff;
+        
+        .btn-social.kakao {
+            background: #FEE500;
+            border-color: #FEE500;
+            color: #000000;
         }
-
-        .season-item-icon {
-            width: 16px;
-            height: 16px;
-            color: #0284c7;
+        
+        .btn-social.kakao:hover {
+            background: #fada00;
+            transform: translateY(-1px);
         }
-
-        .season-item-text {
-            font-size: 13px;
-            color: #374151;
-            font-weight: 500;
-        }
-
-        .season-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            border-radius: 6px;
-            background: #0284c7;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: 600;
+        
+        .btn-social.naver {
+            background: #03C75A;
+            border-color: #03C75A;
             color: white;
         }
-
-        .season-badge-icon {
-            width: 12px;
-            height: 12px;
+        
+        .btn-social.naver:hover {
+            background: #02b351;
+            transform: translateY(-1px);
         }
-
-        /* Features Section */
-        .features {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 64px 24px;
+        
+        .btn-primary {
+            width: 100%;
+            height: 48px;
+            background: var(--success);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: var(--btn-radius);
+            font-size: var(--text-base);
+            font-weight: var(--font-normal);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: var(--space-xl);
         }
-
-        .features-grid {
-            display: grid;
-            gap: 24px;
+        
+        .btn-primary.btn-login {
+            background: var(--brand-primary);
         }
-
-        @media (min-width: 768px) {
-            .features-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        
+        .btn-primary.btn-login:hover {
+            background: var(--brand-primary-hover);
+            transform: translateY(-1px);
         }
-
-        .feature-card {
-            border-radius: 16px;
-            border: 1px solid #f3f4f6;
-            background: white;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            transition: box-shadow 0.3s;
+        
+        .btn-primary:hover {
+            background: #0ea968;
+            transform: translateY(-1px);
         }
-
-        .feature-card:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        
+        .btn-primary:active {
+            transform: translateY(0);
         }
-
-        .feature-icon {
-            height: 44px;
-            width: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            background: #eff6ff;
-            color: #0284c7;
+        
+        .btn-primary.loading {
+            color: transparent;
         }
-
-        .feature-icon svg {
-            height: 24px;
-            width: 24px;
+        
+        .btn-primary.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid var(--bg-primary);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spinner 0.6s linear infinite;
         }
-
-        .feature-title {
-            margin-top: 16px;
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: -0.025em;
+        
+        @keyframes spinner {
+            to { transform: rotate(360deg); }
         }
-
-        .feature-description {
-            margin-top: 4px;
-            font-size: 14px;
-            color: #6b7280;
+        
+        .divider {
+            text-align: center;
+            margin: var(--space-2xl) 0;
+            position: relative;
         }
-
-        /* CTA Section */
-        .cta {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px 80px;
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-default);
         }
-
-        .cta-card {
-            border-radius: 24px;
-            border: 1px solid #f3f4f6;
-            background: linear-gradient(135deg, white, #f0f9ff);
-            padding: 32px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
+        
+        .divider span {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 0 var(--space-lg);
+            font-size: var(--text-sm);
+            color: var(--text-muted);
+            position: relative;
         }
-
-        @media (min-width: 768px) {
-            .cta-card {
-                padding: 48px;
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-            }
-        }
-
-        .cta-content h3 {
-            font-size: 24px;
-            font-weight: 600;
-            letter-spacing: -0.025em;
-        }
-
-        .cta-content p {
-            margin-top: 8px;
-            color: #6b7280;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid #f3f4f6;
-        }
-
-        .footer-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 40px 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            font-size: 14px;
-            color: #6b7280;
-        }
-
-        @media (min-width: 640px) {
-            .footer-container {
-                flex-direction: row;
-            }
-        }
-
+        
         .footer-links {
+            margin-top: var(--space-2xl);
             display: flex;
-            align-items: center;
-            gap: 16px;
+            justify-content: center;
+            gap: var(--space-2xl);
         }
-
+        
         .footer-links a {
-            color: #6b7280;
+            color: var(--text-muted);
             text-decoration: none;
-            transition: color 0.3s;
+            font-size: var(--text-sm);
+            transition: var(--transition-fast);
+            cursor: pointer;
         }
-
+        
         .footer-links a:hover {
-            color: #374151;
+            color: var(--success);
+        }
+        
+        .back-link {
+            display: none;
+            margin-bottom: var(--space-2xl);
+            text-align: center;
+        }
+        
+        .back-link.show {
+            display: block;
+        }
+        
+        .back-link a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: var(--text-sm);
+            transition: var(--transition-fast);
+        }
+        
+        .back-link a:hover {
+            color: var(--success);
+        }
+        
+        .success-message {
+            display: none;
+            background: var(--success-bg);
+            color: var(--success);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--btn-radius);
+            margin-bottom: var(--space-xl);
+            font-size: var(--text-sm);
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .info-message {
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--brand-primary);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-2xl);
+            border-radius: var(--btn-radius);
+        }
+        
+        .info-message p {
+            margin: 0;
+            font-size: var(--text-sm);
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .info-message p:first-child {
+            font-weight: var(--font-normal);
+            margin-bottom: var(--space-xs);
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: var(--space-lg);
+            }
+            
+            .auth-container {
+                padding: var(--card-padding-mobile);
+            }
+            
+            .auth-title {
+                font-size: var(--text-3xl);
+            }
+            
+            .subtitle {
+                font-size: var(--text-base);
+            }
+            
+            .footer-links {
+                gap: var(--space-lg);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <a href="#" class="logo-link">
-                <img src="https://res.cloudinary.com/dde1hpbrp/image/upload/v1753148563/05_etc/dalraemarket_papafarmers.com/DalraeMarket_loge_trans.png" 
-                     alt="달래마켓" 
-                     class="logo">
-            </a>
-            <nav>
-                <a href="#features">기능</a>
-                <a href="#pricing">요금</a>
-                <a href="#faq">FAQ</a>
-            </nav>
-            <div class="header-buttons">
-                <a href="/dashboard.html" class="btn btn-login">로그인</a>
-                <a href="https://papafarmers.com/orders/" target="_blank" class="btn btn-primary">시작하기</a>
-            </div>
+    <!-- AI 애니메이션 배경 -->
+    <div class="ai-animation" id="aiAnimation"></div>
+    
+    <div class="auth-container">
+        <div class="auth-header">
+            <div class="eyebrow">돌아오신 걸 환영해요</div>
+            <h1 class="auth-title">달래마켓</h1>
+            <p class="subtitle">성공을 위한 파트너</p>
         </div>
-    </header>
-
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-bg">
-            <div class="hero-gradient"></div>
+        
+        <div class="back-link" id="backLink">
+            <a href="#" onclick="showLogin(); return false;">← 로그인으로 돌아가기</a>
         </div>
-        <div class="hero-container">
-            <div>
-                <div class="badge">
-                    <span class="badge-dot"></span>
-                    <span>최신 트렌드 · 모던 · 미니멀 · Bright</span>
+        
+        <div class="success-message" id="successMessage"></div>
+        
+        <!-- 로그인 폼 -->
+        <div id="loginForm" class="form-content">
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label" for="loginEmail">이메일</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="example@email.com" required>
+                    <div class="error-message" id="loginEmailError"></div>
                 </div>
-                <h1>
-                    농산물 주문부터 <span class="text-sky">배송</span>·<span class="text-sky">관리</span>까지<br>
-                    매일 <span class="underline-sky">365일</span> 간단하게.
-                </h1>
-                <p class="hero-description">
-                    캘린더 UI와 통일된 밝은 테마. 최소한의 클릭으로 업무 자동화.
-                    상품 선택하고, 주문하고, 결과를 확인하세요.
-                </p>
-                <div class="hero-buttons">
-                    <a href="https://papafarmers.com/orders/" target="_blank" class="btn btn-primary btn-large">발주시스템 가기</a>
-                    <a href="/01-pages/01-dashboard.html" class="btn btn-secondary btn-large">상품 대시보드 가기</a>
+                
+                <div class="form-group">
+                    <label class="form-label" for="loginPassword">비밀번호</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="비밀번호를 입력하세요" required>
+                    <div class="error-message" id="loginPasswordError"></div>
                 </div>
-                <div class="feature-dots">
-                    <span class="feature-dot">
-                        <span class="dot dot-sky"></span>
-                        <span>실시간 재고</span>
-                    </span>
-                    <span class="feature-dot">
-                        <span class="dot dot-cyan"></span>
-                        <span>새벽 배송</span>
-                    </span>
-                    <span class="feature-dot">
-                        <span class="dot dot-gray"></span>
-                        <span>주문 관리</span>
-                    </span>
+                
+                <button type="submit" class="btn-primary btn-login" id="loginBtn">로그인</button>
+                
+                <div class="divider">
+                    <span>간편 로그인</span>
                 </div>
-            </div>
-
-            <!-- Calendar Preview -->
-            <div class="calendar-wrapper">
-                <div class="calendar-bg"></div>
-                <div class="calendar-card">
-                    <div class="calendar-header">
-                        <h3 class="calendar-title">배송 캘린더 · 2025년 1월</h3>
-                        <div class="calendar-nav">
-                            <button aria-label="Previous">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                                </svg>
-                            </button>
-                            <button aria-label="Next">
-                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="calendar-weekdays">
-                        <div class="calendar-weekday">일</div>
-                        <div class="calendar-weekday">월</div>
-                        <div class="calendar-weekday">화</div>
-                        <div class="calendar-weekday">수</div>
-                        <div class="calendar-weekday">목</div>
-                        <div class="calendar-weekday">금</div>
-                        <div class="calendar-weekday">토</div>
-                    </div>
-                    <div class="calendar-days" id="calendar-grid"></div>
-                    <div class="calendar-legend">
-                        <span class="legend-item">
-                            <span class="dot dot-sky"></span>
-                            발주 마감
-                        </span>
-                        <span class="legend-item">
-                            <span class="dot dot-cyan"></span>
-                            배송 완료
-                        </span>
-                    </div>
-                    <div class="calendar-status">
-                        <p class="status-title"><strong>이번 달 배송 현황</strong></p>
-                        <div class="status-bar">
-                            <div class="progress-bar">
-                                <div class="progress-fill"></div>
-                            </div>
-                            <span class="status-text">18/30</span>
-                        </div>
+                
+                <div class="social-buttons">
+                    <button type="button" class="btn-social google" onclick="socialLogin('google')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span>Google 로그인</span>
+                    </button>
+                    <button type="button" class="btn-social kakao" onclick="socialLogin('kakao')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3C6.477 3 2 6.362 2 10.5c0 2.627 1.862 4.966 4.746 6.32-.21.92-.766 3.35-.877 3.87-.137.64.236.63.497.458.204-.134 3.253-2.206 4.569-3.102.68.097 1.368.148 2.065.148 5.523 0 10-3.362 10-7.5S17.523 3 12 3z" fill="#000000"/>
+                        </svg>
+                        <span>카카오 로그인</span>
+                    </button>
+                    <button type="button" class="btn-social naver" onclick="socialLogin('naver')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727v12.845z" fill="white"/>
+                        </svg>
+                        <span>네이버 로그인</span>
+                    </button>
+                </div>
+                
+                <div class="footer-links">
+                    <a onclick="showSignup(); return false;">회원가입</a>
+                    <a onclick="showPasswordReset(); return false;">비밀번호 찾기</a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- 비밀번호 찾기 폼 -->
+        <div id="passwordResetForm" class="form-content signup-mode">
+            <form onsubmit="handlePasswordReset(event)">
+                <div class="info-message">
+                    <p>가입하신 이메일 주소를 입력해주세요.</p>
+                    <p>비밀번호 재설정 링크를 보내드립니다.</p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="resetEmail">이메일</label>
+                    <input type="email" id="resetEmail" class="form-input" placeholder="example@email.com" required>
+                    <div class="error-message" id="resetEmailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="resetName">이름</label>
+                    <input type="text" id="resetName" class="form-input" placeholder="가입 시 등록한 이름" required>
+                    <div class="error-message" id="resetNameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="resetPhone">전화번호</label>
+                    <input type="tel" id="resetPhone" class="form-input" placeholder="010-1234-5678" required>
+                    <div class="error-message" id="resetPhoneError"></div>
+                </div>
+                
+                <button type="submit" class="btn-primary btn-login" id="resetBtn">비밀번호 재설정 링크 보내기</button>
+                
+                <div class="divider">
+                    <span>또는</span>
+                </div>
+                
+                <div class="footer-links">
+                    <a onclick="showLogin(); return false;">로그인으로 돌아가기</a>
+                    <a onclick="showSignup(); return false;">새 계정 만들기</a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- 회원가입 폼 -->
+        <div id="signupForm" class="form-content signup-mode">
+            <form onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label class="form-label" for="signupName">이름</label>
+                    <input type="text" id="signupName" class="form-input" placeholder="홍길동" required>
+                    <div class="error-message" id="signupNameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="signupEmail">이메일</label>
+                    <input type="email" id="signupEmail" class="form-input" placeholder="example@email.com" required>
+                    <div class="error-message" id="signupEmailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="signupPassword">비밀번호</label>
+                    <input type="password" id="signupPassword" class="form-input" placeholder="8자 이상 입력하세요" required>
+                    <div class="error-message" id="signupPasswordError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="signupPasswordConfirm">비밀번호 확인</label>
+                    <input type="password" id="signupPasswordConfirm" class="form-input" placeholder="비밀번호를 다시 입력하세요" required>
+                    <div class="error-message" id="signupPasswordConfirmError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="signupPhone">전화번호</label>
+                    <input type="tel" id="signupPhone" class="form-input" placeholder="010-1234-5678" required>
+                    <div class="error-message" id="signupPhoneError"></div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="sellerSignup" class="checkbox-input" onchange="toggleSellerFields()">
+                    <label for="sellerSignup" class="checkbox-label">
+                        판매자로 가입 <span style="color: var(--text-muted); font-size: var(--text-xs);">(발주서 등록은 판매자회원만 가능합니다)</span>
+                    </label>
+                </div>
+                
+                <div id="sellerFields" style="display: none;">
+                    <div class="form-group">
+                        <label class="form-label" for="businessNumber">사업자등록번호</label>
+                        <input type="text" id="businessNumber" class="form-input" placeholder="123-45-67890">
+                        <div class="error-message" id="businessNumberError"></div>
                     </div>
                     
-                    <!-- Season Band -->
-                    <div class="season-band">
-                        <div class="season-header">
-                            <svg class="season-icon" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"/>
-                            </svg>
-                            <span class="season-title">1월 제철 상품</span>
-                        </div>
-                        <div class="season-grid">
-                            <div class="season-item">
-                                <svg class="season-item-icon" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm3.707 5.293a1 1 0 00-1.414 0L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z"/>
-                                </svg>
-                                <span class="season-item-text">시금치</span>
-                            </div>
-                            <div class="season-item">
-                                <svg class="season-item-icon" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm3.707 5.293a1 1 0 00-1.414 0L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z"/>
-                                </svg>
-                                <span class="season-item-text">브로콜리</span>
-                            </div>
-                            <div class="season-item">
-                                <svg class="season-item-icon" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm3.707 5.293a1 1 0 00-1.414 0L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z"/>
-                                </svg>
-                                <span class="season-item-text">한라봉</span>
-                            </div>
-                            <div class="season-item">
-                                <svg class="season-item-icon" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm3.707 5.293a1 1 0 00-1.414 0L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4a1 1 0 000-1.414z"/>
-                                </svg>
-                                <span class="season-item-text">딸기</span>
-                            </div>
-                        </div>
-                        <div>
-                            <span class="season-badge">
-                                <svg class="season-badge-icon" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                신선도 100% 보장
-                            </span>
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label" for="representativeName">대표자명</label>
+                        <input type="text" id="representativeName" class="form-input" placeholder="대표자명을 입력하세요">
+                        <div class="error-message" id="representativeNameError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="businessAddress">주소</label>
+                        <input type="text" id="businessAddress" class="form-input" placeholder="사업장 주소를 입력하세요">
+                        <div class="error-message" id="businessAddressError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="representativePhone">대표자 연락처</label>
+                        <input type="tel" id="representativePhone" class="form-input" placeholder="010-1234-5678">
+                        <div class="error-message" id="representativePhoneError"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="taxEmail">세금계산서 발행 이메일</label>
+                        <input type="email" id="taxEmail" class="form-input" placeholder="tax@company.com">
+                        <div class="error-message" id="taxEmailError"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features -->
-    <section id="features" class="features">
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M4 5a2 2 0 0 1 2-2h8l6 6v10a 2 2 0 0 1-2 2H6a 2 2 0 0 1-2-2V5zm10 0v4h4"/>
-                    </svg>
-                </div>
-                <h4 class="feature-title">상품 등록</h4>
-                <p class="feature-description">드래그&드롭 또는 선택으로 빠르게 업로드. 자동 카테고리 분류.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M4 7h16v2H4V7zm0 4h10v2H4v-2zm0 4h16v2H4v-2z"/>
-                    </svg>
-                </div>
-                <h4 class="feature-title">주문 관리</h4>
-                <p class="feature-description">실시간 주문 현황 확인. 배송 상태 자동 업데이트.</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M5 20h14v-2H5v2zm7-18l6 6h-4v6h-4V8H6l6-6z"/>
-                    </svg>
-                </div>
-                <h4 class="feature-title">데이터 분석</h4>
-                <p class="feature-description">매출 통계와 트렌드 분석. 시각화된 리포트 제공.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="cta">
-        <div class="cta-card">
-            <div class="cta-content">
-                <h3>지금 바로 시작하세요</h3>
-                <p>밝고 단순한 캘린더 스타일로 한 눈에. 클릭은 최소로.</p>
-            </div>
-            <div class="cta-buttons">
-                <a href="https://papafarmers.com/orders/" target="_blank" class="btn btn-primary btn-large">발주시스템 가기</a>
-                <a href="/dashboard.html" class="btn btn-secondary btn-large">상품 대시보드 가기</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="footer-container">
-            <p>© <span id="year"></span> 달래마켓. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#">이용약관</a>
-                <a href="#">개인정보처리방침</a>
-                <a href="#">문의</a>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Set current year
-        document.getElementById('year').textContent = new Date().getFullYear();
-        
-        // Generate calendar
-        const calendarGrid = document.getElementById('calendar-grid');
-        const firstDay = 3; // January 1, 2025 is Wednesday
-        const daysInMonth = 31;
-        
-        for (let i = 0; i < 35; i++) {
-            const day = document.createElement('div');
-            const dayNum = i - firstDay + 1;
-            const isCurrentMonth = dayNum > 0 && dayNum <= daysInMonth;
-            
-            day.className = isCurrentMonth ? 'calendar-day active' : 'calendar-day';
-            
-            if (isCurrentMonth) {
-                day.textContent = dayNum;
                 
-                // Add markers
-                if (dayNum === 8 || dayNum === 15 || dayNum === 22) {
-                    const marker = document.createElement('span');
-                    marker.className = 'calendar-marker marker-sky';
-                    day.appendChild(marker);
-                }
-                if (dayNum === 9 || dayNum === 16 || dayNum === 23) {
-                    const marker = document.createElement('span');
-                    marker.className = 'calendar-marker marker-cyan';
-                    day.appendChild(marker);
-                }
+                <div class="checkbox-group">
+                    <input type="checkbox" id="agreeTerms" class="checkbox-input" required>
+                    <label for="agreeTerms" class="checkbox-label">
+                        <a href="#" onclick="alert('이용약관 페이지로 이동'); return false;">이용약관</a> 및 
+                        <a href="#" onclick="alert('개인정보처리방침 페이지로 이동'); return false;">개인정보처리방침</a>에 동의합니다
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="signupBtn">회원가입</button>
+                
+                <div class="divider">
+                    <span>간편 가입</span>
+                </div>
+                
+                <div class="social-buttons">
+                    <button type="button" class="btn-social google" onclick="socialLogin('google')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span>Google로 가입</span>
+                    </button>
+                    <button type="button" class="btn-social kakao" onclick="socialLogin('kakao')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 3C6.477 3 2 6.362 2 10.5c0 2.627 1.862 4.966 4.746 6.32-.21.92-.766 3.35-.877 3.87-.137.64.236.63.497.458.204-.134 3.253-2.206 4.569-3.102.68.097 1.368.148 2.065.148 5.523 0 10-3.362 10-7.5S17.523 3 12 3z" fill="#000000"/>
+                        </svg>
+                        <span>카카오로 가입</span>
+                    </button>
+                    <button type="button" class="btn-social naver" onclick="socialLogin('naver')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.273 12.845L7.376 0H0v24h7.727V11.155L16.624 24H24V0h-7.727v12.845z" fill="white"/>
+                        </svg>
+                        <span>네이버로 가입</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // AI 애니메이션 생성
+        function createAIAnimation() {
+            const container = document.getElementById('aiAnimation');
+            
+            // 뉴럴 노드 생성
+            for (let i = 0; i < 15; i++) {
+                const node = document.createElement('div');
+                node.className = 'neural-node';
+                node.style.left = Math.random() * 100 + '%';
+                node.style.top = Math.random() * 100 + '%';
+                node.style.animationDelay = Math.random() * 20 + 's';
+                node.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(node);
             }
             
-            calendarGrid.appendChild(day);
+            // 연결선 생성
+            for (let i = 0; i < 10; i++) {
+                const connection = document.createElement('div');
+                connection.className = 'neural-connection';
+                connection.style.left = Math.random() * 100 + '%';
+                connection.style.top = Math.random() * 100 + '%';
+                connection.style.transform = `rotate(${Math.random() * 360}deg)`;
+                connection.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(connection);
+            }
         }
+        
+        // 페이지 로드 시 애니메이션 생성
+        window.addEventListener('load', createAIAnimation);
+        
+        function showSignup() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('passwordResetForm').style.display = 'none';
+            document.getElementById('signupForm').classList.add('active');
+            document.getElementById('backLink').classList.add('show');
+            document.querySelector('.eyebrow').textContent = '회원가입';
+            clearErrors();
+            document.getElementById('successMessage').classList.remove('show');
+        }
+        
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').classList.remove('active');
+            document.getElementById('passwordResetForm').style.display = 'none';
+            document.getElementById('backLink').classList.remove('show');
+            document.querySelector('.eyebrow').textContent = '돌아오신 걸 환영해요';
+            clearErrors();
+            document.getElementById('successMessage').classList.remove('show');
+        }
+        
+        function showPasswordReset() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').classList.remove('active');
+            document.getElementById('passwordResetForm').style.display = 'block';
+            document.getElementById('passwordResetForm').classList.add('active');
+            document.getElementById('backLink').classList.add('show');
+            document.querySelector('.eyebrow').textContent = '비밀번호 찾기';
+            clearErrors();
+            document.getElementById('successMessage').classList.remove('show');
+        }
+        
+        function toggleSellerFields() {
+            const checkbox = document.getElementById('sellerSignup');
+            const sellerFields = document.getElementById('sellerFields');
+            
+            if (checkbox.checked) {
+                sellerFields.style.display = 'block';
+                // 판매자 필드들을 필수로 설정
+                document.getElementById('businessNumber').required = true;
+                document.getElementById('representativeName').required = true;
+                document.getElementById('businessAddress').required = true;
+                document.getElementById('representativePhone').required = true;
+                document.getElementById('taxEmail').required = true;
+            } else {
+                sellerFields.style.display = 'none';
+                // 판매자 필드들을 필수 해제
+                document.getElementById('businessNumber').required = false;
+                document.getElementById('representativeName').required = false;
+                document.getElementById('businessAddress').required = false;
+                document.getElementById('representativePhone').required = false;
+                document.getElementById('taxEmail').required = false;
+            }
+        }
+        
+        function clearErrors() {
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(error => {
+                error.classList.remove('show');
+                error.textContent = '';
+            });
+            
+            const inputs = document.querySelectorAll('.form-input');
+            inputs.forEach(input => input.classList.remove('error'));
+        }
+        
+        function showError(inputId, message) {
+            const input = document.getElementById(inputId);
+            const errorElement = document.getElementById(inputId + 'Error');
+            
+            input.classList.add('error');
+            errorElement.textContent = message;
+            errorElement.classList.add('show');
+        }
+        
+        function showSuccess(message) {
+            const successElement = document.getElementById('successMessage');
+            successElement.textContent = message;
+            successElement.classList.add('show');
+            
+            setTimeout(() => {
+                successElement.classList.remove('show');
+            }, 3000);
+        }
+        
+        function handleLogin(event) {
+            event.preventDefault();
+            clearErrors();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // 유효성 검사
+            let isValid = true;
+            
+            if (!email) {
+                showError('loginEmail', '이메일을 입력해주세요');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('loginEmail', '올바른 이메일 형식이 아닙니다');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showError('loginPassword', '비밀번호를 입력해주세요');
+                isValid = false;
+            } else if (password.length < 8) {
+                showError('loginPassword', '비밀번호는 8자 이상이어야 합니다');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                showSuccess('로그인에 성공했습니다');
+                console.log('로그인 성공:', { email, password });
+            }
+        }
+        
+        function handleSignup(event) {
+            event.preventDefault();
+            clearErrors();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
+            const phone = document.getElementById('signupPhone').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            // 유효성 검사
+            let isValid = true;
+            
+            if (!name) {
+                showError('signupName', '이름을 입력해주세요');
+                isValid = false;
+            } else if (name.length < 2) {
+                showError('signupName', '이름은 2자 이상이어야 합니다');
+                isValid = false;
+            }
+            
+            if (!email) {
+                showError('signupEmail', '이메일을 입력해주세요');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('signupEmail', '올바른 이메일 형식이 아닙니다');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showError('signupPassword', '비밀번호를 입력해주세요');
+                isValid = false;
+            } else if (password.length < 8) {
+                showError('signupPassword', '비밀번호는 8자 이상이어야 합니다');
+                isValid = false;
+            }
+            
+            if (password !== passwordConfirm) {
+                showError('signupPasswordConfirm', '비밀번호가 일치하지 않습니다');
+                isValid = false;
+            }
+            
+            if (phone && !/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/.test(phone)) {
+                showError('signupPhone', '올바른 전화번호 형식이 아닙니다 (예: 010-1234-5678)');
+                isValid = false;
+            }
+            
+            if (!agreeTerms) {
+                alert('이용약관에 동의해주세요');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                const signupBtn = document.getElementById('signupBtn');
+                signupBtn.classList.add('loading');
+                signupBtn.disabled = true;
+                
+                setTimeout(() => {
+                    signupBtn.classList.remove('loading');
+                    signupBtn.disabled = false;
+                    showSuccess('회원가입이 완료되었습니다. 로그인해주세요.');
+                    
+                    setTimeout(() => {
+                        showLogin();
+                    }, 1500);
+                    
+                    console.log('회원가입 성공:', { name, email, password, phone });
+                }, 1500);
+            }
+        }
+        
+        function handlePasswordReset(event) {
+            event.preventDefault();
+            clearErrors();
+            
+            const email = document.getElementById('resetEmail').value;
+            const name = document.getElementById('resetName').value;
+            const phone = document.getElementById('resetPhone').value;
+            
+            // 유효성 검사
+            let isValid = true;
+            
+            if (!email) {
+                showError('resetEmail', '이메일을 입력해주세요');
+                isValid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showError('resetEmail', '올바른 이메일 형식이 아닙니다');
+                isValid = false;
+            }
+            
+            if (!name) {
+                showError('resetName', '이름을 입력해주세요');
+                isValid = false;
+            } else if (name.length < 2) {
+                showError('resetName', '이름은 2자 이상이어야 합니다');
+                isValid = false;
+            }
+            
+            if (!phone) {
+                showError('resetPhone', '전화번호를 입력해주세요');
+                isValid = false;
+            } else if (!/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/.test(phone)) {
+                showError('resetPhone', '올바른 전화번호 형식이 아닙니다');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                const resetBtn = document.getElementById('resetBtn');
+                resetBtn.classList.add('loading');
+                resetBtn.disabled = true;
+                
+                setTimeout(() => {
+                    resetBtn.classList.remove('loading');
+                    resetBtn.disabled = false;
+                    showSuccess('비밀번호 재설정 링크가 이메일로 발송되었습니다.');
+                    
+                    // 3초 후 로그인 화면으로 이동
+                    setTimeout(() => {
+                        showLogin();
+                    }, 3000);
+                    
+                    console.log('비밀번호 재설정 요청:', { email, name, phone });
+                }, 1500);
+            }
+        }
+        
+        function socialLogin(provider) {
+            console.log(`${provider} 로그인 시도`);
+            alert(`${provider} 로그인 페이지로 이동합니다`);
+        }
+        
+        // 비밀번호 찾기 전화번호 자동 포맷팅
+        document.getElementById('resetPhone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length > 3 && value.length <= 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            } else if (value.length > 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+            }
+            e.target.value = value;
+        });
+        
+        // 전화번호 자동 포맷팅
+        document.getElementById('signupPhone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length > 3 && value.length <= 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            } else if (value.length > 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+            }
+            e.target.value = value;
+        });
+        
+        // 대표자 연락처 자동 포맷팅
+        document.getElementById('representativePhone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length > 3 && value.length <= 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            } else if (value.length > 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+            }
+            e.target.value = value;
+        });
+        
+        // 사업자등록번호 자동 포맷팅
+        document.getElementById('businessNumber').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length > 3 && value.length <= 5) {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            } else if (value.length > 5) {
+                value = value.slice(0, 3) + '-' + value.slice(3, 5) + '-' + value.slice(5, 10);
+            }
+            e.target.value = value;
+        });
     </script>
 </body>
 </html>
