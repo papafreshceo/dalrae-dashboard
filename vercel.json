@@ -1,72 +1,29 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/auth",
-      "destination": "/auth.html"
-    },
-    {
-      "source": "/dashboard",
-      "destination": "/01-pages/01-dashboard.html"
-    },
-    {
-      "source": "/products",
-      "destination": "/01-pages/02-products.html"
-    },
-    {
-      "source": "/products-calendar",
-      "destination": "/01-pages/03-products-calendar.html"
-    },
-    {
-      "source": "/delivery",
-      "destination": "/01-pages/04-delivery-calendar.html"
-    },
-    {
-      "source": "/orders",
-      "destination": "/01-pages/05-orders.html"
-    },
-    {
-      "source": "/services",
-      "destination": "/01-pages/06-services.html"
-    },
-    {
-      "source": "/notice",
-      "destination": "/01-pages/07-notice.html"
-    },
-    {
-      "source": "/css/(.*)",
-      "destination": "/02-assets/01-css/$1"
-    },
-    {
-      "source": "/js/(.*)",
-      "destination": "/02-assets/02-js/$1"
-    },
-    {
-      "source": "/components/(.*)",
-      "destination": "/02-assets/03-components/$1"
-    }
+  "routes": [
+    { "src": "^/$", "dest": "/index.html" },
+    { "src": "^/auth/?$", "dest": "/auth.html" },
+    { "src": "^/dashboard/?$", "dest": "/01-pages/01-dashboard.html" },
+    { "src": "^/products/?$", "dest": "/01-pages/02-products.html" },
+    { "src": "^/products-calendar/?$", "dest": "/01-pages/03-products-calendar.html" },
+    { "src": "^/delivery/?$", "dest": "/01-pages/04-delivery-calendar.html" },
+    { "src": "^/orders/?$", "dest": "/01-pages/05-orders.html" },
+    { "src": "^/services/?$", "dest": "/01-pages/06-services.html" },
+    { "src": "^/notice/?$", "dest": "/01-pages/07-notice.html" },
+    { "src": "^/css/(.*)", "dest": "/02-assets/01-css/$1" },
+    { "src": "^/js/(.*)", "dest": "/02-assets/02-js/$1" },
+    { "src": "^/components/(.*)", "dest": "/02-assets/03-components/$1" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" }
       ]
     }
   ]
